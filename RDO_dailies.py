@@ -1,4 +1,5 @@
 import urllib.request
+import datetime
 import json
 import inspect
 import textwrap
@@ -57,7 +58,7 @@ COLORS = {
 
 
 
-def debug_print(color: str, *messages: any, debug: bool = False):
+def debug_print(color: str, *messages: any, debug: bool = True):
     """
     Print debug messages in specified color if debug is True.
     It accepts the prefix "DEBUG:" as part of the message.
@@ -152,18 +153,29 @@ predefined_lookup = {c['key']: c for c in predefined_challenges}
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #Check if there's a local version of the api json file
+# Your existing local filename path
 local_filename = r"C:\Users\Dunk\Documents\Thonny Bits\RDO Daily Challenges\index.json"
 
-debug_print("icyan", "Checking for a local version of index.json")
-if os.path.exists(local_filename):
-    # Load from local file
-    with open(local_filename, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    debug_print("bgreen", f"Loaded data from local file '{local_filename}'.")
+# URL for downloading if needed
+url = "https://api.rdo.gg/challenges/index.json"
+
+# Determine date string based on UTC time and 6am cutoff
+now = datetime.datetime.utcnow()
+
+# The condition if now.hour < 6: checks if the current hour is less than 6, which means it's between midnight (00:00) and 5:59 AM.
+if now.hour < 6:
+    # this subtracts a day if it's between 00:00 and 05:59
+    date_str = (now - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
 else:
-    # Fetch from URL and optionally save locally
-    url = "https://api.rdo.gg/challenges/index.json"
-    debug_print("icyan", "Starting API request to URL:", url)
+    # while this will set the date_str to today's date
+    date_str = now.strftime('%Y-%m-%d')
+
+date_filename = os.path.join(os.path.dirname(local_filename), f'index_{date_str}.json')
+debug_print("bblue", "Filename to save: ", date_filename)
+
+# Check if local index.json exists
+if not os.path.exists(local_filename):
+    print("Local index.json not found. Downloading from URL...")
     try:
         headers = {'User-Agent': 'Mozilla/5.0'}
         req = urllib.request.Request(url, headers=headers)
@@ -171,16 +183,28 @@ else:
             data_bytes = response.read()
             data_str = data_bytes.decode('utf-8')
             data = json.loads(data_str)
-        debug_print("bgreen", "Fetched data from URL.")
-        # Save to local file for future use
+        # Save to local index.json
         with open(local_filename, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2)
-        debug_print("bgreen", f"Saved data to local file '{local_filename}'.")
+        print("Downloaded and saved index.json.")
     except Exception as e:
-        debug_print("ired", "Error fetching data from URL:", e)
+        print("Error fetching data:", e)
         raise
+else:
+    # Load existing local index.json
+    with open(local_filename, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    print("Loaded data from existing local index.json.")
 
-
+# Check if the date-specific copy exists
+if not os.path.exists(date_filename):
+    # Save a copy of index.json with the date in filename
+    with open(local_filename, 'r', encoding='utf-8') as src, \
+         open(date_filename, 'w', encoding='utf-8') as dst:
+        dst.write(src.read())
+    print(f"Saved a copy of index.json as {date_filename}")
+else:
+    print(f"Date-specific file already exists: {date_filename}")
 # -------------------------------------------------------------------------------------------------------------------------------------------
 
 
