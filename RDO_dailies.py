@@ -328,6 +328,25 @@ for challenge in sorted_challenges:
     print("-" * 120)
 
 
+############################################################################
+
+# 'with' is a context manager that handles resources automatically.
+# It ensures the file closes properly even after an error.
+# It opens the file, and assigns it to the vaiable f
+# The open() function opens a file with the name challenges_export.json
+# the w means it uses 'write mode', creating the file if it doesn't exist or overwriting it if it does
+
+with open('challenges_export.json', 'w') as f:
+    
+# json.dump serializes (sorted_challenges) the alphabetically sorted list, into JSON format and writes it to the file object f
+# indents=4 formats the JSON with 4 spaces of indentation for readability
+    
+    json.dump(sorted_challenges, f, indent=4)
+
+debug_print("iblue", "Challenges data saved to challenges_export.json.")
+############################################################################
+
+
 #Turn off the buffer capture
 sys.stdout = sys.__stdout__
 
@@ -396,7 +415,7 @@ html_full = f"""
 with open("challenges_styled.html", "w", encoding="utf-8") as f:
     f.write(html_full)
 
-print("Styled challenges saved to 'challenges_styled.html'. Open it in your browser.")
+debug_print("iblue", "Styled challenges saved to 'challenges_styled.html'. Open it in your browser.")
 
 
 
