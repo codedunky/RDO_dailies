@@ -8,7 +8,8 @@ import io
 import sys
 import ansi2html
 from ansi2html import Ansi2HTMLConverter
-#print("ansi2html imported successfully!")
+
+
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
@@ -152,30 +153,19 @@ predefined_lookup = {c['key']: c for c in predefined_challenges}
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#Check if there's a local version of the api json file
+
+# Check if there's a local version of the index.json file
 # Your existing local filename path
 local_filename = r"C:\Users\Dunk\Documents\Thonny Bits\RDO Daily Challenges\index.json"
 
 # URL for downloading if needed
 url = "https://api.rdo.gg/challenges/index.json"
 
-# Determine date string based on UTC time and 6am cutoff
+# Determine UTC now
 now = datetime.datetime.utcnow()
 
-# The condition if now.hour < 6: checks if the current hour is less than 6, which means it's between midnight (00:00) and 5:59 AM.
-if now.hour < 6:
-    # this subtracts a day if it's between 00:00 and 05:59
-    date_str = (now - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-else:
-    # while this will set the date_str to today's date
-    date_str = now.strftime('%Y-%m-%d')
-
-date_filename = os.path.join(os.path.dirname(local_filename), f'index_{date_str}.json')
-debug_print("bblue", "Filename to save: ", date_filename)
-
-# Check if local index.json exists
-if not os.path.exists(local_filename):
-    print("Local index.json not found. Downloading from URL...")
+# Function to download and save the JSON data
+def download_json():
     try:
         headers = {'User-Agent': 'Mozilla/5.0'}
         req = urllib.request.Request(url, headers=headers)
@@ -183,28 +173,50 @@ if not os.path.exists(local_filename):
             data_bytes = response.read()
             data_str = data_bytes.decode('utf-8')
             data = json.loads(data_str)
-        # Save to local index.json
+        # Save to local file
         with open(local_filename, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2)
-        print("Downloaded and saved index.json.")
+        print("Successfully downloaded and saved index.json.")
+        return data
     except Exception as e:
         print("Error fetching data:", e)
         raise
-else:
-    # Load existing local index.json
-    with open(local_filename, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    print("Loaded data from existing local index.json.")
 
-# Check if the date-specific copy exists
-if not os.path.exists(date_filename):
-    # Save a copy of index.json with the date in filename
-    with open(local_filename, 'r', encoding='utf-8') as src, \
-         open(date_filename, 'w', encoding='utf-8') as dst:
-        dst.write(src.read())
-    print(f"Saved a copy of index.json as {date_filename}")
+# Check if local index.json exists
+if os.path.exists(local_filename):
+    # Check if file is empty
+    if os.path.getsize(local_filename) == 0:
+        print("index.json is empty. Downloading new data.")
+        data = download_json()
+    else:
+        # Try loading JSON to verify validity
+        try:
+            with open(local_filename, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+        except json.JSONDecodeError:
+            print("Invalid JSON detected. Deleting corrupt file and re-downloading.")
+            os.remove(local_filename)
+            data = download_json()
+        else:
+            debug_print("bwhite", "JSON file passed integrity check")
+            # Check if the file was last modified after 6am UTC today
+            mod_time = os.path.getmtime(local_filename)
+            mod_datetime = datetime.datetime.fromtimestamp(mod_time)
+            today_6am = datetime.datetime.combine(now.date(), datetime.time(6, 0))
+            if mod_datetime > today_6am:
+                # It's recent enough; use the local version
+                print("Local index.json was saved after 6am today. Using local version.")
+            else:
+                # It's older than 6am; ask if you want to download a new one
+                choice = input("Local index.json is older than today's 6am refresh. Download new version? (Y/N): ").lower()
+                if choice == 'y':
+                    data = download_json()
+                else:
+                    print("Using existing local index.json.")
 else:
-    print(f"Date-specific file already exists: {date_filename}")
+    # No local file; download automatically
+    print("No local index.json found. Downloading from URL...")
+    data = download_json()
 # -------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -343,12 +355,12 @@ with open('challenges_export.json', 'w') as f:
     
     json.dump(sorted_challenges, f, indent=4)
 
+#Turn off the buffer capture
+sys.stdout = sys.__stdout__
+
 debug_print("iblue", "Challenges data saved to challenges_export.json.")
 ############################################################################
 
-
-#Turn off the buffer capture
-sys.stdout = sys.__stdout__
 
 # Get the captured output
 captured_output = buffer.getvalue()
