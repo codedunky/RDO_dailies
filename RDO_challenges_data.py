@@ -241,7 +241,7 @@ predefined_challenges = [
     {"name": "Players revived", "key": "mpgc_players_revived"},
     {"name": "Posse Infighting completed", "key": "mpgc_posse_infighting_completed"},
     {"name": "Posse Races completed", "key": "mpgc_posse_race_attempts"},
-    {"name": "Posses joined", "key": "mpgc_posse_join"},
+    {"name": "Posses joined", "key": "mpgc_posse_join", "showgoal": "y"},
     {"name": "Prairie Chickens skinned", "key": "mpgc_prairiechicken_skinned", "category": ["animal", "prairiechicken"]},
     {"name": "Prairie Poppies picked", "key": "mpgc_prairie_poppy_picked", "category": ["plants", "prairie_poppy"]},
     {"name": "Pronghorns skinned", "key": "mpgc_pronghorns_skinned", "category": ["animal", "pronghorn_american_m"]},
@@ -324,5 +324,6 @@ predefined_challenges = [
     {"name": "Wild Mint picked", "key": "mpgc_wild_mint_picked", "category": ["plants", "wild_mint"]},
     {"name": "Wintergreen Berries picked", "key": "mpgc_wintergreen_berry_picked", "category": ["plants", "wintergreen_berry"]},
     {"name": "Wolves killed", "key": "mpgc_wolves_killed", "category": ["animal", "wolf_gray"]},
-    {"name": "Yarrow picked", "key": "mpgc_yarrow_picked", "category": ["plants", "yarrow"]}
+    {"name": "Yarrow picked", "key": "mpgc_yarrow_picked", "category": ["plants", "yarrow"],
+             "description": "Fast travel to Rhodes station, and on the grass area west of the platform, there are two patches of yarrow."}
 ]

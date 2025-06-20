@@ -1,5 +1,6 @@
 import urllib.request
 import datetime
+import time
 import json
 import inspect
 import textwrap
@@ -158,14 +159,89 @@ predefined_lookup = {c['key']: c for c in predefined_challenges}
 # Your existing local filename path
 local_filename = r"C:\Users\Dunk\Documents\Thonny Bits\RDO Daily Challenges\index.json"
 
+# Extract directory
+target_dir = os.path.dirname(local_filename)
+debug_print("target_dir: ", target_dir)
+
+
 # URL for downloading if needed
 url = "https://api.rdo.gg/challenges/index.json"
 
 # Determine UTC now
 now = datetime.datetime.utcnow()
 
-# Function to download and save the JSON data
+# Function to check if download directory exists
+# --- Helper Functions ---
+
+def ensure_directory_exists(file_path):
+    directory = os.path.dirname(file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+def get_unique_backup_name(base_name):
+    count = 1
+    new_name = base_name
+    while os.path.exists(new_name):
+        name, ext = os.path.splitext(base_name)
+        new_name = f"{name}_{count}{ext}"
+        count += 1
+    return new_name
+
+def should_download(existing_data):
+    now = time.time()
+    end_time = existing_data.get('endTime')
+    if end_time is None:
+        return True
+    return now > end_time
+
+def create_backup():
+    debug_print("bblue", "local_filename for backup is: ", local_filename)
+    debug_print("bblue", "Checking if local_filename exists:", local_filename)
+    
+    if os.path.exists(local_filename):
+        # Load the existing data from index.json
+        with open(local_filename, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        # Extract startTime
+        start_time = data.get('startTime')
+        if start_time:
+            # Convert startTime (Unix timestamp) to date string
+            date_str = time.strftime('%Y-%m-%d', time.localtime(start_time))
+        else:
+            # Fallback if startTime isn't present
+            date_str = time.strftime('%Y-%m-%d')
+        
+        # Build the backup filename using the startTime date
+        base_backup_name = os.path.join(os.path.dirname(local_filename), f"index_{date_str}.json")
+        debug_print("bblue", "base_backup_name for backup is: ", base_backup_name)
+        backup_name = get_unique_backup_name(base_backup_name)
+        debug_print("bblue", "backup_name for backup is: ", backup_name)
+        print(f"Creating backup: {backup_name}")
+        os.rename(local_filename, backup_name)
+    else:
+        print("File does not exist at this point.")
+
 def download_json():
+    # Check if file exists
+    if os.path.exists(local_filename):
+        with open(local_filename, 'r', encoding='utf-8') as f:
+            existing_data = json.load(f)
+        if not should_download(existing_data):
+            print("Existing data is current. No need to download.")
+            return None
+        else:
+            print("Detected that 'now' > 'endTime'.")
+            response = input("Do you want to download a new version? (Y/N): ").strip().lower()
+            if response != 'y':
+                print("Skipping download. Keeping existing file.")
+                return None
+            else:
+                print("Proceeding to download new data...")
+    else:
+        print("No existing file found. Downloading new data...")
+
+    # Download data
     try:
         headers = {'User-Agent': 'Mozilla/5.0'}
         req = urllib.request.Request(url, headers=headers)
@@ -173,50 +249,28 @@ def download_json():
             data_bytes = response.read()
             data_str = data_bytes.decode('utf-8')
             data = json.loads(data_str)
-        # Save to local file
-        with open(local_filename, 'w', encoding='utf-8') as f:
-            json.dump(data, f, indent=2)
-        print("Successfully downloaded and saved index.json.")
         return data
     except Exception as e:
-        print("Error fetching data:", e)
-        raise
+        print("Error during download:", e)
+        return None
 
-# Check if local index.json exists
-if os.path.exists(local_filename):
-    # Check if file is empty
-    if os.path.getsize(local_filename) == 0:
-        print("index.json is empty. Downloading new data.")
-        data = download_json()
-    else:
-        # Try loading JSON to verify validity
-        try:
-            with open(local_filename, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-        except json.JSONDecodeError:
-            print("Invalid JSON detected. Deleting corrupt file and re-downloading.")
-            os.remove(local_filename)
-            data = download_json()
-        else:
-            debug_print("bwhite", "JSON file passed integrity check")
-            # Check if the file was last modified after 6am UTC today
-            mod_time = os.path.getmtime(local_filename)
-            mod_datetime = datetime.datetime.fromtimestamp(mod_time)
-            today_6am = datetime.datetime.combine(now.date(), datetime.time(6, 0))
-            if mod_datetime > today_6am:
-                # It's recent enough; use the local version
-                print("Local index.json was saved after 6am today. Using local version.")
-            else:
-                # It's older than 6am; ask if you want to download a new one
-                choice = input("Local index.json is older than today's 6am refresh. Download new version? (Y/N): ").lower()
-                if choice == 'y':
-                    data = download_json()
-                else:
-                    print("Using existing local index.json.")
+# --- Main process ---
+
+# Step 1: Ensure directory exists
+ensure_directory_exists(local_filename)
+
+# Step 2: Check if need to download new data
+data = download_json()
+debug_print("bgreen", "local_filename for backup is: ", local_filename)
+
+# Step 3: If new data is available, backup old file and save new
+if data is not None:
+    create_backup()
+    with open(local_filename, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=2)
+    print(f"New data saved to {local_filename}")
 else:
-    # No local file; download automatically
-    print("No local index.json found. Downloading from URL...")
-    data = download_json()
+    print("No update performed.")
 # -------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -224,7 +278,19 @@ else:
 debug_print("bbrightwhite", "Extract Challenges List From JSON") # Just to have a debug heading.
 
 # This will extract the general challenges from the json file (id, title, goal, goalFormat)
-general_challenges = data.get('general', [])
+general_challenges = []  # default value
+
+# Load existing data from index.json
+if os.path.exists(local_filename):
+    with open(local_filename, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    # Now assign challenges from data if available
+    if data:
+        general_challenges = data.get('general', [])
+    # do other stuff
+else:
+    print("No data available.")
+
 debug_print("icyan", "Extracted 'general' challenges:", len(general_challenges)) # Debug message (and how many general challenges)
 
 # Debug print the challenge object
