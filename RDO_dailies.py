@@ -7,137 +7,191 @@ import textwrap
 import os
 import io
 import sys
-import ansi2html
+from typing import Any
 from ansi2html import Ansi2HTMLConverter
 
 
 
+
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+import inspect
+import textwrap
+from typing import Any
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+# DEBUG_PRINT
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 # ANSI escape codes for different colors used by debug_print
 COLORS = {
-    "ireset": 			"\033[0m",     # 0
-    "idarkred":			"\033[31m",    # 31
-    "idarkgreen":		"\033[32m",    # 32
-    "idarkyellow":		"\033[33m",    # 33
-    "idarkblue": 		"\033[34m",    # 34
-    "idarkpurple":		"\033[35m",    # 35
-    "idarkcyan":		"\033[36m",    # 36
-    "iblack":			"\033[90m",    # 90
-    "ired": 			"\033[91m",    # 91
-    "igreen":			"\033[92m",    # 92
-    "iyellow":			"\033[93m",    # 93
-    "iblue": 			"\033[94m",    # 94
-    "ipurple": 			"\033[95m",    # 95
-    "icyan": 			"\033[96m",    # 96
-    "iwhite":			"\033[97m",    # 97
-
-
-    "bblack":			"\033[40m",				# Background: Black
-    "bred":				"\033[41m",				# Background: Red
-    "bgreen":			"\033[42m",				# Background: Green
-    "byellow":			"\033[43m",				# Background: Yellow
-    "bblue":			"\033[44m",				# Background: Blue
-    "bpurple":			"\033[45m",				# Background: Magenta
-    "bcyan":			"\033[46m",				# Background: Cyan
-    "bwhite":			"\033[47m\033[30m",		# Background: White		ink: Black
-    "bRESET":			"\033[49m",				# Reset background color
-
-    "bbrightblack":		"\033[100m",			# Background: Bright Black (Grey)
-    "bbrightred":		"\033[101m",			# Background: Bright Red
-    "bbrightgreen":		"\033[102m",			# Background: Bright Green
-    "bbrightyellow":	"\033[103m",			# Background: Bright Yellow
-    "bbrightblue":		"\033[104m",			# Background: Bright Blue
-    "bbrightpurple":	"\033[105m",			# Background: Bright Magenta
-    "bbrightcyan":		"\033[106m\033[30m",	# Background: Bright Cyan
-    "bbrightwhite":		"\033[107m\033[30m"		# Background: Bright White
+    "ireset":          "\033[0m",
+    "idarkred":        "\033[31m",
+    "idarkgreen":      "\033[32m",
+    "idarkyellow":     "\033[33m",
+    "idarkblue":       "\033[34m",
+    "idarkpurple":     "\033[35m",
+    "idarkcyan":       "\033[36m",
+    "iblack":          "\033[90m",
+    "ired":            "\033[91m",
+    "igreen":          "\033[92m",
+    "iyellow":         "\033[93m",
+    "iblue":           "\033[94m",
+    "ipurple":        "\033[95m",
+    "icyan":           "\033[96m",
+    "iwhite":          "\033[97m",
+    "bblack":          "\033[40m",
+    "bred":            "\033[41m",
+    "bgreen":          "\033[42m",
+    "byellow":         "\033[43m",
+    "bblue":           "\033[44m",
+    "bpurple":         "\033[45m",
+    "bcyan":           "\033[46m",
+    "bwhite":          "\033[47m\033[30m",
+    "bRESET":          "\033[49m",
+    "bbrightblack":    "\033[100m",
+    "bbrightred":      "\033[101m",
+    "bbrightgreen":    "\033[102m",
+    "bbrightyellow":   "\033[103m",
+    "bbrightblue":     "\033[104m",
+    "bbrightpurple":   "\033[105m",
+    "bbrightcyan":     "\033[106m\033[30m",
+    "bbrightwhite":    "\033[107m\033[30m"
 }
 
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+# Current debug level: 0=L0 (off), 1=L1, 2=L2, 3=L3, 4=L4
+CURRENT_DEBUG_LEVEL = 3
 
+# Map string levels to numeric levels
+LEVEL_MAP = {
+    'L0': 0,
+    'L1': 1,
+    'L2': 2,
+    'L3': 3,
+    'L4': 4
+}
 
+# Default colors for each level
+DEFAULT_LEVEL_COLORS = {
+    'L1': 'bwhite',
+    'L2': 'bblue',
+    'L3': 'idarkgreen',
+    'L4': 'ipurple'
+}
 
-
-def debug_print(color: str, *messages: any, debug: bool = True):
+def debug_print(
+    *args,
+    debug: bool = True
+):
     """
-    Print debug messages in specified color if debug is True.
-    It accepts the prefix "DEBUG:" as part of the message.
-
-    :param color: Color string (e.g. 'cyan', 'purple', 'red', 'blue').
-    :param messages: One or more messages to print.
-    :param debug: Boolean to enable/disable debug printing.
+    Print debug messages with level filtering.
+    Usage:
+      debug_print(level, message parts...)
+    The first argument is the level as a string ('L0', 'L1', 'L2', 'L3').
+    Optionally, the second argument can be the color.
+    If no color is provided, defaults are used based on level.
     """
-    
 
-    
-    if debug:
-        frame = inspect.currentframe()                  # Get the current stack frame
-        caller_frame = frame.f_back                     # Get the caller's frame
-        line_number = caller_frame.f_lineno             # Get the line number
-        
-        # Print debugging information directly
-        #print("DEBUG INFO:")
-        #print(f"Debugging at line number: {line_number}")
+    if not debug:
+        return
 
-        color_code = COLORS.get(color.lower(), COLORS["icyan"])  # Default to cyan if not found
+    if len(args) == 0:
+        return  # No arguments, do nothing
 
-        # Combine all message parts into a single string
-        combined_message = " ".join(str(msg) for msg in messages)
+    # Extract the level
+    level_str = args[0]
+    if isinstance(level_str, str):
+        level_upper = level_str.upper()
+        level_num = LEVEL_MAP.get(level_upper, 3)
+    else:
+        # If first argument isn't a string, assume level 'L4'
+        level_upper = 'L4'
+        level_num = 4
 
-        # Check if there are any messages to print
-        if not combined_message.strip():
-            print(f"LINE {line_number}: No message provided.")
-            return
+    # Check level against current debug level
+    if level_num > CURRENT_DEBUG_LEVEL:
+        return
 
-        # Define a wrap width
-        wrap_width = 125  # Total width for wrapping
-        max_indent = 12   # This value is the indent in from the left side in characters - Increase for massive programs
-                          # because we can't easily pass the highest line number into the function
-                          
-        # Create the initial output line: "LINE <line_number>: "
-        line_info = f"LINE {line_number}: "
-        line_info_length = len(line_info)
-        
-        # Prepare the message with wrapping for the entire combined message
-        wrapped_message = textwrap.fill(combined_message, width=wrap_width)
-        
-        # Indentation for first line
-        indent_str = ' ' * (max_indent - line_info_length) # The max indent minus the Line Number Length
-        
-        # Print the first line, with the line prefix
-        first_line = wrapped_message.splitlines()[0]
-        print(f"{line_info}{indent_str}{color_code}{first_line}{COLORS['ireset']}")
+    # Determine the color:
+    # If second argument exists and is a string, treat it as color
+    color = None
+    message_parts = []
 
-        # Indentation for wrapped lines
-        indent_str = ' ' * (max_indent)  # indent for wrapped lines
+    if len(args) > 1:
+        second_arg = args[1]
+        if isinstance(second_arg, str) and second_arg.lower() in COLORS:
+            color = second_arg.lower()
+            message_parts = args[2:]
+        else:
+            # No color specified, message parts start from second argument
+            message_parts = args[1:]
+    else:
+        message_parts = []
 
-        # Print the wrapped lines, starting from the second line
-        for line in wrapped_message.splitlines()[1:]:  # Start from the second line
-            print(f"{indent_str}{color_code}{line}{COLORS['ireset']}")  # Indent additional lines
+    # If no color specified, use default for level
+    if color is None:
+        #Looks up the color name associated with level_upper in the DEFAULT_LEVEL_COLORS dictionary.
+        #If the color name isn't found in COLORS, it defaults to 'iblue'.
+        default_color_name = DEFAULT_LEVEL_COLORS.get(level_upper, 'iblue')
+        color_code = COLORS.get(default_color_name, COLORS["iblue"])
+    else:
+        # Uses the provided color string to look up the ANSI code.
+        # If the specified color isn't in COLORS, defaults to 'icyan'.
+        color_code = COLORS.get(color, COLORS["icyan"])
 
+    # Get caller line number
+    frame = inspect.currentframe()
+    caller_frame = frame.f_back
+    line_number = caller_frame.f_lineno
 
+    # Combine message parts
+    combined_message = " ".join(str(msg) for msg in message_parts)
 
+    if not combined_message.strip():
+        print(f"LINE {line_number}: No message provided.")
+        return
+
+    # Wrap and print
+    wrap_width = 125
+    max_indent = 12
+    line_info = f"LINE {line_number}: "
+    line_info_length = len(line_info)
+
+    wrapped_message = textwrap.fill(combined_message, width=wrap_width)
+    indent_str = ' ' * (max_indent - line_info_length)
+
+    # Print first line
+    first_line = wrapped_message.splitlines()[0]
+    print(f"{line_info}{indent_str}{color_code}{first_line}{COLORS['ireset']}")
+
+    # Print wrapped remaining lines
+    indent_str = ' ' * (max_indent)
+    for line in wrapped_message.splitlines()[1:]:
+        print(f"{indent_str}{color_code}{line}{COLORS['ireset']}")
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 ###############################################################################################################################################################################################################################################################################################################################
         
         
         
         
         
-        
+debug_print("L1", "Import RDO_Challenges_Data") # Just to have a debug heading.        
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 # Import the predefined_challenges dictionary data from a separate .py file called RDO_challenges_data.py
 # This imports the entire RDO_challenges_data.py module, which contains the predefined_challenges list.
 import RDO_challenges_data
-
+debug_print("L3", "Actually import RDO_Challenges_Data") 
 
 # This assigns the list stored in RDO_challenges_data.predefined_challenges to a variable named predefined_challenges
 # in this current script, so it can be used directly without the challenges_data. prefix.
 predefined_challenges = RDO_challenges_data.predefined_challenges
+debug_print("L3", "Set predefined_challenges")
+debug_print("L4", predefined_challenges)
 
 # Step 2: Sort challenges alphabetically by 'name'
 sorted_challenges = sorted(predefined_challenges, key=lambda x: x['name'])
+debug_print("L3", "Sort challenges alphabetically by 'name'")
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -151,7 +205,8 @@ sorted_challenges = sorted(predefined_challenges, key=lambda x: x['name'])
 # predefined_lookup = {'mpgc_story_mission_wins': {'key': 'mpgc_story_mission_wins', 'name': 'Story Mission Wins', 'showgoal': 'y', ...},
 
 predefined_lookup = {c['key']: c for c in predefined_challenges}
-
+debug_print("L2", "Created predefined_lookup")
+debug_print("L4", predefined_lookup)
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -161,7 +216,8 @@ local_filename = r"C:\Users\Dunk\Documents\Thonny Bits\RDO Daily Challenges\inde
 
 # Extract directory
 target_dir = os.path.dirname(local_filename)
-debug_print("target_dir: ", target_dir)
+debug_print("L2", "Get a target directory to save index.json files to") #
+debug_print("L3", "target_dir: ", target_dir)
 
 
 # URL for downloading if needed
@@ -169,6 +225,8 @@ url = "https://api.rdo.gg/challenges/index.json"
 
 # Determine UTC now
 now = datetime.datetime.utcnow()
+debug_print("L2", "Get the current time") #
+debug_print("L3", "now: ", now)
 
 # Function to check if download directory exists
 # --- Helper Functions ---
@@ -177,46 +235,55 @@ def ensure_directory_exists(file_path):
     directory = os.path.dirname(file_path)
     if not os.path.exists(directory):
         os.makedirs(directory)
+debug_print("L2", "Check download directory exists")
 
 def get_unique_backup_name(base_name):
+    debug_print("L2", "Get unique backup name for saving old index.json")
     count = 1
     new_name = base_name
     while os.path.exists(new_name):
         name, ext = os.path.splitext(base_name)
         new_name = f"{name}_{count}{ext}"
         count += 1
+    debug_print("L3", "Backup name is :", new_name)
     return new_name
 
 def should_download(existing_data):
+    debug_print("L2", "Using should_download function to check if need to download")
     now = time.time()
     end_time = existing_data.get('endTime')
+    debug_print("L3", "end_time: ", local_filename)
     if end_time is None:
         return True
     return now > end_time
 
 def create_backup():
-    debug_print("bblue", "local_filename for backup is: ", local_filename)
-    debug_print("bblue", "Checking if local_filename exists:", local_filename)
+    debug_print("L3", "local_filename for backup is: ", local_filename)
+    debug_print("L3", "Checking if local_filename exists:", local_filename)
     
     if os.path.exists(local_filename):
+        debug_print("L2", "local_filename exists")
         # Load the existing data from index.json
         with open(local_filename, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
         # Extract startTime
         start_time = data.get('startTime')
+        debug_print("L3", "start_time in index.json is:", start_time)
         if start_time:
             # Convert startTime (Unix timestamp) to date string
             date_str = time.strftime('%Y-%m-%d', time.localtime(start_time))
+            debug_print("L3", "start_time converted to yyyy-mm-dd:", date_str)
         else:
             # Fallback if startTime isn't present
             date_str = time.strftime('%Y-%m-%d')
+            debug_print("L3", "No start_time present, so using:", date_str)
         
         # Build the backup filename using the startTime date
         base_backup_name = os.path.join(os.path.dirname(local_filename), f"index_{date_str}.json")
-        debug_print("bblue", "base_backup_name for backup is: ", base_backup_name)
+        debug_print("L3", "base_backup_name for backup is: ", base_backup_name)
         backup_name = get_unique_backup_name(base_backup_name)
-        debug_print("bblue", "backup_name for backup is: ", backup_name)
+        debug_print("L3", "backup_name for backup is: ", backup_name)
         print(f"Creating backup: {backup_name}")
         os.rename(local_filename, backup_name)
     else:
@@ -224,6 +291,7 @@ def create_backup():
 
 def download_json():
     # Check if file exists
+    debug_print("L1", "download_json():")
     if os.path.exists(local_filename):
         with open(local_filename, 'r', encoding='utf-8') as f:
             existing_data = json.load(f)
@@ -242,6 +310,7 @@ def download_json():
         print("No existing file found. Downloading new data...")
 
     # Download data
+    debug_print("L2", "Downloading index.json from api")
     try:
         headers = {'User-Agent': 'Mozilla/5.0'}
         req = urllib.request.Request(url, headers=headers)
@@ -253,6 +322,71 @@ def download_json():
     except Exception as e:
         print("Error during download:", e)
         return None
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# A routine to get the actual date the index.json is for, ready to print in the output heading
+
+def get_date_from_index(local_filename):
+    #debug_print("L1", "get_date_from_index(local_filename):")
+    try:
+        with open(local_filename, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        start_time = data.get('startTime')
+        if start_time:
+            #debug_print("L3", "Time from index.json is: ", time.strftime('%Y-%m-%d', time.localtime(start_time)))
+            return time.strftime('%Y-%m-%d', time.localtime(start_time))
+        else:
+            #debug_print("L3", "Fallback to current date, which is: ", time.strftime('%Y-%m-%d', time.localtime(start_time)))
+            return time.strftime('%Y-%m-%d')  # fallback to current date
+    except Exception as e:
+        print("Error loading index.json:", e)
+        return time.strftime('%Y-%m-%d')  # fallback
+    
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    
+def get_unix_time_from_index(local_filename):
+    try:
+        with open(local_filename, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        start_time = data.get('startTime')
+        if start_time:
+            return start_time  # Return the raw Unix timestamp
+        else:
+            # fallback to current time if startTime not present
+            return int(time.time())
+    except Exception as e:
+        print("Error loading index.json:", e)
+        return int(time.time())  # fallback to current time    
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+def get_human_readable_date(unix_timestamp):
+    dt = datetime.datetime.fromtimestamp(unix_timestamp)
+    day = dt.day
+    month = dt.strftime('%B')  # Full month name
+    year = dt.year
+    weekday = dt.strftime('%A')  # Full weekday name
+
+    # Determine ordinal suffix
+    if 11 <= day <= 13:
+        suffix = 'th'
+    else:
+        last_digit = day % 10
+        if last_digit == 1:
+            suffix = 'st'
+        elif last_digit == 2:
+            suffix = 'nd'
+        elif last_digit == 3:
+            suffix = 'rd'
+        else:
+            suffix = 'th'
+
+    return f"{weekday}, {day}{suffix} {month} {year}"
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 # --- Main process ---
 
@@ -344,7 +478,16 @@ sys.stdout = buffer
 
 ######################################################################################################
 
-print("\nDAILY CHALLENGES\n")
+
+
+
+
+#print("\nDAILY CHALLENGES\n")
+# Get the appropriate date for the list of challenges and print it.
+unix_time = get_unix_time_from_index(local_filename)
+human_readable_date = get_human_readable_date(unix_time)
+print("\n")
+print(human_readable_date)
 print("-" * 120)
 
 # Step 1: Collect all challenges into a list with necessary info
