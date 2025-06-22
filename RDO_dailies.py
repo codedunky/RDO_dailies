@@ -678,11 +678,26 @@ html_full = f"""
     .banner-title {{
       font-family: 'RDOFont', sans-serif;
       position: absolute;
-      top: 15%; /* adjust vertical position as needed */
+      top: 7.5%; /* adjust vertical position as needed */
       left: 50%;
       transform: translateX(-50%);
       color: white;
       font-size: 3em;
+      margin: 0;
+      padding: 10px;
+      /* background: rgba(0, 0, 0, 0.3);
+      /* Drop shadow effect: */
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    }}
+    
+    .date-below-title {{
+      font-family: 'RDOFont', sans-serif;
+      position: absolute;
+      top: 32%; /* adjust vertical position as needed */
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 1.5em;
       margin: 0;
       padding: 10px;
       /* background: rgba(0, 0, 0, 0.3);
@@ -695,6 +710,7 @@ html_full = f"""
   <div class="banner-container">
     <img src="HTML/images/RDO_Banner.jpg" alt="Banner" class="banner-image"/>
     <h1 class="banner-title">Daily Challenges</h1>
+    <div class="date-below-title">{human_readable_date}</div>
   </div>
   {html_body}
 </body>
