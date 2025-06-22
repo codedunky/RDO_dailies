@@ -502,8 +502,6 @@ def find_predefined_challenge(title):
 # Prepare a buffer to capture output
 buffer = io.StringIO()
 
-# Redirect stdout to buffer
-sys.stdout = buffer
 
 ######################################################################################################
 
@@ -518,7 +516,12 @@ human_readable_date = get_human_readable_date(unix_time)
 print("\n")
 print(human_readable_date)
 print("\n")
-print("-" * 120)
+
+
+
+# Redirect stdout to buffer
+sys.stdout = buffer
+
 
 # Step 1: Collect all challenges into a list with necessary info
 all_challenges = []
@@ -613,6 +616,7 @@ with open("challenges.html", "w", encoding="utf-8") as f:
     f.write(html_output)
 
 # Also, print to shell
+print("-" * 120)
 print(captured_output)
 
 
@@ -682,10 +686,10 @@ html_full = f"""
       left: 50%;
       transform: translateX(-50%);
       color: white;
-      font-size: 3em;
       margin: 0;
       padding: 10px;
-      /* background: rgba(0, 0, 0, 0.3);
+      /* Responsive font size: */
+      font-size: clamp(0.25em, 5vw, 3em);
       /* Drop shadow effect: */
       text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
     }}
@@ -697,7 +701,7 @@ html_full = f"""
       left: 50%;
       transform: translateX(-50%);
       color: white;
-      font-size: 1.5em;
+      font-size: clamp(0.15em, 1.5vw, 1.5em);
       margin: 0;
       padding: 10px;
       /* background: rgba(0, 0, 0, 0.3);
