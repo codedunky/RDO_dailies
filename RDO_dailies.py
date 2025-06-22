@@ -520,7 +520,7 @@ print("\n")
 
 
 # Redirect stdout to buffer
-sys.stdout = buffer
+#sys.stdout = buffer
 
 
 # Step 1: Collect all challenges into a list with necessary info
@@ -554,34 +554,74 @@ for challenge in general_challenges:
 # Step 2: Sort alphabetically by 'name'
 sorted_challenges = sorted(all_challenges, key=lambda x: x['name'].lower())
 
-# Step 3: Loop through sorted challenges and apply your display logic
+#-----------------------------------------------------------------------------
+# This will be the final challenge output for the html to read in (with correct numbers)
+json_file_path = 'final_challenges_output.json'
+
+# Load existing data or initialize
+if os.path.exists(json_file_path):
+    with open(json_file_path, 'r') as file:
+        data = json.load(file)
+        # Clear previous entries to start fresh each run
+        data["final_name"] = []
+        
+else:
+    data = {"final_name": []}
+#-----------------------------------------------------------------------------
+
+# Step 3: Loop through sorted challenges, apply your display logic, and save output for html to use
 for challenge in sorted_challenges:
     name = challenge['name']
     goal_value = challenge['goal_value']
     showgoal = challenge['showgoal']
+    description = challenge.get('description', None) 
+    
+    # Initialize the dictionary for this challenge
+    challenge_entry = {}
 
-    
-    
+
     # Decide what to print based on your conditions:
     if showgoal == 'y':
-        #debug_print("icyan", "showgoal: ", showgoal)
-        print(f"{goal_value} {name}")
+        debug_print("icyan", "showgoal: ", showgoal)
+        main_text = f"{goal_value} {name}"
+        
     elif goal_value == 1 and showgoal is None or showgoal :
-        #debug_print("iblue", "showgoal: ", showgoal)
-        print(f"{name}")
+        debug_print("iblue", "showgoal: ", showgoal)
+        main_text = f"{name}"
+    
     else:
         # For all other cases, print goal_value and name
-        print(f"{goal_value} {name}")
+        main_text = f"{goal_value} {name}"
      
-    description = challenge.get('description', None) 
+    
+    # Save main text
+    challenge_entry['text'] = main_text
+    
+    
     if description is not None:
-        print(f"\033[3;33m{challenge['description']}\033[0m")
+        challenge_entry['description'] = description
+        
     elif description is None:
+        challenge_entry['description'] = None
         pass
 
+    
+    # Append this challenge's data to the list
+    data["final_name"].append(challenge_entry)
+    
+    # Redirect stdout to buffer
+    sys.stdout = buffer
+    # Print the challenge and description
+    print(main_text)
+    if description is not None:
+        print(f"\033[3;33m{challenge['description']}\033[0m")
     print("-" * 120)
+    #Turn off the buffer capture
+    sys.stdout = sys.__stdout__
 
-
+# Save a json file out
+with open(json_file_path, 'w') as file:
+    json.dump(data, file, indent=4)
 ############################################################################
 
 # 'with' is a context manager that handles resources automatically.
@@ -618,6 +658,68 @@ with open("challenges.html", "w", encoding="utf-8") as f:
 # Also, print to shell
 print("-" * 120)
 print(captured_output)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##################################################################################################################################
+##################################################################################################################################
+# Parse json file to get challenges split up into nice HTML code
+
+# Load the json data created earlier, that's sorted alphabetically, and in a neat format)
+with open('challenges_export.json', 'r') as f:
+    challenges = json.load(f)
+
+
+@announce
+def render_challenge(challenge):
+    name = challenge.get('name', 'Unnamed Challenge')
+    goal_value = challenge.get('goal_value', '')
+    showgoal = challenge.get('showgoal', True)
+    description = challenge.get('description', '')
+
+    goal_html = ''
+    if showgoal:
+        goal_html = f'<p class="goal">Goal: {goal_value}</p>'
+
+    return f'''
+    <div class="challenge">
+        <h3 class="challenge-name">{name}</h3>
+        {goal_html}
+        <p class="description">{description}</p>
+    </div>
+    '''
+html_template2 = f"""
+{"".join(render_challenge(ch) for ch in challenges)}
+"""
+#debug_print("L3", "html_template2: ", html_template2)
+
+
 
 
 
