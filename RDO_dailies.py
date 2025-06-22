@@ -171,7 +171,15 @@ def debug_print(
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 # This is a 'decorator'
-# If you put @announce in the line before your function, it will debug_print the message
+# If you put @announce in the line before your function, it will debug_print the yellow "Executing Function" message
+'''
+    It takes a function func as input.
+    Inside, it defines wrapper, which:
+        Prints a message indicating which function is running.
+        Calls the original function with its arguments.
+
+    announce returns this wrapper function.
+'''
 def announce(func):
     def wrapper(*args, **kwargs):
         debug_print("L1", "byellow", f"Executing function - {func.__name__}()")
@@ -189,9 +197,10 @@ def announce(func):
 debug_print("L1", "Import RDO_Challenges_Data") # Just to have a debug heading.        
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 # Import the predefined_challenges dictionary data from a separate .py file called RDO_challenges_data.py
+# RDO_challenges_data.py is in the same folder as this program
 # This imports the entire RDO_challenges_data.py module, which contains the predefined_challenges list.
 import RDO_challenges_data
-debug_print("L3", "Actually import RDO_Challenges_Data") 
+debug_print("L3", "Actually imported RDO_Challenges_Data") 
 
 # This assigns the list stored in RDO_challenges_data.predefined_challenges to a variable named predefined_challenges
 # in this current script, so it can be used directly without the challenges_data. prefix.
@@ -626,37 +635,79 @@ html_body = converter.convert(captured_output)
 
 # Wrap in full HTML with styles
 html_full = f"""
+<!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <style>
     body {{
       font-family: Arial, sans-serif;
       background-color: #f0f0f0;
       padding: 20px;
     }}
+    @font-face {{
+      font-family: 'RDOFont'; /* name you'll use in CSS */
+      src: url('Fonts/RDO_chinese_rocks_rg.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }}
     h1 {{
       font-size: 60px;
       text-align: left;
       margin-bottom: 40px;
     }}
-    /* Optional: style for the challenges */
+    /* Style for challenges */
     .challenge {{
       font-size: 32px;
       margin: 10px 0;
     }}
+    /* Banner overlay styles */
+    .banner-container {{
+      position: relative;
+      width: 100%;
+      max-width: 850px; /* match your banner width, or set to 100% for full width */
+      margin: 0; /* center container in page */
+    }}
+
+    .banner-image {{
+      width: 100%; /* makes image fill container width */
+      height: auto;
+      display: block;
+    }}
+
+    .banner-title {{
+      font-family: 'RDOFont', sans-serif;
+      position: absolute;
+      top: 15%; /* adjust vertical position as needed */
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 3em;
+      margin: 0;
+      padding: 10px;
+      /* background: rgba(0, 0, 0, 0.3);
+      /* Drop shadow effect: */
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    }}
   </style>
 </head>
 <body>
-  <h1>Daily Challenges</h1>
+  <div class="banner-container">
+    <img src="HTML/images/RDO_Banner.jpg" alt="Banner" class="banner-image"/>
+    <h1 class="banner-title">Daily Challenges</h1>
+  </div>
   {html_body}
 </body>
 </html>
 """
 
 # Save to file
+#Open the 'challenges_styled.html' file for writing, utf-8 encoding.
+#The 'with' part is the context manager which ensures the file is properly closed after the block completes, even if errors happen.
 with open("challenges_styled.html", "w", encoding="utf-8") as f:
+    
+    #f.write('<img src="/HTML/images/RDO_Banner.jpg" alt="Banner" style="width: 200px; height: auto; display: block; margin: 0 auto;"/>\n')  # Adjust width as needed
     f.write(html_full)
-
 debug_print("iblue", "Styled challenges saved to 'challenges_styled.html'. Open it in your browser.")
 
 
