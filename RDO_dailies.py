@@ -43,7 +43,7 @@ COLORS = {
     "bblack":          "\033[40m",
     "bred":            "\033[41m",
     "bgreen":          "\033[42m",
-    "byellow":         "\033[43m",
+    "byellow":         "\033[43m\033[30m",
     "bblue":           "\033[44m",
     "bpurple":         "\033[45m",
     "bcyan":           "\033[46m",
@@ -170,6 +170,16 @@ def debug_print(
         print(f"{indent_str}{color_code}{line}{COLORS['ireset']}")
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+# This is a 'decorator'
+# If you put @announce in the line before your function, it will debug_print the message
+def announce(func):
+    def wrapper(*args, **kwargs):
+        debug_print("L1", "byellow", f"Executing function - {func.__name__}()")
+        return func(*args, **kwargs)
+    return wrapper
+
+
+
 ###############################################################################################################################################################################################################################################################################################################################
         
         
@@ -230,13 +240,14 @@ debug_print("L3", "now: ", now)
 
 # Function to check if download directory exists
 # --- Helper Functions ---
-
+@announce
 def ensure_directory_exists(file_path):
     directory = os.path.dirname(file_path)
     if not os.path.exists(directory):
         os.makedirs(directory)
 debug_print("L2", "Check download directory exists")
 
+@announce
 def get_unique_backup_name(base_name):
     debug_print("L2", "Get unique backup name for saving old index.json")
     count = 1
@@ -248,15 +259,19 @@ def get_unique_backup_name(base_name):
     debug_print("L3", "Backup name is :", new_name)
     return new_name
 
+@announce
 def should_download(existing_data):
     debug_print("L2", "Using should_download function to check if need to download")
     now = time.time()
     end_time = existing_data.get('endTime')
-    debug_print("L3", "end_time: ", local_filename)
+    #debug_print("L3", "end_time date is:",get_date_from_index(end_time))
+    debug_print("L3", "Date challenges run out is ",get_human_readable_date(end_time))
+    debug_print("L3", "end_time: ", end_time)
     if end_time is None:
         return True
     return now > end_time
 
+@announce
 def create_backup():
     debug_print("L3", "local_filename for backup is: ", local_filename)
     debug_print("L3", "Checking if local_filename exists:", local_filename)
@@ -289,6 +304,7 @@ def create_backup():
     else:
         print("File does not exist at this point.")
 
+@announce
 def download_json():
     # Check if file exists
     debug_print("L1", "download_json():")
@@ -327,6 +343,7 @@ def download_json():
 
 # A routine to get the actual date the index.json is for, ready to print in the output heading
 
+@announce
 def get_date_from_index(local_filename):
     #debug_print("L1", "get_date_from_index(local_filename):")
     try:
@@ -344,7 +361,8 @@ def get_date_from_index(local_filename):
         return time.strftime('%Y-%m-%d')  # fallback
     
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    
+
+
 def get_unix_time_from_index(local_filename):
     try:
         with open(local_filename, 'r', encoding='utf-8') as f:
@@ -360,6 +378,7 @@ def get_unix_time_from_index(local_filename):
         return int(time.time())  # fallback to current time    
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 def get_human_readable_date(unix_timestamp):
     dt = datetime.datetime.fromtimestamp(unix_timestamp)
@@ -448,6 +467,7 @@ def normalize_string(s):
     """
     return s.upper().replace('_', ' ').strip()
 
+
 def find_predefined_challenge(title):
     """
     Search for a challenge in the predefined_challenges list
@@ -488,6 +508,7 @@ unix_time = get_unix_time_from_index(local_filename)
 human_readable_date = get_human_readable_date(unix_time)
 print("\n")
 print(human_readable_date)
+print("\n")
 print("-" * 120)
 
 # Step 1: Collect all challenges into a list with necessary info
