@@ -586,7 +586,7 @@ for challenge in sorted_challenges:
         main_text = f"{goal_value} {name}"
         
     elif goal_value == 1 and showgoal is None or showgoal :
-        debug_print("iblue", "showgoal: ", showgoal)
+        debug_print("L3", "showgoal: ", showgoal)
         main_text = f"{name}"
     
     else:
@@ -640,7 +640,7 @@ with open('challenges_export.json', 'w') as f:
 #Turn off the buffer capture
 sys.stdout = sys.__stdout__
 
-debug_print("iblue", "Challenges data saved to challenges_export.json.")
+debug_print("L3", "Challenges data saved to challenges_export.json.")
 ############################################################################
 
 
@@ -745,6 +745,7 @@ html_full = f"""
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="html/images/favicon.ico" type="image/x-icon">
   <style>
     body {{
       font-family: Arial, sans-serif;
@@ -803,7 +804,7 @@ html_full = f"""
       left: 50%;
       transform: translateX(-50%);
       color: white;
-      font-size: clamp(0.15em, 1.5vw, 1.5em);
+      font-size: clamp(0.15em, 1.75vw, 1.75em);
       margin: 0;
       padding: 10px;
       /* background: rgba(0, 0, 0, 0.3);
@@ -842,11 +843,161 @@ debug_print("iblue", "Styled challenges saved to 'challenges_styled.html'. Open 
 
 
 
+# *******************************************************************************************************************************************************************
+# New version of the HTML with better control over font sizes etc.
+
+import json
+
+with open('final_challenges_output.json', 'r') as f:
+    data = json.load(f)
+    debug_print("L2", "Loaded in the final_challenges_output.json")
+
+challenges = data['final_name']
+
+# 2: Generate HTML for challenges
+html_challenges = ""
+
+for challenge in challenges:
+    text = challenge['text']
+    description = challenge['description']
+    
+    # Style for 'text' and 'description'
+    # For example, you can set font size and font family here
+    challenge_html = f"""
+    <div class="challenge">
+      <div class="challenge-text">{text}</div>
+    """
+    if description:
+        challenge_html += f"""
+      <div class="challenge-desc">{description}</div>
+    """
+    challenge_html += "</div>"
+    html_challenges += challenge_html
 
 
 
 
+html_full2 = f"""
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="html/images/favicon.ico" type="image/x-icon" />
+  <style>
+    /* your existing styles */
+    body {{
+      font-family: Arial, sans-serif;
+      background-color: #000000;
+      padding: 20px;
+    }}
+    @font-face {{
+      font-family: 'RDOFont'; /* name you'll use in CSS */
+      src: url('Fonts/RDO_chinese_rocks_rg.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }}
+    @font-face {{
+      font-family: 'Hapna';
+      src: url('Fonts/Hapna.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+    }}
+    h1 {{
+      font-size: 60px;
+      text-align: left;
+      margin-bottom: 40px;
+    }}
+    /* Wrapper for challenges to limit max width and center */
+    .challenges-wrapper {{
+    max-width: 850px;
+    margin-left: 0; /* align to the left */
+    /* optional: add some padding if needed */
+    padding-left: 10px; /* optional padding for spacing from the edge */
+    }}
+    /* Style for individual challenges */
+    .challenge {{
+      margin-bottom: 15px;
+      border-bottom: 1px solid #404040; /* separator line */
+      padding-bottom: 10px; /* space after the line */
+    }}
+    /* Remove border from last challenge */
+    .challenge:last-child {{
+      border-bottom: none;
+    }}
+    /* Styles for text and description */
+    .challenge-text {{
+      font-family: 'Hapna', sans-serif;
+      font-size: 20px;
+      color: white;
+    }}
+    .challenge-desc {{
+      font-family: 'Hapna', serif;
+      font-size: 16px;
+      color: #999999;
+      white-space: pre-wrap;
+      margin-bottom: 5px;
+    }}
+    /* Banner overlay styles */
+    .banner-container {{
+      position: relative;
+      width: 100%;
+      max-width: 850px; /* match your banner width, or set to 100% for full width */
+      margin-left: 0; /* align left */
+    }}
+    .banner-image {{
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0;
+    }}
+    .banner-title {{
+      font-family: 'RDOFont', sans-serif;
+      position: absolute;
+      top: 7.5%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: clamp(0.25em, 5vw, 3em);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+      margin: 0;
+      padding: 10px;
+    }}
+    .date-below-title {{
+      font-family: 'RDOFont', sans-serif;
+      position: absolute;
+      top: 32%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: clamp(0.15em, 1.5vw, 1.5em);
+      margin: 0;
+      padding: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    }}
+  </style>
+</head>
+<body>
+  <div class="banner-container">
+    <img src="HTML/images/RDO_Banner.jpg" alt="Banner" class="banner-image"/>
+    <h1 class="banner-title">Daily Challenges</h1>
+    <div class="date-below-title">{human_readable_date}</div>
+  </div>
 
+  <!-- Challenges wrapped in container to limit width -->
+  <div class="challenges-wrapper">
+    {html_challenges}
+  </div>
+</body>
+</html>
+"""
+
+# Save to file
+#Open the 'challenges_styled.html' file for writing, utf-8 encoding.
+#The 'with' part is the context manager which ensures the file is properly closed after the block completes, even if errors happen.
+with open("challenges_styled2.html", "w", encoding="utf-8") as f:
+    
+    f.write(html_full2)
+debug_print("iblue", "Styled challenges saved to 'challenges_styled2.html'. Open it in your browser.")
 
 
 
