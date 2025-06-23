@@ -916,7 +916,7 @@ html_full2 = f"""
     }}
     /* Style for individual challenges */
     .challenge {{
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       border-bottom: 1px solid #404040; /* separator line */
       padding-bottom: 10px; /* space after the line */
     }}
