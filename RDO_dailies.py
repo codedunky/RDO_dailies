@@ -1000,9 +1000,230 @@ with open("challenges_styled2.html", "w", encoding="utf-8") as f:
     f.write(html_full2)
 debug_print("iblue", "Styled challenges saved to 'challenges_styled2.html'. Open it in your browser.")
 
+debug_print("L1", "General Challenges HTML generated")
+# *******************************************************************************************************************************************************************
+# *******************************************************************************************************************************************************************
+# *******************************************************************************************************************************************************************
 
 
 
-#print("\nDAILY CHALLENGES\n")
 
-#print("-" * 80)
+
+
+
+
+
+
+
+def role_challenges():
+    debug_print("L1", "Role Challenges Extraction and Matching Started")
+    return
+
+
+
+# Define your difficulty level for the role challenges
+difficulty_level = 'hard'  # can be 'easy', 'med', or 'hard'
+
+
+
+
+
+
+debug_print("L1", "Import RDO_Role_Challenges_Data") # Just to have a debug heading.        
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+# Import the predefined_challenges dictionary data from a separate .py file called RDO_challenges_data.py
+# RDO_challenges_data.py is in the same folder as this program
+# This imports the entire RDO_challenges_data.py module, which contains the predefined_challenges list.
+import RDO_challenges_data
+debug_print("L3", "Actually imported RDO_Challenges_Data") 
+
+# This assigns the list stored in RDO_challenges_data.predefined_challenges to a variable name
+# in this current script, so it can be used directly without the challenges_data. prefix.
+predefined_role_challenges = RDO_challenges_data.predefined_challenges
+trader_role_challenges = RDO_challenges_data.trader
+collector_role_challenges = RDO_challenges_data.collector
+bounty_hunter_role_challenges = RDO_challenges_data.bounty_hunter
+moonshiner_role_challenges = RDO_challenges_data.moonshiner
+naturalist_role_challenges = RDO_challenges_data.naturalist
+
+#-------------------------------------------------------------------------------------------------------------------
+# This sets up a dictionary to process the challenge data in RDO_challenges_data.py
+
+role_lists = {
+   # 'predefined': RDO_challenges_data.predefined_challenges,
+    'trader': RDO_challenges_data.trader,
+    'collector': RDO_challenges_data.collector,
+    'bounty_hunter': RDO_challenges_data.bounty_hunter,
+    'moonshiner': RDO_challenges_data.moonshiner,
+    'naturalist': RDO_challenges_data.naturalist
+}
+
+for role_name, challenges in role_lists.items():
+    for challenge in challenges:
+        name = challenge.get('name')
+        key = challenge.get('key')
+        showgoal = challenge.get('showgoal')
+        description = challenge.get('description')
+
+        # Now you can process each challenge as needed
+        #This line below will print all challenges so you can check it's working
+        #print(f"Role: {role_name} | Name: {name} | Key: {key} | ShowGoal: {showgoal} | Description: {description}")
+
+#-------------------------------------------------------------------------------------------------------------------
+
+
+debug_print("L3", "Set predefined_challenges")
+debug_print("L4", predefined_role_challenges)
+
+# Sort challenges alphabetically by 'name'
+
+for role_name, challenges in role_lists.items():
+    sorted_role_challenges = sorted(challenges, key=lambda x: x['name'])
+    debug_print("L2", f"Sorted challenges for {role_name}:")
+    for challenge in sorted_role_challenges:
+        debug_print("L3", "   ", challenge['name'])
+    
+
+# names = [challenge.get('name') for challenge in predefined_role_challenges]
+# debug_print("L3", "ired", "Predefined challenge names:", names)
+# #debug_print("L3", "ired", predefined_role_challenges)
+
+
+
+# Extract challenges list
+debug_print("L1", "Extract Role Challenges List From index.json") # Just to have a debug heading.
+
+# This will extract the role challenges from the json file (id, title, goal, goalFormat)
+role_challenges = []  # default value
+
+# Load existing data from index.json
+if os.path.exists(local_filename):
+    debug_print("L3", "local filename of index.json is: ", local_filename)
+    with open(local_filename, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+        debug_print("L3", "data:  ", data)
+        debug_print("L2", "Top-level keys:", data.keys()) #Print the top level keys in index.json
+        
+# Load the data for the selected difficulty
+if difficulty_level in data:
+    current_role_challenges = data[difficulty_level] # This creates a list of challenges for the difficulty level
+else:
+    print(f"Difficulty level '{difficulty_level}' not found in data.")
+    current_role_challenges = {}
+
+# # Now, assign the appropriate 'role' list inside the selected difficulty
+# if data:
+#     role_challenges_trader = current_role_challenges.get('trader', [])
+#     role_challenges_collector = current_role_challenges.get('collector', [])
+#     role_challenges_bounty_hunter = current_role_challenges.get('bounty_hunter', [])
+#     role_challenges_moonshiner = current_role_challenges.get('moonshiner', [])
+#     role_challenges_naturalist = current_role_challenges.get('naturalist', [])
+# else:
+#     print("No data available.")
+
+
+# Define the roles
+roles = ['trader', 'collector', 'bounty_hunter', 'moonshiner', 'naturalist']
+
+# Initialize a dictionary to hold all role challenges
+role_challenges_dict = {}
+
+# Populate the dictionary
+for role in roles:
+    role_challenges_dict[role] = current_role_challenges.get(role, [])
+    debug_print("L3", f"Extracted '{role}' challenges:", len(role_challenges_dict[role]))
+
+# Now, you can access each role's challenges like this:
+role_challenges_trader = role_challenges_dict['trader']
+role_challenges_collector = role_challenges_dict['collector']
+role_challenges_bounty_hunter = role_challenges_dict['bounty_hunter']
+role_challenges_moonshiner = role_challenges_dict['moonshiner']
+role_challenges_naturalist = role_challenges_dict['naturalist']
+
+
+
+
+#debug_print("icyan", "Extracted 'general' challenges:", len(general_challenges)) # Debug message (and how many general challenges)
+debug_print("L3", "Extracted 'trader' challenges:", len(role_challenges_trader)) # Debug message (and how many general challenges)    
+
+# Debug print the challenge object
+if role_challenges_trader: # if "role_challenges_trader" exists then do the for loop below
+    for loopnumber, challenge in enumerate(role_challenges_trader):
+        debug_print("L3", "bpurple", f"Trader Challenge {loopnumber + 1}")
+        debug_print("L3", "ipurple", challenge)
+        
+        # "role_challenges_trader" is the list of daily challenges extracted from the json file.
+        #debug_print("ired", general_challenges)
+
+
+
+
+def normalize_string(s):
+    """
+    Normalize a string for comparison:
+    - Convert to uppercase
+    - Replace underscores with spaces (optional, depending on your data)
+    - Strip leading/trailing spaces
+    """
+    return s.upper().replace('_', ' ').strip()
+
+
+def find_predefined_challenge(title):
+    """
+    Search for a challenge in the predefined_challenges list
+    where the 'key' matches the given 'title' after normalization.
+    """
+    normalized_title = normalize_string(title)
+    for challenge in predefined_challenges:
+        challenge_key_normalized = normalize_string(challenge['key'])
+        if challenge_key_normalized == normalized_title:
+            return challenge
+    return None
+
+
+
+
+
+
+
+import json
+
+
+
+# Path to your input JSON file
+input_file_path = r"C:\Users\Dunk\Documents\Thonny Bits\RDO Daily Challenges\index.json"
+
+# Path to your output JSON file
+output_file_path = 'role_challenges.json'
+
+debug_print("L1", "Load index.json and extract role challenges to :", output_file_path)
+
+# Load JSON data from the file
+with open(input_file_path, 'r') as file:
+    data = json.load(file)
+
+# Define categories of interest
+categories = ['bounty_hunter', 'trader', 'collector', 'moonshiner', 'naturalist']
+
+# Initialize list to store results
+results = []
+
+# Loop through each category and extract title and goal
+for category in categories:
+    if category in data['hard']:
+        for challenge in data['hard'][category]:
+            results.append({
+                'category': category,
+                'title': challenge['title'],
+                'goal': challenge['goal']
+            })
+
+# Export the results to a JSON file
+with open(output_file_path, 'w') as outfile:
+    json.dump(results, outfile, indent=4)
+
+print(f"Challenges exported to {output_file_path}")
+
+#----------------------------------------------------------------------------------------------------------------------------------
+
+#debug_print("L3", "sorted_role_challenges:  ", sorted_role_challenges)

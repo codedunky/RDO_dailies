@@ -1,3 +1,15 @@
+
+category_order = [
+    "predefined_challenges",
+    "bounty_hunter",
+    "trader",
+    "collector",
+    "moonshiner",
+    "naturalist"
+  ]
+
+
+
 # Your list of challenges with "name" and "key"
 predefined_challenges = [
     {"name": "A Land of Opportunities missions completed", "key": "mpgc_story_mission_wins", "showgoal": "y"},
@@ -348,3 +360,122 @@ predefined_challenges = [
     {"name": "Yarrow picked", "key": "mpgc_yarrow_picked", "category": ["plants", "yarrow"],
              "description": "Fast travel to Rhodes station, and on the grass area west of the platform, there are two patches of yarrow."}
 ]
+ 
+trader = [
+    {"name": "Camp Stews eaten", "key": "mprc_trader_stew_eaten"},
+    {"name": "Carcasses donated within 10 minutes", "key": "mprc_trader_sold_carcass_timed"},
+    {"name": "Cripps Special Camp Stew recipes completed", "key": "mprc_trader_stew_recipe_completed_cripps"},
+    {"name": "Distance Delivery Wagon traveled on mission", "key": "mprc_trader_travel_wagon"},
+    {"name": "Donated deadly predator carcass or skin", "key": "mprc_trader_supplies_donated_predator"},
+    {"name": "Donations to Cripps", "key": "mprc_trader_supplies_donated"},
+    {"name": "Goods sold to distant buyer", "key": "mprc_trader_goods_sold_far_away"},
+    {"name": "Goods sold to local buyer", "key": "mprc_trader_goods_sold_local"},
+    {"name": "High Quality Camp Stew recipes completed", "key": "mprc_trader_stew_recipe_completed_high"},
+    {"name": "Large animal carcasses donated to Cripps", "key": "mprc_trader_supplies_donated_animal_large"},
+    {"name": "Medium animal carcasses donated to Cripps", "key": "mprc_trader_supplies_donated_animal_medium"},
+    {"name": "Money made from trading", "key": "mprc_trader_money_made"},
+    {"name": "Perfect carcasses donated to Cripps", "key": "mprc_trader_supplies_donated_carcass_perfect"},
+    {"name": "Resupply completed with 3 mins left", "key": "mprc_trader_resupply_completed_timed_easy"},
+    {"name": "Resupply completed with 4 mins left", "key": "mprc_trader_resupply_completed_timed_med"},
+    {"name": "Resupply completed with 5 mins left", "key": "mprc_trader_resupply_completed_timed_hard"},
+    {"name": "Resupply missions completed", "key": "mprc_trader_resupply_completed"},
+    {"name": "Small animal carcasses donated to Cripps", "key": "mprc_trader_supplies_donated_animal_small"},
+    {"name": "Superior Quality Camp Stew recipes completed", "key": "mprc_trader_stew_recipe_completed_superior"}
+  ]
+ 
+collector = [
+    {"name": "American Wild Flowers found", "key": "mprc_collector_wild_flowers_found"},
+    {"name": "Antique Alcohol Bottles found", "key": "mprc_collector_antique_bottles_found", "category": ["menu", "moonshiner_roadblock"]},
+    {"name": "Antique Alcohol drunk", "key": "mprc_collector_antique_alcohol_drunk", "category": ["menu", "moonshiner_roadblock"]},
+    {"name": "Arrowheads found", "key": "mprc_collector_arrowheads_found"},
+    {"name": "Bird Eggs found", "key": "mprc_collector_bird_eggs_found"},
+    {"name": "Coins found", "key": "mprc_collector_coins_found"},
+    {"name": "Collectibles collected", "key": "mprc_collector_items_collected"},
+    {"name": "Collectibles found with a Metal Detector", "key": "mprc_collector_used_metal_dectector"},
+    {"name": "Collectibles found with a Shovel", "key": "mprc_collector_used_shovel"},
+    {"name": "Collectibles looted from non-player enemies", "key": "mprc_collector_items_looted_enemy"},
+    {"name": "Collectibles sold to Madam Nazar", "key": "mprc_collector_items_sold", "category": ["nazar", "madam_nazar"]},
+    {"name": "Collector Maps used", "key": "mprc_collector_used_map", "category": ["nazar", "madam_nazar"]},
+    {"name": "Family Heirlooms found", "key": "mprc_collector_family_heirlooms_found"},
+    {"name": "Fossils found", "key": "mprc_collector_fossils_found"},
+    {"name": "Lost Jewelry found", "key": "mprc_collector_lost_jewelry_found"},
+    {"name": "Tarot Cards found", "key": "mprc_collector_tarot_cards_found"}
+  ]
+ 
+bounty_hunter = [
+    {"name": "Bounties brought in from Lemoyne posters", "key": "mprc_bounty_location_lemoyne"},
+    {"name": "Bounties brought in from New Austin posters", "key": "mprc_bounty_location_new_austin"},
+    {"name": "Bounties brought in from New Hanover posters", "key": "mprc_bounty_location_new_hanover"},
+    {"name": "Bounties brought in from West Elizabeth posters", "key": "mprc_bounty_location_west_elizabeth"},
+    {"name": "Bounties completed within one real-world hour", "key": "mprc_bounty_completed_timed"},
+    {"name": "Bounty completed with at least one other Posse Member", "key": "mprc_bounty_completed_posse_member"},
+    {"name": "Bounty completed without killing an enemy or bounty target", "key": "mprc_bounty_completed_no_kills"},
+    {"name": "Bounty hunt completed with 3 min or more left", "key": "mprc_bounty_general_delivered_timed_easy"},
+    {"name": "Bounty hunt completed with 4 min or more left", "key": "mprc_bounty_general_delivered_timed_med"},
+    {"name": "Bounty hunt completed with 5 min or more left", "key": "mprc_bounty_general_delivered_timed_hard"},
+    {"name": "Bounty targets brought in", "key": "mprc_bounty_general_delivered"},
+    {"name": "Bounty targets hogtied with a Reinforced Lasso", "key": "mprc_bounty_used_reinforced_lasso"},
+    {"name": "Bounty targets lassoed from horseback", "key": "mprc_bounty_used_lasso_horseback"},
+    {"name": "Bounty targets looted", "key": "mprc_bounty_targets_looted"},
+    {"name": "Bounty targets tagged with Tracking Arrow", "key": "mprc_bounty_used_track_arrow"},
+    {"name": "Bounty targets taken down with Bolas", "key": "mprc_bounty_used_bolas"},
+    {"name": "Eagle Eye used to track a bounty target", "key": "mprc_bounty_used_eagle_eye"},
+    {"name": "Easy ($) bounty mission completed", "key": "mprc_bounty_mission_completed_easy"},
+    {"name": "Hard ($$$) or Legendary Bounty mission completed", "key": "mprc_bounty_mission_completed_hard"},
+    {"name": "Living bounty targets in a photograph", "key": "mprc_bounty_target_photographed_alive"},
+    {"name": "Medium ($$) bounty mission completed", "key": "mprc_bounty_mission_completed_medium"},
+    {"name": "More than one bounty target brought in at once", "key": "mprc_bounty_general_delivered_multi_target"},
+    {"name": "Player bounties collected", "key": "mprc_bounty_player_completed"}
+  ]
+ 
+moonshiner = [
+    {"name": "Completed improved or better moonshine recipe", "key": "mprc_moonshiner_recipe_completed_med"},
+    {"name": "Completed regular or better moonshine recipe", "key": "mprc_moonshiner_recipe_completed_easy"},
+    {"name": "Completed special moonshine recipe", "key": "mprc_moonshiner_recipe_completed_hard"},
+    {"name": "Crafted Toxic Moonshine", "key": "mprc_moonshiner_craft_poison_bottle"},
+    {"name": "Distance Moonshine Wagon traveled on mission", "key": "mprc_moonshiner_travel_wagon"},
+    {"name": "Drank own average or higher strength moonshine", "key": "mprc_moonshiner_moonshine_drank_med"},
+    {"name": "Drank own strong moonshine", "key": "mprc_moonshiner_moonshine_drank_hard"},
+    {"name": "Drank own weak or higher strength moonshine", "key": "mprc_moonshiner_moonshine_drank_easy"},
+    {"name": "Money made from moonshine sold", "key": "mprc_moonshiner_money_made"},
+    {"name": "Moonshine Bar - Changed décor", "key": "mprc_moonshiner_bar_changed_decor"},
+    {"name": "Moonshine Bar - Danced for 1 min", "key": "mprc_moonshiner_danced_bar_med"},
+    {"name": "Moonshine Bar - Danced for 2 mins", "key": "mprc_moonshiner_danced_bar_hard"},
+    {"name": "Moonshine Bar - Drunken player interaction", "key": "mprc_moonshiner_drunk_interaction_bar"},
+    {"name": "Moonshine Bar - Stayed for the last round", "key": "mprc_moonshiner_last_round_bar"},
+    {"name": "Moonshine Bootlegger Missions completed", "key": "mprc_moonshiner_marketing_mission_completed"},
+    {"name": "Moonshine of any type sold to a buyer", "key": "mprc_moonshiner_moonshine_sold_buyer"},
+    {"name": "Moonshine of preferred type sold to a buyer", "key": "mprc_moonshiner_moonshine_sold_buyer_hard"},
+    {"name": "Moonshine served to other players at a bar", "key": "mprc_moonshiner_moonshine_served_bar"},
+    {"name": "Moonshine sold with 3 mins left", "key": "mprc_moonshiner_moonshine_sold_buyer_timed_easy"},
+    {"name": "Moonshine sold with 4 mins left", "key": "mprc_moonshiner_moonshine_sold_buyer_timed_med"},
+    {"name": "Moonshine sold with 5 mins left", "key": "mprc_moonshiner_moonshine_sold_buyer_timed_hard"},
+    {"name": "Moonshine sold with at least 10 bottles intact", "key": "mprc_moonshiner_moonshine_sold_buyer_condition_easy"},
+    {"name": "Moonshine sold with at least 15 bottles intact", "key": "mprc_moonshiner_moonshine_sold_buyer_condition_med"},
+    {"name": "Moonshine sold with at least 18 bottles intact", "key": "mprc_moonshiner_moonshine_sold_buyer_condition_hard"},
+    {"name": "Moonshine Story Mission completed", "key": "mprc_moonshiner_story_mission_completed"},
+    {"name": "Played with a band for 1 min", "key": "mprc_moonshiner_band_played_med"},
+    {"name": "Played with a band for 2 mins", "key": "mprc_moonshiner_band_played_hard"}
+  ]
+
+naturalist = [
+    {"name": "Animal samples sold to Harriet", "key": "mprc_naturalist_samples_sold"},
+    {"name": "Animal samples taken within 10 mins", "key": "mprc_naturalist_samples_taken_timed"},
+    {"name": "Blending Tonics crafted or used", "key": "mprc_naturalist_crafted_blending_tonic"},
+    {"name": "Crafted or cooked at Wilderness Camp", "key": "mprc_naturalist_crafted_cooked_wilderness_camp"},
+    {"name": "Desert animal samples taken", "key": "mprc_naturalist_sample_animal_desert"},
+    {"name": "Don't kill an animal for 12 game hours", "key": "mprc_naturalist_dont_kill_animals_easy"},
+    {"name": "Don't kill an animal for 18 game hours", "key": "mprc_naturalist_dont_kill_animals_med"},
+    {"name": "Don't kill an animal for 24 game hours", "key": "mprc_naturalist_dont_kill_animals_hard"},
+    {"name": "Farmland animal samples taken", "key": "mprc_naturalist_sample_animal_domesticated"},
+    {"name": "Forest/River animal samples taken", "key": "mprc_naturalist_sample_animal_forest"},
+    {"name": "Hardy Tonics used when too hot or cold", "key": "mprc_naturalist_used_hardy_tonic"},
+    {"name": "Legendary Animal samples taken", "key": "mprc_naturalist_sample_animal_legendary"},
+    {"name": "Legendary Animals found using pheromones", "key": "mprc_naturalist_used_legendary_bait"},
+    {"name": "Legendary Animals photographed", "key": "mprc_naturalist_photo_animal_legendary"},
+    {"name": "Mountain/Grassland animal samples taken", "key": "mprc_naturalist_sample_animal_grassland"},
+    {"name": "Sedated animals revived", "key": "mprc_naturalist_tranq_animal_revived"},
+    {"name": "Weight Change Tonics used", "key": "mprc_naturalist_used_weight_tonic"},
+    {"name": "Wetland animal samples taken", "key": "mprc_naturalist_sample_animal_swamp"}
+  ]
+
