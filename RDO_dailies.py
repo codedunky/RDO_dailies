@@ -800,7 +800,7 @@ html_full = f"""
     .date-below-title {{
       font-family: 'RDOFont', sans-serif;
       position: absolute;
-      top: 32%; /* adjust vertical position as needed */
+      top: 32.5%; /* adjust vertical position as needed */
       left: 50%;
       transform: translateX(-50%);
       color: white;
@@ -936,6 +936,7 @@ html_full2 = f"""
       color: #999999;
       white-space: pre-wrap;
       margin-bottom: 5px;
+      line-height: 1.2; /* or any value less than 1.5 to reduce spacing */
     }}
     /* Banner overlay styles */
     .banner-container {{
@@ -953,7 +954,7 @@ html_full2 = f"""
     .banner-title {{
       font-family: 'RDOFont', sans-serif;
       position: absolute;
-      top: 7.5%;
+      top: 0%;
       left: 50%;
       transform: translateX(-50%);
       color: white;
@@ -965,11 +966,11 @@ html_full2 = f"""
     .date-below-title {{
       font-family: 'RDOFont', sans-serif;
       position: absolute;
-      top: 32%;
+      top: 37.5%;
       left: 50%;
       transform: translateX(-50%);
       color: white;
-      font-size: clamp(0.15em, 1.5vw, 1.5em);
+      font-size: clamp(0.15em, 1.50vw, 1.50em);
       margin: 0;
       padding: 10px;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
@@ -978,7 +979,7 @@ html_full2 = f"""
 </head>
 <body>
   <div class="banner-container">
-    <img src="HTML/images/RDO_Banner.jpg" alt="Banner" class="banner-image"/>
+    <img src="HTML/images/RDO_Banner_Wide.jpg" alt="Banner" class="banner-image"/>
     <h1 class="banner-title">Daily Challenges</h1>
     <div class="date-below-title">{human_readable_date}</div>
   </div>
