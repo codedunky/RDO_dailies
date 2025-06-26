@@ -1071,24 +1071,27 @@ for role_name, challenges in role_lists.items():
 
 #-------------------------------------------------------------------------------------------------------------------
 
-
-debug_print("L3", "Set predefined_challenges")
-debug_print("L4", predefined_role_challenges)
-
-# Sort challenges alphabetically by 'name'
+# Initialize dictionary to store sorted challenges for each role
+sorted_role_challenges_dict = {}
 
 for role_name, challenges in role_lists.items():
-    sorted_role_challenges = sorted(challenges, key=lambda x: x['name'])
+    # Sort challenges for this role
+    sorted_challenges = sorted(challenges, key=lambda x: x['name'])
+    # Store in dictionary
+    sorted_role_challenges_dict[role_name] = sorted_challenges
+
+    # Optional debug print
     debug_print("L2", f"Sorted challenges for {role_name}:")
-    for challenge in sorted_role_challenges:
+    for challenge in sorted_challenges:
         debug_print("L3", "   ", challenge['name'])
+
+
     
 
-# names = [challenge.get('name') for challenge in predefined_role_challenges]
-# debug_print("L3", "ired", "Predefined challenge names:", names)
-# #debug_print("L3", "ired", predefined_role_challenges)
-
-
+#-------------------------------------------------------------------------------------------------------------------
+####################################################################################################################
+# Get the list of daily role challenges from index.json
+####################################################################################################################
 
 # Extract challenges list
 debug_print("L1", "Extract Role Challenges List From index.json") # Just to have a debug heading.
@@ -1098,7 +1101,7 @@ role_challenges = []  # default value
 
 # Load existing data from index.json
 if os.path.exists(local_filename):
-    debug_print("L3", "local filename of index.json is: ", local_filename)
+    debug_print("L3", "bgreen", "local filename of index.json is: ", local_filename)
     with open(local_filename, 'r', encoding='utf-8') as f:
         data = json.load(f)
         debug_print("L3", "data:  ", data)
@@ -1132,6 +1135,11 @@ role_challenges_dict = {}
 for role in roles:
     role_challenges_dict[role] = current_role_challenges.get(role, [])
     debug_print("L3", f"Extracted '{role}' challenges:", len(role_challenges_dict[role]))
+    
+    
+role_keys = {}
+role_titles = {}
+
 
 # Now, you can access each role's challenges like this:
 role_challenges_trader = role_challenges_dict['trader']
@@ -1140,20 +1148,317 @@ role_challenges_bounty_hunter = role_challenges_dict['bounty_hunter']
 role_challenges_moonshiner = role_challenges_dict['moonshiner']
 role_challenges_naturalist = role_challenges_dict['naturalist']
 
-
-
-
-#debug_print("icyan", "Extracted 'general' challenges:", len(general_challenges)) # Debug message (and how many general challenges)
-debug_print("L3", "Extracted 'trader' challenges:", len(role_challenges_trader)) # Debug message (and how many general challenges)    
+  
 
 # Debug print the challenge object
-if role_challenges_trader: # if "role_challenges_trader" exists then do the for loop below
-    for loopnumber, challenge in enumerate(role_challenges_trader):
-        debug_print("L3", "bpurple", f"Trader Challenge {loopnumber + 1}")
-        debug_print("L3", "ipurple", challenge)
+for role_name, challenges in role_challenges_dict.items():
+    if challenges:
+        for loopnumber, challenge in enumerate(challenges):
+            debug_print("L3", "bpurple", f"{role_name.capitalize()} Challenge {loopnumber + 1}:")
+            debug_print("L3", "ipurple", "'title' ", f"{challenge['title']}")
+            #print(f"{role_name.capitalize()} Challenge {loopnumber + 1}: {challenge['title']}")
+
+
+
+#debug_print("L3", "ired", "sorted_role_challenges:  ", sorted_role_challenges)
+
+# Build a set of all 'key's from the sorted challenges (for all roles)
+keys_in_challenges = {challenge['key'] for challenge in sorted_role_challenges_dict['trader']}
+debug_print("L3", "keys_in_challenges: ", keys_in_challenges)
+
+# Build set of all 'title's for matching
+titles_in_challenges = {challenge['title'].lower() for challenge in challenges}
+debug_print("L3", "tiles_in_challenges: ", titles_in_challenges)
+
+
+# Loop through all roles and their challenges
+for role_name, challenges in sorted_role_challenges_dict.items():
+    for challenge in challenges:
+        debug_print("L3", "bpurple", "Key: ", challenge['key'])
+        debug_print("L3", "ipurple", "Name: ", challenge['name'])
+     
+        challenge_title = challenge.get('title', '')
+        if challenge_title.lower() in titles_in_challenges:
+            print(f"Match found for challenge '{challenge_title}' in role '{role_name}'")
+        else:
+            #print(f"No match for challenge '{challenge_title}' in role '{role_name}'")
+            pass
         
-        # "role_challenges_trader" is the list of daily challenges extracted from the json file.
-        #debug_print("ired", general_challenges)
+        
+        
+        
+# -------------------------------------------------------------------------------------------------------        
+# Initialize the mapping dictionary
+key_to_name = {}
+
+# Loop through all challenges in all roles
+for role_name, challenges in sorted_role_challenges_dict.items():
+    for challenge in challenges:
+        key_lower = challenge['key'].lower()
+        name = challenge['name']
+        # Store the mapping
+        key_to_name[key_lower] = name
+
+# Now, you can look up the 'name' for any challenge key (case-insensitive)
+# Example:
+challenge_key = 'mprc_trader_stew_eaten'
+if challenge_key.lower() in key_to_name:
+    print(f"Challenge '{challenge_key}' corresponds to '{key_to_name[challenge_key.lower()]}'")
+else:
+    print("Challenge key not found.")
+#--------------------------------------------------------------------------------------------------------
+    
+    
+# Step 2: Insert the initialization here
+role_keys = {}
+role_titles = {}
+
+# # Step 3: Populate the sets for each role
+# for role, challenges in role_challenges_dict.items():
+#     role_keys[role] = {challenge['key'].lower() for challenge in challenges}
+#     role_titles[role] = {challenge['title'].lower() for challenge in challenges}
+# 
+# # Your existing matching code, for example:
+# for role in roles:
+#     print(f"\nProcessing role: {role}")
+#     keys_set = role_keys.get(role, set())
+#     titles_set = role_titles.get(role, set())
+# 
+#     challenges = role_challenges_dict.get(role, [])
+#     for challenge in challenges:
+#         challenge_key = challenge['key'].lower()
+#         challenge_title = challenge['title'].lower()
+# 
+#         if challenge_key in keys_set:
+#             print(f"{role}: Challenge '{challenge['title']}' matches key '{challenge['key']}'")
+#         if challenge_title in titles_set:
+#             print(f"{role}: Challenge '{challenge['title']}' matches title")
+
+
+
+
+
+
+
+
+
+
+
+
+
+###############################################################################################
+###############################################################################################
+###############################################################################################
+
+
+# ===================== Load Data Function =====================
+@announce
+def load_data(local_filename):
+    """Load JSON data from a file."""
+    if os.path.exists(local_filename):
+        debug_print("L3", "bgreen", "local filename of index.json is: ", local_filename)
+        with open(local_filename, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    else:
+        debug_print("L2", "bred", f"File {local_filename} not found.")
+        return {}
+
+# ===================== Extract Challenges Function =====================
+@announce
+
+#This function should return data[difficulty_level]
+#for example :-
+#{'bounty_hunter': [{'id': 'MPRC_Bounty_Location_Lemoyne_Hard_00', 'title': 'MPRC_BOUNTY_LOCATION_LEMOYNE', 'goal': 2, 'goalFormat': 'ACMP_DC_PLAYER_MENU'}
+
+def extract_role_challenges(data, difficulty_level):
+    """Extract challenges for a specific difficulty level."""
+    if data and difficulty_level in data:  # Check if 'data' exists and the specified 'difficulty_level' key is present in 'data'
+        debug_print("L3", "bgreen", "Returning data[difficulty_level]:  ", data[difficulty_level])
+        return data[difficulty_level]  # Return the part of 'data' corresponding to the specified difficulty level
+    
+    # If 'data' doesn't exist or 'difficulty_level' key isn't in 'data', print a debug message before returning.
+    debug_print("L3", "bred", "difficulty level is:  ", difficulty_level)
+    debug_print("L3", "bred", "Returning data[difficulty_level]:  ", data[difficulty_level])
+    return {}
+
+
+
+# ===================== Build Role Challenges Dictionary =====================
+@announce
+
+# It creates a new dictionary called role_challenges_dict.
+# It fetches the list of challenges from all_data using all_data.get(role, []).
+# It assigns that list to the role key in role_challenges_dict.
+# Finally, it returns the complete dictionary that maps each role to its challenges.
+
+def build_role_challenges_dict(all_data, roles):
+    """Build a dict, mapping roles to their challenges."""
+    role_challenges_dict = {}  # Initialize an empty dictionary to store role-to-challenges mapping
+    for role in roles:  #role is an arbitrary variable name used to refer to each element in the roles list during each iteration.
+        role_challenges_dict[role] = all_data.get(role, [])
+        debug_print("L3", "bblue", role)
+        debug_print("L3", "iblue", "role_challenges_dict[role]:  ", role_challenges_dict[role])
+        
+
+    return role_challenges_dict
+
+# ===================== Build Mappings Function =====================
+announce
+def build_mappings(challenges):
+    """Create key-to-name and title-to-name mappings."""
+    key_to_name = {}   # Initialize an empty dictionary to map 'key' (lowercase) to 'name'
+    title_to_name = {}   # Initialize an empty dictionary to map 'title' (lowercase) to 'name'
+    for challenge in challenges:
+        key_lower = challenge.get('key', '').lower()   # Retrieve the 'key' value, defaulting to empty string if not present, and convert to lowercase
+        title_lower = challenge.get('title', '').lower()   # Retrieve the 'title' value, defaulting to empty string if not present, and convert to lowercase
+        #name = key_to_name_map.get(challenge.get('title', '').lower(), '') # Use 'title' to find the 'name' from your external data
+        debug_print("L3", "name:  ", name)
+        debug_print("L3", "iblue", "challenge object: ", challenge)
+        
+        if key_lower:
+            key_to_name[key_lower] = name
+        if title_lower:
+            title_to_name[title_lower] = name
+    return key_to_name, title_to_name
+
+
+# ===================== Build Generic key to name Mappings Function =====================
+@announce
+# Build a generic key-to-name mapping from your challenge data list
+def build_key_to_name_map(challenge_list):
+    key_to_name = {}
+    for challenge in challenge_list:
+        key_lower = challenge['key'].lower()
+        name = challenge['name']
+        # Debug print to see each key and name being added
+        debug_print("L3", "Processing challenge:", challenge)
+        debug_print("L3", "Adding to map:", f"key: {key_lower}, name: {name}")
+        key_to_name[key_lower] = name
+    # Final debug print of the entire mapping
+    debug_print("L3", "Final key_to_name map:", key_to_name)
+    return key_to_name
+
+
+
+
+
+# ===================== Build Role Sets Function =====================
+announce
+def build_role_sets(role_challenges_dict):
+    """Build sets of keys and titles for each role."""
+    role_keys = {}
+    role_titles = {}
+    for role, challenges in role_challenges_dict.items():
+        role_keys[role] = {ch.get('key', '').lower() for ch in challenges if 'key' in ch}
+        role_titles[role] = {ch.get('title', '').lower() for ch in challenges if 'title' in ch}
+    return role_keys, role_titles
+
+# ===================== Display Name Helper Function =====================
+announce
+def get_display_name(challenge):
+    """Return 'title' or 'name' as display name, fallback 'Unknown'."""
+    return challenge.get('title', 'Unknown')
+
+# ===================== Get Challenge Titles for Role =====================
+announce
+def get_challenge_titles_for_role(role_name):
+    """Get list of challenge 'title's for a specific role."""
+    challenges = role_challenges_dict.get(role_name, [])
+    return [get_display_name(challenge) for challenge in challenges]
+
+
+
+
+
+
+
+
+
+
+
+# ===================== Main Function =====================
+@announce
+def main():
+    # Configuration: replace with your actual filename and difficulty
+    local_filename = r'C:\Users\Dunk\Documents\Thonny Bits\RDO Daily Challenges\index.json'
+    difficulty_level = 'hard'
+    roles = ['trader', 'collector', 'bounty_hunter', 'moonshiner', 'naturalist']
+
+    # Load your data
+    data = load_data(local_filename)
+
+    # Extract challenges for the specified difficulty
+    all_challenges = extract_role_challenges(data, difficulty_level)
+
+    # Build role challenges dictionary
+    global role_challenges_dict
+    role_challenges_dict = build_role_challenges_dict(all_challenges, roles)
+
+    # Collect all challenges for mappings
+    all_challenges_flat = []
+    for challenges in role_challenges_dict.values():
+        all_challenges_flat.extend(challenges)
+
+    # Build key/title mappings
+    global key_to_name, title_to_name
+    key_to_name, title_to_name = build_mappings(all_challenges_flat)
+
+    # Build role-specific sets of keys and titles
+    global role_keys, role_titles
+    role_keys, role_titles = build_role_sets(role_challenges_dict)
+
+    # Example: Get all challenge titles for 'trader'
+    trader_titles = get_challenge_titles_for_role('trader')
+    print("Trader challenge titles:")
+    for title in trader_titles:
+        print(title)
+
+    # Example: Match challenges between datasets
+    for role in roles:
+        print(f"\nProcessing role: {role}")
+        challenges = role_challenges_dict.get(role, [])
+        for challenge in challenges:
+            challenge_title_lower = challenge.get('title', '').lower()
+            challenge_key_lower = challenge.get('key', '').lower()
+            
+            # Assuming get_display_name returns the challenge's display name
+            display_name = get_display_name(challenge)
+
+            if challenge_title_lower in role_titles.get(role, set()):
+                print(f"{role}: Challenge '{display_name}' matches title set")
+            if challenge_key_lower in role_keys.get(role, set()):
+                print(f"{role}: Challenge '{display_name}' matches key set")
+
+if __name__ == "__main__":
+    main()
+    
+    
+    
+
+# Assuming 'role_challenges_dict' is already populated
+trader_challenges = role_challenges_dict.get('trader', [])
+
+# Create a list of challenge names
+trader_challenge_names = [challenge.get('name', 'Unknown') for challenge in trader_challenges]
+
+print("Trader challenge names:")
+for name in trader_challenge_names:
+    print(name)
+
+
+
+# Example usage:
+trader_titles = get_challenge_titles_for_role('trader')
+print("Trader challenge titles:", trader_titles)
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1227,3 +1532,177 @@ print(f"Challenges exported to {output_file_path}")
 #----------------------------------------------------------------------------------------------------------------------------------
 
 #debug_print("L3", "sorted_role_challenges:  ", sorted_role_challenges)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################################################################
+##  CHATGPT
+################################################################################################################################
+
+
+
+
+
+
+
+import json
+from collections import defaultdict
+from RDO_challenges_data import (
+    predefined_challenges,
+    trader,
+    bounty_hunter,
+    collector,
+    naturalist,
+    moonshiner,
+)
+
+# Set the path to your local index.json file
+local_filename = r"C:\Users\Dunk\Documents\Thonny Bits\RDO Daily Challenges\index.json"
+
+# Set the difficulty filter (None, "easy", "med", "hard")
+filter_difficulty = "hard"  # Set to "easy", "med", or "hard" to filter role challenges
+
+# Load the index.json challenge data
+with open(local_filename, 'r', encoding='utf-8') as f:
+    index_data = json.load(f)
+
+# Flatten all challenges into a single list with 'role' and 'difficulty' metadata
+def extract_challenges_with_roles(index):
+    combined = []
+
+    # General challenges (not tied to a specific role or difficulty)
+    for challenge in index.get("general", []):
+        combined.append({**challenge, "role": "general", "difficulty": None})
+
+    # Role-based challenges across easy, med, hard
+    for difficulty in ["easy", "med", "hard"]:
+        for role, challenges in index[difficulty].items():
+            for challenge in challenges:
+                combined.append({**challenge, "role": role, "difficulty": difficulty})
+
+    return combined
+
+# Normalize keys by uppercasing and stripping whitespace (no prefix removal)
+def normalize_key(key):
+    return key.strip().upper()
+
+# Combine all sources of challenge definitions that include name/key pairs
+all_challenge_definitions = (
+    predefined_challenges
+    + trader
+    + bounty_hunter
+    + collector
+    + naturalist
+    + moonshiner
+)
+
+# Build a lookup table from all sources: exact key -> details including optional description and showgoal
+detail_lookup = {
+    normalize_key(ch["key"]): {
+        "name": ch["name"],
+        "description": ch.get("description"),
+        "showgoal": ch.get("showgoal", "n")  # default to 'n' if missing
+    }
+    for ch in all_challenge_definitions
+}
+
+# Extract and normalize all challenges from index.json
+indexed_challenges = extract_challenges_with_roles(index_data)
+
+# Final result list
+final_list = []
+
+for ch in indexed_challenges:
+    title_upper = normalize_key(ch["title"])
+    details = detail_lookup.get(title_upper, {})
+
+    entry = {
+        "title": ch["title"],
+        "goal": ch["goal"],
+        "category": ch["role"],
+        "difficulty": ch["difficulty"],
+        "name": details.get("name"),
+        "description": details.get("description"),
+        "showgoal": details.get("showgoal", "n")
+    }
+    final_list.append(entry)
+
+# Group by category and difficulty, then sort alphabetically by name
+grouped = defaultdict(lambda: defaultdict(list))
+for item in final_list:
+    grouped[item["category"]][item["difficulty"]].append(item)
+
+# Desired print order for categories
+category_order = ["general", "bounty_hunter", "trader", "collector", "moonshiner", "naturalist"]
+
+for category in category_order:
+    if category not in grouped:
+        continue
+    print(f"\n{category.upper()}")
+    for difficulty in [None, "easy", "med", "hard"]:
+        if difficulty in grouped[category]:
+            # Respect difficulty filter
+            if difficulty is not None and filter_difficulty and difficulty != filter_difficulty:
+                continue
+            if not filter_difficulty:
+                label = "GENERAL" if difficulty is None else difficulty.upper()
+                print(f"  {label}")
+            for idx, challenge in enumerate(sorted(grouped[category][difficulty], key=lambda x: x["name"] or x["title"])):
+                goal_display = ""
+                if challenge["showgoal"].lower() == "y" or (isinstance(challenge["goal"], (int, float)) and challenge["goal"] > 1):
+                    goal_display = f"{challenge['goal']} "
+
+                print(f"{goal_display}{challenge['name'] or challenge['title']}")
+                if challenge.get("description"):
+                    print(f"\033[3;33m{challenge['description']}\033[0m")  # italic yellow ANSI
+
+                # Divider line between general challenges only
+                if category == "general" and idx < len(grouped[category][difficulty]) - 1:
+                    print("-" * 120)
+
+# Summary stats
+named = sum(1 for i in final_list if i["name"])
+unnamed = len(final_list) - named
+print(f"\nTotal challenges: {len(final_list)}")
+print(f"With names: {named}, Without names: {unnamed}")
+
+
