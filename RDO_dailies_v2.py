@@ -385,6 +385,8 @@ print(f"With names: {named}, Without names: {unnamed}")
 
 
 
+
+
 import json
 from collections import defaultdict
 
@@ -543,7 +545,7 @@ html_output = f'''
           box-sizing: border-box;
         }}
         .role-hard-wrapper {{
-          width: 410px;
+          width: 440px;
           max-height: 100vh;
           overflow-y: hidden;
           padding: 20px;
@@ -560,7 +562,7 @@ html_output = f'''
         .role-hard-wrapper .challenge-text {{
           font-family: 'Hapna', serif;
           font-size: 14px;
-          color: white;
+          color: #DADADA;
           white-space: pre-wrap;
           margin-bottom: 5px;
           line-height: 1;
@@ -568,7 +570,7 @@ html_output = f'''
         .role-hard-wrapper .challenge-desc {{
           font-family: 'Hapna', serif;
           font-size: 12px;
-          color: #999999;
+          color: # #FFC300 ;
           white-space: pre-wrap;
           margin-bottom: 5px;
           line-height: 1.2;
@@ -603,8 +605,15 @@ html_output = f'''
           font-family: 'RDOFont', sans-serif;
           font-size: 24px;
           color: #eee;
-          margin-top: 10px;
+          margin-top: -0px;
           margin-bottom: 8px;
+          text-shadow:
+            -3px -3px 0 #000,  
+             3px -3px 0 #000,
+            -3px 3px 0 #000,
+             3px 3px 0 #000;
+          letter-spacing: 1px; /* adjust as needed */
+          
         }}
         .role-challenge {{
           margin-bottom: 0px;
@@ -612,16 +621,23 @@ html_output = f'''
         }}
         .role-challenge-text {{
           font-family: 'Hapna', sans-serif;
-          font-size: 16px;
-          color: #ebebeb;
+          font-size: 18px;
+          color: #dadada;
+          padding-bottom: 0px;
+          display: inline-block; /* needed for transform to work properly */
+          transform: scaleX(0.925); /* reduce width to 90% */
+          transform-origin: left; /* or 'center' or 'right' based on your preference */
         }}
         .role-challenge-desc {{
           font-family: 'Hapna', serif;
           font-size: 14px;
-          color: #FFAA00;
+          color: #8c8080;
           white-space: pre-wrap;
-          margin-bottom: 5px;
+          margin-bottom: 1px;
           line-height: 1.2;
+          display: inline-block; /* needed for transform to work properly */
+          transform: scaleX(0.925); /* reduce width to 90% */
+          transform-origin: left; /* or 'center' or 'right' based on your preference */          
         }}
     </style>
 </head>
