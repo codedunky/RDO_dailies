@@ -232,17 +232,104 @@ from RDO_challenges_data import (
     moonshiner,
 )
 
+# Initialize index_data with a default empty dict
+index_data = {}
+
 # Set the path to your local index.json file
 local_filename = r"C:\Users\Dunk\Documents\Thonny Bits\RDO Daily Challenges\index.json"
+
+# URL for downloading if needed
+url = "https://api.rdo.gg/challenges/index.json"
 
 # Set the difficulty filter (None, "easy", "med", "hard")
 filter_difficulty = "hard"  # Set to "easy", "med", or "hard" to filter role challenges
 
 # Load the index.json challenge data
-with open(local_filename, 'r', encoding='utf-8') as f:
-    index_data = json.load(f)
+import urllib.request
 
-# Flatten all challenges into a single list with 'role' and 'difficulty' metadata
+
+file_exists = os.path.exists(local_filename)
+ 
+if file_exists:
+    try:
+        with open(local_filename, 'r', encoding='utf-8') as f:
+            index_data = json.load(f)  # Load JSON data from index.json file (it will all break without it as values are 0 otherwise)
+            # Check if the file is outdated
+            now = int(time.time())
+            end_time = index_data.get("endTime", 0)
+            start_time = index_data.get("startTime", 0)
+            
+    except FileNotFoundError:
+        print(f"{local_filename} not found. Proceeding without it.")
+        # handle accordingly, e.g., initialize empty data
+        now = int(time.time())
+        end_time = 0
+        start_time = 0
+
+else:
+    print(f"{local_filename} not found. Will download new index.json.")
+    now = int(time.time())
+    end_time = 0
+    start_time = 0
+
+
+# Check if the index has expired
+if end_time < now:
+    debug_print("L2", "idarkyellow", f"The index.json has expired (endTime: {end_time}). Current time: {now}.")
+
+    # Decide whether to prompt or just download
+    if file_exists:
+        user_input = input("Do you want to download the latest index.json from rdo.gg? (y/n): ").strip().lower()
+        download_now = (user_input == 'y')
+    else:
+        # No file exists, so download immediately
+        download_now = True
+
+    if download_now:
+        # Only backup if start_time != 0
+        if file_exists and start_time != 0:
+            backup_filename = f"index_{datetime.datetime.fromtimestamp(start_time).strftime('%Y-%m-%d')}.json"
+            backup_path = os.path.join(os.path.dirname(local_filename), backup_filename)
+            try:
+                os.rename(local_filename, backup_path)
+                debug_print("L2", "igreen", "Backed up old index.json to:  ", backup_path)
+            except Exception as e:
+                debug_print("L1", "ired", f"Failed to backup old file: {e}")
+        else:
+            print("Skipping backup")     
+
+        # Download new index.json
+        try:
+            headers = {'User-Agent': 'Mozilla/5.0'}
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req) as response:
+                data_bytes = response.read()
+                data_str = data_bytes.decode('utf-8')
+                data = json.loads(data_str)
+                # Save the new data to the file
+                with open(local_filename, 'w', encoding='utf-8') as f:
+                    json.dump(data, f, indent=2)
+                    print("downloaded new index.json file")
+        except Exception as e:
+            print(f"Error during download: {e}")
+
+        # Now, read the data from the saved file
+        try:
+            with open(local_filename, 'r', encoding='utf-8') as f:
+                index_data = json.load(f)
+            # Access the data
+            end_time = index_data.get("endTime", 0)
+            start_time = index_data.get("startTime", 0)
+            print(f"endTime: {end_time}, startTime: {start_time}")
+        except Exception as e:
+            print(f"Error reading {local_filename}: {e}")
+
+
+
+
+
+
+
 def extract_challenges_with_roles(index):
     combined = []
 
@@ -665,3 +752,4 @@ with open("challenge_output3.html", "w", encoding="utf-8") as f:
     f.write(html_output)
 
 print("HTML output written to challenge_output3.html")
+
