@@ -581,7 +581,7 @@ html_output = f'''
 <!DOCTYPE html><html>
 <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="html/images/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="./html/images/favicon.ico" type="image/x-icon" />
     <style>
         body {{
           font-family: Arial, sans-serif;
@@ -593,13 +593,13 @@ html_output = f'''
         }}
         @font-face {{
           font-family: 'RDOFont';
-          src: url('Fonts/RDO_chinese_rocks_rg.otf') format('opentype');
+          src: url('./Fonts/RDO_chinese_rocks_rg.otf') format('opentype');
           font-weight: normal;
           font-style: normal;
         }}
         @font-face {{
           font-family: 'Hapna';
-          src: url('Fonts/Hapna.woff2') format('woff2');
+          src: url('./Fonts/hapna.woff2') format('woff2');
           font-weight: normal;
           font-style: normal;
         }}
