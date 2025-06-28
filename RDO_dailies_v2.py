@@ -598,7 +598,7 @@ html_output = f'''
           font-style: normal;
         }}
         @font-face {{
-          font-family: 'Hapna';
+          font-family: 'hapna';
           src: url('./Fonts/hapna.woff2') format('woff2');
           font-weight: normal;
           font-style: normal;
@@ -673,7 +673,7 @@ html_output = f'''
           z-index: 1000;
         }}
         .role-hard-wrapper .challenge-text {{
-          font-family: 'Hapna', serif;
+          font-family: 'hapna', serif;
           font-size: 14px;
           color: #DADADA;
           white-space: pre-wrap;
@@ -681,7 +681,7 @@ html_output = f'''
           line-height: 1;
         }}
         .role-hard-wrapper .challenge-desc {{
-          font-family: 'Hapna', serif;
+          font-family: 'hapna', serif;
           font-size: 12px;
           color: # #FFC300 ;
           white-space: pre-wrap;
@@ -702,12 +702,12 @@ html_output = f'''
           border-bottom: none;
         }}
         .challenge-text {{
-          font-family: 'Hapna', sans-serif;
+          font-family: 'hapna', sans-serif;
           font-size: 20px;
           color: white;
         }}
         .challenge-desc {{
-          font-family: 'Hapna', serif;
+          font-family: 'hapna', serif;
           font-size: 16px;
           color: #999999;
           white-space: pre-wrap;
@@ -733,7 +733,7 @@ html_output = f'''
           padding-bottom: 10px;
         }}
         .role-challenge-text {{
-          font-family: 'Hapna', sans-serif;
+          font-family: 'hapna', sans-serif;
           font-size: 18px;
           color: #dadada;
           padding-bottom: 0px;
@@ -742,7 +742,7 @@ html_output = f'''
           transform-origin: left; /* or 'center' or 'right' based on your preference */
         }}
         .role-challenge-desc {{
-          font-family: 'Hapna', serif;
+          font-family: 'hapna', serif;
           font-size: 14px;
           color: #8c8080;
           white-space: pre-wrap;
@@ -756,7 +756,7 @@ html_output = f'''
           position: fixed;
           bottom: 10px;
           left: 40px;
-          font-family: 'Hapna', sans-serif;
+          font-family: 'hapna', sans-serif;
           font-size: 12px;
           color: #888;
           z-index: 9999;
