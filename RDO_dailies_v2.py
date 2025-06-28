@@ -9,12 +9,13 @@ import io
 import sys
 from typing import Any
 
+# Set a variable to control if index.json will download without user prompt
+autoDownload = True
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-import inspect
-import textwrap
-from typing import Any
+
+
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 # DEBUG_PRINT
@@ -255,9 +256,9 @@ if file_exists:
         with open(local_filename, 'r', encoding='utf-8') as f:
             index_data = json.load(f)  # Load JSON data from index.json file (it will all break without it as values are 0 otherwise)
             # Check if the file is outdated
-            now = int(time.time())
-            end_time = index_data.get("endTime", 0)
-            start_time = index_data.get("startTime", 0)
+            now = int(time.time())  # Gets current time in seconds since Unix epoch, and assign to 'now'
+            end_time = index_data.get("endTime", 0)      # Tries to retrieve 'endTime' from the index_data dictionary, sets to 0 if can't
+            start_time = index_data.get("startTime", 0)  # Tries to retrieve 'startTime' from the index_data dictionary, sets to 0 if can't
             
     except FileNotFoundError:
         print(f"{local_filename} not found. Proceeding without it.")
@@ -266,21 +267,25 @@ if file_exists:
         end_time = 0
         start_time = 0
 
-else:
+else:   #  If the index.json is not found, it will go and download it from the api website.
     print(f"{local_filename} not found. Will download new index.json.")
     now = int(time.time())
     end_time = 0
     start_time = 0
 
 
-# Check if the index has expired
+# Check if the index has expired by comparing 'endTime' in index.json to current time.
 if end_time < now:
     debug_print("L2", "idarkyellow", f"The index.json has expired (endTime: {end_time}). Current time: {now}.")
 
     # Decide whether to prompt or just download
     if file_exists:
-        user_input = input("Do you want to download the latest index.json from rdo.gg? (y/n): ").strip().lower()
-        download_now = (user_input == 'y')
+        if autoDownload:
+            debug_print("L3", "bgreen", "autoDownload is True")
+            download_now = True
+        else:
+            user_input = input("Do you want to download the latest index.json from rdo.gg? (y/n): ").strip().lower()
+            download_now = (user_input == 'y')
     else:
         # No file exists, so download immediately
         download_now = True
@@ -632,7 +637,7 @@ html_output = f'''
           box-sizing: border-box;
         }}
         .role-hard-wrapper {{
-          width: 440px;
+          width: 460px;
           max-height: 100vh;
           overflow-y: hidden;
           padding: 20px;
@@ -712,7 +717,7 @@ html_output = f'''
           color: #dadada;
           padding-bottom: 0px;
           display: inline-block; /* needed for transform to work properly */
-          transform: scaleX(0.925); /* reduce width to 90% */
+          transform: scaleX(0.90); /* reduce width to 90% */
           transform-origin: left; /* or 'center' or 'right' based on your preference */
         }}
         .role-challenge-desc {{
