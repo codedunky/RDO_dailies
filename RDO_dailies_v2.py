@@ -789,6 +789,25 @@ html_output = f'''
   <div class="api-credit">
   Data provided by <a href="https://rdo.gg/api" target="_blank">rdo.gg API</a>
 </div>
+
+<!-- Default Statcounter code for RDO_dailies - codedunky
+https://codedunky.github.io/RDO_dailies/ -->
+<script type="text/javascript">
+var sc_project=13147326; 
+var sc_invisible=1; 
+var sc_security="51162dbd"; 
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js"
+async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="https://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="https://c.statcounter.com/13147326/0/51162dbd/1/"
+alt="Web Analytics"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+
 </body>
 </html>
 '''
