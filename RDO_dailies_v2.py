@@ -58,7 +58,7 @@ COLORS = {
 }
 
 # Current debug level: 0=L0 (off), 1=L1, 2=L2, 3=L3, 4=L4
-CURRENT_DEBUG_LEVEL = 3
+CURRENT_DEBUG_LEVEL = 2
 
 # Map string levels to numeric levels
 LEVEL_MAP = {
@@ -237,7 +237,17 @@ from RDO_challenges_data import (
 index_data = {}
 
 # Set the path to your local index.json file
-local_filename = r"C:\Users\Dunk\Documents\Thonny Bits\RDO Daily Challenges\index.json"
+#local_filename = r"C:\Users\Dunk\Documents\Thonny Bits\RDO\RDO_dailies\jsonFiles\index.json"
+
+# Set the path to your local index.json file in a relative subfolder called 'jsonFiles'
+script_dir = os.path.dirname(os.path.abspath(__file__))  # the directory where the script is
+os.makedirs(os.path.join(script_dir, "jsonFiles"), exist_ok=True)  # Check folder exists
+
+local_filename = os.path.join(script_dir, "jsonFiles", "index.json") # Creates the filepath and assign to variable
+debug_print("L1", "local_filename:  ", local_filename)
+
+
+
 
 # URL for downloading if needed
 url = "https://api.rdo.gg/challenges/index.json"
@@ -290,11 +300,20 @@ if end_time < now:
         # No file exists, so download immediately
         download_now = True
 
+    # Logic to do backup of existing index.json file before new download
     if download_now:
         # Only backup if start_time != 0
         if file_exists and start_time != 0:
+            # Define the backup folder as a subfolder called 'indexJsonBackups'
+            backup_folder = os.path.join(os.path.dirname(local_filename), 'indexJsonBackups')
+            # Create the backup folder if it doesn't exist
+            os.makedirs(backup_folder, exist_ok=True)
+            
+            # Construct the backup filename
             backup_filename = f"index_{datetime.datetime.fromtimestamp(start_time).strftime('%Y-%m-%d')}.json"
-            backup_path = os.path.join(os.path.dirname(local_filename), backup_filename)
+            # Full path for backup
+            backup_path = os.path.join(backup_folder, backup_filename)
+            
             try:
                 os.rename(local_filename, backup_path)
                 debug_print("L2", "igreen", "Backed up old index.json to:  ", backup_path)
@@ -303,6 +322,8 @@ if end_time < now:
         else:
             print("Skipping backup")     
 
+        
+        
         # Download new index.json
         try:
             headers = {'User-Agent': 'Mozilla/5.0'}
@@ -539,7 +560,7 @@ for idx, role in enumerate(role_keys):
         html_hard_roles += render_role_challenge_block(grouped_roles[role])
         if idx < len(role_keys) - 1:
             html_hard_roles += '<hr class="thin-divider" />'
-            debug_print("L2", "Would be printing a line here")
+            debug_print("L3", "Would be printing a line here")
             
 debug_print("L3", "html_hard_roles:   ", html_hard_roles)            
             
@@ -731,6 +752,23 @@ html_output = f'''
           transform: scaleX(0.925); /* reduce width to 90% */
           transform-origin: left; /* or 'center' or 'right' based on your preference */          
         }}
+        .api-credit {{
+          position: fixed;
+          bottom: 10px;
+          left: 40px;
+          font-family: 'Hapna', sans-serif;
+          font-size: 12px;
+          color: #888;
+          z-index: 9999;
+        }}
+        .api-credit a {{
+          color: #999;
+          text-decoration: none;
+        }}
+        .api-credit a:hover {{
+          text-decoration: underline;
+          color: #ccc;
+        }}
     </style>
 </head>
 <body>
@@ -748,13 +786,16 @@ html_output = f'''
       {html_hard_roles}
     </div>
   </div>
+  <div class="api-credit">
+  Data provided by <a href="https://rdo.gg/api" target="_blank">rdo.gg API</a>
+</div>
 </body>
 </html>
 '''
 
 # Write to file
-with open("challenge_output3.html", "w", encoding="utf-8") as f:
+with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_output)
 
-print("HTML output written to challenge_output3.html")
+print("HTML output written to index.html")
 
