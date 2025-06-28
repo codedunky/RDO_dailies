@@ -3,8 +3,8 @@ name: RDO Dailies v2.
 on:
   schedule:
     - cron: '0 7 * * *'  # Runs at 07:00 UTC every day
-  push:
-    # optional: trigger manually or on other events
+  
+  workflow_dispatch:  # <-- this enables the manual "Run workflow" button
 
 jobs:
   build:
