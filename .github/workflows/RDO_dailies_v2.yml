@@ -35,3 +35,10 @@ jobs:
         git push
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Debug - List output files
+      run: |
+        echo "Current directory:"
+        pwd
+        echo "Files:"
+        ls -R
