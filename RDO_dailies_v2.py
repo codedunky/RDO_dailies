@@ -259,6 +259,22 @@ filter_difficulty = "hard"  # Set to "easy", "med", or "hard" to filter role cha
 import urllib.request
 
 
+#############################################################################################
+##  DEBUG FOR GITHUB
+#############################################################################################
+print(f"[DEBUG] index.json path: {local_filename}")                                         
+print(f"[DEBUG] Does index.json exist? {os.path.exists(local_filename)}")
+
+if os.path.exists(local_filename):
+    with open(local_filename, 'r') as f:
+        data = json.load(f)
+    print(f"[DEBUG] index.json endTime: {data.get('endTime')}")
+    
+
+#############################################################################################
+
+
+
 file_exists = os.path.exists(local_filename)
  
 if file_exists:
@@ -287,6 +303,7 @@ else:   #  If the index.json is not found, it will go and download it from the a
 # Check if the index has expired by comparing 'endTime' in index.json to current time.
 if end_time < now:
     debug_print("L2", "idarkyellow", f"The index.json has expired (endTime: {end_time}). Current time: {now}.")
+    print
 
     # Decide whether to prompt or just download
     if file_exists:
@@ -562,7 +579,21 @@ for idx, role in enumerate(role_keys):
             html_hard_roles += '<hr class="thin-divider" />'
             debug_print("L3", "Would be printing a line here")
             
-debug_print("L3", "html_hard_roles:   ", html_hard_roles)            
+debug_print("L3", "html_hard_roles:   ", html_hard_roles)
+
+
+
+#############################################################################################
+##  DEBUG FOR GITHUB
+#############################################################################################
+unix_time = get_unix_time_from_index(local_filename)
+print("#################### unix_time from index.json", unix_time, "####################")    
+
+
+#############################################################################################
+
+
+
             
 
 #####################################################################################################################################
