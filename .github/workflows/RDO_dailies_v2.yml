@@ -26,6 +26,11 @@ jobs:
       run: |
         python RDO_dailies_v2.py
 
+    - name: Debug - Show output files
+      run: |
+        echo "Current directory: $(pwd)"
+        ls -R
+    
     - name: Commit and push generated file
       run: |
         git config --global user.name 'github-actions'
