@@ -2,7 +2,7 @@
 <!DOCTYPE html><html>
 <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="html/images/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="./html/images/favicon.ico" type="image/x-icon" />
     <style>
         body {
           font-family: Arial, sans-serif;
@@ -14,13 +14,13 @@
         }
         @font-face {
           font-family: 'RDOFont';
-          src: url('Fonts/RDO_chinese_rocks_rg.otf') format('opentype');
+          src: url('./Fonts/RDO_chinese_rocks_rg.otf') format('opentype');
           font-weight: normal;
           font-style: normal;
         }
         @font-face {
-          font-family: 'Hapna';
-          src: url('Fonts/Hapna.woff2') format('woff2');
+          font-family: 'hapna';
+          src: url('./Fonts/hapna.woff2') format('woff2');
           font-weight: normal;
           font-style: normal;
         }
@@ -94,7 +94,7 @@
           z-index: 1000;
         }
         .role-hard-wrapper .challenge-text {
-          font-family: 'Hapna', serif;
+          font-family: 'hapna', serif;
           font-size: 14px;
           color: #DADADA;
           white-space: pre-wrap;
@@ -102,7 +102,7 @@
           line-height: 1;
         }
         .role-hard-wrapper .challenge-desc {
-          font-family: 'Hapna', serif;
+          font-family: 'hapna', serif;
           font-size: 12px;
           color: # #FFC300 ;
           white-space: pre-wrap;
@@ -123,12 +123,12 @@
           border-bottom: none;
         }
         .challenge-text {
-          font-family: 'Hapna', sans-serif;
+          font-family: 'hapna', sans-serif;
           font-size: 20px;
           color: white;
         }
         .challenge-desc {
-          font-family: 'Hapna', serif;
+          font-family: 'hapna', serif;
           font-size: 16px;
           color: #999999;
           white-space: pre-wrap;
@@ -154,7 +154,7 @@
           padding-bottom: 10px;
         }
         .role-challenge-text {
-          font-family: 'Hapna', sans-serif;
+          font-family: 'hapna', sans-serif;
           font-size: 18px;
           color: #dadada;
           padding-bottom: 0px;
@@ -163,7 +163,7 @@
           transform-origin: left; /* or 'center' or 'right' based on your preference */
         }
         .role-challenge-desc {
-          font-family: 'Hapna', serif;
+          font-family: 'hapna', serif;
           font-size: 14px;
           color: #8c8080;
           white-space: pre-wrap;
@@ -177,7 +177,7 @@
           position: fixed;
           bottom: 10px;
           left: 40px;
-          font-family: 'Hapna', sans-serif;
+          font-family: 'hapna', sans-serif;
           font-size: 12px;
           color: #888;
           z-index: 9999;
@@ -209,13 +209,14 @@
           <div class="challenge-desc">Shallow water with fish is a great way to complete this.
 South of Scratching Post, by the little island in the San Luis River is a good spot.</div></div>
         <div class="challenge">
-          <div class="challenge-text">Hamish Sinclair missions completed</div></div>
+          <div class="challenge-text">1 Hamish Sinclair missions completed</div></div>
         <div class="challenge">
           <div class="challenge-text">3 Little Brown Bats collected</div>
           <div class="challenge-desc">The cave behind the waterfall at Elysian Pool, at night is probably the best spot.
 Switch lobbies to get them to spawn if none there.</div></div>
         <div class="challenge">
-          <div class="challenge-text">3 Player kills with melee in Free Roam Events</div></div>
+          <div class="challenge-text">3 Player kills with melee in Free Roam Events</div>
+          <div class="challenge-desc">Stamina tonics, then knock down and subdue players.</div></div>
         <div class="challenge">
           <div class="challenge-text">5 Provisions cooked at campfires</div></div>
         <div class="challenge">
@@ -236,7 +237,8 @@ There's a good patch around the road the runs through 'FOREST' on the map</div><
         <div class="role-challenge">
           <div class="role-challenge-text">2 Goods sold to distant buyer</div></div>
         <div class="role-challenge">
-          <div class="role-challenge-text">6 Perfect carcasses donated to Cripps</div></div>
+          <div class="role-challenge-text">6 Perfect carcasses donated to Cripps</div>
+          <div class="role-challenge-desc">Perfect pelts don't count for this.</div></div>
         <div class="role-challenge">
           <div class="role-challenge-text">2 Resupply missions completed</div></div><hr class="thin-divider" /><h3 class="role-heading">Collector</h3>
         <div class="role-challenge">
@@ -262,5 +264,24 @@ There's a good patch around the road the runs through 'FOREST' on the map</div><
   <div class="api-credit">
   Data provided by <a href="https://rdo.gg/api" target="_blank">rdo.gg API</a>
 </div>
+
+<!-- Default Statcounter code for RDO_dailies - codedunky
+https://codedunky.github.io/RDO_dailies/ -->
+<script type="text/javascript">
+var sc_project=13147326; 
+var sc_invisible=1; 
+var sc_security="51162dbd"; 
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js"
+async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="https://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="https://c.statcounter.com/13147326/0/51162dbd/1/"
+alt="Web Analytics"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+
 </body>
 </html>
