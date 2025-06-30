@@ -573,41 +573,50 @@ debug_print("L3", "ipurple", "html_general:  ", html_general)
 def generate_html_for_difficulty(challenges, difficulty):
     from collections import defaultdict
     
+    # Group challenges by their 'category' (e.g., role categories or 'general')
     grouped_by_role = defaultdict(list)
     for c in challenges:
         grouped_by_role[c['category']].append(c)
     
+    # Filter challenges for the specified difficulty or 'general' category
     filtered = [
         c for c in challenges
         if c["category"] == "general" or c["difficulty"] == difficulty
     ]
 
+    # Separate general challenges and role-specific challenges
     general_challenges = [c for c in filtered if c["category"] == "general"]
     role_challenges = [c for c in filtered if c["category"] != "general"]
 
+    # Group role challenges by their category for easier rendering
     grouped_roles = defaultdict(list)
     for c in role_challenges:
         grouped_roles[c["category"]].append(c)
 
+    # Render the general challenges HTML block
     html_general = render_challenge_block(general_challenges)
     html_roles = ""
     
-    #print(f"role_challenges type: {type(role_challenges)}")
-    #print(f"sample value: {role_challenges[:1]}")
-    
-    
+    # Loop through all role keys in order to generate role-specific blocks
     for idx, role in enumerate(role_keys):
         block = grouped_roles.get(role, [])
         if not block:
-            continue
+            continue  # Skip roles with no challenges
+        
+        # Add the heading for the role section
         html_roles += f'<h3 class="role-heading">{role_names.get(role, role.title())}</h3>\n'
+        
+        # Render all challenges for this role, with the appropriate CSS prefix
         html_roles += render_challenge_block(block, prefix="role-challenge")
-        html_roles += '<hr class="thin-divider" />\n'
+        
+        # Add a thin divider line between role sections, but NOT after the last one
+        if idx < len(role_keys) - 1:
+            html_roles += '<hr class="thin-divider" />\n'
+        
         debug_print("L2", "byellow", f"Adding role block: {role_names[role]}")
-        #if idx < len(role_keys) - 1:			#Code was adding markdown heading stuff
-        #   html_roles += "\n* * *\n\n"			# Basically * * *
 
     return html_general, html_roles
+
 
 
 
@@ -805,7 +814,7 @@ html_output = f'''
         }}
         .challenges-wrapper {{
           max-width: 850px;
-          padding: 40px 20px;
+          padding: 4px 20px;          /* 1st one will move the general challenges vertically, 2nd one horizontally*/
           box-sizing: border-box;
         }}
         .role-wrapper {{
@@ -820,7 +829,7 @@ html_output = f'''
           background: #111;
           border-left: 1px solid #333;
           font-size: 13px;
-          line-height: 1;
+          line-height: .75;            /*squashes up the vertical height of the role-challenges*/
           z-index: 1000;
         }}
         .role-wrapper .challenge-text {{
@@ -880,6 +889,12 @@ html_output = f'''
           letter-spacing: 1px; /* adjust as needed */
           
         }}
+        .role-challenge label {{
+          display: flex;
+          align-items: center;  /* vertically center checkbox + text */
+          gap: 2px;             /* control space between checkbox and text */
+          margin-bottom: -2px;   /* less vertical space between rows */
+        }}
         .role-challenge {{
           margin-bottom: 0px;
           padding-bottom: 10px;
@@ -888,7 +903,8 @@ html_output = f'''
           font-family: 'hapna', sans-serif;
           font-size: 18px;
           color: #dadada;
-          padding-bottom: 0px;
+          line-height: 1.25; /* or try 1.8 for a bit more spacing */
+          margin-bottom: -5px
           display: inline-block; /* needed for transform to work properly */
           transform: scaleX(0.90); /* reduce width to 90% */
           transform-origin: left; /* or 'center' or 'right' based on your preference */
@@ -897,13 +913,20 @@ html_output = f'''
           font-family: 'hapna', serif;
           font-size: 14px;
           color: #8c8080;
-          padding-left: 7px !important;  /* Only works with !important, so leave this in*/
+          padding-left: 5px !important;  /* Only works with !important, so leave this in*/
           white-space: pre-wrap;
-          margin-bottom: 1px;
+          margin-bottom: -5px;
+          margin-top: 2px;
           line-height: 1.2;
           display: inline-block; /* needed for transform to work properly */
           transform: scaleX(0.925); /* reduce width to 90% */
           transform-origin: left; /* or 'center' or 'right' based on your preference */          
+        }}
+        .role-challenge input[type="checkbox"] {{
+          margin-right: 3px;            /* remove default margin */
+          padding: 0;
+          transform: scale(0.9); /* optionally shrink the checkbox a bit */
+          accent-color: #999;   /* or your desired color */
         }}
         .api-credit {{
           position: fixed;
@@ -952,6 +975,9 @@ html_output = f'''
           text-decoration: line-through;
           opacity: 0.85;
         }}
+        * {{
+        /*outline: 1px solid red;*/
+        }}
 
     </style>
 </head>
@@ -993,35 +1019,64 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 <!-- End of Statcounter Code -->
 
 
-
-
+// //////////////////////////////////////////////////////////////////////////// //
+// Javascript Loop that controls the toggling of challenges when tickboxes used //
+// //////////////////////////////////////////////////////////////////////////// //
 <script>
-  // This script enables saving checkbox state using localStorage
+  // Run the script when the DOM is fully loaded
   document.addEventListener("DOMContentLoaded", function() {{
-    document.querySelectorAll('.challenge-checkbox').forEach(cb => {{
-      const key = cb.id;
+    // currentVersion is the date or version string injected by Python (e.g., "2025-06-30")
+    const currentVersion = "{human_readable_date}";
 
-      // Restore checkbox state from localStorage
-      const saved = localStorage.getItem(key);
+    // Retrieve the previously stored version from localStorage
+    const storedVersion = localStorage.getItem("challenge_version");
+
+    // If the stored version is different from the current version,
+    // it means we have a new daily challenges set (or new data)
+    if (storedVersion !== currentVersion) {{
+      // Loop through all keys in localStorage
+      Object.keys(localStorage).forEach(key => {{
+        // Remove only keys related to challenge checkboxes to clear previous state
+        if (key.startsWith("role-challenge_") || key.startsWith("challenge_")) {{
+          localStorage.removeItem(key);
+        }}
+      }});
+      // Update the stored version to the current one so this reset doesn't happen again until next update
+      localStorage.setItem("challenge_version", currentVersion);
+    }}
+
+    // Now process each checkbox on the page
+    document.querySelectorAll('.challenge-checkbox').forEach(cb => {{
+      const key = cb.id; // Use checkbox id as the localStorage key
+      const saved = localStorage.getItem(key); // Check if this checkbox was previously checked
+
+      // If the checkbox was previously checked, restore that state
       if (saved === "true") {{
         cb.checked = true;
-        const container = cb.closest('.challenge, .role-challenge');
-        if (container) {{
-          container.classList.add('completed');
-        }}
       }}
 
-      // Save checkbox state on change and toggle completed class
+      // Find the closest container wrapping the challenge text and description
+      const wrapper = cb.closest('.challenge') || cb.closest('.role-challenge');
+
+      // If the checkbox is checked, add the "completed" class to apply dimming styles
+      if (cb.checked && wrapper) {{
+        wrapper.classList.add('completed');
+      }}
+
+      // When checkbox state changes, toggle the completed class and save state in localStorage
       cb.addEventListener('change', () => {{
-        const container = cb.closest('.challenge, .role-challenge');
-        if (container) {{
-          container.classList.toggle('completed', cb.checked);
+        if (wrapper) {{
+          wrapper.classList.toggle('completed', cb.checked);
         }}
         localStorage.setItem(key, cb.checked);
       }});
     }});
   }});
 </script>
+
+
+
+
 </body>
 </html>
 '''
