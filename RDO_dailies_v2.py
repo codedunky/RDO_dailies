@@ -58,7 +58,7 @@ COLORS = {
 }
 
 # Current debug level: 0=L0 (off), 1=L1, 2=L2, 3=L3, 4=L4
-CURRENT_DEBUG_LEVEL = 2
+CURRENT_DEBUG_LEVEL = 3
 
 # Map string levels to numeric levels
 LEVEL_MAP = {
@@ -527,6 +527,8 @@ challenges = data['final_name']
 general_challenges = [c for c in challenges if c["category"] == "general"]
 hard_role_challenges = [c for c in challenges if c["category"] != "general" and c["difficulty"] == "hard"]
 
+role_keys = ["bounty_hunter", "trader", "collector", "moonshiner", "naturalist"]
+
 role_names = {
     "bounty_hunter": "Bounty Hunter",
     "trader": "Trader",
@@ -535,20 +537,72 @@ role_names = {
     "naturalist": "Naturalist"
 }
 
-def render_challenge_block(block):
+def render_challenge_block(block, prefix="challenge"):
     html = ""
     for c in block:
         html += f'''
-        <div class="challenge">
-          <div class="challenge-text">{c["text"]}</div>'''
+        <div class="{prefix}">'''
+        html += f'''
+          <div class="{prefix}-text">{c["text"]}</div>'''
         if c.get("description"):
             html += f'''
-          <div class="challenge-desc">{c["description"]}</div>'''
-        html += "</div>"
+          <div class="{prefix}-desc">{c["description"]}</div>'''
+        html += "</div>\n"
     return html
+
 
 html_general = render_challenge_block(general_challenges)
 debug_print("L3", "ipurple", "html_general:  ", html_general)
+
+
+############################################################
+# Generate html for role challenges with difficulty levels #
+############################################################
+
+def generate_html_for_difficulty(challenges, difficulty):
+    from collections import defaultdict
+    
+    grouped_by_role = defaultdict(list)
+    for c in challenges:
+        grouped_by_role[c['category']].append(c)
+    
+    filtered = [
+        c for c in challenges
+        if c["category"] == "general" or c["difficulty"] == difficulty
+    ]
+
+    general_challenges = [c for c in filtered if c["category"] == "general"]
+    role_challenges = [c for c in filtered if c["category"] != "general"]
+
+    grouped_roles = defaultdict(list)
+    for c in role_challenges:
+        grouped_roles[c["category"]].append(c)
+
+    html_general = render_challenge_block(general_challenges)
+    html_roles = ""
+    
+    print(f"role_challenges type: {type(role_challenges)}")
+    print(f"sample value: {role_challenges[:1]}")
+    
+    
+    for idx, role in enumerate(role_keys):
+        block = grouped_roles.get(role, [])
+        if not block:
+            continue
+        html_roles += f'<h3 class="role-heading">{role_names.get(role, role.title())}</h3>\n'
+        html_roles += render_challenge_block(block, prefix="role-challenge")
+        html_roles += '<hr class="thin-divider" />\n'
+        debug_print("L2", "byellow", f"Adding role block: {role_names[role]}")
+        #if idx < len(role_keys) - 1:			#Code was adding markdown heading stuff
+        #   html_roles += "\n* * *\n\n"			# Basically * * *
+
+    return html_general, html_roles
+
+
+
+
+
+
 
 
 def render_role_challenge_block(block):
@@ -564,22 +618,65 @@ def render_role_challenge_block(block):
     return html
 
 
+#-------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------
+########################  This was the old hard coded role challenges (for hard difficulty) ########################
 
-grouped_roles = defaultdict(list)
-for c in hard_role_challenges:
-    grouped_roles[c["category"]].append(c)
+# grouped_roles = defaultdict(list)
+# for c in hard_role_challenges:
+#     grouped_roles[c["category"]].append(c)
+# 
+# html_hard_roles = ""
+# role_keys = ["bounty_hunter", "trader", "collector", "moonshiner", "naturalist"]
+# for idx, role in enumerate(role_keys):
+#     if role in grouped_roles:
+#         html_hard_roles += f'<h3 class="role-heading">{role_names[role]}</h3>'
+#         html_hard_roles += render_role_challenge_block(grouped_roles[role])
+#         if idx < len(role_keys) - 1:
+#             html_hard_roles += '<hr class="thin-divider" />'
+#             debug_print("L3", "Would be printing a line here")
+#             
+# debug_print("L3", "html_hard_roles:   ", html_hard_roles)
 
-html_hard_roles = ""
-role_keys = ["bounty_hunter", "trader", "collector", "moonshiner", "naturalist"]
-for idx, role in enumerate(role_keys):
-    if role in grouped_roles:
-        html_hard_roles += f'<h3 class="role-heading">{role_names[role]}</h3>'
-        html_hard_roles += render_role_challenge_block(grouped_roles[role])
-        if idx < len(role_keys) - 1:
-            html_hard_roles += '<hr class="thin-divider" />'
-            debug_print("L3", "Would be printing a line here")
-            
-debug_print("L3", "html_hard_roles:   ", html_hard_roles)
+#-------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------
+
+
+
+
+####################################
+# Generate HTML for each difficulty#
+####################################
+html_easy_general, html_easy_roles = generate_html_for_difficulty(challenges, "easy")
+html_med_general,  html_med_roles  = generate_html_for_difficulty(challenges, "med")
+html_hard_general, html_hard_roles = generate_html_for_difficulty(challenges, "hard")
+
+debug_print("L2", "bblue", "Generated html_easy_roles")
+debug_print("L3", "iblue", "html_easy_roles:   ", html_easy_roles)
+print ("-" * 120)
+debug_print("L2", "bpurple", "Generated html_med_roles")
+debug_print("L3", "ipurple", "html_med_roles:   ", html_med_roles)
+print ("-" * 120)
+debug_print("L2", "bred", "Generated html_hard_roles")
+debug_print("L3", "ired", "html_hard_roles:   ", html_hard_roles)
+print ("-" * 120)
+
+#---------------------------------------------------------------------------------------
+difficulty_roles_map = {
+    "easy": html_easy_roles,
+    "med": html_med_roles,
+    #"hard": html_hard_roles
+}
+
+selected_html_roles = difficulty_roles_map.get(filter_difficulty, html_hard_roles)
+#---------------------------------------------------------------------------------------
+
 
 
 
@@ -639,6 +736,18 @@ html_output = f'''
           text-align: left;
           margin-bottom: 40px;
         }}
+        h3 {{
+          font-family: 'RDOFont', sans-serif;
+          color: #eee;
+          font-size: 22px;
+          margin: 20px 0 10px 0;
+          text-shadow:
+            -2px -2px 0 #000,  
+             2px -2px 0 #000,
+            -2px 2px 0 #000,
+             2px 2px 0 #000;
+          letter-spacing: 1px;
+        }}
         .banner-container {{
           position: relative;
           width: 100%;
@@ -688,7 +797,7 @@ html_output = f'''
           padding: 40px 20px;
           box-sizing: border-box;
         }}
-        .role-hard-wrapper {{
+        .role-wrapper {{
           width: 460px;
           max-height: 100vh;
           overflow-y: hidden;
@@ -703,7 +812,7 @@ html_output = f'''
           line-height: 1;
           z-index: 1000;
         }}
-        .role-hard-wrapper .challenge-text {{
+        .role-wrapper .challenge-text {{
           font-family: 'hapna', serif;
           font-size: 14px;
           color: #DADADA;
@@ -711,7 +820,7 @@ html_output = f'''
           margin-bottom: 5px;
           line-height: 1;
         }}
-        .role-hard-wrapper .challenge-desc {{
+        .role-wrapper .challenge-desc {{
           font-family: 'hapna', serif;
           font-size: 12px;
           color: # #FFC300 ;
@@ -813,8 +922,8 @@ html_output = f'''
       {html_general}
     </div>
   </div>
-  <div class="role-hard-wrapper">
-      {html_hard_roles}
+  <div class="role-wrapper ">
+      {selected_html_roles}
     </div>
   </div>
   <div class="api-credit">
