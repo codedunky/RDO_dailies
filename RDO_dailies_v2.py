@@ -58,7 +58,7 @@ COLORS = {
 }
 
 # Current debug level: 0=L0 (off), 1=L1, 2=L2, 3=L3, 4=L4
-CURRENT_DEBUG_LEVEL = 3
+CURRENT_DEBUG_LEVEL = 1
 
 # Map string levels to numeric levels
 LEVEL_MAP = {
@@ -540,15 +540,26 @@ role_names = {
 def render_challenge_block(block, prefix="challenge"):
     html = ""
     for c in block:
+        # Create a unique ID for the checkbox (based on challenge text hash)
+        safe_id = prefix + "_" + str(abs(hash(c["text"])))
+
         html += f'''
-        <div class="{prefix}">'''
-        html += f'''
-          <div class="{prefix}-text">{c["text"]}</div>'''
+        <div class="{prefix}">
+          <!-- Label wraps checkbox + text for styling -->
+          <label>
+            <!-- Checkbox that will be used to mark completion -->
+            <input type="checkbox" class="challenge-checkbox" id="{safe_id}" />
+            <!-- Challenge text, styled via CSS based on checkbox state -->
+            <span class="{prefix}-text">{c["text"]}</span>
+          </label>'''
+        
         if c.get("description"):
             html += f'''
           <div class="{prefix}-desc">{c["description"]}</div>'''
-        html += "</div>\n"
+        
+        html += "</div>"
     return html
+
 
 
 html_general = render_challenge_block(general_challenges)
@@ -581,8 +592,8 @@ def generate_html_for_difficulty(challenges, difficulty):
     html_general = render_challenge_block(general_challenges)
     html_roles = ""
     
-    print(f"role_challenges type: {type(role_challenges)}")
-    print(f"sample value: {role_challenges[:1]}")
+    #print(f"role_challenges type: {type(role_challenges)}")
+    #print(f"sample value: {role_challenges[:1]}")
     
     
     for idx, role in enumerate(role_keys):
@@ -853,6 +864,7 @@ html_output = f'''
           white-space: pre-wrap;
           margin-bottom: 5px;
           line-height: 1.2;
+          padding-left: 5px
         }}
         .role-heading {{
           font-family: 'RDOFont', sans-serif;
@@ -885,6 +897,7 @@ html_output = f'''
           font-family: 'hapna', serif;
           font-size: 14px;
           color: #8c8080;
+          padding-left: 7px !important;  /* Only works with !important, so leave this in*/
           white-space: pre-wrap;
           margin-bottom: 1px;
           line-height: 1.2;
@@ -909,6 +922,37 @@ html_output = f'''
           text-decoration: underline;
           color: #ccc;
         }}
+        
+        /* ==== Checkbox Challenge Completion Styling ==== */
+        .challenge-checkbox {{
+          accent-color: #555; /* dark gray for checked box */
+          margin-right: 8px;
+        }}
+
+        /* When checkbox is checked, style the following sibling text */
+        .challenge-checkbox:checked + .challenge-text,
+        .challenge-checkbox:checked + .role-challenge-text {{
+          color: #555;
+          text-decoration: line-through;
+          opacity: 0.5;
+        }}
+
+        label {{
+          margin-left: -20px;
+          display: inline-flex;
+          align-items: center;
+        }}
+        /* This dims both the challenge text and the description when the challenge is completed */
+        .challenge.completed .challenge-text,
+        .challenge.completed .challenge-desc,
+        .role-challenge.completed .role-challenge-text,
+        .role-challenge.completed .role-challenge-desc {{
+          color: #555 !important;
+          /* Uncomment if you want strikethrough and opacity effect */
+          text-decoration: line-through;
+          opacity: 0.85;
+        }}
+
     </style>
 </head>
 <body>
@@ -948,6 +992,36 @@ alt="Web Analytics"
 referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 <!-- End of Statcounter Code -->
 
+
+
+
+<script>
+  // This script enables saving checkbox state using localStorage
+  document.addEventListener("DOMContentLoaded", function() {{
+    document.querySelectorAll('.challenge-checkbox').forEach(cb => {{
+      const key = cb.id;
+
+      // Restore checkbox state from localStorage
+      const saved = localStorage.getItem(key);
+      if (saved === "true") {{
+        cb.checked = true;
+        const container = cb.closest('.challenge, .role-challenge');
+        if (container) {{
+          container.classList.add('completed');
+        }}
+      }}
+
+      // Save checkbox state on change and toggle completed class
+      cb.addEventListener('change', () => {{
+        const container = cb.closest('.challenge, .role-challenge');
+        if (container) {{
+          container.classList.toggle('completed', cb.checked);
+        }}
+        localStorage.setItem(key, cb.checked);
+      }});
+    }});
+  }});
+</script>
 </body>
 </html>
 '''
