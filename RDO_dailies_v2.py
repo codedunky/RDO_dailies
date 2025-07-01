@@ -176,24 +176,43 @@ def debug_print(
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-def get_unix_time_from_index(local_filename):
+import json
+import datetime
+import time
+
+def get_index_start_date(local_filename):
+    """
+    Reads the index JSON file and returns:
+    - The raw Unix timestamp for startTime (or current time fallback)
+    - The formatted start date string "YYYY-MM-DD" (UTC)
+    """
     try:
         with open(local_filename, 'r', encoding='utf-8') as f:
             data = json.load(f)
         start_time = data.get('startTime')
         if start_time:
-            return start_time  # Return the raw Unix timestamp
+            dt = datetime.datetime.utcfromtimestamp(start_time)
+            date_str = dt.strftime('%Y-%m-%d')
+            return start_time, date_str
         else:
-            # fallback to current time if startTime not present
-            return int(time.time())
+            now = int(time.time())
+            date_str = datetime.datetime.utcfromtimestamp(now).strftime('%Y-%m-%d')
+            return now, date_str
     except Exception as e:
         print("Error loading index.json:", e)
-        return int(time.time())  # fallback to current time    
+        now = int(time.time())
+        date_str = datetime.datetime.utcfromtimestamp(now).strftime('%Y-%m-%d')
+        return now, date_str
+
+# Usage
+start_timestamp, human_readable_date = get_index_start_date('index.json')
+  
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 def get_human_readable_date(unix_timestamp):
+    unix_timestamp, _ = get_index_start_date(local_filename)  # if your function returns a tuple
     dt = datetime.datetime.fromtimestamp(unix_timestamp)
     day = dt.day
     month = dt.strftime('%B')  # Full month name
@@ -218,6 +237,18 @@ def get_human_readable_date(unix_timestamp):
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+#need this to get the unique build time so tickbox logic works with local storage caching
+
+def get_index_mod_date_str(local_filename):
+    try:
+        mod_timestamp = os.path.getmtime(local_filename)
+        dt = datetime.datetime.fromtimestamp(mod_timestamp)
+        return dt.strftime("%Y-%m-%d_%H-%M-%S")
+    except Exception as e:
+        print(f"Error getting modification time: {e}")
+        return datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -272,6 +303,12 @@ if os.path.exists(local_filename):
     
 
 #############################################################################################
+
+# Generating a unique id for tickboxes using todays date
+import datetime
+start_time_unix, human_readable_date = get_index_start_date('index.json')
+start_date_str = datetime.datetime.utcfromtimestamp(start_time_unix).strftime("%Y-%m-%d")
+
 
 
 
@@ -537,27 +574,35 @@ role_names = {
     "naturalist": "Naturalist"
 }
 
+import datetime
+
 def render_challenge_block(block, prefix="challenge"):
     html = ""
+    today_str = datetime.datetime.now().strftime("%Y-%m-%d")  # Current date for debug purposes
+    debug_print("L3", "today_str:   ", today_str)
+    start_time_unix, human_readable_date = get_index_start_date(local_filename)  # Date of challenges from index.json
+    start_date_str = datetime.datetime.utcfromtimestamp(start_time_unix).strftime("%Y-%m-%d")  # Creating a unique id for the index.json date
+    debug_print("L3", "bblue", "'start_date_str' for use in tickbox id:   ", start_date_str)
+
     for c in block:
-        # Create a unique ID for the checkbox (based on challenge text hash)
-        safe_id = prefix + "_" + str(abs(hash(c["text"])))
+        # Combine date + text hash to avoid persistence across different days
+        safe_id = f"{prefix}_{start_date_str}_{abs(hash(c['text']))}"
+        debug_print("L3", "safe_id:   ", safe_id)  #  Print the unique id for a challenge
 
         html += f'''
         <div class="{prefix}">
-          <!-- Label wraps checkbox + text for styling -->
           <label>
-            <!-- Checkbox that will be used to mark completion -->
             <input type="checkbox" class="challenge-checkbox" id="{safe_id}" />
-            <!-- Challenge text, styled via CSS based on checkbox state -->
             <span class="{prefix}-text">{c["text"]}</span>
           </label>'''
-        
+
+        # Optional description
         if c.get("description"):
             html += f'''
           <div class="{prefix}-desc">{c["description"]}</div>'''
-        
-        html += "</div>"
+
+        html += '</div>\n'
+
     return html
 
 
@@ -703,7 +748,7 @@ selected_html_roles = difficulty_roles_map.get(filter_difficulty, html_hard_role
 #############################################################################################
 ##  DEBUG FOR GITHUB
 #############################################################################################
-unix_time = get_unix_time_from_index(local_filename)
+unix_time = get_index_start_date(local_filename)
 print("#################### unix_time from index.json", unix_time, "####################")    
 
 
@@ -719,9 +764,11 @@ print("#################### unix_time from index.json", unix_time, "############
 ##
 #####################################################################################################################################
 # Get the appropriate date for the list of challenges and print it.
-unix_time = get_unix_time_from_index(local_filename)
+unix_time = get_index_start_date(local_filename)
 human_readable_date = get_human_readable_date(unix_time)
 print(human_readable_date)
+index_mod_date_str = get_index_mod_date_str(local_filename)
+print("index_mod_date_str:  ",index_mod_date_str)
 print("\n")
 
 
@@ -1019,60 +1066,53 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 <!-- End of Statcounter Code -->
 
 
-// //////////////////////////////////////////////////////////////////////////// //
-// Javascript Loop that controls the toggling of challenges when tickboxes used //
-// //////////////////////////////////////////////////////////////////////////// //
 <script>
-  // Run the script when the DOM is fully loaded
-  document.addEventListener("DOMContentLoaded", function() {{
-    // currentVersion is the date or version string injected by Python (e.g., "2025-06-30")
-    const currentVersion = "{human_readable_date}";
+// ////////////////////////////////////////////////////////////////////////////
+// JavaScript: Toggle challenge states and handle persistence via localStorage
+// ////////////////////////////////////////////////////////////////////////////
 
-    // Retrieve the previously stored version from localStorage
-    const storedVersion = localStorage.getItem("challenge_version");
+document.addEventListener("DOMContentLoaded", function() {{
+  const currentVersion = "{index_mod_date_str}";
+  const storedVersion = localStorage.getItem("challenge_version");
 
-    // If the stored version is different from the current version,
-    // it means we have a new daily challenges set (or new data)
-    if (storedVersion !== currentVersion) {{
-      // Loop through all keys in localStorage
-      Object.keys(localStorage).forEach(key => {{
-        // Remove only keys related to challenge checkboxes to clear previous state
-        if (key.startsWith("role-challenge_") || key.startsWith("challenge_")) {{
-          localStorage.removeItem(key);
-        }}
-      }});
-      // Update the stored version to the current one so this reset doesn't happen again until next update
-      localStorage.setItem("challenge_version", currentVersion);
+  if (storedVersion !== currentVersion) {{
+    Object.keys(localStorage).forEach(key => {{
+      if (key.startsWith("role-challenge_") || key.startsWith("challenge_")) {{
+        localStorage.removeItem(key);
+      }}
+    }});
+    localStorage.setItem("challenge_version", currentVersion);
+  }}
+
+  document.querySelectorAll('.challenge-checkbox').forEach(cb => {{
+    const key = cb.id;
+    const saved = localStorage.getItem(key);
+
+    cb.checked = false; // Reset checkbox to unchecked first
+
+    if (saved === "true") {{
+      cb.checked = true; // Restore if saved as checked
     }}
 
-    // Now process each checkbox on the page
-    document.querySelectorAll('.challenge-checkbox').forEach(cb => {{
-      const key = cb.id; // Use checkbox id as the localStorage key
-      const saved = localStorage.getItem(key); // Check if this checkbox was previously checked
+    const wrapper = cb.closest('.challenge') || cb.closest('.role-challenge');
+    if (cb.checked && wrapper) {{
+      wrapper.classList.add('completed');
+    }} else if (wrapper) {{
+      wrapper.classList.remove('completed');
+    }}
 
-      // If the checkbox was previously checked, restore that state
-      if (saved === "true") {{
-        cb.checked = true;
+    cb.addEventListener('change', () => {{
+      if (wrapper) {{
+        wrapper.classList.toggle('completed', cb.checked);
       }}
-
-      // Find the closest container wrapping the challenge text and description
-      const wrapper = cb.closest('.challenge') || cb.closest('.role-challenge');
-
-      // If the checkbox is checked, add the "completed" class to apply dimming styles
-      if (cb.checked && wrapper) {{
-        wrapper.classList.add('completed');
-      }}
-
-      // When checkbox state changes, toggle the completed class and save state in localStorage
-      cb.addEventListener('change', () => {{
-        if (wrapper) {{
-          wrapper.classList.toggle('completed', cb.checked);
-        }}
-        localStorage.setItem(key, cb.checked);
-      }});
+      localStorage.setItem(key, cb.checked);
     }});
   }});
+}});
 </script>
+
+
+
 
 
 
