@@ -370,7 +370,7 @@ predefined_challenges = [
              "description": "From Blackwater, go south to Quaker's Cove, and as you come down the approach road, to the left\nis a small beach, often with Whooping Cranes at the waters edge. Change lobbies to get respawns."},
     {"name": "Wild Carrots picked", "key": "mpgc_wild_carrots_picked", "category": ["plants", "wild_carrots"]},
     {"name": "Wild Feverfew picked", "key": "mpgc_wild_feverfew_picked", "category": ["plants", "wild_feverfew"],
-             "description": "At Armadillo, a few metres south of the station, there's a patch by the railway tracks.\nHead west for two more."},
+             "description": "Fast travel to Armadillo, walk a few metres to the first telegraph pole south of the station, and cross\nthe tracks to your right. There's a patch here, then head directly west for two more patches nearby."},
     {"name": "Wild Mint picked", "key": "mpgc_wild_mint_picked", "category": ["plants", "wild_mint"]},
     {"name": "Wintergreen Berries picked", "key": "mpgc_wintergreen_berry_picked", "category": ["plants", "wintergreen_berry"],
              "description": "Cumberland Forest, north east of Valentine, is the best place to find them.\nThere's a good patch around the road the runs through 'FOREST' on the map"},

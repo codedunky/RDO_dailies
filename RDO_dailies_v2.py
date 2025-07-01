@@ -8,6 +8,7 @@ import os
 import io
 import sys
 from typing import Any
+import hashlib  # For the checkbox id's
 
 # Set a variable to control if index.json will download without user prompt
 autoDownload = True
@@ -574,6 +575,13 @@ role_names = {
     "naturalist": "Naturalist"
 }
 
+###########################################
+###### Generate a stable tickbox hash #####
+###########################################
+def stable_hash(text):
+    return hashlib.sha256(text.encode('utf-8')).hexdigest()[:16]  # First 16 chars of hash
+#-----------------------------------------#
+
 import datetime
 
 def render_challenge_block(block, prefix="challenge"):
@@ -586,7 +594,7 @@ def render_challenge_block(block, prefix="challenge"):
 
     for c in block:
         # Combine date + text hash to avoid persistence across different days
-        safe_id = f"{prefix}_{start_date_str}_{abs(hash(c['text']))}"
+        safe_id = f"{prefix}_{start_date_str}_{stable_hash(c['text'])}"
         debug_print("L3", "safe_id:   ", safe_id)  #  Print the unique id for a challenge
 
         html += f'''
