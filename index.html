@@ -41,12 +41,20 @@
              2px 2px 0 #000;
           letter-spacing: 1px;
         }
+        
+        
+        
+        
+        /* ################################################################## */
+        /* This sets up a container for the various banner elements           */
+        /* ################################################################## */        
         .banner-container {
           position: relative;
           width: 100%;
           max-width: 850px;
           margin-left: 0;
         }
+
         .banner-image {
           width: 100%;
           height: auto;
@@ -60,23 +68,93 @@
           left: 50%;
           transform: translateX(-50%);
           color: white;
-          font-size: clamp(0.25em, 5vw, 3em);
+          font-size: clamp(0.25vw, 5vw, 3em);
           text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
           margin: 0;
-          padding: 10px;
+          margin-bottom: 0.2em; /* adjust spacing if needed */
+          
         }
         .date-below-title {
           font-family: 'RDOFont', sans-serif;
-          position: absolute;
-          top: 37.5%;
-          left: 50%;
-          transform: translateX(-50%);
           color: white;
-          font-size: clamp(0.15em, 1.50vw, 1.50em);
-          margin: 0;
-          padding: 10px;
+          font-size: clamp(0.15vw, 1.50vw, 1.50em);
+          margin-top: 2em;  /* adjust this to move the date further down relative to the title */
           text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
         }
+        
+        
+        /* ####################### Challenge Counters ####################### */
+        .challenge-counters {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          max-width: 850px;
+          font-family: 'RDOFont', sans-serif;
+          color: #dadada;
+          font-size: clamp(0.15em, 1.50vw, 1.50em);
+          text-shadow:
+            -3px -3px 0 #000,  
+             3px -3px 0 #000,
+            -3px 3px 0 #000,
+             3px 3px 0 #000;
+          padding: 0 1rem; /* optional padding inside container */
+          box-sizing: border-box;
+        }
+
+        .challenge-counters > div {
+          /* ensures text stays nicely aligned */
+          white-space: nowrap;
+        }
+
+        .challenge-counters span {
+          display: inline-block;
+          width: 4ch; /* reserve space for 4 characters */
+          text-align: right;
+        }
+
+        
+        #general-counter {
+          font-family: 'RDOFont', sans-serif;
+          position: relative;
+          color: #dadada;
+          font-size: clamp(1em, 1.50vw, 1.50em);
+          margin: 0;
+          padding: 10px;
+          text-shadow:
+            -3px -3px 0 #000,  
+             3px -3px 0 #000,
+            -3px 3px 0 #000,
+             3px 3px 0 #000;
+        }
+        #role-counter {
+          font-family: 'RDOFont', sans-serif;
+          position: relative;
+          color: #dadada;
+          font-size: clamp(1em, 1.50vw, 1.50em);
+          margin: 0;
+          padding: 10px;
+          text-shadow:
+            -3px -3px 0 #000,  
+             3px -3px 0 #000,
+            -3px 3px 0 #000,
+             3px 3px 0 #000;
+        }
+        
+        
+        
+        /* ################################################################## */
+        /* This controls all the banner text as a whole block for positioning */
+        /* ################################################################## */
+        .banner-text {
+          position: absolute;
+          top: 3%; /* adjust as needed */
+          left: 50%;
+          transform: translateX(-50%);
+          text-align: center;
+          width: 100%;
+        }
+        
+        
         .main-wrapper {
           display: flex;
           align-items: flex-start;
@@ -251,61 +329,109 @@
         * {
         /*outline: 1px solid red;*/
         }
+        
+        
+        .general-challenges-header, .role-challenges-header {
+          flex: 1 1 auto;
+        }
+        
+        .general-challenges-header {
+          font-family: 'RDOFont', sans-serif;
+          position: relative;
+          font-size: 1.5em;
+          color: #dadada;
+          white-space: nowrap;  /* ✅ prevents text from wrapping */
+          /*user-select: none;*/    /* Optional: prevent accidental text selection */
+        }
+        
+        .role-challenges-header {
+          font-family: 'RDOFont', sans-serif;
+          position: relative;
+          text-align: right;
+          color: #dadada;
+          font-size: 1.5em;
+          flex: 1
+          /*user-select: none;*/    /* Optional: prevent accidental text selection */
+        }
+        ..challenge-headers {
+          display: flex;
+          gap: 50px; /* try smaller gap */
+          align-items: center;
+        }
+
+        .challenge-headers span {
+          position: relative;
+          top: -3px; /* lift counters a little */
+        }
+        
 
     </style>
 </head>
 <body>
-  <div class="banner-container">
-    <img src="HTML/images/RDO_Banner_Wide.jpg" alt="Banner" class="banner-image"/>
+<div class="banner-container">
+  <img src="HTML/images/RDO_Banner_Wide.jpg" alt="Banner" class="banner-image"/>
+
+  <div class="banner-text">
     <h1 class="banner-title">Daily Challenges</h1>
-    <div class="date-below-title">Tuesday, 1st July 2025</div>
-  </div>
+    <div class="date-below-title">Thursday, 3rd July 2025</div>
+
+    <div class="challenge-counters">
+      <div>General Challenges <span id="general-counter">(0/7)</span></div>
+      <div>Role Challenges <span id="role-counter">(0/9)</span></div>
+    </div>
+  </div> <!-- closes banner-text -->
+</div> <!-- closes banner-container -->
+
+
+
+
   <div class="main-wrapper">
     <div class="challenges-wrapper">
       
         <div class="challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-01_f60cd883a303b60b" />
-            <span class="challenge-text">10 Flying birds killed</span>
-          </label></div>
-
-        <div class="challenge">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-01_0c45d2555287d591" />
-            <span class="challenge-text">Multiple Player kills in 5 sec. in Free Roam Events</span>
-          </label></div>
-
-        <div class="challenge">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-01_af0d1beca413a169" />
-            <span class="challenge-text">5 Rock Bass caught</span>
-          </label></div>
-
-        <div class="challenge">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-01_aed62817f5d4210b" />
-            <span class="challenge-text">1 Shaky missions completed</span>
-          </label></div>
-
-        <div class="challenge">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-01_f9515788cf8fe4d5" />
-            <span class="challenge-text">Visited a shop in Tumbleweed</span>
-          </label></div>
-
-        <div class="challenge">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-01_8f0f0982ad1c901a" />
-            <span class="challenge-text">5 Wild Carrots picked</span>
-          </label></div>
-
-        <div class="challenge">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-01_e4e83d6dfa199b39" />
-            <span class="challenge-text">5 Wild Feverfew picked</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-03_eabfa247ef776f8c" />
+            <span class="challenge-text">1 Cooked Seasoned Exotic Bird</span>
           </label>
-          <div class="challenge-desc">Fast travel to Armadillo, walk a few metres to the first telegraph pole south of the station, and cross
-the tracks to your right. There's a patch here, then head directly west for two more patches nearby.</div></div>
+          <div class="challenge-desc">Pelicans are the best source of Exotic Bird Meat. A good spot is just east of Quaker's Cove.
+As you come down the road into the cove, to the left is a beach area where they often sit.</div></div>
+
+        <div class="challenge">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-03_1453e341d64a3cc3" />
+            <span class="challenge-text">3 Cooked Seasoned Flaky Fish</span>
+          </label></div>
+
+        <div class="challenge">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-03_47c54f9cc6a0899d" />
+            <span class="challenge-text">5 Desert Sage picked</span>
+          </label></div>
+
+        <div class="challenge">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-03_9ada9222f127db30" />
+            <span class="challenge-text">Hunt the Leader completed</span>
+          </label></div>
+
+        <div class="challenge">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-03_383a4bfe99607e0a" />
+            <span class="challenge-text">Nine-banded Armadillos skinned</span>
+          </label></div>
+
+        <div class="challenge">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-03_24a5bdb24c2e0e36" />
+            <span class="challenge-text">3 Player kills with a Bow in Free Roam Events</span>
+          </label></div>
+
+        <div class="challenge">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-03_1ccc921f328eb89c" />
+            <span class="challenge-text">5 Ram's Head picked</span>
+          </label>
+          <div class="challenge-desc">Cumberland Forest is a great place to look for Rams Head. There are a couple of patches of them just below the letter ‘C’ at the beginning of the word Cumberland on the map. There is another patch where the letter ‘M’ is too. Another good place to get them is north of the path that runs above the letters ‘U’ and ‘M’</div></div>
 
     </div>
   </div>
@@ -314,102 +440,101 @@ the tracks to your right. There's a patch here, then head directly west for two 
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_d2cbf59582cea939" />
-            <span class="role-challenge-text">2 Bounties brought in from New Hanover posters</span>
-          </label>
-          <div class="role-challenge-desc">Valentine, Emerald Station, Van Horn and Annesburg</div></div>
-
-        <div class="role-challenge">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_4d1b4a5176eaec8f" />
-            <span class="role-challenge-text">3 Bounty targets brought in</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_884a3c9ac86610de" />
+            <span class="role-challenge-text">2 Bounty completed with at least one other Posse Member</span>
           </label></div>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_77fbeff3be4de737" />
-            <span class="role-challenge-text">3 Bounty targets hogtied with a Reinforced Lasso</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_20e0bdba90106b1b" />
+            <span class="role-challenge-text">3 Bounty targets looted</span>
+          </label></div>
+
+        <div class="role-challenge">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_121e660060f222b2" />
+            <span class="role-challenge-text">1 Player bounties collected</span>
           </label></div>
 <hr class="thin-divider" />
 <h3 class="role-heading">Trader</h3>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_557dce4124d165b0" />
-            <span class="role-challenge-text">15838 Distance Delivery Wagon traveled on mission</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_4e216c392f6b24b9" />
+            <span class="role-challenge-text">20 Carcasses donated within 10 minutes</span>
+          </label></div>
+
+        <div class="role-challenge">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_3b59724647115f0a" />
+            <span class="role-challenge-text">$200.00 Money made from trading</span>
+          </label></div>
+
+        <div class="role-challenge">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_94c4a5f307bd95b4" />
+            <span class="role-challenge-text">6 Perfect carcasses donated to Cripps</span>
           </label>
-          <div class="role-challenge-desc">Use a Change Appearance solo lobby to be sure it registers</div></div>
-
-        <div class="role-challenge">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_3de860b9058453d1" />
-            <span class="role-challenge-text">3 Donated deadly predator carcass or skin</span>
-          </label></div>
-
-        <div class="role-challenge">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_a54ddaa847862b1b" />
-            <span class="role-challenge-text">2 Goods sold to distant buyer</span>
-          </label></div>
+          <div class="role-challenge-desc">Perfect pelts don't count for this.</div></div>
 <hr class="thin-divider" />
 <h3 class="role-heading">Collector</h3>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_319d53e1ab59e4c6" />
-            <span class="role-challenge-text">3 American Wild Flowers found</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_7412647babd68c64" />
+            <span class="role-challenge-text">3 Arrowheads found</span>
           </label></div>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_a67b009dab98cf72" />
-            <span class="role-challenge-text">3 Coins found</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_36c74c07935432b3" />
+            <span class="role-challenge-text">3 Collectibles found with a Shovel</span>
           </label></div>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_97b28daff39dbff5" />
-            <span class="role-challenge-text">3 Collector Maps used</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_9e5b72f6a24b7d39" />
+            <span class="role-challenge-text">3 Family Heirlooms found</span>
           </label></div>
 <hr class="thin-divider" />
 <h3 class="role-heading">Moonshiner</h3>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_3fe6bec7eb88d56f" />
-            <span class="role-challenge-text">Completed special moonshine recipe</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_10f392805415cb2d" />
+            <span class="role-challenge-text">Drank own strong moonshine</span>
           </label></div>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_2529c09bd2ba077b" />
-            <span class="role-challenge-text">$200.00 Money made from moonshine sold</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_0b81da59c5133188" />
+            <span class="role-challenge-text">2 Moonshine Story Mission completed</span>
           </label></div>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_95f296355ab8a02f" />
-            <span class="role-challenge-text">2 Moonshine Bar - Danced for 2 mins</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_0f4883a6fe3ffe92" />
+            <span class="role-challenge-text">2 Played with a band for 2 mins</span>
           </label></div>
 <hr class="thin-divider" />
 <h3 class="role-heading">Naturalist</h3>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_9a50d23e61c79c00" />
-            <span class="role-challenge-text">2 Legendary Animals found using pheromones</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_9c900a7864af7125" />
+            <span class="role-challenge-text">7 Crafted or cooked at Wilderness Camp</span>
           </label></div>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_284a4be7f5835d48" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_0896959a770cb9bb" />
+            <span class="role-challenge-text">2 Hardy Tonics used when too hot or cold</span>
+          </label></div>
+
+        <div class="role-challenge">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_284a4be7f5835d48" />
             <span class="role-challenge-text">1 Legendary Animals photographed</span>
-          </label></div>
-
-        <div class="role-challenge">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-01_d959c68a05bca1fa" />
-            <span class="role-challenge-text">2 Sedated animals revived</span>
           </label></div>
 
     </div>
@@ -417,6 +542,8 @@ the tracks to your right. There's a patch here, then head directly west for two 
   <div class="api-credit">
   Data provided by <a href="https://rdo.gg/api" target="_blank">rdo.gg API</a>
 </div>
+
+
 
 <!-- Default Statcounter code for RDO_dailies - codedunky
 https://codedunky.github.io/RDO_dailies/ -->
@@ -437,13 +564,14 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 <!-- End of Statcounter Code -->
 
 
+
 <script>
 // ////////////////////////////////////////////////////////////////////////////
-// JavaScript: Toggle challenge states and handle persistence via localStorage
+// JavaScript: Toggle challenge states and handle persistence via localStorage + counters
 // ////////////////////////////////////////////////////////////////////////////
 
 document.addEventListener("DOMContentLoaded", function() {
-  const currentVersion = "2025-07-01_11-42-17";
+  const currentVersion = "{index_mod_date_str}";
   const storedVersion = localStorage.getItem("challenge_version");
 
   if (storedVersion !== currentVersion) {
@@ -455,15 +583,35 @@ document.addEventListener("DOMContentLoaded", function() {
     localStorage.setItem("challenge_version", currentVersion);
   }
 
-  document.querySelectorAll('.challenge-checkbox').forEach(cb => {
+  const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
+  const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
+  const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
+
+  // Update counters helper
+  function updateCounters() {
+    const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
+    const generalTotal = generalCheckboxes.length;
+
+    const roleDone = Array.from(roleCheckboxes).filter(cb => cb.checked).length;
+    const roleTotal = 9;
+
+    const generalCounter = document.getElementById('general-counter');
+    const roleCounter = document.getElementById('role-counter');
+
+    if (generalCounter) {
+      generalCounter.textContent = `${generalDone}/${generalTotal}`;
+    }
+    if (roleCounter) {
+      roleCounter.textContent = `${roleDone}/${roleTotal}`;
+    }
+  }
+
+  // Initialize checkboxes from localStorage and add event listeners
+  allCheckboxes.forEach(cb => {
     const key = cb.id;
     const saved = localStorage.getItem(key);
 
-    cb.checked = false; // Reset checkbox to unchecked first
-
-    if (saved === "true") {
-      cb.checked = true; // Restore if saved as checked
-    }
+    cb.checked = saved === "true";
 
     const wrapper = cb.closest('.challenge') || cb.closest('.role-challenge');
     if (cb.checked && wrapper) {
@@ -477,10 +625,16 @@ document.addEventListener("DOMContentLoaded", function() {
         wrapper.classList.toggle('completed', cb.checked);
       }
       localStorage.setItem(key, cb.checked);
+      updateCounters();  // Update counters live on toggle
     });
   });
+
+  // Update counters on page load
+  updateCounters();
 });
 </script>
+
+
 
 
 
