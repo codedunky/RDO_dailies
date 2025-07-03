@@ -11,7 +11,7 @@ from typing import Any
 import hashlib  # For the checkbox id's
 
 # Set a variable to control if index.json will download without user prompt
-autoDownload = True
+autoDownload = False#True
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
@@ -647,9 +647,14 @@ def generate_html_for_difficulty(challenges, difficulty):
         grouped_roles[c["category"]].append(c)
 
     # Render the general challenges HTML block
-    html_general = render_challenge_block(general_challenges)
-    html_roles = ""
+    html_general = '<h2 class="general-heading">General Challenges <span id="general-counter">(0/0)</span></h2>\n'
+    html_general = ""
+    # Add heading with counter for general challenges
+    html_general += render_challenge_block(general_challenges)
+
     
+    html_roles = '<h2>Role Challenges <span id="role-counter">(0/0)</span></h2>\n'
+    html_roles = ""
     # Loop through all role keys in order to generate role-specific blocks
     for idx, role in enumerate(role_keys):
         block = grouped_roles.get(role, [])
@@ -658,6 +663,7 @@ def generate_html_for_difficulty(challenges, difficulty):
         
         # Add the heading for the role section
         html_roles += f'<h3 class="role-heading">{role_names.get(role, role.title())}</h3>\n'
+
         
         # Render all challenges for this role, with the appropriate CSS prefix
         html_roles += render_challenge_block(block, prefix="role-challenge")
@@ -823,12 +829,20 @@ html_output = f'''
              2px 2px 0 #000;
           letter-spacing: 1px;
         }}
+        
+        
+        
+        
+        /* ################################################################## */
+        /* This sets up a container for the various banner elements           */
+        /* ################################################################## */        
         .banner-container {{
           position: relative;
           width: 100%;
           max-width: 850px;
           margin-left: 0;
         }}
+
         .banner-image {{
           width: 100%;
           height: auto;
@@ -842,23 +856,93 @@ html_output = f'''
           left: 50%;
           transform: translateX(-50%);
           color: white;
-          font-size: clamp(0.25em, 5vw, 3em);
+          font-size: clamp(0.25vw, 5vw, 3em);
           text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
           margin: 0;
-          padding: 10px;
+          margin-bottom: 0.2em; /* adjust spacing if needed */
+          
         }}
         .date-below-title {{
           font-family: 'RDOFont', sans-serif;
-          position: absolute;
-          top: 37.5%;
-          left: 50%;
-          transform: translateX(-50%);
           color: white;
-          font-size: clamp(0.15em, 1.50vw, 1.50em);
-          margin: 0;
-          padding: 10px;
+          font-size: clamp(0.15vw, 1.50vw, 1.50em);
+          margin-top: 2em;  /* adjust this to move the date further down relative to the title */
           text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
         }}
+        
+        
+        /* ######################## Challenge Counters ######################## */
+        .challenge-counters {{
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          max-width: 850px;
+          font-family: 'RDOFont', sans-serif;
+          color: #dadada;
+          font-size: clamp(0.15em, 1.50vw, 1.50em);
+          text-shadow:
+            -3px -3px 0 #000,  
+             3px -3px 0 #000,
+            -3px 3px 0 #000,
+             3px 3px 0 #000;
+          padding: 0 1rem; /* optional padding inside container */
+          box-sizing: border-box;
+        }}
+
+        .challenge-counters > div {{
+          /* ensures text stays nicely aligned */
+          white-space: nowrap;
+        }}
+
+        .challenge-counters span {{
+          display: inline-block;
+          width: 4ch; /* reserve space for 4 characters */
+          text-align: right;
+        }}
+
+        
+        #general-counter {{
+          font-family: 'RDOFont', sans-serif;
+          position: relative;
+          color: #dadada;
+          font-size: clamp(1em, 1.50vw, 1.50em);
+          margin: 0;
+          padding: 10px;
+          text-shadow:
+            -3px -3px 0 #000,  
+             3px -3px 0 #000,
+            -3px 3px 0 #000,
+             3px 3px 0 #000;
+        }}
+        #role-counter {{
+          font-family: 'RDOFont', sans-serif;
+          position: relative;
+          color: #dadada;
+          font-size: clamp(1em, 1.50vw, 1.50em);
+          margin: 0;
+          padding: 10px;
+          text-shadow:
+            -3px -3px 0 #000,  
+             3px -3px 0 #000,
+            -3px 3px 0 #000,
+             3px 3px 0 #000;
+        }}
+        
+        
+        
+        /* ################################################################## */
+        /* This controls all the banner text as a whole block for positioning */
+        /* ################################################################## */
+        .banner-text {{
+          position: absolute;
+          top: 3%; /* adjust as needed */
+          left: 50%;
+          transform: translateX(-50%);
+          text-align: center;
+          width: 100%;
+        }}
+        
+        
         .main-wrapper {{
           display: flex;
           align-items: flex-start;
@@ -1033,15 +1117,62 @@ html_output = f'''
         * {{
         /*outline: 1px solid red;*/
         }}
+        
+        
+        .general-challenges-header, .role-challenges-header {{
+          flex: 1 1 auto;
+        }}
+        
+        .general-challenges-header {{
+          font-family: 'RDOFont', sans-serif;
+          position: relative;
+          font-size: 1.5em;
+          color: #dadada;
+          white-space: nowrap;  /* ✅ prevents text from wrapping */
+          /*user-select: none;*/    /* Optional: prevent accidental text selection */
+        }}
+        
+        .role-challenges-header {{
+          font-family: 'RDOFont', sans-serif;
+          position: relative;
+          text-align: right;
+          color: #dadada;
+          font-size: 1.5em;
+          flex: 1
+          /*user-select: none;*/    /* Optional: prevent accidental text selection */
+        }}
+        ..challenge-headers {{
+          display: flex;
+          gap: 50px; /* try smaller gap */
+          align-items: center;
+        }}
+
+        .challenge-headers span {{
+          position: relative;
+          top: -3px; /* lift counters a little */
+        }}
+        
 
     </style>
 </head>
 <body>
-  <div class="banner-container">
-    <img src="HTML/images/RDO_Banner_Wide.jpg" alt="Banner" class="banner-image"/>
+<div class="banner-container">
+  <img src="HTML/images/RDO_Banner_Wide.jpg" alt="Banner" class="banner-image"/>
+
+  <div class="banner-text">
     <h1 class="banner-title">Daily Challenges</h1>
     <div class="date-below-title">{human_readable_date}</div>
-  </div>
+
+    <div class="challenge-counters">
+      <div>General Challenges <span id="general-counter">(0/7)</span></div>
+      <div>Role Challenges <span id="role-counter">(0/9)</span></div>
+    </div>
+  </div> <!-- closes banner-text -->
+</div> <!-- closes banner-container -->
+
+
+
+
   <div class="main-wrapper">
     <div class="challenges-wrapper">
       {html_general}
@@ -1054,6 +1185,8 @@ html_output = f'''
   <div class="api-credit">
   Data provided by <a href="https://rdo.gg/api" target="_blank">rdo.gg API</a>
 </div>
+
+
 
 <!-- Default Statcounter code for RDO_dailies - codedunky
 https://codedunky.github.io/RDO_dailies/ -->
@@ -1074,13 +1207,14 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 <!-- End of Statcounter Code -->
 
 
+
 <script>
 // ////////////////////////////////////////////////////////////////////////////
-// JavaScript: Toggle challenge states and handle persistence via localStorage
+// JavaScript: Toggle challenge states and handle persistence via localStorage + counters
 // ////////////////////////////////////////////////////////////////////////////
 
 document.addEventListener("DOMContentLoaded", function() {{
-  const currentVersion = "{index_mod_date_str}";
+  const currentVersion = "{{index_mod_date_str}}";
   const storedVersion = localStorage.getItem("challenge_version");
 
   if (storedVersion !== currentVersion) {{
@@ -1092,15 +1226,35 @@ document.addEventListener("DOMContentLoaded", function() {{
     localStorage.setItem("challenge_version", currentVersion);
   }}
 
-  document.querySelectorAll('.challenge-checkbox').forEach(cb => {{
+  const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
+  const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
+  const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
+
+  // Update counters helper
+  function updateCounters() {{
+    const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
+    const generalTotal = generalCheckboxes.length;
+
+    const roleDone = Array.from(roleCheckboxes).filter(cb => cb.checked).length;
+    const roleTotal = 9;
+
+    const generalCounter = document.getElementById('general-counter');
+    const roleCounter = document.getElementById('role-counter');
+
+    if (generalCounter) {{
+      generalCounter.textContent = `${{generalDone}}/${{generalTotal}}`;
+    }}
+    if (roleCounter) {{
+      roleCounter.textContent = `${{roleDone}}/${{roleTotal}}`;
+    }}
+  }}
+
+  // Initialize checkboxes from localStorage and add event listeners
+  allCheckboxes.forEach(cb => {{
     const key = cb.id;
     const saved = localStorage.getItem(key);
 
-    cb.checked = false; // Reset checkbox to unchecked first
-
-    if (saved === "true") {{
-      cb.checked = true; // Restore if saved as checked
-    }}
+    cb.checked = saved === "true";
 
     const wrapper = cb.closest('.challenge') || cb.closest('.role-challenge');
     if (cb.checked && wrapper) {{
@@ -1114,10 +1268,16 @@ document.addEventListener("DOMContentLoaded", function() {{
         wrapper.classList.toggle('completed', cb.checked);
       }}
       localStorage.setItem(key, cb.checked);
+      updateCounters();  // Update counters live on toggle
     }});
   }});
+
+  // Update counters on page load
+  updateCounters();
 }});
 </script>
+
+
 
 
 
