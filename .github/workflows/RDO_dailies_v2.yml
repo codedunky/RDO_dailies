@@ -1,4 +1,4 @@
-name: RDO Dailies v2.
+name: RDO Dailies v3.
 
 on:
   schedule:
@@ -24,7 +24,7 @@ jobs:
 
     - name: Run script to generate index.html
       run: |
-        python RDO_dailies_v2.py
+        python RDO_dailies_v3.py
 
     - name: Debug - Show output files
       run: |
