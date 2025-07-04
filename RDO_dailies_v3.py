@@ -1022,10 +1022,10 @@ html_output = f'''
           margin-bottom: 10px;
           margin-top: -15px;
           text-shadow:
-            -2px -2px 0 #000,
-             2px -2px 0 #000,
-            -2px  2px 0 #000,
-             2px  2px 0 #000;
+           -1px -1px 2px #000,
+            1px -1px 2px #000,
+           -1px  1px 2px #000,
+            1px  1px 2px #000;
         }}
 
         .challenge-counters {{
@@ -1038,11 +1038,7 @@ html_output = f'''
           padding: 0 15px;
           font-size: 1.25rem;
           color: white;
-          text-shadow:
-            -3px -3px 0 #000,  
-             3px -3px 0 #000,
-            -3px 3px 0 #000,
-             3px 3px 0 #000;
+          text-shadow: 3px 3px 2px rgba(0,0,0,0.6);
           pointer-events: none;
           font-family: 'RDOFont', sans-serif;
         }}
@@ -1102,15 +1098,17 @@ html_output = f'''
           margin-top: 6px;  /* Optional: better vertical alignment */
           appearance: none; /* Remove default styling */
           -webkit-appearance: none;
-          background-color: #cccccc; /* Default background */
-          border: 2px solid #666;
+          background-color: #888; /* Default background */
+          /* background-color: orange; /* TEST */*/
+          border: 2px solid #333;
           border-radius: 3px;
           cursor: pointer;
         }}
         
         .challenge-checkbox:checked {{
-          background-color: #999;
-          border: 2px solid #666;
+          background-color: #222;
+          background-color: #b00000;  /* Dark Red Colour */
+          border: 2px solid #333;
           border-radius: 3px;
         }}
         
@@ -1161,6 +1159,12 @@ html_output = f'''
             color: #eee;
             margin: 0 0 0 0;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+            text-shadow:
+            -3px -3px 0 #000,  
+             3px -3px 0 #000,
+            -3px 3px 0 #000,
+             3px 3px 0 #000;
+            letter-spacing: 0.05em; /* Adjust this value to your liking */
         }}
 
         .role-challenge-text {{
@@ -1179,7 +1183,10 @@ html_output = f'''
             white-space: pre-wrap; /* allows \n line breaks in descriptions */
             transform: scaleX(0.925); /* reduce width to 90% */
         }}
-
+        
+        /*  ##### Role Challenges Tickboxes ##### */
+        
+        /* Unchecked state */
         .role-challenge input[type="checkbox"] {{
             width: 14px;
             height: 14px;
@@ -1187,11 +1194,32 @@ html_output = f'''
             margin-top: 0px;  /* Optional: better vertical alignment */
             appearance: none; /* Remove default styling */
             -webkit-appearance: none;
-            background-color: #cccccc; /* Default background */
-            border: 2px solid #666;
+            background-color: #888; /* Default background */
+            border: 2px solid #333;
             border-radius: 3px;
             cursor: pointer;
         }}
+        
+        /* Checked state */
+        .role-challenge input[type="checkbox"]:checked {{
+            background-color: #222;
+            background-color: #b00000;  /* Dark Red Colour */
+            border: 2px solid #333;
+            border-radius: 3px;
+        }}
+        .role-challenge input[type="checkbox"]:checked::before {{
+            content: "✔";
+            display: block;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            line-height: 14px;
+            vertical-align: middle;
+            position: relative;
+            top: -2px; /* Adjust this value to fine-tune the vertical alignment */
+        }}
+        
+        
         .role-challenge-label {{
           display: flex;
           align-items: center;
@@ -1206,10 +1234,7 @@ html_output = f'''
         }}
 
 /* ==== Checkbox Challenge Completion Styling ==== */
-        .challenge-checkbox {{
-          accent-color: #555; /* dark gray for checked box */
-          margin-right: 8px;
-        }}
+
 
         /* When checkbox is checked, style the following sibling text */
         .challenge-checkbox:checked + .challenge-text,
@@ -1303,6 +1328,10 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
   
   
     <script>
+      // ////////////////////////////////////////////////////////////////////////////////////// //
+      // JavaScript: Resize text size dynamically based on container width for better accuracy  //
+      // ////////////////////////////////////////////////////////////////////////////////////// //
+      
       // Resize banner text dynamically based on container width
       function resizeBannerText() {{
           const container = document.querySelector('.banner-container');
@@ -1326,9 +1355,9 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
       window.addEventListener('resize', resizeBannerText);
       window.addEventListener('load', resizeBannerText);
 
-      // ////////////////////////////////////////////////////////////////////////////
-      // JavaScript: Toggle challenge states and handle persistence via localStorage + counters
-      // ////////////////////////////////////////////////////////////////////////////
+      // ////////////////////////////////////////////////////////////////////////////////////// //
+      // JavaScript: Toggle challenge states and handle persistence via localStorage + counters //
+      // ////////////////////////////////////////////////////////////////////////////////////// //
 
       document.addEventListener("DOMContentLoaded", function() {{
           const currentVersion = "{index_mod_date_str}";
