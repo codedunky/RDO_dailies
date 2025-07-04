@@ -664,10 +664,16 @@ def render_challenge_block(block, prefix="challenge"):
         safe_id = f"{prefix}_{start_date_str}_{stable_hash(c['text'])}"
         debug_print("L3", "safe_id:   ", safe_id)  # Print the unique id for a challenge
 
+        # Add the class to the label only for role challenges
+        label_class = 'role-challenge-label' if prefix == 'role-challenge' else ''
+        label_open = f'<label class="{label_class}">' if label_class else '<label>'
+
+        #debug_print("L3", "bbrightyellow", "label_class:  ", label_class)
+
         # Start the challenge container with a label and checkbox
         html += f'''
         <div class="{prefix}">
-          <label>
+          {label_open}
             <input type="checkbox" class="challenge-checkbox" id="{safe_id}" />
             <span class="{prefix}-text">{c["text"]}</span>
           </label>'''
@@ -780,6 +786,7 @@ def render_role_challenge_block_old(block):
 # Generate html for role challenges with difficulty levels and tickboxes #
 ##########################################################################
 def render_role_challenge_block(block):
+    debug_print("L1", "bbyellow", "render_role_challenge_block")
     html = ""
 
     # Get the start date string to use in generating stable IDs
@@ -789,10 +796,11 @@ def render_role_challenge_block(block):
     for c in block:
         # Create a stable unique ID based on date and challenge text
         safe_id = f"role-challenge_{start_date_str}_{stable_hash(c['text'])}"
-
+        
+        debug_print("L1", "bbyellow", "label class")
         html += f'''
         <div class="role-challenge">
-          <label>
+          <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="{safe_id}" />
             <span class="text-scale"><span class="role-challenge-text">{c["text"]}</span></span>
           </label>'''
@@ -1171,6 +1179,8 @@ html_output = f'''
             font-family: 'hapna', sans-serif; /* Example font */
             font-size: 1.15rem;
             color: #eee;
+            display: inline-block; /* keeps it inline for natural text flow */
+            line-height: 1.4;
 
 
 
@@ -1179,7 +1189,7 @@ html_output = f'''
             font-family: 'hapna', sans-serif; /* Example font */
             font-size: 1rem;
             color: #aaa;
-            margin-left: 20px; /* aligns under the checkbox text */
+            margin-left: 6px; /* aligns under the role challenge text */
             white-space: pre-wrap; /* allows \n line breaks in descriptions */
             transform: scaleX(0.925); /* reduce width to 90% */
         }}
@@ -1222,8 +1232,9 @@ html_output = f'''
         
         .role-challenge-label {{
           display: flex;
-          align-items: center;
-          gap: 8px;
+          align-items: baseline; /* aligns checkbox with first line of text */
+          gap: 0.5em;               /* space between checkbox and text */
+          cursor: pointer;
         }}
         
         /* Using this to scale role challenge text */
