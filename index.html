@@ -4,14 +4,20 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="./html/images/favicon.ico" type="image/x-icon" />
     <style>
+        /* === Global styles === */
         body {
-          font-family: Arial, sans-serif;
-          background-color: #000000;
-          padding: 20px;
           margin: 0;
-          height: 100vh;
-          overflow: hidden;
+          padding: 0;
+          background-color: #000;
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: flex-start;
+          font-family: Arial, sans-serif;
+          gap: 20px;
+          flex-wrap: wrap;
         }
+
         @font-face {
           font-family: 'RDOFont';
           src: url('./Fonts/RDO_chinese_rocks_rg.otf') format('opentype');
@@ -24,280 +30,277 @@
           font-weight: normal;
           font-style: normal;
         }
-        h1 {
-          font-size: 60px;
-          text-align: left;
-          margin-bottom: 40px;
+
+        /* === Layout containers === */
+        .page-container {
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
         }
-        h3 {
-          font-family: 'RDOFont', sans-serif;
+        .main-container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-start;
+          align-items: flex-start;
+          gap: 20px;
+          margin: 0;
+          padding: 0;
+        }
+
+        .left-column {
+          display: flex;
+          flex-direction: column;
+          max-width: 850px;
+          width: 100%;
+        }
+
+        .sidebar-container {
+          display: block;
+          width: 460px;
+          background-color: #111;
           color: #eee;
-          font-size: 22px;
-          margin: 20px 0 10px 0;
-          text-shadow:
-            -2px -2px 0 #000,  
-             2px -2px 0 #000,
-            -2px 2px 0 #000,
-             2px 2px 0 #000;
-          letter-spacing: 1px;
+          /*border: 2px solid orange;*/
+          padding: 15px;
+          box-sizing: border-box;
+          font-family: Arial, sans-serif;
         }
-        
-        
-        
-        
-        /* ################################################################## */
-        /* This sets up a container for the various banner elements           */
-        /* ################################################################## */        
+
         .banner-container {
-          position: relative;
           width: 100%;
           max-width: 850px;
-          margin-left: 0;
+          min-width: 400px;
+          background-color: #000;
+          /*border: 2px solid blue;*/
+          box-sizing: border-box;
+          padding: 10px;
+          color: #eee;
+        }
+
+        .banner-image-wrapper {
+          position: relative;
+          width: 100%;
         }
 
         .banner-image {
           width: 100%;
           height: auto;
           display: block;
-          margin: 0;
         }
-        .banner-title {
-          font-family: 'RDOFont', sans-serif;
+
+        .banner-text-overlay {
           position: absolute;
-          top: 0%;
+          top: -3%;
           left: 50%;
           transform: translateX(-50%);
           color: white;
-          font-size: clamp(0.25vw, 5vw, 3em);
+          text-align: center;
+          width: 90%;
           text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-          margin: 0;
-          margin-bottom: 0.2em; /* adjust spacing if needed */
-          
-        }
-        .date-below-title {
+          pointer-events: none;
           font-family: 'RDOFont', sans-serif;
-          color: white;
-          font-size: clamp(0.15vw, 1.50vw, 1.50em);
-          margin-top: 2em;  /* adjust this to move the date further down relative to the title */
-          text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
         }
-        
-        
-        /* ####################### Challenge Counters ####################### */
+
+        .banner-title {
+          font-size: 2.5rem;
+          margin: 10px 0;
+          text-shadow:
+            -2px -2px 0 #000,
+             2px -2px 0 #000,
+            -2px  2px 0 #000,
+             2px  2px 0 #000;
+        }
+
+        .banner-date {
+          font-size: 1.4rem;
+          margin-bottom: 10px;
+          margin-top: -15px;
+          text-shadow:
+            -2px -2px 0 #000,
+             2px -2px 0 #000,
+            -2px  2px 0 #000,
+             2px  2px 0 #000;
+        }
+
         .challenge-counters {
+          position: absolute;
+          bottom: 10px;
+          left: 0;
+          right: 0;
           display: flex;
           justify-content: space-between;
-          width: 100%;
-          max-width: 850px;
-          font-family: 'RDOFont', sans-serif;
-          color: #dadada;
-          font-size: clamp(0.15em, 1.50vw, 1.50em);
+          padding: 0 15px;
+          font-size: 1.25rem;
+          color: white;
           text-shadow:
             -3px -3px 0 #000,  
              3px -3px 0 #000,
             -3px 3px 0 #000,
              3px 3px 0 #000;
-          padding: 0 1rem; /* optional padding inside container */
-          box-sizing: border-box;
+          pointer-events: none;
+          font-family: 'RDOFont', sans-serif;
         }
 
         .challenge-counters > div {
-          /* ensures text stays nicely aligned */
           white-space: nowrap;
         }
 
         .challenge-counters span {
           display: inline-block;
-          width: 4ch; /* reserve space for 4 characters */
+          width: 4ch;
           text-align: right;
         }
 
-        
-        #general-counter {
-          font-family: 'RDOFont', sans-serif;
-          position: relative;
-          color: #dadada;
-          font-size: clamp(1em, 1.50vw, 1.50em);
-          margin: 0;
-          padding: 10px;
-          text-shadow:
-            -3px -3px 0 #000,  
-             3px -3px 0 #000,
-            -3px 3px 0 #000,
-             3px 3px 0 #000;
-        }
-        #role-counter {
-          font-family: 'RDOFont', sans-serif;
-          position: relative;
-          color: #dadada;
-          font-size: clamp(1em, 1.50vw, 1.50em);
-          margin: 0;
-          padding: 10px;
-          text-shadow:
-            -3px -3px 0 #000,  
-             3px -3px 0 #000,
-            -3px 3px 0 #000,
-             3px 3px 0 #000;
-        }
-        
-        
-        
-        /* ################################################################## */
-        /* This controls all the banner text as a whole block for positioning */
-        /* ################################################################## */
-        .banner-text {
-          position: absolute;
-          top: 3%; /* adjust as needed */
-          left: 50%;
-          transform: translateX(-50%);
-          text-align: center;
+        .general-challenges-container {
           width: 100%;
-        }
-        
-        
-        .main-wrapper {
-          display: flex;
-          align-items: flex-start;
-          height: 100vh;
-          padding: 0;
-          margin: 0;
-          position: relative;
-        }
-        .challenges-wrapper {
           max-width: 850px;
-          padding: 4px 20px;          /* 1st one will move the general challenges vertically, 2nd one horizontally*/
+          margin: 0 auto;
+          background-color: #111;
+          padding: 15px;
           box-sizing: border-box;
+          color: white;
+          font-family: 'hapna', sans-serif;
+          font-size: 1.25rem;
+          text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+          /*border: 2px solid green;*/
         }
-        .role-wrapper {
-          width: 460px;
-          max-height: 100vh;
-          overflow-y: hidden;
-          padding: 20px;
-          box-sizing: border-box;
-          position: absolute;
-          top: 0;
-          left: 870px;
-          background: #111;
-          border-left: 1px solid #333;
-          font-size: 13px;
-          line-height: .75;            /*squashes up the vertical height of the role-challenges*/
-          z-index: 1000;
+
+        @media (max-width: 1350px) {
+          body {
+            flex-direction: column;
+            align-items: center;
+          }
+          .sidebar-container {
+            width: 100%;
+            max-width: 850px;
+          }
         }
-        .role-wrapper .challenge-text {
-          font-family: 'hapna', serif;
-          font-size: 14px;
-          color: #DADADA;
-          white-space: pre-wrap;
-          margin-bottom: 5px;
-          line-height: 1;
+
+        /* === Challenge checkboxes with wrapped text aligned properly === */
+        .challenge label {
+          display: flex; /* container */
+          align-items: flex-start;  /* Align to the top of the checkbox */
+          gap: 8px;                 /* Space between checkbox and text */
+          position: relative; /* for absolute checkbox */
+          padding-left: 0px; /* reserve space for checkbox */
+          cursor: pointer;
+          white-space: normal;
+          line-height: 1.3;
         }
-        .role-wrapper .challenge-desc {
-          font-family: 'hapna', serif;
+
+        /* Position the checkbox at the left of label */
+        .challenge-checkbox {
+          width: 14px;
+          height: 14px;
+          margin: 0;
+          margin-top: 6px;  /* Optional: better vertical alignment */
+          appearance: none; /* Remove default styling */
+          -webkit-appearance: none;
+          background-color: #cccccc; /* Default background */
+          border: 2px solid #666;
+          border-radius: 3px;
+          cursor: pointer;
+        }
+        
+        .challenge-checkbox:checked {
+          background-color: #999;
+          border: 2px solid #666;
+          border-radius: 3px;
+        }
+        
+        /* add a checkmark */
+        .challenge-checkbox:checked::before {
+          content: "✔";
+          display: block;
+          text-align: top;
+          color: white;
           font-size: 12px;
-          color: # #FFC300 ;
-          white-space: pre-wrap;
-          margin-bottom: 5px;
-          line-height: 1.2;
+          line-height: 10px;
         }
+        
+
+        /* Text span with hanging indent:
+           first line starts after checkbox,
+           wrapped lines align under text, NOT under checkbox */
+           
+        .challenge-text {
+          display: block;
+          display: block;
+          word-wrap: break-word;
+          max-width: 100%;
+          user-select: none;
+        }
+
+
+        /* Optional: styling for challenge description */
+        .challenge-desc {
+          margin-left: 30px; /* indent to align with text */
+          font-size: 1rem;
+          color: #999999;
+          padding-bottom: 8px;
+          white-space: pre-wrap;  /* Preserve 
+ line breaks and wrap long lines */
+        }
+        
         .thin-divider {
           border: none;
           border-top: 1px solid #444;
-          margin: 8px 0;
+          /*width: 825px;    Allowing this will kill the word-wrap and dynamic resizing of the general challenges*/
+          max-width: 100%;
+          margin: 8px auto;
         }
-        .challenge {
-          margin-bottom: 10px;
-          border-bottom: 1px solid #404040;
-          padding-bottom: 10px;
-        }
-        .challenge:last-child {
-          border-bottom: none;
-        }
-        .challenge-text {
-          font-family: 'hapna', sans-serif;
-          font-size: 20px;
-          color: white;
-        }
-        .challenge-desc {
-          font-family: 'hapna', serif;
-          font-size: 16px;
-          color: #999999;
-          white-space: pre-wrap;
-          margin-bottom: 5px;
-          line-height: 1.2;
-          padding-left: 5px
-        }
+
         .role-heading {
-          font-family: 'RDOFont', sans-serif;
-          font-size: 24px;
-          color: #eee;
-          margin-top: -0px;
-          margin-bottom: 8px;
-          text-shadow:
-            -3px -3px 0 #000,  
-             3px -3px 0 #000,
-            -3px 3px 0 #000,
-             3px 3px 0 #000;
-          letter-spacing: 1px; /* adjust as needed */
-          
+            font-family: 'RDOFont', sans-serif;  /* Example font, change as needed */
+            font-size: 1.5rem;
+            color: #eee;
+            margin: 0 0 0 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
         }
-        .role-challenge label {
-          display: flex;
-          align-items: center;  /* vertically center checkbox + text */
-          gap: 2px;             /* control space between checkbox and text */
-          margin-bottom: -2px;   /* less vertical space between rows */
-        }
-        .role-challenge {
-          margin-bottom: 0px;
-          padding-bottom: 10px;
-        }
+
         .role-challenge-text {
-          font-family: 'hapna', sans-serif;
-          font-size: 18px;
-          color: #dadada;
-          line-height: 1.25; /* or try 1.8 for a bit more spacing */
-          margin-bottom: -5px
-          display: inline-block; /* needed for transform to work properly */
-          transform: scaleX(0.90); /* reduce width to 90% */
-          transform-origin: left; /* or 'center' or 'right' based on your preference */
+            font-family: 'hapna', sans-serif; /* Example font */
+            font-size: 1.15rem;
+            color: #eee;
+
+
+
         }
         .role-challenge-desc {
-          font-family: 'hapna', serif;
-          font-size: 14px;
-          color: #8c8080;
-          padding-left: 5px !important;  /* Only works with !important, so leave this in*/
-          white-space: pre-wrap;
-          margin-bottom: -5px;
-          margin-top: 2px;
-          line-height: 1.2;
-          display: inline-block; /* needed for transform to work properly */
-          transform: scaleX(0.925); /* reduce width to 90% */
-          transform-origin: left; /* or 'center' or 'right' based on your preference */          
+            font-family: 'hapna', sans-serif; /* Example font */
+            font-size: 1rem;
+            color: #aaa;
+            margin-left: 20px; /* aligns under the checkbox text */
+            white-space: pre-wrap; /* allows 
+ line breaks in descriptions */
+            transform: scaleX(0.925); /* reduce width to 90% */
         }
+
         .role-challenge input[type="checkbox"] {
-          margin-right: 3px;            /* remove default margin */
-          padding: 0;
-          transform: scale(0.9); /* optionally shrink the checkbox a bit */
-          accent-color: #999;   /* or your desired color */
+            width: 14px;
+            height: 14px;
+            margin: 0;
+            margin-top: 0px;  /* Optional: better vertical alignment */
+            appearance: none; /* Remove default styling */
+            -webkit-appearance: none;
+            background-color: #cccccc; /* Default background */
+            border: 2px solid #666;
+            border-radius: 3px;
+            cursor: pointer;
         }
-        .api-credit {
-          position: fixed;
-          bottom: 10px;
-          left: 40px;
-          font-family: 'hapna', sans-serif;
-          font-size: 12px;
-          color: #888;
-          z-index: 9999;
-        }
-        .api-credit a {
-          color: #999;
-          text-decoration: none;
-        }
-        .api-credit a:hover {
-          text-decoration: underline;
-          color: #ccc;
+        .role-challenge-label {
+          display: flex;
+          align-items: center;
+          gap: 8px;
         }
         
-        /* ==== Checkbox Challenge Completion Styling ==== */
+        /* Using this to scale role challenge text */
+        .text-scale {
+            display: inline-block;
+            transform: scaleX(0.9);
+            transform-origin: left;
+        }
+
+/* ==== Checkbox Challenge Completion Styling ==== */
         .challenge-checkbox {
           accent-color: #555; /* dark gray for checked box */
           margin-right: 8px;
@@ -311,11 +314,7 @@
           opacity: 0.5;
         }
 
-        label {
-          margin-left: -20px;
-          display: inline-flex;
-          align-items: center;
-        }
+
         /* This dims both the challenge text and the description when the challenge is completed */
         .challenge.completed .challenge-text,
         .challenge.completed .challenge-desc,
@@ -326,194 +325,185 @@
           text-decoration: line-through;
           opacity: 0.85;
         }
-        * {
-        /*outline: 1px solid red;*/
-        }
-        
-        
-        .general-challenges-header, .role-challenges-header {
-          flex: 1 1 auto;
-        }
-        
-        .general-challenges-header {
-          font-family: 'RDOFont', sans-serif;
-          position: relative;
-          font-size: 1.5em;
-          color: #dadada;
-          white-space: nowrap;  /* ✅ prevents text from wrapping */
-          /*user-select: none;*/    /* Optional: prevent accidental text selection */
-        }
-        
-        .role-challenges-header {
-          font-family: 'RDOFont', sans-serif;
-          position: relative;
-          text-align: right;
-          color: #dadada;
-          font-size: 1.5em;
-          flex: 1
-          /*user-select: none;*/    /* Optional: prevent accidental text selection */
-        }
-        ..challenge-headers {
-          display: flex;
-          gap: 50px; /* try smaller gap */
-          align-items: center;
-        }
 
-        .challenge-headers span {
-          position: relative;
-          top: -3px; /* lift counters a little */
+
+
+
+        /* API credit styling */
+        .api-credit {
+          margin-top: auto;
+          padding: 10px 0 10px 15px;
+          font-size: 0.85rem;
+          color: #888;
+          font-family: Arial, sans-serif;
+          text-align: left;
+        }
+        .api-credit a {
+          color: #999;
+          text-decoration: none;
+        }
+        .api-credit a:hover {
+          text-decoration: underline;
+          color: #ccc;
         }
         
-
     </style>
 </head>
 <body>
-<div class="banner-container">
-  <img src="HTML/images/RDO_Banner_Wide.jpg" alt="Banner" class="banner-image"/>
+    <div class="main-container">
+        <div class="left-column">
+            <div class="banner-container">
+                <div class="banner-image-wrapper">
+                    <img src="HTML/images/RDO_Banner_Wide.jpg" alt="Banner" class="banner-image"/>
+                    <div class="banner-text-overlay">
+                        <h1 class="banner-title">Daily Challenges</h1>
+                        <div class="banner-date">Friday, 4th July 2025</div>
+                    </div>
+                    <div class="challenge-counters">
+                        <div>General Challenges <span id="general-counter">(0/7)</span></div>
+                        <div>Role Challenges <span id="role-counter">(0/9)</span></div>
+                    </div>
+                </div>
+            </div>
 
-  <div class="banner-text">
-    <h1 class="banner-title">Daily Challenges</h1>
-    <div class="date-below-title">Thursday, 3rd July 2025</div>
-
-    <div class="challenge-counters">
-      <div>General Challenges <span id="general-counter">(0/7)</span></div>
-      <div>Role Challenges <span id="role-counter">(0/9)</span></div>
-    </div>
-  </div> <!-- closes banner-text -->
-</div> <!-- closes banner-container -->
-
-
-
-
-  <div class="main-wrapper">
-    <div class="challenges-wrapper">
-      
+            <div class="general-challenges-container">
+                
         <div class="challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-03_eabfa247ef776f8c" />
-            <span class="challenge-text">1 Cooked Seasoned Exotic Bird</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-04_9ff8bc877e665d98" />
+            <span class="challenge-text">3 Capitale notes collected</span>
           </label>
-          <div class="challenge-desc">Pelicans are the best source of Exotic Bird Meat. A good spot is just east of Quaker's Cove.
-As you come down the road into the cove, to the left is a beach area where they often sit.</div></div>
+          <div class="challenge-desc">The Blood Money contract, 'Railroad Contract' is a very good one to find capitale.
+Part 1 has some in a box at the campsite for example.</div></div>
+<hr class="thin-divider">
 
         <div class="challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-03_1453e341d64a3cc3" />
-            <span class="challenge-text">3 Cooked Seasoned Flaky Fish</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-04_83b45b939e29d0cc" />
+            <span class="challenge-text">5 Drinks ordered at a Saloon</span>
           </label></div>
+<hr class="thin-divider">
 
         <div class="challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-03_47c54f9cc6a0899d" />
-            <span class="challenge-text">5 Desert Sage picked</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-04_9e4e63b4cfb8532e" />
+            <span class="challenge-text">2 Horse tonics used</span>
           </label></div>
+<hr class="thin-divider">
 
         <div class="challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-03_9ada9222f127db30" />
-            <span class="challenge-text">Hunt the Leader completed</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-04_894bb738454e6e4e" />
+            <span class="challenge-text">5 Indian Tobacco picked</span>
           </label></div>
+<hr class="thin-divider">
 
         <div class="challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-03_383a4bfe99607e0a" />
-            <span class="challenge-text">Nine-banded Armadillos skinned</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-04_a4187247c8260904" />
+            <span class="challenge-text">3 Items sold to a Fence</span>
           </label></div>
+<hr class="thin-divider">
 
         <div class="challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-03_24a5bdb24c2e0e36" />
-            <span class="challenge-text">3 Player kills with a Bow in Free Roam Events</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-04_1e6e2a8822df4ede" />
+            <span class="challenge-text">3 Player kills with a Repeater in Free Roam Events</span>
           </label></div>
+<hr class="thin-divider">
 
         <div class="challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-03_1ccc921f328eb89c" />
-            <span class="challenge-text">5 Ram's Head picked</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-04_37b6f11cf24250bf" />
+            <span class="challenge-text">2 Western Toads collected</span>
           </label>
-          <div class="challenge-desc">Cumberland Forest is a great place to look for Rams Head. There are a couple of patches of them just below the letter ‘C’ at the beginning of the word Cumberland on the map. There is another patch where the letter ‘M’ is too. Another good place to get them is north of the path that runs above the letters ‘U’ and ‘M’</div></div>
+          <div class="challenge-desc">Follow the railway tracks north out of the city and into Bluewater Marsh.
+The mud flats near where the railway line forks over the water is a good place to hunt for toads.
+So is the area near the burnt out fishing shack at Copperhead Landing, just NE of that.</div></div>
 
-    </div>
-  </div>
-  <div class="role-wrapper ">
-      <h3 class="role-heading">Bounty Hunter</h3>
+            </div>
+        </div>
+
+        <div class="sidebar-container">
+            <h3 class="role-heading">Bounty Hunter</h3>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_884a3c9ac86610de" />
-            <span class="role-challenge-text">2 Bounty completed with at least one other Posse Member</span>
-          </label></div>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_095bdbbecec412b0" />
+            <span class="role-challenge-text">2 Bounties brought in from Lemoyne posters</span>
+          </label>
+          <div class="role-challenge-desc">Rhodes and Saint Denis</div></div>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_20e0bdba90106b1b" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_20e0bdba90106b1b" />
             <span class="role-challenge-text">3 Bounty targets looted</span>
           </label></div>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_121e660060f222b2" />
-            <span class="role-challenge-text">1 Player bounties collected</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_4a008830b82fce96" />
+            <span class="role-challenge-text">3 More than one bounty target brought in at once</span>
           </label></div>
 <hr class="thin-divider" />
 <h3 class="role-heading">Trader</h3>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_4e216c392f6b24b9" />
-            <span class="role-challenge-text">20 Carcasses donated within 10 minutes</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_e2fc25cd87a58806" />
+            <span class="role-challenge-text">6 Large animal carcasses donated to Cripps</span>
           </label></div>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_3b59724647115f0a" />
-            <span class="role-challenge-text">$200.00 Money made from trading</span>
-          </label></div>
-
-        <div class="role-challenge">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_94c4a5f307bd95b4" />
-            <span class="role-challenge-text">6 Perfect carcasses donated to Cripps</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_f584c6c3976ff8a7" />
+            <span class="role-challenge-text">7 Medium animal carcasses donated to Cripps</span>
           </label>
-          <div class="role-challenge-desc">Perfect pelts don't count for this.</div></div>
+          <div class="role-challenge-desc">Emerald Ranch, for sheep, turkeys, & foxes.</div></div>
+
+        <div class="role-challenge">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_601930bd27702744" />
+            <span class="role-challenge-text">1 Resupply completed with 5 mins left</span>
+          </label></div>
 <hr class="thin-divider" />
 <h3 class="role-heading">Collector</h3>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_7412647babd68c64" />
-            <span class="role-challenge-text">3 Arrowheads found</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_98be3bcfdd3cbf7e" />
+            <span class="role-challenge-text">6 Collectibles collected</span>
           </label></div>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_36c74c07935432b3" />
-            <span class="role-challenge-text">3 Collectibles found with a Shovel</span>
-          </label></div>
-
-        <div class="role-challenge">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_9e5b72f6a24b7d39" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_9e5b72f6a24b7d39" />
             <span class="role-challenge-text">3 Family Heirlooms found</span>
+          </label></div>
+
+        <div class="role-challenge">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_23e2c87f6a116d1f" />
+            <span class="role-challenge-text">3 Tarot Cards found</span>
           </label></div>
 <hr class="thin-divider" />
 <h3 class="role-heading">Moonshiner</h3>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_10f392805415cb2d" />
-            <span class="role-challenge-text">Drank own strong moonshine</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_b922faf42e9c14e1" />
+            <span class="role-challenge-text">Moonshine Bar - Changed décor</span>
           </label></div>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_0b81da59c5133188" />
-            <span class="role-challenge-text">2 Moonshine Story Mission completed</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_81cf0ee7813f2ae3" />
+            <span class="role-challenge-text">Moonshine sold with at least 18 bottles intact</span>
           </label></div>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_0f4883a6fe3ffe92" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_0f4883a6fe3ffe92" />
             <span class="role-challenge-text">2 Played with a band for 2 mins</span>
           </label></div>
 <hr class="thin-divider" />
@@ -521,30 +511,26 @@ As you come down the road into the cove, to the left is a beach area where they 
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_9c900a7864af7125" />
-            <span class="role-challenge-text">7 Crafted or cooked at Wilderness Camp</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_6cdbce1b8ac129af" />
+            <span class="role-challenge-text">2 Blending Tonics crafted or used</span>
           </label></div>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_0896959a770cb9bb" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_0896959a770cb9bb" />
             <span class="role-challenge-text">2 Hardy Tonics used when too hot or cold</span>
           </label></div>
 
         <div class="role-challenge">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-03_284a4be7f5835d48" />
-            <span class="role-challenge-text">1 Legendary Animals photographed</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-04_9a50d23e61c79c00" />
+            <span class="role-challenge-text">2 Legendary Animals found using pheromones</span>
           </label></div>
 
-    </div>
-  </div>
-  <div class="api-credit">
-  Data provided by <a href="https://rdo.gg/api" target="_blank">rdo.gg API</a>
-</div>
-
-
-
+        </div>
+    </div> 
+  
+  
 <!-- Default Statcounter code for RDO_dailies - codedunky
 https://codedunky.github.io/RDO_dailies/ -->
 <script type="text/javascript">
@@ -561,86 +547,101 @@ class="statcounter"
 src="https://c.statcounter.com/13147326/0/51162dbd/1/"
 alt="Web Analytics"
 referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
-<!-- End of Statcounter Code -->
+<!-- End of Statcounter Code -->  
+  
+  
+  
+    <script>
+      // Resize banner text dynamically based on container width
+      function resizeBannerText() {
+          const container = document.querySelector('.banner-container');
+          const title = document.querySelector('.banner-title');
+          const date = document.querySelector('.banner-date');
+          const counters = document.querySelector('.challenge-counters');
 
+          if (!container) return;
 
+          const containerWidth = container.offsetWidth;
+          const minWidth = 400;
+          const maxWidth = 850;
 
-<script>
-// ////////////////////////////////////////////////////////////////////////////
-// JavaScript: Toggle challenge states and handle persistence via localStorage + counters
-// ////////////////////////////////////////////////////////////////////////////
+          const scale = Math.max(minWidth, Math.min(containerWidth, maxWidth)) / maxWidth;
 
-document.addEventListener("DOMContentLoaded", function() {
-  const currentVersion = "{index_mod_date_str}";
-  const storedVersion = localStorage.getItem("challenge_version");
-
-  if (storedVersion !== currentVersion) {
-    Object.keys(localStorage).forEach(key => {
-      if (key.startsWith("role-challenge_") || key.startsWith("challenge_")) {
-        localStorage.removeItem(key);
+          title.style.fontSize = (2.5 * scale) + 'rem';
+          date.style.fontSize = (1.4 * scale) + 'rem';
+          counters.style.fontSize = (1.25 * scale) + 'rem';
       }
-    });
-    localStorage.setItem("challenge_version", currentVersion);
-  }
 
-  const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
-  const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
-  const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
+      window.addEventListener('resize', resizeBannerText);
+      window.addEventListener('load', resizeBannerText);
 
-  // Update counters helper
-  function updateCounters() {
-    const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
-    const generalTotal = generalCheckboxes.length;
+      // ////////////////////////////////////////////////////////////////////////////
+      // JavaScript: Toggle challenge states and handle persistence via localStorage + counters
+      // ////////////////////////////////////////////////////////////////////////////
 
-    const roleDone = Array.from(roleCheckboxes).filter(cb => cb.checked).length;
-    const roleTotal = 9;
+      document.addEventListener("DOMContentLoaded", function() {
+          const currentVersion = "2025-07-04_09-20-42";
+          const storedVersion = localStorage.getItem("challenge_version");
 
-    const generalCounter = document.getElementById('general-counter');
-    const roleCounter = document.getElementById('role-counter');
+          if (storedVersion !== currentVersion) {
+              Object.keys(localStorage).forEach(key => {
+                  if (key.startsWith("role-challenge_") || key.startsWith("challenge_")) {
+                      localStorage.removeItem(key);
+                  }
+              });
+              localStorage.setItem("challenge_version", currentVersion);
+          }
 
-    if (generalCounter) {
-      generalCounter.textContent = `${generalDone}/${generalTotal}`;
-    }
-    if (roleCounter) {
-      roleCounter.textContent = `${roleDone}/${roleTotal}`;
-    }
-  }
+          const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
+          const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
+          const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
 
-  // Initialize checkboxes from localStorage and add event listeners
-  allCheckboxes.forEach(cb => {
-    const key = cb.id;
-    const saved = localStorage.getItem(key);
+          // Update counters helper function
+          function updateCounters() {
+              const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
+              const generalTotal = generalCheckboxes.length;
 
-    cb.checked = saved === "true";
+              const roleDone = Array.from(roleCheckboxes).filter(cb => cb.checked).length;
+              const roleTotal = 9;
 
-    const wrapper = cb.closest('.challenge') || cb.closest('.role-challenge');
-    if (cb.checked && wrapper) {
-      wrapper.classList.add('completed');
-    } else if (wrapper) {
-      wrapper.classList.remove('completed');
-    }
+              const generalCounter = document.getElementById('general-counter');
+              const roleCounter = document.getElementById('role-counter');
 
-    cb.addEventListener('change', () => {
-      if (wrapper) {
-        wrapper.classList.toggle('completed', cb.checked);
-      }
-      localStorage.setItem(key, cb.checked);
-      updateCounters();  // Update counters live on toggle
-    });
-  });
+              if (generalCounter) {
+                  generalCounter.textContent = `${generalDone}/${generalTotal}`;
+              }
+              if (roleCounter) {
+                  roleCounter.textContent = `${roleDone}/${roleTotal}`;
+              }
+          }
 
-  // Update counters on page load
-  updateCounters();
-});
-</script>
+          // Initialize checkboxes from localStorage and add event listeners
+          allCheckboxes.forEach(cb => {
+              const key = cb.id;
+              const saved = localStorage.getItem(key);
 
+              cb.checked = saved === "true";
 
+              const wrapper = cb.closest('.challenge') || cb.closest('.role-challenge');
+              if (cb.checked && wrapper) {
+                  wrapper.classList.add('completed');
+              } else if (wrapper) {
+                  wrapper.classList.remove('completed');
+              }
 
+              cb.addEventListener('change', () => {
+                  if (wrapper) {
+                      wrapper.classList.toggle('completed', cb.checked);
+                  }
+                  localStorage.setItem(key, cb.checked);
+                  updateCounters();  // Update counters live on toggle
+              });
+          });
 
+          // Update counters on page load
+          updateCounters();
+      });
 
-
-
-
-
+    </script>
 </body>
 </html>
