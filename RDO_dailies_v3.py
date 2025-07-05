@@ -1204,7 +1204,7 @@ html_output = f'''
             background-image: url('HTML/images/RDO_Role_Challenges_Header3.png');
             background-repeat: no-repeat;
             background-position: 2px center;
-            background-size: 200px 35px;
+            background-size: 410px 35px;
     
         }}
             /* Space between different role challenges */
