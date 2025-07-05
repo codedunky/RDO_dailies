@@ -638,13 +638,7 @@ def render_general_challenges_with_dividers(general_challenges):
 
 
 
-###########################################################################################################################################################
-
-
-## New render_challenge_block function does not add in line dividers (for roles)
-###########################################################################################################################################################
-
-def render_challenge_block(block, prefix="challenge"):
+def render_challenge_block(block, prefix="challenge", role_name=""):
     html = ""
 
     # Current date for debug purposes (not used in ID generation)
@@ -658,6 +652,13 @@ def render_challenge_block(block, prefix="challenge"):
     start_date_str = datetime.datetime.utcfromtimestamp(start_time_unix).strftime("%Y-%m-%d")
     debug_print("L3", "bblue", "'start_date_str' for use in tickbox id:   ", start_date_str)
 
+    # If this is a role challenge, add a heading and wrapper container
+    if prefix == "role-challenge":
+        # Create a role ID from the role name (lowercase, no spaces)
+        role_id = "role-" + "".join(c.lower() if c.isalnum() else "-" for c in role_name).strip("-")
+        html += f'<div class="role-block" id="{role_id}-block">\n'
+        html += f'  <h3 class="role-heading" id="{role_id}">{role_name}</h3>\n'
+
     # Loop through the challenge block. Use enumerate to track index for divider logic.
     for i, c in enumerate(block):
         # Combine date + text hash to create a unique and stable ID for each challenge
@@ -667,8 +668,6 @@ def render_challenge_block(block, prefix="challenge"):
         # Add the class to the label only for role challenges
         label_class = 'role-challenge-label' if prefix == 'role-challenge' else ''
         label_open = f'<label class="{label_class}">' if label_class else '<label>'
-
-        #debug_print("L3", "bbrightyellow", "label_class:  ", label_class)
 
         # Start the challenge container with a label and checkbox
         html += f'''
@@ -686,12 +685,12 @@ def render_challenge_block(block, prefix="challenge"):
         # Close the challenge container
         html += '</div>\n'
 
-#         # Add a divider line between challenges, except after the last one
-#         if i < len(block) - 1:
-#             html += '<hr class="thin-divider">\n'
-#             debug_print("L2", "bbrightyellow", "**Thin Divider**")
-# 
+    # If this was a role challenge, close the wrapper container
+    if prefix == "role-challenge":
+        html += '</div>\n'
+
     return html
+
 
 
 
@@ -749,11 +748,8 @@ def generate_html_for_difficulty(challenges, difficulty):
     for idx, role in enumerate(roles_with_challenges):
         block = grouped_roles[role]
         
-        # Add the heading for the role section
-        html_roles += f'<h3 class="role-heading">{role_names.get(role, role.title())}</h3>\n'
-
-        # Render all challenges for this role, with the appropriate CSS prefix
-        html_roles += render_challenge_block(block, prefix="role-challenge")
+        # Render all challenges for this role, with the appropriate CSS prefix and role name for heading
+        html_roles += render_challenge_block(block, prefix="role-challenge", role_name=role_names.get(role, role.title()))
         
         # Add a thin divider line between role sections, but NOT after the last one
         if idx < len(roles_with_challenges) - 1:
@@ -762,7 +758,6 @@ def generate_html_for_difficulty(challenges, difficulty):
         debug_print("L2", "byellow", f"Adding role block: {role_names[role]}")
 
     return html_general, html_roles
-
 
 
 
@@ -1273,6 +1268,11 @@ html_output = f'''
           align-items: baseline; /* aligns checkbox with first line of text */
           gap: 0.5em;               /* space between checkbox and text */
           cursor: pointer;
+          user-select: none;
+          -webkit-user-select: none; /* Safari */
+          -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* IE/Edge */
+          
         }}
         
         /* Using this to scale role challenge text */
@@ -1303,6 +1303,12 @@ html_output = f'''
           /* Uncomment if you want strikethrough and opacity effect */
           text-decoration: line-through;
           opacity: 0.85;
+        }}
+        
+        
+        .role-completed {{
+          color: #555;
+          font-weight: bold;
         }}
 
 
@@ -1376,102 +1382,132 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
   
   
   
-    <script>
-      // ////////////////////////////////////////////////////////////////////////////////////// //
-      // JavaScript: Resize text size dynamically based on container width for better accuracy  //
-      // ////////////////////////////////////////////////////////////////////////////////////// //
-      
-      // Resize banner text dynamically based on container width
-      function resizeBannerText() {{
-          const container = document.querySelector('.banner-container');
-          const title = document.querySelector('.banner-title');
-          const date = document.querySelector('.banner-date');
-          const counters = document.querySelector('.challenge-counters');
 
-          if (!container) return;
+<script>
+  // ////////////////////////////////////////////////////////////////////////////////////// //
+  // JavaScript: Resize text size dynamically based on container width for better accuracy  //
+  // ////////////////////////////////////////////////////////////////////////////////////// //
+  
+  // Resize banner text dynamically based on container width
+  function resizeBannerText() {{
+      const container = document.querySelector('.banner-container');
+      const title = document.querySelector('.banner-title');
+      const date = document.querySelector('.banner-date');
+      const counters = document.querySelector('.challenge-counters');
 
-          const containerWidth = container.offsetWidth;
-          const minWidth = 400;
-          const maxWidth = 850;
+      if (!container) return;
 
-          const scale = Math.max(minWidth, Math.min(containerWidth, maxWidth)) / maxWidth;
+      const containerWidth = container.offsetWidth;
+      const minWidth = 400;
+      const maxWidth = 850;
 
-          title.style.fontSize = (2.5 * scale) + 'rem';
-          date.style.fontSize = (1.4 * scale) + 'rem';
-          counters.style.fontSize = (1.25 * scale) + 'rem';
+      const scale = Math.max(minWidth, Math.min(containerWidth, maxWidth)) / maxWidth;
+
+      title.style.fontSize = (2.5 * scale) + 'rem';
+      date.style.fontSize = (1.4 * scale) + 'rem';
+      counters.style.fontSize = (1.25 * scale) + 'rem';
+  }}
+
+  window.addEventListener('resize', resizeBannerText);
+  window.addEventListener('load', resizeBannerText);
+
+  // ////////////////////////////////////////////////////////////////////////////////////// //
+  // JavaScript: Toggle challenge states and handle persistence via localStorage + counters //
+  // ////////////////////////////////////////////////////////////////////////////////////// //
+
+  document.addEventListener("DOMContentLoaded", function() {{
+      const currentVersion = "{index_mod_date_str}";
+      const storedVersion = localStorage.getItem("challenge_version");
+
+      if (storedVersion !== currentVersion) {{
+          Object.keys(localStorage).forEach(key => {{
+              if (key.startsWith("role-challenge_") || key.startsWith("challenge_")) {{
+                  localStorage.removeItem(key);
+              }}
+          }});
+          localStorage.setItem("challenge_version", currentVersion);
       }}
 
-      window.addEventListener('resize', resizeBannerText);
-      window.addEventListener('load', resizeBannerText);
+      const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
+      const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
+      const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
 
-      // ////////////////////////////////////////////////////////////////////////////////////// //
-      // JavaScript: Toggle challenge states and handle persistence via localStorage + counters //
-      // ////////////////////////////////////////////////////////////////////////////////////// //
+      // Update counters helper function
+      function updateCounters() {{
+          const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
+          const generalTotal = generalCheckboxes.length;
 
-      document.addEventListener("DOMContentLoaded", function() {{
-          const currentVersion = "{index_mod_date_str}";
-          const storedVersion = localStorage.getItem("challenge_version");
+          const roleDone = Array.from(roleCheckboxes).filter(cb => cb.checked).length;
+          const roleTotal = 9;
 
-          if (storedVersion !== currentVersion) {{
-              Object.keys(localStorage).forEach(key => {{
-                  if (key.startsWith("role-challenge_") || key.startsWith("challenge_")) {{
-                      localStorage.removeItem(key);
-                  }}
-              }});
-              localStorage.setItem("challenge_version", currentVersion);
+          const generalCounter = document.getElementById('general-counter');
+          const roleCounter = document.getElementById('role-counter');
+
+          if (generalCounter) {{
+              generalCounter.textContent = `${{generalDone}}/${{generalTotal}}`;
+          }}
+          if (roleCounter) {{
+              roleCounter.textContent = `${{roleDone}}/${{roleTotal}}`;
           }}
 
-          const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
-          const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
-          const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
+          // === New: Change role heading color if all challenges for that role are checked ===
+          // For each role heading, check its associated checkboxes and toggle class
+          document.querySelectorAll('.role-heading').forEach(roleHeading => {{
+              // The role heading is followed by role challenges until the next <hr> or next .role-heading
+              let allChecked = true;
+              let nextElem = roleHeading.nextElementSibling;
 
-          // Update counters helper function
-          function updateCounters() {{
-              const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
-              const generalTotal = generalCheckboxes.length;
-
-              const roleDone = Array.from(roleCheckboxes).filter(cb => cb.checked).length;
-              const roleTotal = 9;
-
-              const generalCounter = document.getElementById('general-counter');
-              const roleCounter = document.getElementById('role-counter');
-
-              if (generalCounter) {{
-                  generalCounter.textContent = `${{generalDone}}/${{generalTotal}}`;
-              }}
-              if (roleCounter) {{
-                  roleCounter.textContent = `${{roleDone}}/${{roleTotal}}`;
-              }}
-          }}
-
-          // Initialize checkboxes from localStorage and add event listeners
-          allCheckboxes.forEach(cb => {{
-              const key = cb.id;
-              const saved = localStorage.getItem(key);
-
-              cb.checked = saved === "true";
-
-              const wrapper = cb.closest('.challenge') || cb.closest('.role-challenge');
-              if (cb.checked && wrapper) {{
-                  wrapper.classList.add('completed');
-              }} else if (wrapper) {{
-                  wrapper.classList.remove('completed');
-              }}
-
-              cb.addEventListener('change', () => {{
-                  if (wrapper) {{
-                      wrapper.classList.toggle('completed', cb.checked);
+              while (nextElem && !nextElem.classList.contains('role-heading') && nextElem.tagName !== 'HR') {{
+                  if (nextElem.classList.contains('role-challenge')) {{
+                      const checkbox = nextElem.querySelector('input.challenge-checkbox[type="checkbox"]');
+                      if (!checkbox || !checkbox.checked) {{
+                          allChecked = false;
+                          break;
+                      }}
                   }}
-                  localStorage.setItem(key, cb.checked);
-                  updateCounters();  // Update counters live on toggle
-              }});
+                  nextElem = nextElem.nextElementSibling;
+              }}
+
+              if (allChecked) {{
+                  roleHeading.classList.add('role-completed');
+              }} else {{
+                  roleHeading.classList.remove('role-completed');
+              }}
           }});
+      }}
 
-          // Update counters on page load
-          updateCounters();
+      // Initialize checkboxes from localStorage and add event listeners
+      allCheckboxes.forEach(cb => {{
+          const key = cb.id;
+          const saved = localStorage.getItem(key);
+
+          cb.checked = saved === "true";
+
+          const wrapper = cb.closest('.challenge') || cb.closest('.role-challenge');
+          if (cb.checked && wrapper) {{
+              wrapper.classList.add('completed');
+          }} else if (wrapper) {{
+              wrapper.classList.remove('completed');
+          }}
+
+          cb.addEventListener('change', () => {{
+              if (wrapper) {{
+                  wrapper.classList.toggle('completed', cb.checked);
+              }}
+              localStorage.setItem(key, cb.checked);
+              updateCounters();  // Update counters live on toggle
+          }});
       }});
 
-    </script>
+      // Update counters and role heading colors on page load
+      updateCounters();
+  }});
+</script>
+
+
+
+
+
 </body>
 </html>
 '''

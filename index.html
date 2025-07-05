@@ -360,6 +360,11 @@
           align-items: baseline; /* aligns checkbox with first line of text */
           gap: 0.5em;               /* space between checkbox and text */
           cursor: pointer;
+          user-select: none;
+          -webkit-user-select: none; /* Safari */
+          -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* IE/Edge */
+          
         }
         
         /* Using this to scale role challenge text */
@@ -390,6 +395,12 @@
           /* Uncomment if you want strikethrough and opacity effect */
           text-decoration: line-through;
           opacity: 0.85;
+        }
+        
+        
+        .role-completed {
+          color: #555;
+          font-weight: bold;
         }
 
 
@@ -494,7 +505,8 @@ Cumberland Forest can be a good location. Generally wolves tend to be out at nig
         </div>
 
         <div class="sidebar-container">
-            <h3 class="role-heading">Bounty Hunter</h3>
+            <div class="role-block" id="role-bounty-hunter-block">
+  <h3 class="role-heading" id="role-bounty-hunter">Bounty Hunter</h3>
 
         <div class="role-challenge">
           <label class="role-challenge-label">
@@ -513,8 +525,10 @@ Cumberland Forest can be a good location. Generally wolves tend to be out at nig
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_4a008830b82fce96" />
             <span class="role-challenge-text">3 More than one bounty target brought in at once</span>
           </label></div>
+</div>
 <hr class="thin-divider" />
-<h3 class="role-heading">Trader</h3>
+<div class="role-block" id="role-trader-block">
+  <h3 class="role-heading" id="role-trader">Trader</h3>
 
         <div class="role-challenge">
           <label class="role-challenge-label">
@@ -534,8 +548,10 @@ Cumberland Forest can be a good location. Generally wolves tend to be out at nig
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_64c9ecc0da996a74" />
             <span class="role-challenge-text">2 Resupply missions completed</span>
           </label></div>
+</div>
 <hr class="thin-divider" />
-<h3 class="role-heading">Collector</h3>
+<div class="role-block" id="role-collector-block">
+  <h3 class="role-heading" id="role-collector">Collector</h3>
 
         <div class="role-challenge">
           <label class="role-challenge-label">
@@ -554,8 +570,10 @@ Cumberland Forest can be a good location. Generally wolves tend to be out at nig
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_fd639934cda4345d" />
             <span class="role-challenge-text">3 Lost Jewelry found</span>
           </label></div>
+</div>
 <hr class="thin-divider" />
-<h3 class="role-heading">Moonshiner</h3>
+<div class="role-block" id="role-moonshiner-block">
+  <h3 class="role-heading" id="role-moonshiner">Moonshiner</h3>
 
         <div class="role-challenge">
           <label class="role-challenge-label">
@@ -574,8 +592,10 @@ Cumberland Forest can be a good location. Generally wolves tend to be out at nig
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_0d7fa226032602eb" />
             <span class="role-challenge-text">4 Moonshine served to other players at a bar</span>
           </label></div>
+</div>
 <hr class="thin-divider" />
-<h3 class="role-heading">Naturalist</h3>
+<div class="role-block" id="role-naturalist-block">
+  <h3 class="role-heading" id="role-naturalist">Naturalist</h3>
 
         <div class="role-challenge">
           <label class="role-challenge-label">
@@ -594,6 +614,7 @@ Cumberland Forest can be a good location. Generally wolves tend to be out at nig
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_d959c68a05bca1fa" />
             <span class="role-challenge-text">2 Sedated animals revived</span>
           </label></div>
+</div>
 
         </div>
     </div> 
@@ -619,101 +640,131 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
   
   
   
-    <script>
-      // ////////////////////////////////////////////////////////////////////////////////////// //
-      // JavaScript: Resize text size dynamically based on container width for better accuracy  //
-      // ////////////////////////////////////////////////////////////////////////////////////// //
-      
-      // Resize banner text dynamically based on container width
-      function resizeBannerText() {
-          const container = document.querySelector('.banner-container');
-          const title = document.querySelector('.banner-title');
-          const date = document.querySelector('.banner-date');
-          const counters = document.querySelector('.challenge-counters');
 
-          if (!container) return;
+<script>
+  // ////////////////////////////////////////////////////////////////////////////////////// //
+  // JavaScript: Resize text size dynamically based on container width for better accuracy  //
+  // ////////////////////////////////////////////////////////////////////////////////////// //
+  
+  // Resize banner text dynamically based on container width
+  function resizeBannerText() {
+      const container = document.querySelector('.banner-container');
+      const title = document.querySelector('.banner-title');
+      const date = document.querySelector('.banner-date');
+      const counters = document.querySelector('.challenge-counters');
 
-          const containerWidth = container.offsetWidth;
-          const minWidth = 400;
-          const maxWidth = 850;
+      if (!container) return;
 
-          const scale = Math.max(minWidth, Math.min(containerWidth, maxWidth)) / maxWidth;
+      const containerWidth = container.offsetWidth;
+      const minWidth = 400;
+      const maxWidth = 850;
 
-          title.style.fontSize = (2.5 * scale) + 'rem';
-          date.style.fontSize = (1.4 * scale) + 'rem';
-          counters.style.fontSize = (1.25 * scale) + 'rem';
+      const scale = Math.max(minWidth, Math.min(containerWidth, maxWidth)) / maxWidth;
+
+      title.style.fontSize = (2.5 * scale) + 'rem';
+      date.style.fontSize = (1.4 * scale) + 'rem';
+      counters.style.fontSize = (1.25 * scale) + 'rem';
+  }
+
+  window.addEventListener('resize', resizeBannerText);
+  window.addEventListener('load', resizeBannerText);
+
+  // ////////////////////////////////////////////////////////////////////////////////////// //
+  // JavaScript: Toggle challenge states and handle persistence via localStorage + counters //
+  // ////////////////////////////////////////////////////////////////////////////////////// //
+
+  document.addEventListener("DOMContentLoaded", function() {
+      const currentVersion = "2025-07-05_11-38-11";
+      const storedVersion = localStorage.getItem("challenge_version");
+
+      if (storedVersion !== currentVersion) {
+          Object.keys(localStorage).forEach(key => {
+              if (key.startsWith("role-challenge_") || key.startsWith("challenge_")) {
+                  localStorage.removeItem(key);
+              }
+          });
+          localStorage.setItem("challenge_version", currentVersion);
       }
 
-      window.addEventListener('resize', resizeBannerText);
-      window.addEventListener('load', resizeBannerText);
+      const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
+      const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
+      const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
 
-      // ////////////////////////////////////////////////////////////////////////////////////// //
-      // JavaScript: Toggle challenge states and handle persistence via localStorage + counters //
-      // ////////////////////////////////////////////////////////////////////////////////////// //
+      // Update counters helper function
+      function updateCounters() {
+          const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
+          const generalTotal = generalCheckboxes.length;
 
-      document.addEventListener("DOMContentLoaded", function() {
-          const currentVersion = "2025-07-05_11-38-11";
-          const storedVersion = localStorage.getItem("challenge_version");
+          const roleDone = Array.from(roleCheckboxes).filter(cb => cb.checked).length;
+          const roleTotal = 9;
 
-          if (storedVersion !== currentVersion) {
-              Object.keys(localStorage).forEach(key => {
-                  if (key.startsWith("role-challenge_") || key.startsWith("challenge_")) {
-                      localStorage.removeItem(key);
-                  }
-              });
-              localStorage.setItem("challenge_version", currentVersion);
+          const generalCounter = document.getElementById('general-counter');
+          const roleCounter = document.getElementById('role-counter');
+
+          if (generalCounter) {
+              generalCounter.textContent = `${generalDone}/${generalTotal}`;
+          }
+          if (roleCounter) {
+              roleCounter.textContent = `${roleDone}/${roleTotal}`;
           }
 
-          const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
-          const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
-          const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
+          // === New: Change role heading color if all challenges for that role are checked ===
+          // For each role heading, check its associated checkboxes and toggle class
+          document.querySelectorAll('.role-heading').forEach(roleHeading => {
+              // The role heading is followed by role challenges until the next <hr> or next .role-heading
+              let allChecked = true;
+              let nextElem = roleHeading.nextElementSibling;
 
-          // Update counters helper function
-          function updateCounters() {
-              const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
-              const generalTotal = generalCheckboxes.length;
-
-              const roleDone = Array.from(roleCheckboxes).filter(cb => cb.checked).length;
-              const roleTotal = 9;
-
-              const generalCounter = document.getElementById('general-counter');
-              const roleCounter = document.getElementById('role-counter');
-
-              if (generalCounter) {
-                  generalCounter.textContent = `${generalDone}/${generalTotal}`;
-              }
-              if (roleCounter) {
-                  roleCounter.textContent = `${roleDone}/${roleTotal}`;
-              }
-          }
-
-          // Initialize checkboxes from localStorage and add event listeners
-          allCheckboxes.forEach(cb => {
-              const key = cb.id;
-              const saved = localStorage.getItem(key);
-
-              cb.checked = saved === "true";
-
-              const wrapper = cb.closest('.challenge') || cb.closest('.role-challenge');
-              if (cb.checked && wrapper) {
-                  wrapper.classList.add('completed');
-              } else if (wrapper) {
-                  wrapper.classList.remove('completed');
-              }
-
-              cb.addEventListener('change', () => {
-                  if (wrapper) {
-                      wrapper.classList.toggle('completed', cb.checked);
+              while (nextElem && !nextElem.classList.contains('role-heading') && nextElem.tagName !== 'HR') {
+                  if (nextElem.classList.contains('role-challenge')) {
+                      const checkbox = nextElem.querySelector('input.challenge-checkbox[type="checkbox"]');
+                      if (!checkbox || !checkbox.checked) {
+                          allChecked = false;
+                          break;
+                      }
                   }
-                  localStorage.setItem(key, cb.checked);
-                  updateCounters();  // Update counters live on toggle
-              });
+                  nextElem = nextElem.nextElementSibling;
+              }
+
+              if (allChecked) {
+                  roleHeading.classList.add('role-completed');
+              } else {
+                  roleHeading.classList.remove('role-completed');
+              }
           });
+      }
 
-          // Update counters on page load
-          updateCounters();
+      // Initialize checkboxes from localStorage and add event listeners
+      allCheckboxes.forEach(cb => {
+          const key = cb.id;
+          const saved = localStorage.getItem(key);
+
+          cb.checked = saved === "true";
+
+          const wrapper = cb.closest('.challenge') || cb.closest('.role-challenge');
+          if (cb.checked && wrapper) {
+              wrapper.classList.add('completed');
+          } else if (wrapper) {
+              wrapper.classList.remove('completed');
+          }
+
+          cb.addEventListener('change', () => {
+              if (wrapper) {
+                  wrapper.classList.toggle('completed', cb.checked);
+              }
+              localStorage.setItem(key, cb.checked);
+              updateCounters();  // Update counters live on toggle
+          });
       });
 
-    </script>
+      // Update counters and role heading colors on page load
+      updateCounters();
+  });
+</script>
+
+
+
+
+
 </body>
 </html>
