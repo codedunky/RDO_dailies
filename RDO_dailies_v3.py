@@ -1049,6 +1049,8 @@ html_output = f'''
           text-shadow: 3px 3px 2px rgba(0,0,0,0.6);
           pointer-events: none;
           font-family: 'RDOFont', sans-serif;
+          transform: scaleY(1.15); /* Increase font height */
+          
         }}
 
         .challenge-counters > div {{
@@ -1165,7 +1167,7 @@ html_output = f'''
             font-family: 'RDOFont', sans-serif;  /* Example font, change as needed */
             font-size: 1.5rem;
             color: #eee;
-            margin: 0 0 0 0;
+            margin: -4px 0 0 0;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
             text-shadow:
             -3px -3px 0 #000,  
@@ -1175,13 +1177,19 @@ html_output = f'''
             letter-spacing: 0.05em; /* Adjust this value to your liking */
         }}
 
+            /* Space between different role challenges */
+            .role-challenge {{
+              margin-bottom: .6rem; /* adjust as needed */
+            }}
+
         .role-challenge-text {{
             font-family: 'hapna', sans-serif; /* Example font */
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             color: #eee;
             display: inline-block; /* keeps it inline for natural text flow */
-            line-height: 1.4;
-
+            line-height: 1.1;
+            display: inline;
+            transform: scaleY(1.1); /* Increase font height */
 
 
         }}
