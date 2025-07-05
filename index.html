@@ -14,7 +14,7 @@
           justify-content: flex-start;
           align-items: flex-start;
           font-family: Arial, sans-serif;
-          gap: 20px;
+          gap: 10px;
           flex-wrap: wrap;
         }
 
@@ -42,7 +42,7 @@
           flex-wrap: wrap;
           justify-content: flex-start;
           align-items: flex-start;
-          gap: 20px;
+          gap: 10px;
           margin: 0;
           padding: 0;
         }
@@ -56,13 +56,15 @@
 
         .sidebar-container {
           display: block;
-          width: 460px;
+          width: 450px;
           background-color: #111;
           color: #eee;
           /*border: 2px solid orange;*/
           padding: 15px;
           box-sizing: border-box;
           font-family: Arial, sans-serif;
+          overflow: visible; /* allow images to stick outside */
+          /* margin-left: -10px;shift left */
         }
 
         .banner-container {
@@ -162,14 +164,31 @@
           /*border: 2px solid green;*/
         }
 
-        @media (max-width: 1350px) {
+
+
+/* ############################################################# */
+/*  Role challenges switching logic as browser viewport narrows  */
+/* ############################################################# */
+        
+        /* Narrow screens: column layout, sidebar below main */
+        @media (max-width: 1320px) {
           body {
             flex-direction: column;
             align-items: center;
           }
+          
+            .main-container {
+            flex-direction: column;
+            align-items: center;
+            width: 100%; /* allow children to fill horizontally */
+            align-items: stretch; /* <— THIS is the key */
+            min-width: 420px;
+          }
+          
           .sidebar-container {
-            width: 100%;
-            max-width: 850px;
+            width: 100% !important; 
+            max-width: 850px !important;
+            margin-left: 0; /* center below main container */
           }
         }
 
@@ -249,20 +268,31 @@
           margin: 8px auto;
         }
 
+
         .role-heading {
             font-family: 'RDOFont', sans-serif;  /* Example font, change as needed */
             font-size: 1.5rem;
             color: #eee;
             margin: -4px 0 0 0;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+            
             text-shadow:
             -3px -3px 0 #000,  
              3px -3px 0 #000,
             -3px 3px 0 #000,
              3px 3px 0 #000;
+             text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
             letter-spacing: 0.05em; /* Adjust this value to your liking */
+            padding-left: 20px; /* Increase this to move the text right */
+            background-color: transparent;
+            overflow: visible;
+            /*Adding picture behind the heading text*/
+            z-index: 0; /* Create a stacking context */
+            background-image: url('HTML/images/RDO_Role_Challenges_Header3.png');
+            background-repeat: no-repeat;
+            background-position: 2px center;
+            background-size: 200px 35px;
+    
         }
-
             /* Space between different role challenges */
             .role-challenge {
               margin-bottom: .6rem; /* adjust as needed */
