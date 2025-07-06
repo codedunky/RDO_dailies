@@ -1392,6 +1392,14 @@ html_output = f'''
         }}
 
 
+        .role-challenge-desc.dimmed {{
+          opacity: 0.5;
+          color: #666666;
+          transition: opacity 0.3s ease, color 0.3s ease;
+        }}
+
+
+
 /* ==== Global Checkbox Role Challenge Completion Styling (9 out of 9)==== */
 
         /* Per role heading dim */
@@ -1497,7 +1505,7 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
   
   
 
-js_code = f"""
+
 <script>
 // ////////////////////////////////////////////////////////////////////////////////////// //
 // JavaScript: Resize text size dynamically based on container width for better accuracy  //
@@ -1566,16 +1574,13 @@ document.addEventListener("DOMContentLoaded", function() {{
         const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
         const generalTotal = generalCheckboxes.length;
 
-        // Count only visible role checkboxes
-        const visibleRoleCheckboxes = Array.from(roleCheckboxes).filter(cb => cb.offsetParent !== null);
-
         const roleDone = Math.min(
-            visibleRoleCheckboxes.filter(cb => cb.checked).length,
+            Array.from(roleCheckboxes).filter(cb => cb.checked).length,
             9
         );
         const roleTotal = 9;
 
-        console.log('updateCounters:', {{ roleDone }}, {{ roleTotal }}, 'visibleRoleCheckboxes:', visibleRoleCheckboxes.length);
+        console.log('updateCounters:', {{ roleDone }}, {{ roleTotal }}, 'roleCheckboxes:', roleCheckboxes.length);
 
         const generalCounter = document.getElementById('general-counter');
         const roleCounter = document.getElementById('role-counter');
@@ -1628,26 +1633,22 @@ document.addEventListener("DOMContentLoaded", function() {{
             }});
         }}
 
-        // Dim role challenge descriptions for unchecked challenges ONLY when all 9 are done
+        // Dim all role challenges and descriptions except checked ones if all completed
         const allDone = roleDone === roleTotal;
 
         roleCheckboxes.forEach(cb => {{
             const challenge = cb.closest('.role-challenge');
             if (!challenge) return;
 
-            // Find description element; try .challenge-description, fallback to <p>
-            let description = challenge.querySelector('.challenge-description');
-            if (!description) {{
-                description = challenge.querySelector('p');
-            }}
+            let description = challenge.querySelector('.role-challenge-desc');
 
             if (description) {{
-                // If all done AND checkbox is unchecked, dim description, else remove dim
                 description.classList.toggle('dimmed', allDone && !cb.checked);
             }}
+            challenge.classList.toggle('dimmed', allDone && !cb.checked);
         }});
 
-        updateRoleHeadingCompletion(); // Update headings based on current checkboxes
+        updateRoleHeadingCompletion();
     }}
 
     allCheckboxes.forEach(cb => {{
@@ -1691,7 +1692,7 @@ document.addEventListener("DOMContentLoaded", function() {{
             toggle.textContent = desc;
         }}
 
-        updateRoleHeadingCompletion(); // Refresh heading when difficulty changes
+        updateRoleHeadingCompletion();
     }}
 
     function nextDifficulty(current) {{
@@ -1709,19 +1710,17 @@ document.addEventListener("DOMContentLoaded", function() {{
             const currentDifficulty = toggle.dataset.difficulty || 'easy';
             const newDifficulty = nextDifficulty(currentDifficulty);
             updateRoleDifficulty(roleContainer, newDifficulty);
-            updateCounters(); // Refresh counters after difficulty change
+            updateCounters();
         }});
 
         const roleContainer = toggle.closest('.role-container');
         updateRoleDifficulty(roleContainer, toggle.dataset.difficulty || 'easy');
     }});
 
-    // Initial counters update
     updateCounters();
 }});
 </script>
 
-"""
 
 
 
