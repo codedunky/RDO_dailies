@@ -1064,6 +1064,33 @@ html_output = f'''
           width: 4ch;
           text-align: right;
         }}
+        
+        .counter-glow {{
+          color: white;
+          text-shadow:
+            0 0 5px rgba(255, 255, 160, 0.75),  /* yellow glow with an opacity (0.75) */
+            0 0 10px rgba(255, 255, 160, 0.75),
+            0 0 15px rgba(255, 255, 160, 0.75);
+          transition: text-shadow 0.3s ease;
+        }}
+        
+        @keyframes counterPop {{
+          0% {{
+            transform: scale(1);
+          }}
+          50% {{
+            transform: scale(1.3);
+          }}
+          100% {{
+            transform: scale(1);
+          }}
+        }}
+
+        .counter-pop {{
+          animation: counterPop 0.4s ease forwards;
+        }}
+        
+        
 
         .general-challenges-container {{
           width: 100%;
@@ -1381,6 +1408,13 @@ html_output = f'''
           opacity: 0.5;
           transition: color 0.3s, opacity 0.3s;
         }}
+        
+        .challenge-description.dimmed,
+        .role-challenge p.dimmed {{
+            opacity: 0.5;
+            color: #888888;  /* mid grey */
+            transition: opacity 0.3s ease, color 0.3s ease;
+        }}
 
         /* But keep checkboxes fully visible and interactive */
         .all-roles-completed input[type="checkbox"] {{
@@ -1513,20 +1547,20 @@ document.addEventListener("DOMContentLoaded", function() {{
     const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
 
     // Function to dim headings when all visible challenges for a role are completed
-function updateRoleHeadingCompletion() {{
-    document.querySelectorAll('.role-container').forEach(roleContainer => {{
-        const visibleChallenges = Array.from(roleContainer.querySelectorAll('.role-challenge')).filter(ch => ch.style.display !== 'none');
-        const allCompleted = visibleChallenges.length > 0 && visibleChallenges.every(ch => {{
-            const cb = ch.querySelector('.challenge-checkbox');
-            return cb && cb.checked;
-        }});
+    function updateRoleHeadingCompletion() {{
+        document.querySelectorAll('.role-container').forEach(roleContainer => {{
+            const visibleChallenges = Array.from(roleContainer.querySelectorAll('.role-challenge')).filter(ch => ch.style.display !== 'none');
+            const allCompleted = visibleChallenges.length > 0 && visibleChallenges.every(ch => {{
+                const cb = ch.querySelector('.challenge-checkbox');
+                return cb && cb.checked;
+            }});
 
-        const heading = roleContainer.querySelector('.role-heading');
-        if (heading) {{
-            heading.classList.toggle('dimmed', allCompleted);
-        }}
-    }});
-}}
+            const heading = roleContainer.querySelector('.role-heading');
+            if (heading) {{
+                heading.classList.toggle('dimmed', allCompleted);
+            }}
+        }});
+    }}
 
     function updateCounters() {{
         const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
@@ -1548,9 +1582,21 @@ function updateRoleHeadingCompletion() {{
 
         if (generalCounter) {{
             generalCounter.textContent = `${{generalDone}}/${{generalTotal}}`;
+            // Add or remove glow on general counter
+            if (generalDone === generalTotal) {{
+                generalCounter.classList.add('counter-glow');
+            }} else {{
+                generalCounter.classList.remove('counter-glow');
+            }}
         }}
         if (roleCounter) {{
             roleCounter.textContent = `${{roleDone}}/${{roleTotal}}`;
+            // Add or remove glow on role counter
+            if (roleDone === roleTotal) {{
+                roleCounter.classList.add('counter-glow');
+            }} else {{
+                roleCounter.classList.remove('counter-glow');
+            }}
         }}
 
         const rolesContainer = document.getElementById('roles-container') || document.body;
@@ -1581,6 +1627,25 @@ function updateRoleHeadingCompletion() {{
                 toggle.classList.remove('dimmed-text');
             }});
         }}
+
+        // Dim role challenge descriptions for unchecked challenges ONLY when all 9 are done
+        const allDone = roleDone === roleTotal;
+
+        roleCheckboxes.forEach(cb => {{
+            const challenge = cb.closest('.role-challenge');
+            if (!challenge) return;
+
+            // Find description element; try .challenge-description, fallback to <p>
+            let description = challenge.querySelector('.challenge-description');
+            if (!description) {{
+                description = challenge.querySelector('p');
+            }}
+
+            if (description) {{
+                // If all done AND checkbox is unchecked, dim description, else remove dim
+                description.classList.toggle('dimmed', allDone && !cb.checked);
+            }}
+        }});
 
         updateRoleHeadingCompletion(); // Update headings based on current checkboxes
     }}
@@ -1655,7 +1720,9 @@ function updateRoleHeadingCompletion() {{
     updateCounters();
 }});
 </script>
+
 """
+
 
 
 
