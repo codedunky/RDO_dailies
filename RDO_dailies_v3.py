@@ -978,6 +978,11 @@ html_output = f'''
         }}
 
         .banner-container {{
+          position: sticky;
+          top: 0;
+          z-index: 10; /* stays above other content */
+          
+          
           width: 100%;
           max-width: 850px;
           min-width: 400px;
@@ -1293,9 +1298,15 @@ html_output = f'''
             user-select: none;
             font-size: 0.6em;  /* adjust if needed */
             margin-right: 10px; /* adjust px as you like */
-            color: #b00000;  /* Dark Red Colour */
-            transform: scaleY(1.2);
-        }}
+            color: #dd0000;  /* Dark Red Colour */
+            transform: scaleY(1.2); 
+            /* Mid-grey outline effect */
+            text-shadow:
+              -1px -1px 0 #111111,
+               1px -1px 0 #111111,
+              -1px  1px 0 #111111,
+               1px  1px 0 #111111;
+            }}
         
         /* Dimming the difficulty-toggle */
         .dimmed-text {{
@@ -1481,7 +1492,7 @@ window.addEventListener('resize', resizeBannerText);
 window.addEventListener('load', resizeBannerText);
 
 // ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Main logic for toggling, persistence, counters, and difficulty switching //
+// JavaScript: Main logic for toggling, persistence, counters, and difficulty switching  //
 // ////////////////////////////////////////////////////////////////////////////////////// //
 
 document.addEventListener("DOMContentLoaded", function() {{
@@ -1501,14 +1512,28 @@ document.addEventListener("DOMContentLoaded", function() {{
     const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
     const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
 
+    // Function to dim headings when all visible challenges for a role are completed
+function updateRoleHeadingCompletion() {{
+    document.querySelectorAll('.role-container').forEach(roleContainer => {{
+        const visibleChallenges = Array.from(roleContainer.querySelectorAll('.role-challenge')).filter(ch => ch.style.display !== 'none');
+        const allCompleted = visibleChallenges.length > 0 && visibleChallenges.every(ch => {{
+            const cb = ch.querySelector('.challenge-checkbox');
+            return cb && cb.checked;
+        }});
+
+        const heading = roleContainer.querySelector('.role-heading');
+        if (heading) {{
+            heading.classList.toggle('dimmed', allCompleted);
+        }}
+    }});
+}}
+
     function updateCounters() {{
         const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
         const generalTotal = generalCheckboxes.length;
 
-        // Count only visible role checkboxes (based on difficulty filter)
-        const visibleRoleCheckboxes = Array.from(roleCheckboxes).filter(cb => {{
-            return cb.offsetParent !== null;
-        }});
+        // Count only visible role checkboxes
+        const visibleRoleCheckboxes = Array.from(roleCheckboxes).filter(cb => cb.offsetParent !== null);
 
         const roleDone = Math.min(
             visibleRoleCheckboxes.filter(cb => cb.checked).length,
@@ -1533,12 +1558,10 @@ document.addEventListener("DOMContentLoaded", function() {{
         if (roleDone === roleTotal) {{
             rolesContainer.classList.add('all-roles-completed');
 
-            // Disable role checkboxes not checked
             roleCheckboxes.forEach(cb => {{
                 cb.disabled = !cb.checked;
             }});
 
-            // Disable and dim toggle buttons
             const toggles = rolesContainer.querySelectorAll('.difficulty-toggle');
             toggles.forEach(toggle => {{
                 toggle.disabled = true;
@@ -1548,18 +1571,18 @@ document.addEventListener("DOMContentLoaded", function() {{
         }} else {{
             rolesContainer.classList.remove('all-roles-completed');
 
-            // Enable all role checkboxes
             roleCheckboxes.forEach(cb => {{
                 cb.disabled = false;
             }});
 
-            // Enable and undim toggle buttons
             const toggles = rolesContainer.querySelectorAll('.difficulty-toggle');
             toggles.forEach(toggle => {{
                 toggle.disabled = false;
                 toggle.classList.remove('dimmed-text');
             }});
         }}
+
+        updateRoleHeadingCompletion(); // Update headings based on current checkboxes
     }}
 
     allCheckboxes.forEach(cb => {{
@@ -1602,6 +1625,8 @@ document.addEventListener("DOMContentLoaded", function() {{
 
             toggle.textContent = desc;
         }}
+
+        updateRoleHeadingCompletion(); // Refresh heading when difficulty changes
     }}
 
     function nextDifficulty(current) {{
@@ -1631,6 +1656,7 @@ document.addEventListener("DOMContentLoaded", function() {{
 }});
 </script>
 """
+
 
 
 
