@@ -269,6 +269,7 @@
         }
 
 
+    
         .role-heading {
             font-family: 'RDOFont', sans-serif;  /* Example font, change as needed */
             font-size: 1.5rem;
@@ -291,6 +292,10 @@
             background-repeat: no-repeat;
             background-position: 2px center;
             background-size: 410px 35px;
+            
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
     
         }
             /* Space between different role challenges */
@@ -374,7 +379,24 @@
             transform-origin: left;
         }
         
+        /* Makes it clickable */
+        .difficulty-toggle {
+            cursor: pointer;
+            user-select: none;
+            font-size: 0.6em;  /* adjust if needed */
+            margin-right: 10px; /* adjust px as you like */
+            color: #b00000;  /* Dark Red Colour */
+            transform: scaleY(1.2);
+        }
         
+        /* Dimming the difficulty-toggle */
+        .dimmed-text {
+            opacity: 0.5;
+            pointer-events: none;
+            user-select: none;
+        }
+
+
         
         
 
@@ -492,7 +514,7 @@
 
             <div class="general-challenges-container">
                 
-        <div class="challenge">
+        <div class="challenge" data-difficulty="None">
           <label>
             <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-05_bbd6d12733b8a6ba" />
             <span class="challenge-text">5 American Ginseng picked</span>
@@ -501,14 +523,14 @@
 Keep going across the railway line, there's 4 plants close by.</div></div>
 <hr class="thin-divider">
 
-        <div class="challenge">
+        <div class="challenge" data-difficulty="None">
           <label>
             <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-05_9cc72942cd51b024" />
             <span class="challenge-text">Crafted a Tonic</span>
           </label></div>
 <hr class="thin-divider">
 
-        <div class="challenge">
+        <div class="challenge" data-difficulty="None">
           <label>
             <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-05_b1807b308c1e5ee6" />
             <span class="challenge-text">3 Ducks skinned</span>
@@ -516,21 +538,21 @@ Keep going across the railway line, there's 4 plants close by.</div></div>
           <div class="challenge-desc">At dawn, north east of Emerald Station, there are plenty of ducks around Heartland Overflow.</div></div>
 <hr class="thin-divider">
 
-        <div class="challenge">
+        <div class="challenge" data-difficulty="None">
           <label>
             <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-05_12c190d38a615f1b" />
             <span class="challenge-text">3 Player kills with throwing weapons in Showdowns</span>
           </label></div>
 <hr class="thin-divider">
 
-        <div class="challenge">
+        <div class="challenge" data-difficulty="None">
           <label>
             <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-05_5be47bae24127154" />
             <span class="challenge-text">Posse Infighting completed</span>
           </label></div>
 <hr class="thin-divider">
 
-        <div class="challenge">
+        <div class="challenge" data-difficulty="None">
           <label>
             <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-05_d6fa09ebdfc5b3ea" />
             <span class="challenge-text">2 Striped Skunks skinned</span>
@@ -539,7 +561,7 @@ Keep going across the railway line, there's 4 plants close by.</div></div>
 Bolger Glade battlefield has a few, also around Cumberland Forest.</div></div>
 <hr class="thin-divider">
 
-        <div class="challenge">
+        <div class="challenge" data-difficulty="None">
           <label>
             <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-05_8c0d4fd25a4501be" />
             <span class="challenge-text">3 Wolves killed</span>
@@ -552,111 +574,298 @@ Cumberland Forest can be a good location. Generally wolves tend to be out at nig
         </div>
 
         <div class="sidebar-container">
-            <div class="role-block" id="role-bounty-hunter-block">
-  <h3 class="role-heading" id="role-bounty-hunter">Bounty Hunter</h3>
+            <div class="role-container">
+  <h3 class="role-heading" id="role-bounty-hunter">Bounty Hunter&nbsp; <span class="difficulty-toggle RDOFont" data-difficulty="hard">(Hard: Rank 15+)</span></h3>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_bc7f35a336365f90" />
+            <span class="role-challenge-text">1 Bounties brought in from West Elizabeth posters</span>
+          </label>
+          <div class="role-challenge-desc">Strawberry, Blackwater, Wallace Station, and Riggs Station</div></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_54e09aee142745a5" />
+            <span class="role-challenge-text">1 Eagle Eye used to track a bounty target</span>
+          </label>
+          <div class="role-challenge-desc">Can shoot with tracking arrow and then track them</div></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_460bb7e7b36775a8" />
+            <span class="role-challenge-text">1 More than one bounty target brought in at once</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_095bdbbecec412b0" />
+            <span class="role-challenge-text">2 Bounties brought in from Lemoyne posters</span>
+          </label>
+          <div class="role-challenge-desc">Rhodes and Saint Denis</div></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_ca1fa9508588e161" />
+            <span class="role-challenge-text">1 Bounty targets taken down with Bolas</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_c8b8e05ac7301447" />
+            <span class="role-challenge-text">2 More than one bounty target brought in at once</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_affdff6654e7d4ad" />
             <span class="role-challenge-text">2 Bounty targets tagged with Tracking Arrow</span>
           </label></div>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_aac61ef1b09f3212" />
             <span class="role-challenge-text">1 Hard ($$$) or Legendary Bounty mission completed</span>
           </label></div>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_4a008830b82fce96" />
             <span class="role-challenge-text">3 More than one bounty target brought in at once</span>
           </label></div>
 </div>
 <hr class="thin-divider" />
-<div class="role-block" id="role-trader-block">
-  <h3 class="role-heading" id="role-trader">Trader</h3>
+<div class="role-container">
+  <h3 class="role-heading" id="role-trader">Trader&nbsp; <span class="difficulty-toggle RDOFont" data-difficulty="hard">(Hard: Rank 15+)</span></h3>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_ad26031174779a0b" />
+            <span class="role-challenge-text">5280 Distance Delivery Wagon traveled on mission</span>
+          </label>
+          <div class="role-challenge-desc">Use a Change Appearance solo lobby to be sure it registers</div></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_f7be76de99db9c0b" />
+            <span class="role-challenge-text">3 Medium animal carcasses donated to Cripps</span>
+          </label>
+          <div class="role-challenge-desc">Emerald Ranch, for sheep, turkeys, & foxes.</div></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_83bdbc4ad4f16e1c" />
+            <span class="role-challenge-text">2 Perfect carcasses donated to Cripps</span>
+          </label>
+          <div class="role-challenge-desc">Perfect pelts don't count for this.</div></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_834a58007a6d45a2" />
+            <span class="role-challenge-text">2 Donated deadly predator carcass or skin</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_73fcf139b8fc40c3" />
+            <span class="role-challenge-text">2 Goods sold to local buyer</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_6f0533ee87fa7578" />
+            <span class="role-challenge-text">$100.00 Money made from trading</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_17eb7ba375c36585" />
             <span class="role-challenge-text">3 Camp Stews eaten</span>
           </label></div>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_e2fc25cd87a58806" />
             <span class="role-challenge-text">6 Large animal carcasses donated to Cripps</span>
           </label>
           <div class="role-challenge-desc">Deer, Pronghorn, Bighorn Rams, Panther, Cougar, Wolf</div></div>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_64c9ecc0da996a74" />
             <span class="role-challenge-text">2 Resupply missions completed</span>
           </label></div>
 </div>
 <hr class="thin-divider" />
-<div class="role-block" id="role-collector-block">
-  <h3 class="role-heading" id="role-collector">Collector</h3>
+<div class="role-container">
+  <h3 class="role-heading" id="role-collector">Collector&nbsp; <span class="difficulty-toggle RDOFont" data-difficulty="hard">(Hard: Rank 15+)</span></h3>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_af78eab5de3bd9a2" />
+            <span class="role-challenge-text">1 American Wild Flowers found</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_ae9a1be38d2bdd62" />
+            <span class="role-challenge-text">1 Antique Alcohol Bottles found</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_a71e00487001894d" />
+            <span class="role-challenge-text">1 Family Heirlooms found</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_18e681e3a217d7fc" />
+            <span class="role-challenge-text">2 Family Heirlooms found</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_058a7b03b7913562" />
+            <span class="role-challenge-text">2 Fossils found</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_a16a6df35447b903" />
+            <span class="role-challenge-text">2 Lost Jewelry found</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_4e6a6092efc63336" />
             <span class="role-challenge-text">3 Antique Alcohol Bottles found</span>
           </label></div>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_7cbb4f59e33c458c" />
             <span class="role-challenge-text">2 Collectibles found with a Metal Detector</span>
           </label></div>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_fd639934cda4345d" />
             <span class="role-challenge-text">3 Lost Jewelry found</span>
           </label></div>
 </div>
 <hr class="thin-divider" />
-<div class="role-block" id="role-moonshiner-block">
-  <h3 class="role-heading" id="role-moonshiner">Moonshiner</h3>
+<div class="role-container">
+  <h3 class="role-heading" id="role-moonshiner">Moonshiner&nbsp; <span class="difficulty-toggle RDOFont" data-difficulty="hard">(Hard: Rank 15+)</span></h3>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_119b104a967e8b9d" />
+            <span class="role-challenge-text">Completed regular or better moonshine recipe</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_8f895dc71bc9e233" />
+            <span class="role-challenge-text">1 Moonshine Story Mission completed</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_55932db38da20773" />
+            <span class="role-challenge-text">1 Moonshine served to other players at a bar</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_2bad69e601ef3fb5" />
+            <span class="role-challenge-text">3218 Distance Moonshine Wagon traveled on mission</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_bc42d8f8821a9c52" />
+            <span class="role-challenge-text">1 Moonshine Bar - Drunken player interaction</span>
+          </label>
+          <div class="role-challenge-desc">If solo, use Y then B button combo as entering shack</div></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_ac3946ad0b3c7dff" />
+            <span class="role-challenge-text">Moonshine sold with at least 15 bottles intact</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_bf63086bf4d7da82" />
             <span class="role-challenge-text">2 Crafted Toxic Moonshine</span>
           </label></div>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_e038419111804667" />
             <span class="role-challenge-text">4827 Distance Moonshine Wagon traveled on mission</span>
           </label></div>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_0d7fa226032602eb" />
             <span class="role-challenge-text">4 Moonshine served to other players at a bar</span>
           </label></div>
 </div>
 <hr class="thin-divider" />
-<div class="role-block" id="role-naturalist-block">
-  <h3 class="role-heading" id="role-naturalist">Naturalist</h3>
+<div class="role-container">
+  <h3 class="role-heading" id="role-naturalist">Naturalist&nbsp; <span class="difficulty-toggle RDOFont" data-difficulty="hard">(Hard: Rank 15+)</span></h3>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_a04f5ec0bd736c6b" />
+            <span class="role-challenge-text">1 Blending Tonics crafted or used</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_cf51af02d7363d67" />
+            <span class="role-challenge-text">Don't kill an animal for 12 game hours</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_284a4be7f5835d48" />
+            <span class="role-challenge-text">1 Legendary Animals photographed</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_c3e539a86cd5b9ff" />
+            <span class="role-challenge-text">5 Crafted or cooked at Wilderness Camp</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_780f4b91650f4e33" />
+            <span class="role-challenge-text">Don't kill an animal for 18 game hours</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_f85c94c66f41aaf4" />
+            <span class="role-challenge-text">1 Legendary Animals found using pheromones</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_6cdbce1b8ac129af" />
             <span class="role-challenge-text">2 Blending Tonics crafted or used</span>
           </label></div>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_c36d02f902de2cbc" />
             <span class="role-challenge-text">Don't kill an animal for 24 game hours</span>
           </label></div>
 
-        <div class="role-challenge">
+        <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
             <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-05_d959c68a05bca1fa" />
             <span class="role-challenge-text">2 Sedated animals revived</span>
@@ -688,6 +897,7 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
   
   
 
+js_code = f"""
 <script>
 // ////////////////////////////////////////////////////////////////////////////////////// //
 // JavaScript: Resize text size dynamically based on container width for better accuracy  //
@@ -716,7 +926,7 @@ window.addEventListener('resize', resizeBannerText);
 window.addEventListener('load', resizeBannerText);
 
 // ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Toggle challenge states and handle persistence via localStorage + counters //
+// JavaScript: Main logic for toggling, persistence, counters, and difficulty switching //
 // ////////////////////////////////////////////////////////////////////////////////////// //
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -736,17 +946,22 @@ document.addEventListener("DOMContentLoaded", function() {
     const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
     const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
 
-    // Update counters helper function
     function updateCounters() {
         const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
         const generalTotal = generalCheckboxes.length;
 
-        // Ensure roleDone count does not exceed 9
+        // Count only visible role checkboxes (based on difficulty filter)
+        const visibleRoleCheckboxes = Array.from(roleCheckboxes).filter(cb => {
+            return cb.offsetParent !== null;
+        });
+
         const roleDone = Math.min(
-            Array.from(roleCheckboxes).filter(cb => cb.checked).length,
+            visibleRoleCheckboxes.filter(cb => cb.checked).length,
             9
         );
         const roleTotal = 9;
+
+        console.log('updateCounters:', { roleDone }, { roleTotal }, 'visibleRoleCheckboxes:', visibleRoleCheckboxes.length);
 
         const generalCounter = document.getElementById('general-counter');
         const roleCounter = document.getElementById('role-counter');
@@ -758,25 +973,40 @@ document.addEventListener("DOMContentLoaded", function() {
             roleCounter.textContent = `${roleDone}/${roleTotal}`;
         }
 
-        // Dim all role challenges and headings when all 9 role challenges are done
         const rolesContainer = document.getElementById('roles-container') || document.body;
+
         if (roleDone === roleTotal) {
             rolesContainer.classList.add('all-roles-completed');
+
+            // Disable role checkboxes not checked
+            roleCheckboxes.forEach(cb => {
+                cb.disabled = !cb.checked;
+            });
+
+            // Disable and dim toggle buttons
+            const toggles = rolesContainer.querySelectorAll('.difficulty-toggle');
+            toggles.forEach(toggle => {
+                toggle.disabled = true;
+                toggle.classList.add('dimmed-text');
+            });
+
         } else {
             rolesContainer.classList.remove('all-roles-completed');
-        }
 
-        // Disable unchecked role checkboxes when all 9 are done, enable otherwise
-        roleCheckboxes.forEach(cb => {
-            if (roleDone === roleTotal) {
-                cb.disabled = !cb.checked;  // disable unchecked boxes
-            } else {
-                cb.disabled = false;        // enable all boxes if less than 9 done
-            }
-        });
+            // Enable all role checkboxes
+            roleCheckboxes.forEach(cb => {
+                cb.disabled = false;
+            });
+
+            // Enable and undim toggle buttons
+            const toggles = rolesContainer.querySelectorAll('.difficulty-toggle');
+            toggles.forEach(toggle => {
+                toggle.disabled = false;
+                toggle.classList.remove('dimmed-text');
+            });
+        }
     }
 
-    // Initialize checkboxes from localStorage and add event listeners
     allCheckboxes.forEach(cb => {
         const key = cb.id;
         const saved = localStorage.getItem(key);
@@ -795,14 +1025,63 @@ document.addEventListener("DOMContentLoaded", function() {
                 wrapper.classList.toggle('completed', cb.checked);
             }
             localStorage.setItem(key, cb.checked);
-            updateCounters();  // Update counters live on toggle
+            updateCounters();
         });
     });
 
-    // Update counters on page load
+    // Difficulty toggle logic
+    function updateRoleDifficulty(roleContainer, difficulty) {
+        const challenges = roleContainer.querySelectorAll('.role-challenge');
+
+        challenges.forEach(challenge => {
+            const challengeDifficulty = challenge.getAttribute('data-difficulty') || 'easy';
+            challenge.style.display = (challengeDifficulty === difficulty) ? '' : 'none';
+        });
+
+        const toggle = roleContainer.querySelector('.difficulty-toggle');
+        if (toggle) {
+            toggle.dataset.difficulty = difficulty;
+            const desc = difficulty === 'easy' ? 'Rank 1–5'
+                        : difficulty === 'med' ? 'Rank 6–14'
+                        : 'Rank 15+';
+
+            toggle.textContent = desc;
+        }
+    }
+
+    function nextDifficulty(current) {
+        if (current === 'easy') return 'med';
+        if (current === 'med') return 'hard';
+        return 'easy';
+    }
+
+    const toggles = document.querySelectorAll('.difficulty-toggle');
+
+    toggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            console.log('Difficulty toggle clicked, current difficulty:', toggle.dataset.difficulty);
+            const roleContainer = toggle.closest('.role-container');
+            const currentDifficulty = toggle.dataset.difficulty || 'easy';
+            const newDifficulty = nextDifficulty(currentDifficulty);
+            updateRoleDifficulty(roleContainer, newDifficulty);
+            updateCounters(); // Refresh counters after difficulty change
+        });
+
+        const roleContainer = toggle.closest('.role-container');
+        updateRoleDifficulty(roleContainer, toggle.dataset.difficulty || 'easy');
+    });
+
+    // Initial counters update
     updateCounters();
 });
 </script>
+"""
+
+
+
+
+
+
 
 
 

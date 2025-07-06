@@ -638,7 +638,7 @@ def render_general_challenges_with_dividers(general_challenges):
 
 
 
-def render_challenge_block(block, prefix="challenge", role_name=""):
+def render_challenge_block(block, prefix="challenge", role_name="", filter_difficulty="hard"):
     html = ""
 
     # Current date for debug purposes (not used in ID generation)
@@ -656,8 +656,16 @@ def render_challenge_block(block, prefix="challenge", role_name=""):
     if prefix == "role-challenge":
         # Create a role ID from the role name (lowercase, no spaces)
         role_id = "role-" + "".join(c.lower() if c.isalnum() else "-" for c in role_name).strip("-")
-        html += f'<div class="role-block" id="{role_id}-block">\n'
-        html += f'  <h3 class="role-heading" id="{role_id}">{role_name}</h3>\n'
+
+        # Start a role block container
+        html += f'<div class="role-container">\n'  # << NEW: wrapper for the role + its challenges
+
+        # Add role heading and difficulty toggle button
+        html += f'  <h3 class="role-heading" id="{role_id}">{role_name}&nbsp; '
+        html += f'<span class="difficulty-toggle RDOFont" data-difficulty="{filter_difficulty}">({filter_difficulty.capitalize()}: ' \
+        f'{ "Rank 1–5" if filter_difficulty == "easy" else "Rank 6–14" if filter_difficulty == "med" else "Rank 15+" })</span>'
+
+        html += '</h3>\n'
 
     # Loop through the challenge block. Use enumerate to track index for divider logic.
     for i, c in enumerate(block):
@@ -669,9 +677,12 @@ def render_challenge_block(block, prefix="challenge", role_name=""):
         label_class = 'role-challenge-label' if prefix == 'role-challenge' else ''
         label_open = f'<label class="{label_class}">' if label_class else '<label>'
 
-        # Start the challenge container with a label and checkbox
+        # Get the difficulty of the challenge, defaulting to 'easy' if not present
+        difficulty = c.get("difficulty", "easy")  # << NEW: Add this to support filtering
+
+        # Start the challenge container with a label, checkbox, and difficulty attribute
         html += f'''
-        <div class="{prefix}">
+        <div class="{prefix}" data-difficulty="{difficulty}">
           {label_open}
             <input type="checkbox" class="challenge-checkbox" id="{safe_id}" />
             <span class="{prefix}-text">{c["text"]}</span>
@@ -687,7 +698,7 @@ def render_challenge_block(block, prefix="challenge", role_name=""):
 
     # If this was a role challenge, close the wrapper container
     if prefix == "role-challenge":
-        html += '</div>\n'
+        html += '</div>\n'  # Close the role-container div
 
     return html
 
@@ -704,61 +715,50 @@ def render_challenge_block(block, prefix="challenge", role_name=""):
 html_general = render_general_challenges_with_dividers(general_challenges)
 debug_print("L3", "ipurple", "html_general:  ", html_general)
 
-
 ############################################################
 # Generate html for role challenges with difficulty levels #
 ############################################################
 
-def generate_html_for_difficulty(challenges, difficulty):
+def generate_html_for_difficulty(challenges, filter_difficulty):
     from collections import defaultdict
-    
-    # Group challenges by their 'category' (e.g., role categories or 'general')
+
+    # Group all challenges by their 'category' (e.g., role categories or 'general')
     grouped_by_role = defaultdict(list)
     for c in challenges:
         grouped_by_role[c['category']].append(c)
-    
-    # Filter challenges for the specified difficulty or 'general' category
-    filtered = [
-        c for c in challenges
-        if c["category"] == "general" or c["difficulty"] == difficulty
-    ]
 
     # Separate general challenges and role-specific challenges
-    general_challenges = [c for c in filtered if c["category"] == "general"]
-    role_challenges = [c for c in filtered if c["category"] != "general"]
-
-    # Group role challenges by their category for easier rendering
-    grouped_roles = defaultdict(list)
-    for c in role_challenges:
-        grouped_roles[c["category"]].append(c)
+    general_challenges = grouped_by_role.get("general", [])
 
     # Render the general challenges HTML block
     html_general = '<h2 class="general-heading">General Challenges <span id="general-counter">(0/0)</span></h2>\n'
-    html_general = ""
-    # Add heading with counter for general challenges
+    # Render general challenges without role/difficulty filtering
     html_general += render_challenge_block(general_challenges)
 
-    html_roles = '<h2>Role Challenges <span id="role-counter">(0/0)</span></h2>\n'
-    html_roles = ""
+    # Render role challenges — don't pre-filter by difficulty anymore
+    html_roles = ''   # <h2>Role Challenges <span id="role-counter">(0/0)</span></h2>\n'
 
-    # Filter role_keys to only those roles that have challenges to render
-    roles_with_challenges = [role for role in role_keys if role in grouped_roles and grouped_roles[role]]
+    # Loop through roles that actually have challenges
+    roles_with_challenges = [role for role in role_keys if role in grouped_by_role and grouped_by_role[role]]
 
-    # Loop through roles with actual challenges to generate role-specific blocks
     for idx, role in enumerate(roles_with_challenges):
-        block = grouped_roles[role]
-        
-        # Render all challenges for this role, with the appropriate CSS prefix and role name for heading
-        html_roles += render_challenge_block(block, prefix="role-challenge", role_name=role_names.get(role, role.title()))
-        
-        # Add a thin divider line between role sections, but NOT after the last one
+        block = grouped_by_role[role]
+
+        # Pass the filter_difficulty to set the initial difficulty shown
+        html_roles += render_challenge_block(
+            block,
+            prefix="role-challenge",
+            role_name=role_names.get(role, role.title()),
+            filter_difficulty=filter_difficulty  # Pass down difficulty
+        )
+
+        # Add a thin divider line between role sections, except after the last one
         if idx < len(roles_with_challenges) - 1:
             html_roles += '<hr class="thin-divider" />\n'
-        
+
         debug_print("L2", "byellow", f"Adding role block: {role_names[role]}")
 
     return html_general, html_roles
-
 
 
 
@@ -1178,6 +1178,7 @@ html_output = f'''
         }}
 
 
+    
         .role-heading {{
             font-family: 'RDOFont', sans-serif;  /* Example font, change as needed */
             font-size: 1.5rem;
@@ -1200,6 +1201,10 @@ html_output = f'''
             background-repeat: no-repeat;
             background-position: 2px center;
             background-size: 410px 35px;
+            
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
     
         }}
             /* Space between different role challenges */
@@ -1282,7 +1287,24 @@ html_output = f'''
             transform-origin: left;
         }}
         
+        /* Makes it clickable */
+        .difficulty-toggle {{
+            cursor: pointer;
+            user-select: none;
+            font-size: 0.6em;  /* adjust if needed */
+            margin-right: 10px; /* adjust px as you like */
+            color: #b00000;  /* Dark Red Colour */
+            transform: scaleY(1.2);
+        }}
         
+        /* Dimming the difficulty-toggle */
+        .dimmed-text {{
+            opacity: 0.5;
+            pointer-events: none;
+            user-select: none;
+        }}
+
+
         
         
 
@@ -1430,6 +1452,7 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
   
   
 
+js_code = f"""
 <script>
 // ////////////////////////////////////////////////////////////////////////////////////// //
 // JavaScript: Resize text size dynamically based on container width for better accuracy  //
@@ -1458,7 +1481,7 @@ window.addEventListener('resize', resizeBannerText);
 window.addEventListener('load', resizeBannerText);
 
 // ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Toggle challenge states and handle persistence via localStorage + counters //
+// JavaScript: Main logic for toggling, persistence, counters, and difficulty switching //
 // ////////////////////////////////////////////////////////////////////////////////////// //
 
 document.addEventListener("DOMContentLoaded", function() {{
@@ -1478,17 +1501,22 @@ document.addEventListener("DOMContentLoaded", function() {{
     const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
     const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
 
-    // Update counters helper function
     function updateCounters() {{
         const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
         const generalTotal = generalCheckboxes.length;
 
-        // Ensure roleDone count does not exceed 9
+        // Count only visible role checkboxes (based on difficulty filter)
+        const visibleRoleCheckboxes = Array.from(roleCheckboxes).filter(cb => {{
+            return cb.offsetParent !== null;
+        }});
+
         const roleDone = Math.min(
-            Array.from(roleCheckboxes).filter(cb => cb.checked).length,
+            visibleRoleCheckboxes.filter(cb => cb.checked).length,
             9
         );
         const roleTotal = 9;
+
+        console.log('updateCounters:', {{ roleDone }}, {{ roleTotal }}, 'visibleRoleCheckboxes:', visibleRoleCheckboxes.length);
 
         const generalCounter = document.getElementById('general-counter');
         const roleCounter = document.getElementById('role-counter');
@@ -1500,25 +1528,40 @@ document.addEventListener("DOMContentLoaded", function() {{
             roleCounter.textContent = `${{roleDone}}/${{roleTotal}}`;
         }}
 
-        // Dim all role challenges and headings when all 9 role challenges are done
         const rolesContainer = document.getElementById('roles-container') || document.body;
+
         if (roleDone === roleTotal) {{
             rolesContainer.classList.add('all-roles-completed');
+
+            // Disable role checkboxes not checked
+            roleCheckboxes.forEach(cb => {{
+                cb.disabled = !cb.checked;
+            }});
+
+            // Disable and dim toggle buttons
+            const toggles = rolesContainer.querySelectorAll('.difficulty-toggle');
+            toggles.forEach(toggle => {{
+                toggle.disabled = true;
+                toggle.classList.add('dimmed-text');
+            }});
+
         }} else {{
             rolesContainer.classList.remove('all-roles-completed');
-        }}
 
-        // Disable unchecked role checkboxes when all 9 are done, enable otherwise
-        roleCheckboxes.forEach(cb => {{
-            if (roleDone === roleTotal) {{
-                cb.disabled = !cb.checked;  // disable unchecked boxes
-            }} else {{
-                cb.disabled = false;        // enable all boxes if less than 9 done
-            }}
-        }});
+            // Enable all role checkboxes
+            roleCheckboxes.forEach(cb => {{
+                cb.disabled = false;
+            }});
+
+            // Enable and undim toggle buttons
+            const toggles = rolesContainer.querySelectorAll('.difficulty-toggle');
+            toggles.forEach(toggle => {{
+                toggle.disabled = false;
+                toggle.classList.remove('dimmed-text');
+            }});
+        }}
     }}
 
-    // Initialize checkboxes from localStorage and add event listeners
     allCheckboxes.forEach(cb => {{
         const key = cb.id;
         const saved = localStorage.getItem(key);
@@ -1537,14 +1580,63 @@ document.addEventListener("DOMContentLoaded", function() {{
                 wrapper.classList.toggle('completed', cb.checked);
             }}
             localStorage.setItem(key, cb.checked);
-            updateCounters();  // Update counters live on toggle
+            updateCounters();
         }});
     }});
 
-    // Update counters on page load
+    // Difficulty toggle logic
+    function updateRoleDifficulty(roleContainer, difficulty) {{
+        const challenges = roleContainer.querySelectorAll('.role-challenge');
+
+        challenges.forEach(challenge => {{
+            const challengeDifficulty = challenge.getAttribute('data-difficulty') || 'easy';
+            challenge.style.display = (challengeDifficulty === difficulty) ? '' : 'none';
+        }});
+
+        const toggle = roleContainer.querySelector('.difficulty-toggle');
+        if (toggle) {{
+            toggle.dataset.difficulty = difficulty;
+            const desc = difficulty === 'easy' ? 'Rank 1–5'
+                        : difficulty === 'med' ? 'Rank 6–14'
+                        : 'Rank 15+';
+
+            toggle.textContent = desc;
+        }}
+    }}
+
+    function nextDifficulty(current) {{
+        if (current === 'easy') return 'med';
+        if (current === 'med') return 'hard';
+        return 'easy';
+    }}
+
+    const toggles = document.querySelectorAll('.difficulty-toggle');
+
+    toggles.forEach(toggle => {{
+        toggle.addEventListener('click', () => {{
+            console.log('Difficulty toggle clicked, current difficulty:', toggle.dataset.difficulty);
+            const roleContainer = toggle.closest('.role-container');
+            const currentDifficulty = toggle.dataset.difficulty || 'easy';
+            const newDifficulty = nextDifficulty(currentDifficulty);
+            updateRoleDifficulty(roleContainer, newDifficulty);
+            updateCounters(); // Refresh counters after difficulty change
+        }});
+
+        const roleContainer = toggle.closest('.role-container');
+        updateRoleDifficulty(roleContainer, toggle.dataset.difficulty || 'easy');
+    }});
+
+    // Initial counters update
     updateCounters();
 }});
 </script>
+"""
+
+
+
+
+
+
 
 
 
