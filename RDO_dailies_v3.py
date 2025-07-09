@@ -854,6 +854,8 @@ html_easy_general, html_easy_roles = generate_html_for_difficulty(challenges, "e
 html_med_general,  html_med_roles  = generate_html_for_difficulty(challenges, "med")
 html_hard_general, html_hard_roles = generate_html_for_difficulty(challenges, "hard")
 
+
+
 debug_print("L2", "bblue", "Generated html_easy_roles")
 debug_print("L3", "iblue", "html_easy_roles:   ", html_easy_roles)
 print ("-" * 120)
@@ -1433,26 +1435,33 @@ html_output = f'''
 
 
 
-
-
+    /*############ API CREDIT SECTION ############*/
+        .api-credit-separator {{
+            border: none;
+            height: 15px;               /* Thickness of the line */
+            background-color: black;
+            margin: 10px -15px;         /* Vertical spacing, and negative horizontal to counter the container padding so it stretches all the way across */
+        }}
 
 
         /* API credit styling */
         .api-credit {{
           margin-top: auto;
-          padding: 10px 0 10px 15px;
-          font-size: 0.85rem;
-          color: #888;
+          margin-bottom: 0px;
+          padding: 0px 0 0px 5px;
+          font-size: 0.75rem;
+          color: #5b5b5b;
           font-family: Arial, sans-serif;
-          text-align: left;
+          text-align: right;
+          line-height: 1
         }}
         .api-credit a {{
-          color: #999;
+          color: #5b5b5b;
           text-decoration: none;
         }}
         .api-credit a:hover {{
           text-decoration: underline;
-          color: #ccc;
+          color: #8e7878;
         }}
         
     </style>
@@ -1481,6 +1490,13 @@ html_output = f'''
 
         <div class="sidebar-container">
             {selected_html_roles}
+            
+        <hr class="api-credit-separator" />
+            
+        <div class="api-credit">
+          <span class="api-label">Data provided by:&nbsp;</span>
+          <a href="https://rdo.gg/api" target="_blank" class="api-link">rdo.gg API</a>
+        </div>
         </div>
     </div> 
   
