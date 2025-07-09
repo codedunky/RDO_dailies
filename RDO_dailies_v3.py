@@ -1194,11 +1194,12 @@ html_output = f'''
 
         /* Optional: styling for challenge description */
         .challenge-desc {{
-          margin-left: 30px; /* indent to align with text */
+          margin-left: 22px; /* indent to align with text */
           font-size: 1rem;
           color: #999999;
           padding-bottom: 8px;
           white-space: pre-wrap;  /* Preserve \n line breaks and wrap long lines */
+          line-height: 1.2;  /* smaller numbers = tighter spacing */
         }}
         
         .thin-divider {{
