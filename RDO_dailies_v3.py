@@ -13,6 +13,13 @@ import hashlib  # For the checkbox id's
 # Set a variable to control if index.json will download without user prompt
 autoDownload = True
 
+# Set the path to your local index.json file in a relative subfolder called 'jsonFiles'
+script_dir = os.path.dirname(os.path.abspath(__file__))  # the directory where the script is
+os.makedirs(os.path.join(script_dir, "jsonFiles"), exist_ok=True)  # Check folder exists
+
+local_filename = os.path.join(script_dir, "jsonFiles", "index.json") # Creates the filepath and assign to variable
+print("Initial 'local_filename':  ", local_filename)
+
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -187,6 +194,9 @@ def get_index_start_date(local_filename):
     - The raw Unix timestamp for startTime (or current time fallback)
     - The formatted start date string "YYYY-MM-DD" (UTC)
     """
+    #debug_print("L1", "local_filename", local_filename)
+    #print(f"[DEBUG] Looking for index.json at: {os.path.abspath(local_filename)}")
+
     try:
         with open(local_filename, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -200,13 +210,14 @@ def get_index_start_date(local_filename):
             date_str = datetime.datetime.utcfromtimestamp(now).strftime('%Y-%m-%d')
             return now, date_str
     except Exception as e:
+        debug_print("L1", "bred", "Error loading index.json file")
         print("Error loading index.json:", e)
         now = int(time.time())
         date_str = datetime.datetime.utcfromtimestamp(now).strftime('%Y-%m-%d')
         return now, date_str
 
 # Usage
-start_timestamp, human_readable_date = get_index_start_date('index.json')
+start_timestamp, human_readable_date = get_index_start_date(local_filename)
   
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -237,6 +248,15 @@ def get_human_readable_date(unix_timestamp):
     return f"{weekday}, {day}{suffix} {month} {year}"
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Returns a human readbale date from a unix timestamp
+def timestamp_to_date(timestamp):
+    return datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
 
 #need this to get the unique build time so tickbox logic works with local storage caching
 
@@ -300,14 +320,15 @@ print(f"[DEBUG] Does index.json exist? {os.path.exists(local_filename)}")
 if os.path.exists(local_filename):
     with open(local_filename, 'r') as f:
         data = json.load(f)
-    print(f"[DEBUG] index.json endTime: {data.get('endTime')}")
+    print(f"[DEBUG] ***** index.json endTime: {data.get('endTime')} ({timestamp_to_date(data.get('endTime'))})")
+
     
 
 #############################################################################################
 
 # Generating a unique id for tickboxes using todays date
 import datetime
-start_time_unix, human_readable_date = get_index_start_date('index.json')
+start_time_unix, human_readable_date = get_index_start_date(local_filename)
 start_date_str = datetime.datetime.utcfromtimestamp(start_time_unix).strftime("%Y-%m-%d")
 
 
@@ -401,9 +422,11 @@ if end_time < now:
             # Access the data
             end_time = index_data.get("endTime", 0)
             start_time = index_data.get("startTime", 0)
-            print(f"endTime: {end_time}, startTime: {start_time}")
+            print(f"endTime: {timestamp_to_date(end_time)}, startTime: {timestamp_to_date(start_time)}")
         except Exception as e:
             print(f"Error reading {local_filename}: {e}")
+            
+        time.sleep(5)        
 
 
 
@@ -1147,6 +1170,10 @@ html_output = f'''
           white-space: normal;
           line-height: 1.3;
         }}
+        
+        .challenge:first-of-type label {{
+          margin-top: -8px; /* adjust as needed */
+        }}
 
         /* Position the checkbox at the left of label */
         .challenge-checkbox {{
@@ -1199,7 +1226,7 @@ html_output = f'''
           margin-left: 22px; /* indent to align with text */
           font-size: 1rem;
           color: #999999;
-          padding-bottom: 8px;
+          padding-bottom: 7px;
           white-space: pre-wrap;  /* Preserve \n line breaks and wrap long lines */
           line-height: 1.2;  /* smaller numbers = tighter spacing */
         }}
@@ -1592,7 +1619,9 @@ document.addEventListener("DOMContentLoaded", function() {{
         const generalTotal = generalCheckboxes.length;
 
         const roleDone = Math.min(
-            Array.from(roleCheckboxes).filter(cb => cb.checked).length,
+            Array.from(roleCheckboxes).filter(cb => {{
+                return cb.checked && cb.closest('.role-challenge')?.style.display !== 'none';
+            }}).length,
             9
         );
         const roleTotal = 9;
