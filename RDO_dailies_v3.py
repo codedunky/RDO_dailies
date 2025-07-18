@@ -422,11 +422,11 @@ if end_time < now:
             # Access the data
             end_time = index_data.get("endTime", 0)
             start_time = index_data.get("startTime", 0)
-            print(f"endTime: {timestamp_to_date(end_time)}, startTime: {timestamp_to_date(start_time)}")
+            print(f"endTime: {startTime: {timestamp_to_date(start_time)}, timestamp_to_date(end_time)} ")
         except Exception as e:
             print(f"Error reading {local_filename}: {e}")
             
-        time.sleep(5)        
+        time.sleep(10)        
 
 
 
@@ -1459,6 +1459,24 @@ html_output = f'''
           opacity: 1 !important;
           pointer-events: auto;
         }}
+        
+        
+        .rdo-clock {{
+            position: absolute;
+            bottom: 5px;  /* Position near the bottom of the banner */
+            left: 47.5%;
+            transform: translateX(-50%);
+            transform: translateY(-2px);  /* Negative value moves it up */
+            font-family: 'RDOFont', sans-serif;
+            font-size: 2rem;
+            color: #white;
+            text-shadow:
+             -4px -4px 4px #cf0202,
+              4px -4px 4px #cf0202,
+             -4px  4px 4px #cf0202,
+              4px  4px 4px #cf0202;
+        }}
+        
 
 
 
@@ -1506,6 +1524,9 @@ html_output = f'''
                     <div class="challenge-counters">
                         <div>General Challenges <span id="general-counter">(0/7)</span></div>
                         <div>Role Challenges <span id="role-counter">(0/9)</span></div>
+                    </div>
+                    <div class="rdo-clock" id="rdo-clock">
+                        Loading in-game time...
                     </div>
                 </div>
             </div>
@@ -1576,6 +1597,33 @@ function resizeBannerText() {{
 
 window.addEventListener('resize', resizeBannerText);
 window.addEventListener('load', resizeBannerText);
+
+
+
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: In-Game clock routine                                                      //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+const offsetSeconds = -600;  // -10 minutes offset
+
+function updateRDOClock() {{
+    const now = new Date();
+    const utcSeconds = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
+
+    const gameSeconds = (utcSeconds * 30 + offsetSeconds) % 86400;
+
+    const gameHours = Math.floor(gameSeconds / 3600).toString().padStart(2, '0');
+    const gameMinutes = Math.floor((gameSeconds % 3600) / 60).toString().padStart(2, '0');
+
+    document.getElementById("rdo-clock").textContent = `${{gameHours}}:${{gameMinutes}}`;
+}}
+
+setInterval(updateRDOClock, 1000);
+updateRDOClock();
+
+
+
 
 // ////////////////////////////////////////////////////////////////////////////////////// //
 // JavaScript: Main logic for toggling, persistence, counters, and difficulty switching  //
