@@ -1460,7 +1460,7 @@ html_output = f'''
           pointer-events: auto;
         }}
         
-        
+    /*############ RDO-CLOCK SECTION ############*/        
         .rdo-clock {{
             position: absolute;
             bottom: 5px;  /* Position near the bottom of the banner */
@@ -1468,7 +1468,7 @@ html_output = f'''
             transform: translateX(-50%);
             transform: translateY(-2px);  /* Negative value moves it up */
             font-family: 'RDOFont', sans-serif;
-            font-size: 2rem;
+            font-size: calc(1.5vw + 0.8rem);
             color: #white;
             text-shadow:
              -4px -4px 4px #cf0202,
@@ -1476,7 +1476,6 @@ html_output = f'''
              -4px  4px 4px #cf0202,
               4px  4px 4px #cf0202;
         }}
-        
 
 
 
@@ -1526,7 +1525,7 @@ html_output = f'''
                         <div>Role Challenges <span id="role-counter">(0/9)</span></div>
                     </div>
                     <div class="rdo-clock" id="rdo-clock">
-                        Loading in-game time...
+                        --:--
                     </div>
                 </div>
             </div>
@@ -1581,6 +1580,7 @@ function resizeBannerText() {{
     const title = document.querySelector('.banner-title');
     const date = document.querySelector('.banner-date');
     const counters = document.querySelector('.challenge-counters');
+    const clock = document.getElementById('rdo-clock');
 
     if (!container) return;
 
@@ -1593,6 +1593,13 @@ function resizeBannerText() {{
     title.style.fontSize = (2.5 * scale) + 'rem';
     date.style.fontSize = (1.4 * scale) + 'rem';
     counters.style.fontSize = (1.25 * scale) + 'rem';
+    
+    if (clock) {{
+    // Let's match the clock font scaling to date's scale, maybe slightly bigger if you want
+    clock.style.fontSize = (2 * scale) + 'rem';
+    }}
+    
+    
 }}
 
 window.addEventListener('resize', resizeBannerText);
@@ -1611,6 +1618,7 @@ function updateRDOClock() {{
     const now = new Date();
     const utcSeconds = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
 
+    // Game time calculation: 1 real second = 30 game seconds
     const gameSeconds = (utcSeconds * 30 + offsetSeconds) % 86400;
 
     const gameHours = Math.floor(gameSeconds / 3600).toString().padStart(2, '0');
@@ -1621,7 +1629,6 @@ function updateRDOClock() {{
 
 setInterval(updateRDOClock, 1000);
 updateRDOClock();
-
 
 
 
