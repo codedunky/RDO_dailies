@@ -1476,6 +1476,15 @@ html_output = f'''
              -4px  4px 4px #cf0202,
               4px  4px 4px #cf0202;
         }}
+        
+        .rdo-clock.night-glow {{
+            text-shadow:
+            -4px -4px 4px #0d2542,
+             4px -4px 4px #0d2542,
+            -4px  4px 4px #0d2542,
+             4px  4px 4px #0d2542;
+            /*color: #white;               Optional: change text color too */
+}}
 
 
 
@@ -1614,26 +1623,84 @@ window.addEventListener('load', resizeBannerText);
 
 const offsetSeconds = -600;  // -10 minutes offset
 
-function updateRDOClock() {{
+function getInGameHour() {{
     const now = new Date();
     const utcSeconds = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
 
     // Game time calculation: 1 real second = 30 game seconds
     const gameSeconds = (utcSeconds * 30 + offsetSeconds) % 86400;
 
-    const gameHours = Math.floor(gameSeconds / 3600).toString().padStart(2, '0');
-    const gameMinutes = Math.floor((gameSeconds % 3600) / 60).toString().padStart(2, '0');
+    const gameHours = Math.floor(gameSeconds / 3600);
+    const gameMinutes = Math.floor((gameSeconds % 3600) / 60);
+
+    return gameHours + gameMinutes / 60;
+}}
+
+function updateRDOClock() {{
+    const hourFloat = getInGameHour();
+    const gameHours = Math.floor(hourFloat).toString().padStart(2, '0');
+    const gameMinutes = Math.floor((hourFloat % 1) * 60).toString().padStart(2, '0');
 
     document.getElementById("rdo-clock").textContent = `${{gameHours}}:${{gameMinutes}}`;
 }}
 
-setInterval(updateRDOClock, 1000);
-updateRDOClock();
 
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: Swap banner image between 10pm and 5am                                     //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+function updateBanner() {{
+    const hour = getInGameHour();
+    console.log("Current in-game hour:", hour);
+    const banner = document.querySelector('.banner-image');
+
+    if (hour >= 22 || hour < 5) {{
+        if (!banner.src.endsWith("RDO_Banner_Wide_Night.jpg")) {{
+            console.log("Switching to night banner");
+            banner.src = "HTML/images/RDO_Banner_Wide_Night.jpg";
+        }}
+    }} else {{
+        if (!banner.src.endsWith("RDO_Banner_Wide.jpg")) {{
+            console.log("Switching to day banner");
+            banner.src = "HTML/images/RDO_Banner_Wide.jpg";
+        }}
+    }}
+}}
 
 
 // ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Main logic for toggling, persistence, counters, and difficulty switching  //
+// JavaScript: Change clock glow colour between 10pm and 5am                              //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+function updateClockGlow() {{
+    const hour = getInGameHour();
+    const clock = document.querySelector('.rdo-clock');
+
+    if (hour >= 22 || hour < 5) {{
+        clock.classList.add('night-glow');
+    }} else {{
+        clock.classList.remove('night-glow');
+    }}
+}}
+
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: Call various time related functions                                        //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+function updateAllTimeFunctions() {{
+    updateRDOClock();
+    updateBanner();
+    updateClockGlow();
+}}
+
+// Use a single interval to keep everything in sync
+setInterval(updateAllTimeFunctions, 1000);
+updateAllTimeFunctions();
+
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: Main logic for toggling, persistence, counters, and difficulty switching   //
 // ////////////////////////////////////////////////////////////////////////////////////// //
 
 document.addEventListener("DOMContentLoaded", function() {{
@@ -1820,6 +1887,8 @@ document.addEventListener("DOMContentLoaded", function() {{
 
     updateCounters();
 }});
+
+
 </script>
 
 
