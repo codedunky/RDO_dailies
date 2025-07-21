@@ -1,4 +1,4 @@
-name: RDO Dailies v2
+name: RDO Dailies
 
 on:
   schedule:
