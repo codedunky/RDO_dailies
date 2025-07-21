@@ -40,7 +40,7 @@ jobs:
         uses: peter-evans/retry@v3
         with:
           timeout_seconds: 900    # Timeout per attempt in seconds (15 minutes)
-          max_attempts: 3         # Number of retry attempts
+          max_attempts: 12         # Number of retry attempts
           retry_on: error         # Retry on any error
           run: |
             # Deploy the ./public directory to GitHub Pages
