@@ -29,17 +29,25 @@ jobs:
       - name: Run script
         run: node rdo_dailies.js
 
-      # Set up GitHub CLI with authentication (required for gh pages deploy)
-      - name: Set up GitHub CLI
-        uses: actions/setup-gh@v4
-
-      # Deploy to GitHub Pages with automatic retries to handle transient errors
-      - name: Retry Deploy to GitHub Pages
-        uses: peter-evans/retry@v3.0.0
+      # Upload the generated content as an artifact for deployment
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          timeout_seconds: 600    # Timeout per attempt in seconds (10 minutes)
-          max_attempts: 3         # Number of retry attempts
-          retry_on: error         # Retry on any error
-          run: |
-            # Deploy the ./public directory to GitHub Pages
-            gh pages deploy ./public --branch gh-pages
+          path: ./public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # Deploy to GitHub Pages (official way, no retries but managed by GitHub)
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
