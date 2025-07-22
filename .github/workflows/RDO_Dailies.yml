@@ -35,7 +35,7 @@ jobs:
 
       # Deploy to GitHub Pages with automatic retries to handle transient errors
       - name: Retry Deploy to GitHub Pages
-        uses: peter-evans/retry@v3
+        uses: peter-evans/retry@v3.0.0
         with:
           timeout_seconds: 600    # Timeout per attempt in seconds (10 minutes)
           max_attempts: 3         # Number of retry attempts
