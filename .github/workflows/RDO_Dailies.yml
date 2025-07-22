@@ -31,16 +31,14 @@ jobs:
 
       # Set up GitHub CLI with authentication (required for gh pages deploy)
       - name: Set up GitHub CLI
-        uses: cli/cli-action@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/setup-gh@v4
 
       # Deploy to GitHub Pages with automatic retries to handle transient errors
       - name: Retry Deploy to GitHub Pages
         uses: peter-evans/retry@v3
         with:
-          timeout_seconds: 900    # Timeout per attempt in seconds (15 minutes)
-          max_attempts: 12         # Number of retry attempts
+          timeout_seconds: 600    # Timeout per attempt in seconds (10 minutes)
+          max_attempts: 3         # Number of retry attempts
           retry_on: error         # Retry on any error
           run: |
             # Deploy the ./public directory to GitHub Pages
