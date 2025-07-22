@@ -15,19 +15,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup Node.js environment
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      # Set up Python 3
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          node-version: '20'
+          python-version: '3.11'
 
-      # Install Node.js dependencies
+      # Install Python dependencies if needed
       - name: Install dependencies
-        run: npm install
+        run: |
+          pip install -r requirements.txt || true  # Use this if you have a requirements.txt
+          pip install requests beautifulsoup4  # Or install specific libs manually
 
-      # Run the daily script to generate content
-      - name: Run script
-        run: node rdo_dailies.js
+      # Run the Python script to generate content
+      - name: Run RDO Dailies Python script
+        run: python RDO_dailies_v3.py
 
       # Upload the generated content as an artifact for deployment
       - name: Upload artifact
@@ -47,7 +49,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      # Deploy to GitHub Pages (official way, no retries but managed by GitHub)
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
