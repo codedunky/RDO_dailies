@@ -1,54 +1,49 @@
-name: RDO Dailies
+name: RDO Dailies v3.
 
 on:
   schedule:
-    # Runs every day at 8:01 UTC
-    - cron: '1 8 * * *'
-  workflow_dispatch:
+    - cron: '10 7 * * *'  # Runs at 07:10 UTC every day
+  
+  workflow_dispatch:  # <-- this enables the manual "Run workflow" button
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository to the runner
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v3
 
-      # Set up Python 3
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
 
-      # Install Python dependencies if needed
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt || true  # Use this if you have a requirements.txt
-          pip install requests beautifulsoup4  # Or install specific libs manually
+    #- name: Install dependencies
+    #  run: |
+    #    pip install -r requirements.txt  # if you have dependencies
 
-      # Run the Python script to generate content
-      - name: Run RDO Dailies Python script
-        run: python RDO_dailies_v3.py
+    - name: Run script to generate index.html
+      run: |
+        python RDO_dailies_v3.py
 
-      # Upload the generated content as an artifact for deployment
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./public
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+    - name: Debug - Show output files
+      run: |
+        echo "Current directory: $(pwd)"
+        ls -R
+    
+    - name: Commit and push generated file
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'actions@github.com'
+        git add index.html jsonFiles/index.json
+        git commit -m "Update index.html and index.json" || echo "No changes to commit"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Debug - List output files
+      run: |
+        echo "Current directory:"
+        pwd
+        echo "Files:"
+        ls -R
