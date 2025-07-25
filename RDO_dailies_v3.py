@@ -422,7 +422,7 @@ if end_time < now:
             # Access the data
             end_time = index_data.get("endTime", 0)
             start_time = index_data.get("startTime", 0)
-            print(f"endTime: {startTime: {timestamp_to_date(start_time)}, timestamp_to_date(end_time)} ")
+            print(f"startTime: {timestamp_to_date(start_time)}, endTime: {timestamp_to_date(end_time)}")
         except Exception as e:
             print(f"Error reading {local_filename}: {e}")
             
