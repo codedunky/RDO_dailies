@@ -1,5 +1,5 @@
 # RDO_dailies
-Pulling the daily RDO challenges from the api and fiddling about with them.
+Pulling the daily Red Dead Online challenges from the api and fiddling about with them.
 <br>
 https://codedunky.github.io/RDO_dailies/
 
