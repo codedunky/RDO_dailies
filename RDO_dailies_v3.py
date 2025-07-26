@@ -1517,6 +1517,42 @@ html_output = f'''
           color: #8e7878;
         }}
         
+        
+     /*############ PAUSE RDR BUTTON SECTION ############*/       
+        .pause-rdr2-button {{
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 9999;
+            padding: 6px 10px;
+            background-color: #b00000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-family: 'hapna', sans-serif;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            transition: background-color 0.3s ease;
+        }}
+        .pause-rdr2-button:hover {{
+            background-color: #900000;
+        }}
+        
+        #pauseBtn {{
+          position: absolute;
+          top: 5px;
+          right: 10px;
+          width: 100px;
+          cursor: pointer;
+          filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.6));
+        }}
+        
+        #pauseBtn:hover {{
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+          transform: scale(1.05);
+        }}
+        
     </style>
 </head>
 <body>
@@ -1525,6 +1561,8 @@ html_output = f'''
             <div class="banner-container">
                 <div class="banner-image-wrapper">
                     <img src="HTML/images/RDO_Banner_Wide.jpg" alt="Banner" class="banner-image"/>
+                    <img id="pauseBtn" src="HTML/images/RDO_PauseStopwatch.png" alt="Pause RDO" title="Pause RDO"
+                         style="position:absolute; top:0px; left:10px; width:50px; cursor:pointer;" />                    
                     <div class="banner-text-overlay">
                         <h1 class="banner-title">Daily Challenges</h1>
                         <div class="banner-date">{human_readable_date}</div>
@@ -1887,6 +1925,40 @@ document.addEventListener("DOMContentLoaded", function() {{
 
     updateCounters();
 }});
+
+
+
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: Hide the Pause Process Button For Remote Visitors, Only For Local          //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+document.addEventListener("DOMContentLoaded", function () {{
+    const isLocal = location.protocol === "file:" || location.hostname === "localhost";
+    const pauseBtn = document.getElementById("pause-btn");
+    if (!isLocal && pauseBtn) {{
+        pauseBtn.style.display = "none";
+    }}
+}});
+
+
+
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: Pause Button Code                                                          //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+document.addEventListener('DOMContentLoaded', () => {{
+    document.getElementById('pauseBtn').addEventListener('click', () => {{
+      fetch('http://127.0.0.1:6969/pause', {{
+        method: 'POST'
+      }})
+      .then(response => response.text())
+      .then(data => alert('Server response: ' + data))
+      .catch(error => alert('Error: ' + error));
+    }});
+}});
+
 
 
 </script>

@@ -584,6 +584,42 @@
           color: #8e7878;
         }
         
+        
+     /*############ PAUSE RDR BUTTON SECTION ############*/       
+        .pause-rdr2-button {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 9999;
+            padding: 6px 10px;
+            background-color: #b00000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-family: 'hapna', sans-serif;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            transition: background-color 0.3s ease;
+        }
+        .pause-rdr2-button:hover {
+            background-color: #900000;
+        }
+        
+        #pauseBtn {
+          position: absolute;
+          top: 5px;
+          right: 10px;
+          width: 100px;
+          cursor: pointer;
+          filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.6));
+        }
+        
+        #pauseBtn:hover {
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+          transform: scale(1.05);
+        }
+        
     </style>
 </head>
 <body>
@@ -592,9 +628,11 @@
             <div class="banner-container">
                 <div class="banner-image-wrapper">
                     <img src="HTML/images/RDO_Banner_Wide.jpg" alt="Banner" class="banner-image"/>
+                    <img id="pauseBtn" src="HTML/images/RDO_PauseStopwatch.png" alt="Pause RDO" title="Pause RDO"
+                         style="position:absolute; top:0px; left:10px; width:50px; cursor:pointer;" />                    
                     <div class="banner-text-overlay">
                         <h1 class="banner-title">Daily Challenges</h1>
-                        <div class="banner-date">Friday, 25th July 2025</div>
+                        <div class="banner-date">Saturday, 26th July 2025</div>
                     </div>
                     <div class="challenge-counters">
                         <div>General Challenges <span id="general-counter">(0/7)</span></div>
@@ -610,55 +648,55 @@
                 
         <div class="challenge" data-difficulty="None">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-25_7528a097f313f7bb" />
-            <span class="challenge-text">500 Distance traveled leading own horse</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-26_4357d39bde67b64e" />
+            <span class="challenge-text">2 Cougars killed</span>
+          </label>
+          <div class="challenge-desc">Fast travel to Manzanita Post, then head north and take the road to Blackwater. A cougar often attacks around the north entrance of Beecher's Hope. Solo lobbies are far more effective of course.</div></div>
+<hr class="thin-divider">
+
+        <div class="challenge" data-difficulty="None">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-26_704d1a42ef85c4cc" />
+            <span class="challenge-text">5 Fish caught with a lure</span>
+          </label>
+          <div class="challenge-desc">The special spinner works for this challenge as well.</div></div>
+<hr class="thin-divider">
+
+        <div class="challenge" data-difficulty="None">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-26_196af5c3ea03927f" />
+            <span class="challenge-text">5 Parasol Mushrooms picked</span>
+          </label>
+          <div class="challenge-desc">Head south along the railway line out of Valentine until you get to the big crossroads, plenty just east of there. Also the pig pens at Flatneck Station have some.
+Go South out of Blackwater, and just past the first house on the left there's some, next to the boundary line on the map.</div></div>
+<hr class="thin-divider">
+
+        <div class="challenge" data-difficulty="None">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-26_25cc18c9d0e5c104" />
+            <span class="challenge-text">3 Player kills with a Revolver in Showdowns</span>
           </label></div>
 <hr class="thin-divider">
 
         <div class="challenge" data-difficulty="None">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-25_9ec9be53793fc90c" />
-            <span class="challenge-text">2 Free Roam Events played</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-26_9e4865d8650c4cb4" />
+            <span class="challenge-text">3 Posse Races completed</span>
           </label></div>
 <hr class="thin-divider">
 
         <div class="challenge" data-difficulty="None">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-25_0c45d2555287d591" />
-            <span class="challenge-text">Multiple Player kills in 5 sec. in Free Roam Events</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-26_576dfc19524df3ce" />
+            <span class="challenge-text">3 Sockeye Salmon caught</span>
           </label>
-          <div class="challenge-desc">Fools Gold, Railroad Baron, Cold Dead Hands, and King Of The Castle are good choices for this.
-Maybe a well aimed dynamite arrow at the Railroad Baron spawn area is the best way to get them in a single shot.</div></div>
+          <div class="challenge-desc">Go to Cumberland Falls, west of Valentine, and fish in the pool below the falls. Usually a few Salmon in there to catch.</div></div>
 <hr class="thin-divider">
 
         <div class="challenge" data-difficulty="None">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-25_d34ebdebe8ce6cd3" />
-            <span class="challenge-text">5 Non-player enemies trampled</span>
-          </label>
-          <div class="challenge-desc">Thieves Landing NPCs are probably the easiest way to complete this, or try enemies in bounty missions or resupply missions. They have to be Del Lobos or red enemies on the mini-map to count.</div></div>
-<hr class="thin-divider">
-
-        <div class="challenge" data-difficulty="None">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-25_1d108ca5ccdb220a" />
-            <span class="challenge-text">5 Redfin Pickerel caught</span>
-          </label>
-          <div class="challenge-desc">Fast travel to Blackwater, and just north of the town hall building is a little bay at the mouth of the Upper Montana River. This is the place to catch them.
-A sunny day is best, with bread bait or a special spinner.</div></div>
-<hr class="thin-divider">
-
-        <div class="challenge" data-difficulty="None">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-25_7e223138266915f9" />
-            <span class="challenge-text">Self portraits taken</span>
-          </label></div>
-<hr class="thin-divider">
-
-        <div class="challenge" data-difficulty="None">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-25_ce5bba278a38442c" />
-            <span class="challenge-text">Visited a shop in Strawberry</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-07-26_f10d4deb6b03a219" />
+            <span class="challenge-text">Weapons customized</span>
           </label></div>
 
             </div>
@@ -670,59 +708,61 @@ A sunny day is best, with bread bait or a special spinner.</div></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_bc7f35a336365f90" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_bc7f35a336365f90" />
             <span class="role-challenge-text">1 Bounties brought in from West Elizabeth posters</span>
           </label>
           <div class="role-challenge-desc">Strawberry, Blackwater, Wallace Station, and Riggs Station</div></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_b8c4ca28e5b32232" />
-            <span class="role-challenge-text">Bounty hunt completed with 3 min or more left</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_6a76260d214c5a5c" />
+            <span class="role-challenge-text">1 Bounty targets looted</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_9058360075f51103" />
-            <span class="role-challenge-text">1 Bounty targets lassoed from horseback</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_6c9e8b1bade24bcc" />
+            <span class="role-challenge-text">Easy ($) bounty mission completed</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_095bdbbecec412b0" />
-            <span class="role-challenge-text">2 Bounties brought in from Lemoyne posters</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_d2cbf59582cea939" />
+            <span class="role-challenge-text">2 Bounties brought in from New Hanover posters</span>
           </label>
-          <div class="role-challenge-desc">Rhodes and Saint Denis</div></div>
+          <div class="role-challenge-desc">Valentine, Emerald Station, Van Horn and Annesburg</div></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_0278ff2b0d677d01" />
-            <span class="role-challenge-text">2 Bounty targets brought in</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_2f425bd0ad79301e" />
-            <span class="role-challenge-text">2 Bounty targets hogtied with a Reinforced Lasso</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="hard">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_edd0762d5fecf97f" />
-            <span class="role-challenge-text">2 Bounties completed within one real-world hour</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="hard">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_83cd663bb9ac7aa7" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_83cd663bb9ac7aa7" />
             <span class="role-challenge-text">Bounty completed without killing an enemy or bounty target</span>
           </label>
           <div class="role-challenge-desc">Risky, usually bugged and won't register</div></div>
 
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_ac3afb5ca88ab135" />
+            <span class="role-challenge-text">2 Eagle Eye used to track a bounty target</span>
+          </label>
+          <div class="role-challenge-desc">Can shoot with tracking arrow and then track them</div></div>
+
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_4a008830b82fce96" />
-            <span class="role-challenge-text">3 More than one bounty target brought in at once</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_415cc79724ecf9a3" />
+            <span class="role-challenge-text">2 Bounties brought in from West Elizabeth posters</span>
+          </label>
+          <div class="role-challenge-desc">Strawberry, Blackwater, Wallace Station, and Riggs Station</div></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_2e411e0641ca28cd" />
+            <span class="role-challenge-text">Bounty hunt completed with 5 min or more left</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_9cf0553b25c3bc6d" />
+            <span class="role-challenge-text">2 Bounty targets taken down with Bolas</span>
           </label></div>
 </div>
 <hr class="thin-divider" />
@@ -731,60 +771,58 @@ A sunny day is best, with bread bait or a special spinner.</div></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_ad26031174779a0b" />
-            <span class="role-challenge-text">5280 Distance Delivery Wagon traveled on mission</span>
-          </label>
-          <div class="role-challenge-desc">Use a Change Appearance solo lobby so it registers</div></div>
-
-        <div class="role-challenge" data-difficulty="easy">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_9c5204c7a9cfaa79" />
-            <span class="role-challenge-text">High Quality Camp Stew recipes completed</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_a5f40489e673a5fb" />
+            <span class="role-challenge-text">1 Goods sold to local buyer</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_83bdbc4ad4f16e1c" />
-            <span class="role-challenge-text">2 Perfect carcasses donated to Cripps</span>
-          </label>
-          <div class="role-challenge-desc">Perfect pelts don't count. Try Emerald Ranch sheep.</div></div>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_313ba5b2eda4cf9d" />
+            <span class="role-challenge-text">1 Resupply missions completed</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_4229e42383ef90f0" />
+            <span class="role-challenge-text">3 Small animal carcasses donated to Cripps</span>
+          </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_04b4bb74b06bffc6" />
-            <span class="role-challenge-text">10559 Distance Delivery Wagon traveled on mission</span>
-          </label>
-          <div class="role-challenge-desc">Use a Change Appearance solo lobby so it registers</div></div>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_7dd7bfd6fa785588" />
+            <span class="role-challenge-text">2 Camp Stews eaten</span>
+          </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_834a58007a6d45a2" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_834a58007a6d45a2" />
             <span class="role-challenge-text">2 Donated deadly predator carcass or skin</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_d48016ddc4f1f1a9" />
-            <span class="role-challenge-text">6 Small animal carcasses donated to Cripps</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_73fcf139b8fc40c3" />
+            <span class="role-challenge-text">2 Goods sold to local buyer</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_3de860b9058453d1" />
-            <span class="role-challenge-text">3 Donated deadly predator carcass or skin</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_e111737a83591fbc" />
+            <span class="role-challenge-text">20 Donations to Cripps</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_3b59724647115f0a" />
-            <span class="role-challenge-text">$200.00 Money made from trading</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_a54ddaa847862b1b" />
+            <span class="role-challenge-text">2 Goods sold to distant buyer</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_64c9ecc0da996a74" />
-            <span class="role-challenge-text">2 Resupply missions completed</span>
-          </label></div>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_94c4a5f307bd95b4" />
+            <span class="role-challenge-text">6 Perfect carcasses donated to Cripps</span>
+          </label>
+          <div class="role-challenge-desc">Perfect pelts don't count. Try Emerald Ranch sheep.</div></div>
 </div>
 <hr class="thin-divider" />
 <div class="role-container">
@@ -792,58 +830,57 @@ A sunny day is best, with bread bait or a special spinner.</div></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_fca3179b205c0671" />
-            <span class="role-challenge-text">1 Arrowheads found</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_8578cc1b3e172eab" />
+            <span class="role-challenge-text">1 Coins found</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_2b95a2b3e1a3e9ac" />
-            <span class="role-challenge-text">1 Bird Eggs found</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_ece7524890cea1a3" />
+            <span class="role-challenge-text">1 Collectibles looted from non-player enemies</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_400b97ffcd828b1c" />
+            <span class="role-challenge-text">1 Lost Jewelry found</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_a7dbe46321a815cf" />
+            <span class="role-challenge-text">3 Bird Eggs found</span>
           </label>
           <div class="role-challenge-desc">Keep less than 5 duck eggs in your satchel, and you can then pick 5 of them at once</div></div>
 
-        <div class="role-challenge" data-difficulty="easy">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_22cc5639eda6d34f" />
-            <span class="role-challenge-text">1 Collector Maps used</span>
-          </label></div>
-
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_2fe014c782337625" />
-            <span class="role-challenge-text">2 Antique Alcohol Bottles found</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_547e5ac1600566e6" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_547e5ac1600566e6" />
             <span class="role-challenge-text">2 Collectibles sold to Madam Nazar</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_f23eb6801814f708" />
-            <span class="role-challenge-text">2 Collector Maps used</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_01cfdcd21eab2b39" />
+            <span class="role-challenge-text">2 Tarot Cards found</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_8a6d4dcb3a5f57bb" />
-            <span class="role-challenge-text">5 Bird Eggs found</span>
-          </label>
-          <div class="role-challenge-desc">Keep less than 5 duck eggs in your satchel, and you can then pick 5 of them at once</div></div>
-
-        <div class="role-challenge" data-difficulty="hard">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_9e5b72f6a24b7d39" />
-            <span class="role-challenge-text">3 Family Heirlooms found</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_4e6a6092efc63336" />
+            <span class="role-challenge-text">3 Antique Alcohol Bottles found</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_fd639934cda4345d" />
-            <span class="role-challenge-text">3 Lost Jewelry found</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_0d3676a724b3c197" />
+            <span class="role-challenge-text">3 Collectibles looted from non-player enemies</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_23e2c87f6a116d1f" />
+            <span class="role-challenge-text">3 Tarot Cards found</span>
           </label></div>
 </div>
 <hr class="thin-divider" />
@@ -852,56 +889,56 @@ A sunny day is best, with bread bait or a special spinner.</div></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_119b104a967e8b9d" />
-            <span class="role-challenge-text">Completed regular or better moonshine recipe</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_f86d8cb4d98186fd" />
+            <span class="role-challenge-text">Drank own weak or higher strength moonshine</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_36737553f1be60af" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_b922faf42e9c14e1" />
+            <span class="role-challenge-text">Moonshine Bar - Changed décor</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_36737553f1be60af" />
             <span class="role-challenge-text">1 Moonshine Bootlegger Missions completed</span>
           </label></div>
 
-        <div class="role-challenge" data-difficulty="easy">
+        <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_8f895dc71bc9e233" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_2bad69e601ef3fb5" />
+            <span class="role-challenge-text">3218 Distance Moonshine Wagon traveled on mission</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_9736e514df2f5ec9" />
+            <span class="role-challenge-text">Moonshine Bar - Danced for 1 min</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_8f895dc71bc9e233" />
             <span class="role-challenge-text">1 Moonshine Story Mission completed</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_7c1fd384380f9df6" />
-            <span class="role-challenge-text">$100.00 Money made from moonshine sold</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_f26447c28caa4dd9" />
-            <span class="role-challenge-text">2 Moonshine served to other players at a bar</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_b90ddfa74a9a0ed2" />
-            <span class="role-challenge-text">Moonshine sold with 4 mins left</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_3fe6bec7eb88d56f" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_3fe6bec7eb88d56f" />
             <span class="role-challenge-text">Completed special moonshine recipe</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_13b5b3aede9acffc" />
-            <span class="role-challenge-text">3 Moonshine Bootlegger Missions completed</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_95f296355ab8a02f" />
+            <span class="role-challenge-text">2 Moonshine Bar - Danced for 2 mins</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_81cf0ee7813f2ae3" />
-            <span class="role-challenge-text">Moonshine sold with at least 18 bottles intact</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_0d7fa226032602eb" />
+            <span class="role-challenge-text">4 Moonshine served to other players at a bar</span>
           </label></div>
 </div>
 <hr class="thin-divider" />
@@ -910,56 +947,56 @@ A sunny day is best, with bread bait or a special spinner.</div></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_a04f5ec0bd736c6b" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_a04f5ec0bd736c6b" />
             <span class="role-challenge-text">1 Blending Tonics crafted or used</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_cf51af02d7363d67" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_cf51af02d7363d67" />
             <span class="role-challenge-text">Don't kill an animal for 12 game hours</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_284a4be7f5835d48" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_284a4be7f5835d48" />
             <span class="role-challenge-text">1 Legendary Animals photographed</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_a04f5ec0bd736c6b" />
-            <span class="role-challenge-text">1 Blending Tonics crafted or used</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_f85c94c66f41aaf4" />
+            <span class="role-challenge-text">1 Legendary Animals found using pheromones</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_c3e539a86cd5b9ff" />
-            <span class="role-challenge-text">5 Crafted or cooked at Wilderness Camp</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_284a4be7f5835d48" />
+            <span class="role-challenge-text">1 Legendary Animals photographed</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_221236541d4abf9a" />
-            <span class="role-challenge-text">1 Hardy Tonics used when too hot or cold</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_f9c3c5a2a3a7658a" />
+            <span class="role-challenge-text">1 Sedated animals revived</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_9c900a7864af7125" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_6cdbce1b8ac129af" />
+            <span class="role-challenge-text">2 Blending Tonics crafted or used</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_9c900a7864af7125" />
             <span class="role-challenge-text">7 Crafted or cooked at Wilderness Camp</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_c36d02f902de2cbc" />
-            <span class="role-challenge-text">Don't kill an animal for 24 game hours</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="hard">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-25_0896959a770cb9bb" />
-            <span class="role-challenge-text">2 Hardy Tonics used when too hot or cold</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-07-26_d959c68a05bca1fa" />
+            <span class="role-challenge-text">2 Sedated animals revived</span>
           </label></div>
 </div>
 
@@ -1121,7 +1158,7 @@ updateAllTimeFunctions();
 // ////////////////////////////////////////////////////////////////////////////////////// //
 
 document.addEventListener("DOMContentLoaded", function() {
-    const currentVersion = "2025-07-25_15-26-13";
+    const currentVersion = "2025-07-26_12-03-13";
     const storedVersion = localStorage.getItem("challenge_version");
 
     if (storedVersion !== currentVersion) {
@@ -1304,6 +1341,40 @@ document.addEventListener("DOMContentLoaded", function() {
 
     updateCounters();
 });
+
+
+
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: Hide the Pause Process Button For Remote Visitors, Only For Local          //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+document.addEventListener("DOMContentLoaded", function () {
+    const isLocal = location.protocol === "file:" || location.hostname === "localhost";
+    const pauseBtn = document.getElementById("pause-btn");
+    if (!isLocal && pauseBtn) {
+        pauseBtn.style.display = "none";
+    }
+});
+
+
+
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: Pause Button Code                                                          //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('pauseBtn').addEventListener('click', () => {
+      fetch('http://127.0.0.1:6969/pause', {
+        method: 'POST'
+      })
+      .then(response => response.text())
+      .then(data => alert('Server response: ' + data))
+      .catch(error => alert('Error: ' + error));
+    });
+});
+
 
 
 </script>
