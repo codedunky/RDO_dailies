@@ -1,0 +1,116 @@
+SETTING UP THE PAUSE SERVER ON WINDOWS 10
+------------------------------------------------------------------------------------------------------------
+
+This document explains how to set up and run the pause_server.py local Flask server to enable pausing the RDR2.exe process via a web interface.
+
+Prerequisites
+- Python 3.7+ installed on your Windows 10 machine.
+  Download from: https://www.python.org/downloads/windows/
+- Basic familiarity with Windows Command Prompt or PowerShell.
+
+------------------------------------------------------------------------------------------------------------
+***Step 1:
+Install Required Python Packages
+
+
+The server uses Flask, Flask-CORS, and psutil. You need to install them using pip.
+
+Open Command Prompt and run:
+
+pip install flask flask-cors psutil
+
+If you have multiple Python versions, you might need to specify the version, e.g.:
+
+python -m pip install flask flask-cors psutil
+
+
+------------------------------------------------------------------------------------------------------------
+***Step 2:
+Place pause_server.py File
+
+
+Put the pause_server.py script somewhere convenient on your PC, for example:
+
+C:\Users\YourName\Documents\RDO\pause_server.py
+
+
+------------------------------------------------------------------------------------------------------------
+***Step 3:
+Run the Flask Server
+
+
+Open Command Prompt, navigate to the directory containing pause_server.py:
+
+cd C:\Users\YourName\Documents\RDO
+
+Run the server with:
+
+python pause_server.py
+
+You should see output like:
+
+ * Running on http://127.0.0.1:6969
+
+This means the server is now running locally on port 6969.
+
+
+------------------------------------------------------------------------------------------------------------
+***Step 4: 
+Keep the Server Running
+
+
+Leave this Command Prompt window open while you use the pause button on your webpage or local app.
+
+If you close this window or stop the process, the pause server will no longer respond.
+
+Optional: Run Server Automatically on Windows Startup (via Task Scheduler)
+If you'd like to run the pause server automatically in the background whenever you log in:
+
+1. Open Task Scheduler (press Windows key, type "Task Scheduler", and open it).
+2. Click Create Task.
+3. Under the General tab:
+   - Give it a name (e.g., "Pause Server for RDR2").
+   - Choose Run only when user is logged on.
+4. Under the Triggers tab:
+   - Click New and select At log on.
+5. Under the Actions tab:
+   - Click New.
+   - Action: Start a program.
+   - Program/script: full path to your Python executable, e.g.
+     C:\Users\YourName\AppData\Local\Programs\Python\Python313\python.exe
+   - Add arguments: full path to your pause_server.py, e.g.
+     "C:\Users\YourName\Documents\RDO\pause_server.py"
+	 *****You must make sure to include the speech marks around the arguements, or it will break the syntax*****
+6. Click OK and save the task.
+
+Next time you log in, the server will start automatically.
+
+
+------------------------------------------------------------------------------------------------------------
+***Step 5:
+Testing the Server
+
+
+- Open a browser and navigate to:
+
+  http://127.0.0.1:6969/pause
+
+- This endpoint expects a POST request. You can test it with:
+
+  curl -X POST http://127.0.0.1:6969/pause
+
+- If everything is set up correctly, the server will respond with a message indicating it paused the RDR2 process for a few seconds.
+
+
+- If you run the generated webpage for the RDO_dailies, if the flask server is running, you should see the stopwatch icon in the top left.
+
+Troubleshooting
+- If you get ModuleNotFoundError for Flask or psutil, make sure you installed the packages correctly with pip.
+- If the server does not start, check that Python is correctly installed and added to your system PATH.
+- If the pause request times out, ensure pause_server.py is running and accessible on 127.0.0.1:6969.
+- If RDR2.exe process is not found, make sure the game is running, and the process name matches exactly (RDR2.exe).
+
+Notes
+- This server is intended to run locally on your machine.
+- The pause functionality will only work if the RDR2.exe process is running.
+- Running this server publicly or exposing it outside localhost may cause security risks — use with caution.

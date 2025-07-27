@@ -933,6 +933,10 @@ print("\n")
 
 
 
+
+
+
+
 html_output = f'''
 <!DOCTYPE html><html>
 <head>
@@ -1545,6 +1549,7 @@ html_output = f'''
           right: 10px;
           width: 100px;
           cursor: pointer;
+          display: none;    /* hidden by default */
           filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.6));
         }}
         
@@ -1618,6 +1623,28 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 
 
 <script>
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: Check if flask server is running and show or hide button accordingly       //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+// Check if the server is running
+fetch('http://127.0.0.1:6969/status')
+    .then(response => {{
+      if (response.ok) {{
+        document.getElementById('pauseBtn').style.display = 'inline';
+      }} else {{
+        document.getElementById('pauseBtn').style.display = 'none';
+      }}
+    }})
+    .catch(error => {{
+      // Server is unreachable
+      document.getElementById('pauseBtn').style.display = 'none';
+    }});
+
+
+
+
+
 // ////////////////////////////////////////////////////////////////////////////////////// //
 // JavaScript: Resize text size dynamically based on container width for better accuracy  //
 // ////////////////////////////////////////////////////////////////////////////////////// //

@@ -20,6 +20,12 @@ CORS(app)
 
 PROCESS_NAME = "RDR2.exe"
 
+## This checks to see if the flask server is running ##
+@app.route('/status', methods=['GET'])
+def status():
+    return "OK", 200
+
+
 @app.route('/pause', methods=['POST'])
 def pause_rdr2():
     proc = next((p for p in psutil.process_iter(['name']) if p.info['name'] == PROCESS_NAME), None)
