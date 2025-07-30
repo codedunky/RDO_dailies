@@ -66,7 +66,7 @@ COLORS = {
 }
 
 # Current debug level: 0=L0 (off), 1=L1, 2=L2, 3=L3, 4=L4
-CURRENT_DEBUG_LEVEL = 1
+CURRENT_DEBUG_LEVEL = 0
 
 # Map string levels to numeric levels
 LEVEL_MAP = {
@@ -509,9 +509,26 @@ for category in category_order:
         items = grouped_json.get(category, {}).get(difficulty, [])
         for item in sorted(items, key=lambda x: x["name"] or x["title"]):
             goal_display = ""
-            if item["showgoal"].lower() == "y" or (isinstance(item["goal"], (int, float)) and item["goal"] > 1):
-                goal_display = f"{item['goal']} "
 
+            # Safely get and normalize the showgoal value
+            showgoal = str(item.get("showgoal", "")).strip().lower()
+            debug_print("L3", "bpurple", "showgoal before processing: ", showgoal)
+
+            if showgoal == "no":
+                # Explicitly do not show the goal
+                goal_display = ""
+            elif showgoal == "yes":
+                # Always show the goal
+                goal_display = f"{item['goal']} "
+            else:
+                # Default fallback: show goal if > 1
+                if isinstance(item.get("goal"), (int, float)) and item["goal"] > 1:
+                    goal_display = f"{item['goal']} "
+                    
+            debug_print("L3", "showgoal: ", showgoal)
+            debugtext = f"{goal_display}{item['name'] or item['title']}",
+            debug_print("L3", "iblue", "text: ", debugtext),
+                        
             output_json.append({
                 "text": f"{goal_display}{item['name'] or item['title']}",
                 "description": item.get("description"),
