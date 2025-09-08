@@ -16,7 +16,7 @@ predefined_challenges = [
     {"name": "Alaskan Ginseng picked", "key": "mpgc_alaskan_ginseng_picked", "category": ["plants", "alaskan_ginseng"],
              "description": "South West of Wapiti there is a farm near Window Rock that grows ALASKAN Ginseng.\nThat should get you four, then head NE past the tower and follow the rock face for another plant."},
     {"name": "Alligators killed", "key": "mpgc_gators_killed", "category": ["animal", "alligator_medium"],
-             "description": "Alligators are all over Lemoyne along the river banks. Follow the road north from Harriet's tent at Lagras, and just past the junction to the bridge is a good place to find resting alligators. On the coast to the east of the railway line once you're out of Saint Denisis another decent spot."},
+             "description": "Alligators are all over Lemoyne along the river banks. Follow the road north from Harriet's tent at Lagras, and just past the junction to the bridge is a good place to find resting alligators. On the coast to the east of the railway line once you're out of Saint Denis is another decent spot.", "showgoal": "yes"},
     {"name": "Alpine Goats skinned", "key": "mpgc_goats_skinned", "category": ["animal", "goat"],
              "description": "Rathskeller Fork, north of Tumbleweed, is a great place to kill two Alpine Goats."},
     {"name": "American Badgers skinned", "key": "mpgc_badgers_skinned", "category": ["animal", "badger"],
