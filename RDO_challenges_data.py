@@ -303,7 +303,9 @@ predefined_challenges = [
              "description": "Thieves Landing NPCs are probably the easiest way to complete this, or try enemies in bounty missions or resupply missions. They have to be Del Lobos or red enemies on the mini-map to count."},
     {"name": "Non-player enemy hats shot off", "key": "mpgc_enemy_hats_shot_off",
              "description": "Moonshiner roadblocks with a varmint rifle at a distance, or get a wanted level and fend off the law."},
-    {"name": "North American Raccoons skinned", "key": "mpgc_raccoons_skinned", "category": ["animal", "racoon"]},
+    {"name": "North American Raccoons skinned", "key": "mpgc_raccoons_skinned", "category": ["animal", "racoon"],
+             "description": "Raccoons are mainly nocturnal, so hunt these after dark.\nAround Rhodes, mainly to the south or west is a decent area.",
+             "description2": "Hunt these when it gets dark. A good place to find them is on the little track up the hill out of Strawberry in the vicinity of the taxidermist's house."},
     {"name": "Northern Pike caught", "key": "mpgc_fish_northern_pike", "category": ["fish", "northernpike"],
              "description": "Try Cattail Pond, or the Dakota River between Fort Wallace and Valentine."},
     {"name": "Oleander Sage picked", "key": "mpgc_oleander_picked", "category": ["plants", "oleander_sage"],
@@ -319,8 +321,8 @@ predefined_challenges = [
     {"name": "Panthers killed", "key": "mpgc_panthers_killed", "category": ["animal", "panther"],
      "description": "Near Braithwaite Manor, in the woods to the south by Black Belle's hideout is a good place.\nYou have to hunt at night though"},
     {"name": "Parasol Mushrooms picked", "key": "mpgc_parasol_mushroom_picked", "category": ["plants", "parasol_mushroom"],
-             "description": "Head south along the railway line out of Valentine until you get to the big crossroads, plenty just east of there. Also the pig pens at Flatneck Station have some.\nGo South out of Blackwater, and just past the first house on the left there's some, next to the boundary line on the map.\nIn front of Harriet's tent at MacFarlane's Ranch has some too.",
-             "description2": "Just to the north of the Tumbleweed Mansion, there's a patch of parasol mushrooms to pick."},
+             "description": "Head south along the railway line out of Valentine until you get to the big crossroads, plenty just east of there. Also the pig pens at Flatneck Station have some.\nIn front of Harriet's tent at MacFarlane's Ranch has some too.",
+             "description2": "Just to the north of the Tumbleweed Mansion, there's a patch of parasol mushrooms to pick.\nGo South out of Blackwater, and just past the first house on the left there's some, next to the boundary line on the map."},
     {"name": "Pelicans plucked", "key": "mpgc_pelicans_skinned", "category": ["animal", "pelican_white"],
              "description": "Quaker's Cove, the little bay just to the left, is a good spot."},
     {"name": "Perch caught", "key": "mpgc_fish_caught_perch", "category": ["fish", "perch"],
@@ -380,7 +382,7 @@ predefined_challenges = [
              "description": "Stamina tonics, then knock down and subdue players."},
     {"name": "Player kills with melee in Showdowns", "key": "mpgc_players_killed_melee_showdown", "showgoal": "yes"},
     {"name": "Player kills with throwing weapons in Showdowns", "key": "mpgc_players_killed_throw_showdown", "showgoal": "yes",
-             "description": "Dynamite, tomahawks and hatchets in regular Shootouts or Featured Series, and you can often get tomahawks and throwing knives in Elimination Series.\nStill quite a tricky one though."},
+             "description": "Dynamite, tomahawks and hatchets in regular Shootouts or Featured Series, and you can often get tomahawks and throwing knives in Elimination Series, but this is still quite a tricky one though."},
     {"name": "Player kills with thrown weapons in Free Roam Events", "key": "mpgc_players_killed_throw_fme", "showgoal": "yes",
              "description": "Cold Dead Hands, King Of The Castle, Fools Gold or Railroad Baron are the best events to try this in.\nThrowing knives or tomahawks, together with Dead Eye headshots are a good idea, though dynamite should also work but it's harder to kill with."},
     {"name": "Player stats boosted by tonics", "key": "mpgc_consumable_tonics_oils_used", "category": ["shops", "general_store"], "showgoal": "yes"},
@@ -511,7 +513,8 @@ predefined_challenges = [
     {"name": "Wolves killed", "key": "mpgc_wolves_killed", "category": ["animal", "wolf_gray"],
              "description": "Wolves often attack between Fort Riggs and Riggs Station. Try Tall Trees, east of Aurora Basin.\nAbove MacFarlane's Ranch on the road to Harriet's, or by the railway south-east of the ranch.\nCumberland Forest can be a good location. Generally wolves tend to be out at night."},
     {"name": "Yarrow picked", "key": "mpgc_yarrow_picked", "category": ["plants", "yarrow"],
-             "description": "Fast travel to Rhodes station, and on the grass area to the west, there are two patches of yarrow.\nOne is opposite the platform beside the southern path, and the next is further south-east opposite the funeral parlour."}
+             "description": "Fast travel to Rhodes station, and on the grass area to the west, there are two patches of yarrow.\nOne is opposite the platform beside the southern path, and the next is further south-east opposite the funeral parlour.",
+             "description2": "Head south from Valentine to the big crossroads, and you'll find some in the trees just to the east. For more, head south to the junction where the line splits off to Flatneck Station, there's some just there too."},
 ]
  
 trader = [
