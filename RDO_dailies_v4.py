@@ -20,6 +20,22 @@ os.makedirs(os.path.join(script_dir, "jsonFiles"), exist_ok=True)  # Check folde
 local_filename = os.path.join(script_dir, "jsonFiles", "index.json") # Creates the filepath and assign to variable
 print("Initial 'local_filename':  ", local_filename)
 
+
+####################################################################################################################
+# Set whether using description2 (for testing)
+USE_DESCRIPTION2 = True
+
+# #### CONFIG FLAGS #### #
+#####################################################
+#   Override mode: "auto", "force1", or "force2"
+#   auto   = pick based on even/odd calendar day
+#   force1 = always use description (description1)
+#   force2 = always use description2
+DESCRIPTION_MODE = "auto"
+
+
+
+
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -311,9 +327,7 @@ url = "https://api.rdo.gg/challenges/index.json"
 # Set the difficulty filter (None, "easy", "med", "hard")
 filter_difficulty = "hard"  # Set to "easy", "med", or "hard" to filter role challenges
 
-# Set whether using description2 (for testing)
-use_description2 = True
-debug_print("L2", "use_description2 set")
+
 
 # Load the index.json challenge data
 import urllib.request
@@ -513,12 +527,32 @@ def get_printable_description(details):
     desc1 = details.get("description")
     desc2 = details.get("description2")
 
-    if desc2:
-        if use_description2:
-            return desc2
-        else:
-            return desc1
-    return desc1
+    # Fallback if no alternate description
+    if not desc2:
+        return desc1
+    
+    
+    # --- Manual override modes ---
+    if DESCRIPTION_MODE == "force1":
+        debug_print("L2", "Force1 is set, so forcing description")
+        return desc1
+    elif DESCRIPTION_MODE == "force2":
+        debug_print("L2", "Force2 is set, so forcing description2")
+        return desc2
+
+    # --- Auto mode: alternate by calendar day ---
+    today = datetime.date.today()
+    if today.day % 2 == 0:
+        # even-numbered day
+        debug_print("L2", "Even Numbered Day, using description2")
+        return desc2
+    else:
+        # odd-numbered day
+        debug_print("L2", "Odd Numbered Day, using description")
+        return desc1
+    
+    
+    
 
 # Desired print order for categories and difficulty
 category_order = ["general", "bounty_hunter", "trader", "collector", "moonshiner", "naturalist"]
