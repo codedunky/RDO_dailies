@@ -1106,7 +1106,7 @@ html_output = f'''
             font-family: 'RDOFont', sans-serif;
             font-size: 1.3rem;
             margin-top: 0;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             border-bottom: 2px solid #555;
             padding-bottom: 5px;
             color: #666666; /* PRESERVED: Keeping the original color */
@@ -1117,10 +1117,11 @@ html_output = f'''
             font-family: 'hapna', sans-serif; /* Example font */
             font-size: 1rem;
             color: #aaa;
-            /*margin-left: 6px; aligns under the role challenge text */
             white-space: pre-wrap; /* allows \n line breaks in descriptions */
             transform: scaleX(0.925); /* reduce width to 90% */
             transform-origin: left; /* NEW: Anchors the scaling to the left side */
+            margin-top: 0;
+            margin: 0;
             
         }}
             
@@ -1731,11 +1732,12 @@ html_output = f'''
 
 <!-- COLUMN 3: BONUS INFO (Now the final column, cleared of content) -->
         <div class="bonus-container" id="bonus-container">
-            <h3 class="stats-heading" style="border-bottom-color: #eee; color: #666666;">Bonus Info</h3>
+            <h3 class="stats-heading" style="color: #666666;">Bonus Info</h3>
             
             <!-- Placeholder HTML only - content removed as requested -->
             <div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: left;">
-                <p class="stats-text">This container is now structurally ready as the third column on the right.</p>
+                <p class="stats-text">Daily Challenge Streak:</p>
+                <p class="stats-text">Gold Per Challenge:</p>
             </div>
             <!-- End Placeholder -->
 

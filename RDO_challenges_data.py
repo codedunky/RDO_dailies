@@ -394,7 +394,8 @@ predefined_challenges = [
     {"name": "Posse Races completed", "key": "mpgc_posse_race_attempts"},
     {"name": "Posses joined", "key": "mpgc_posse_join", "showgoal": "yes"},
     {"name": "Prairie Chickens skinned", "key": "mpgc_prairiechicken_skinned", "category": ["animal", "prairiechicken"],
-             "description": "Where the road from Cornwall Kerosene and Tar joins the road at Twin Stack Pass is a great place, there are spawn points at the junction where all the roads meet, near the 'W' of 'NEW HANOVER' on the map."},
+             "description": "Where the road from Cornwall Kerosene and Tar joins the road at Twin Stack Pass is a great place, there are spawn points at the junction where all the roads meet, near the 'W' of 'NEW HANOVER' on the map.",
+             "description2": "During the day, south east of MacFarlane's Ranch, in the vicinity of the old wooden bridge over the trail down to Brittlebush Trawl, there's often some in the long grass by the small clump of trees."},
     {"name": "Prairie Poppies picked", "key": "mpgc_prairie_poppy_picked", "category": ["plants", "prairie_poppy"],
              "description": "Head south out of Blackwater, and just past the first house on the east side, follow the boundary line and you'll find a couple of patches. There are another couple just south of this too, all within walking distance."},
     {"name": "Pronghorns skinned", "key": "mpgc_pronghorns_skinned", "category": ["animal", "pronghorn_american_m"],
@@ -460,7 +461,8 @@ predefined_challenges = [
     {"name": "Types of fish caught", "key": "mpgc_fish_caught_variety", "category": ["shops", "tackle"]},
     {"name": "Used an emote on a local", "key": "mpgc_emote_npc"},
     {"name": "Used an emote on a player in Free Roam", "key": "mpgc_emote_player"},
-    {"name": "Vanilla Flowers picked", "key": "mpgc_vanilla_flower_picked", "category": ["plants", "vanilla_flower"]},
+    {"name": "Vanilla Flowers picked", "key": "mpgc_vanilla_flower_picked", "category": ["plants", "vanilla_flower"],
+             "description": "Head to Lagras and go north, there should be enough vanilla flowers on trees between the fast travel post and the turnoff to the bridge. Watch out for crocodiles lurking in the mud."},
     {"name": "Vaults on horseback", "key": "mpgc_horse_vaults",
              "description": "Head to Tumbleweed, there's a nice low wall right by the fast travel post that you can use to vault over."},
     {"name": "Violet Snowdrop picked", "key": "mpgc_violet_snowdrop_picked", "category": ["plants", "violet_snowdrop"],
@@ -518,7 +520,7 @@ predefined_challenges = [
 ]
  
 trader = [
-    {"name": "Camp Stews eaten", "key": "mprc_trader_stew_eaten"},
+    {"name": "Camp Stews eaten", "key": "mprc_trader_stew_eaten", "showgoal": "yes"},
     {"name": "Carcasses donated within 10 minutes", "key": "mprc_trader_sold_carcass_timed"},
     {"name": "Cripps Special Camp Stew recipes completed", "key": "mprc_trader_stew_recipe_completed_cripps", "showgoal": "yes"},
     {"name": "Distance Delivery Wagon traveled on mission", "key": "mprc_trader_travel_wagon",
