@@ -1132,8 +1132,10 @@ html_output = f'''
         
         .gold-flash {{
             /* Define the bright, temporary state */
-            color: gold !important; /* Force a bright gold color */
-            text-shadow: 0 0 5px #ffd700, 0 0 10px #ffcc00; /* Subtle outer glow */
+            color: #FFFFAA !important; /* Lighter, brighter gold color */
+            text-shadow: 
+                0 0 8px #FFD700,  /* Brighter inner glow */
+                0 0 20px #FFCC00; /* Stronger outer glow */
             transition: all 0.1s ease-in; /* Quick transition to the bright state */
         }}
             
@@ -1805,7 +1807,11 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 <!-- End of Statcounter Code -->  
   
   
-  
+###############################################################################################################################################################  
+
+
+
+
 
 
 <script>
@@ -1902,7 +1908,7 @@ function updateRDOClock() {{
 
 function updateBanner() {{
     const hour = getInGameHour();
-    console.log("Current in-game hour:", hour);
+    // console.log("Current in-game hour:", hour);
     const banner = document.querySelector('.banner-image');
 
     if (hour >= 22 || hour < 5) {{
@@ -2098,7 +2104,7 @@ document.addEventListener("DOMContentLoaded", function() {{
         updateCounters();
     }}
     
-    /**
+/**
      * Loads the streak from local storage, performs the break check, and sets the GOLD MULTIPLIER lock.
      */
     function loadStreak() {{
@@ -2106,7 +2112,7 @@ document.addEventListener("DOMContentLoaded", function() {{
         const lastCompletionDateStr = localStorage.getItem(LS_LAST_COMPLETION_DATE);
         const currentDayKey = getRDODayKey();
         
-        // --- PYTHON OVERRIDE CHECK ---
+        // --- PYTHON OVERRIDE CHECK (No change) ---
         if (PYTHON_STREAK_OVERRIDE > 0) {{
             setStreakCount(PYTHON_STREAK_OVERRIDE, true); 
             currentStreak = PYTHON_STREAK_OVERRIDE; 
@@ -2119,20 +2125,37 @@ document.addEventListener("DOMContentLoaded", function() {{
             const daysDifference = getDateDifferenceInDays(currentDayKey, lastCompletionDateStr);
             
             if (daysDifference > 1) {{
+                // STREAK BREAK: Reset to 0 if the gap is > 1 day.
                 currentStreak = 0; 
                 setStreakCount(0, false); 
                 localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, 0); 
                 console.log("Streak Broken! Reset to 0 days.");
                 
             }} else if (daysDifference === 1) {{
-                // NEW DAY: Multiplier is locked to yesterday's streak (currentStreak holds yesterday's value).
-                localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
+                // NEW DAY DETECTED
                 
-                // Clear completion status keys to allow handleStreakUpdate to increment the streak.
+                // CRITICAL FIX: If the streak was 28 (or more, just in case), force a full reset to 0.
+                if (currentStreak >= MAX_RDO_STREAK) {{
+                    
+                    // Reset to Day 0, clear completion status, and reset multiplier lock.
+                    currentStreak = 0; 
+                    setStreakCount(0, false); // Resets LS_STREAK_COUNT to 0, clears completion flags.
+                    localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, 0); // Locks multiplier at 1.0x
+                    
+                    console.log("Streak Cycle Complete! Reset to 0 days for new cycle.");
+                    
+                }} else {{
+                    // Regular new day logic: lock the multiplier to previous streak.
+                    localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
+                }}
+
+                // Clear completion status keys to allow handleStreakUpdate to increment for the new day's first tick.
                 localStorage.removeItem(LS_CHALLENGE_STATUS);
                 localStorage.removeItem(LS_LAST_COMPLETION_DATE); 
                 
-                console.log("New RDO Day. Multiplier locked to previous streak of " + currentStreak + " days.");
+                if (currentStreak < MAX_RDO_STREAK) {{
+                    console.log("New RDO Day. Multiplier locked to previous streak of " + currentStreak + " days.");
+                }}
             }}
 
         }} else if (currentStreak > 0) {{
@@ -2140,7 +2163,7 @@ document.addEventListener("DOMContentLoaded", function() {{
             localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
         }}
 
-        // --- INITIAL UI DISPLAY ---
+        // --- INITIAL UI DISPLAY (No change) ---
         const streakElement = document.getElementById('current-streak');
         const multiplierElement = document.getElementById('streak-multiplier');
 
@@ -2154,7 +2177,6 @@ document.addEventListener("DOMContentLoaded", function() {{
             console.log("UI STREAK UPDATED. Streak: " + currentStreak + " Multiplier: " + multiplier.toFixed(1) + "x");
         }}
     }}
-
     function calculateDailyGoldTotal(completedGeneral, completedRole) {{
         const BASE_REWARD = 0.10; 
         const COMPLETION_BONUS_BASE = 0.30; 
@@ -2261,17 +2283,15 @@ document.addEventListener("DOMContentLoaded", function() {{
             goldDisplay.textContent = totalGold + "\u00A0Gold\u00A0Bars";
 
             if (isGoldChanging) {{
-                // 1. Remove the class first (to reset the animation)
+                // 1. Remove and re-add class to reset the animation
                 goldDisplay.classList.remove('gold-flash'); 
-                
-                // 2. Immediately add the class to trigger the bright glow
-                void goldDisplay.offsetWidth; // Force a reflow for instant re-application
+                void goldDisplay.offsetWidth; 
                 goldDisplay.classList.add('gold-flash');
                 
-                // 3. Remove the class after 200ms to end the flash effect
+                // 3. Remove the class after 400ms to end the flash effect (THIS IS THE CHANGE)
                 setTimeout(() => {{
                     goldDisplay.classList.remove('gold-flash');
-                }}, 200); 
+                }}, 400); 
             }}
         }}
 
