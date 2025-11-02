@@ -1762,6 +1762,16 @@ html_output = f'''
                     <span id="completion-bonus-reward" style="color: #FFC107; text-align: right; flex-basis: 30%;">0.00 Gold Bars</span>
                 </p>
                 
+                
+                
+                <!-- Daily Gold Total Stat -->
+                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
+                    <span style="font-weight: 500; flex-basis: 70%;">Daily Gold Total:</span>
+                    <!-- Changed from font-weight: bold; to color: #FFC107; -->
+                    <span id="daily-gold-total" style="color: #FFC107; text-align: right; flex-basis: 30%;">0.00 Gold Bars</span>
+                </p>
+                
+                
             </div>
 
 
