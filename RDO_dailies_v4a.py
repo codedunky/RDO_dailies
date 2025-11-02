@@ -33,7 +33,8 @@ USE_DESCRIPTION2 = True
 #   force2 = always use description2
 DESCRIPTION_MODE = "auto"
 
-
+manual_streak = -1		# Set the number of days for the daily streak
+                        # -1 will set it to use the current stored value
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
@@ -1115,15 +1116,19 @@ html_output = f'''
         
         .stats-text {{
             font-family: 'hapna', sans-serif; /* Example font */
-            font-size: 1rem;
+            font-size: .9rem;
             color: #aaa;
             white-space: pre-wrap; /* allows \n line breaks in descriptions */
-            transform: scaleX(0.925); /* reduce width to 90% */
-            transform-origin: left; /* NEW: Anchors the scaling to the left side */
+            /* REMOVED: transform: scaleX(.85); */
+            /* REMOVED: transform-origin: left; */
+            
+            /* NEW: Use negative letter-spacing to visually condense the text. */
+            letter-spacing: -0.05em; 
+            
             margin-top: 0;
             margin: 0;
-            
         }}
+
             
             
 
@@ -1734,14 +1739,32 @@ html_output = f'''
         <div class="bonus-container" id="bonus-container">
             <h3 class="stats-heading" style="color: #666666;">Bonus Info</h3>
             
-            <!-- Placeholder HTML only - content removed as requested -->
-            <div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: left;">
-                <p class="stats-text">Daily Challenge Streak:</p>
-                <p class="stats-text">Gold Per Challenge:</p>
-            </div>
-            <!-- End Placeholder -->
 
-        </div>
+            <div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: left; color: #E0E0E0; font-family: sans-serif;">
+                <!-- Original Daily Challenge Streak for context -->
+                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
+                    <span style="font-weight: 500; flex-basis: 70%;">Daily Challenge Streak:</span>
+                    <!-- Changed from font-weight: bold; to color: #FFC107; -->
+                    <span id="current-streak" style="color: #FFC107; text-align: right; flex-basis: 30%;">13 Days</span>
+                </p>
+
+                <!-- New Gold Per Challenge Stat -->
+                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
+                    <span style="font-weight: 500; flex-basis: 70%;">Gold Per Challenge:</span>
+                    <!-- Changed from font-weight: bold; to color: #FFC107; -->
+                    <span id="gold-per-challenge" style="color: #FFC107; text-align: right; flex-basis: 30%;">0.00 Gold Bars</span>
+                </p>
+                
+                <!-- Completion Reward based on General or Role Challenges -->
+                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
+                    <span style="font-weight: 500; flex-basis: 70%;">Completion Reward:</span>
+                    <!-- This ID must be targeted by your JavaScript to dynamically update the gold value -->
+                    <span id="completion-bonus-reward" style="color: #FFC107; text-align: right; flex-basis: 30%;">0.00 Gold Bars</span>
+                </p>
+                
+            </div>
+
+
         <!-- END COLUMN 3 -->
     </div> 
   
@@ -1910,12 +1933,248 @@ setInterval(updateAllTimeFunctions, 1000);
 updateAllTimeFunctions();
 
 
+
+
+
+
 // ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Main logic for toggling, persistence, counters, and difficulty switching   //
+// JavaScript: Main logic for toggling, persistence, counters, and difficulty switching  //
 // ////////////////////////////////////////////////////////////////////////////////////// //
 
+    const PYTHON_STREAK_OVERRIDE_STR = "{{ manual_streak | default('0') }}";
+    const PYTHON_STREAK_OVERRIDE = parseInt(PYTHON_STREAK_OVERRIDE_STR, 10);
+    
+
 document.addEventListener("DOMContentLoaded", function() {{
-    const currentVersion = "{index_mod_date_str}";
+
+    // --- STREAK AND GOLD LOGIC CONSTANTS ---
+    const LS_STREAK_COUNT = 'rdoStreakCount';
+    const LS_LAST_COMPLETION_DATE = 'rdoLastCompletionDate';
+    const LS_CHALLENGE_STATUS = 'rdoChallengeStatus';
+    const LS_STREAK_FOR_MULTIPLIER = 'rdoStreakForMultiplier'; 
+    const MAX_RDO_STREAK = 28; // Enforce the maximum visual and reward streak
+    
+    // --- ELEMENT SELECTORS (SCOPE FIX) ---
+    const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
+    const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
+    const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
+    
+    // --- Utility Functions ---
+
+    function getRDODayKey() {{
+        const now = new Date();
+        const resetTimeHours = 6; 
+        const date = new Date(now.getTime());
+
+        if (date.getUTCHours() < resetTimeHours) {{
+            date.setUTCDate(date.getUTCDate() - 1);
+        }}
+
+        const year = date.getUTCFullYear();
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        
+        return year + "-" + month + "-" + day;
+    }}
+
+    function getDateDifferenceInDays(dateStr1, dateStr2) {{
+        const date1 = new Date(dateStr1 + 'T12:00:00Z');
+        const date2 = new Date(dateStr2 + 'T12:00:00Z');
+        const diffTime = Math.abs(date2.getTime() - date1.getTime());
+        const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); 
+        return diffDays;
+    }}
+    
+    // --- Streak Storage and Calculation Functions ---
+
+    /**
+     * Updates LS_STREAK_COUNT and sets completion status.
+     * CAPS the streak at MAX_RDO_STREAK.
+     */
+    function setStreakCount(newCount, setCompleted) {{
+        // FIX 1: Enforce Max Streak here
+        const count = Math.min(Math.max(0, newCount), MAX_RDO_STREAK); 
+        localStorage.setItem(LS_STREAK_COUNT, count);
+        
+        if (setCompleted) {{
+            localStorage.setItem(LS_LAST_COMPLETION_DATE, getRDODayKey());
+            localStorage.setItem(LS_CHALLENGE_STATUS, 'completed');
+        }} else {{
+            localStorage.removeItem(LS_LAST_COMPLETION_DATE);
+            localStorage.removeItem(LS_CHALLENGE_STATUS);
+        }}
+    }}
+
+    function getMultiplier() {{ 
+        const lockedStreak = parseInt(localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) || '0', 10);
+        
+        if (lockedStreak >= 21) return 2.5;
+        if (lockedStreak >= 14) return 2.0;
+        if (lockedStreak >= 7) return 1.5;
+        return 1.0; 
+    }}
+    
+    /**
+     * Calculates the streak count that was achieved at the end of the *previous* RDO day, 
+     * handling any streak breaks.
+     */
+    function getCurrentStreakBeforeToday() {{
+        let currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
+        const lastCompletionDateStr = localStorage.getItem(LS_LAST_COMPLETION_DATE);
+        const currentDayKey = getRDODayKey();
+        
+        if (lastCompletionDateStr) {{
+            const daysDifference = getDateDifferenceInDays(currentDayKey, lastCompletionDateStr);
+
+            if (daysDifference > 1) {{
+                return 0;
+            }} 
+        }}
+        
+        return currentStreak;
+    }}
+
+/**
+     * Handles the streak logic based on a check/uncheck event.
+     */
+    function handleStreakUpdate(isTicked) {{
+        const completedGeneral = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
+        const completedRole = Array.from(roleCheckboxes).filter(cb => cb.checked).length;
+        const challengesCompleted = completedGeneral + completedRole;
+        const currentStatus = localStorage.getItem(LS_CHALLENGE_STATUS);
+        
+        // This is the streak value *before* today's first completion, guaranteed to be stable (e.g., 13)
+        // by the 6 AM UTC lock rule, which we stored in loadStreak().
+        const lockedStreakForMultiplier = parseInt(localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) || '0', 10);
+        
+        // Read the currently saved streak (e.g., 14)
+        const currentSavedStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
+
+        // --- 1. FIRST TICK OF THE DAY (INCREMENT) ---
+        // If a box is ticked, challenges are now > 0, and the status hasn't been set yet.
+        if (isTicked && challengesCompleted > 0 && currentStatus !== 'completed') {{
+            
+            // Increment is based on the guaranteed stable previous day's streak (lockedStreakForMultiplier)
+            const newStreak = lockedStreakForMultiplier + 1;
+            setStreakCount(newStreak, true); // Sets new streak, status, and date.
+            
+            console.log("Streak Incremented: " + newStreak);
+            
+        // --- 2. LAST UNTICK OF THE DAY (REVERT) ---
+        // If all challenges are 0, AND the day was marked complete
+        }} else if (!isTicked && challengesCompleted === 0 && currentStatus === 'completed') {{
+            
+            // CRITICAL CHECK: Only revert if the current streak has been incremented today.
+            // i.e., currentSavedStreak (14) > lockedStreakForMultiplier (13)
+            if (currentSavedStreak > lockedStreakForMultiplier) {{
+                
+                // Set the streak directly back to the guaranteed previous day's value (e.g., 13)
+                // setCompleted=false clears LS_CHALLENGE_STATUS and LS_LAST_COMPLETION_DATE
+                setStreakCount(lockedStreakForMultiplier, false); 
+                
+                console.log("Streak Reverted from " + currentSavedStreak + " to " + lockedStreakForMultiplier);
+            }}
+
+        }} 
+        
+        // Always update the UI after the potential change
+        updateCounters();
+    }}
+    
+    /**
+     * Loads the streak from local storage, performs the break check, and sets the GOLD MULTIPLIER lock.
+     */
+    function loadStreak() {{
+        let currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
+        const lastCompletionDateStr = localStorage.getItem(LS_LAST_COMPLETION_DATE);
+        const currentDayKey = getRDODayKey();
+        
+        // --- PYTHON OVERRIDE CHECK ---
+        if (PYTHON_STREAK_OVERRIDE > 0) {{
+            setStreakCount(PYTHON_STREAK_OVERRIDE, true); 
+            currentStreak = PYTHON_STREAK_OVERRIDE; 
+            localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
+            console.log("OVERRIDE APPLIED. Streak: " + currentStreak + " Multiplier Locked."); 
+        }}
+        
+        // --- STREAK BREAK CHECK & MULTIPLIER LOCK ---
+        if (lastCompletionDateStr) {{
+            const daysDifference = getDateDifferenceInDays(currentDayKey, lastCompletionDateStr);
+            
+            if (daysDifference > 1) {{
+                currentStreak = 0; 
+                setStreakCount(0, false); 
+                localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, 0); 
+                console.log("Streak Broken! Reset to 0 days.");
+                
+            }} else if (daysDifference === 1) {{
+                // NEW DAY: Multiplier is locked to yesterday's streak (currentStreak holds yesterday's value).
+                localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
+                
+                // Clear completion status keys to allow handleStreakUpdate to increment the streak.
+                localStorage.removeItem(LS_CHALLENGE_STATUS);
+                localStorage.removeItem(LS_LAST_COMPLETION_DATE); 
+                
+                console.log("New RDO Day. Multiplier locked to previous streak of " + currentStreak + " days.");
+            }}
+
+        }} else if (currentStreak > 0) {{
+             // First time user uses the tracker or after a manual reset. Lock multiplier to current streak.
+            localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
+        }}
+
+        // --- INITIAL UI DISPLAY ---
+        const streakElement = document.getElementById('current-streak');
+        const multiplierElement = document.getElementById('streak-multiplier');
+
+        if (streakElement) {{
+            const multiplier = getMultiplier(); 
+            streakElement.textContent = currentStreak + " Days";
+            
+            if (multiplierElement) {{
+                multiplierElement.textContent = multiplier.toFixed(1) + "x";
+            }}
+            console.log("UI STREAK UPDATED. Streak: " + currentStreak + " Multiplier: " + multiplier.toFixed(1) + "x");
+        }}
+    }}
+
+    function calculateDailyGoldTotal(completedGeneral, completedRole) {{
+        const BASE_REWARD = 0.10; 
+        const COMPLETION_BONUS_BASE = 0.30; 
+        const MAX_GENERAL = 7;
+        const MAX_ROLE = 9;
+        
+        const multiplier = getMultiplier(); 
+
+        const completionBonusAmount = COMPLETION_BONUS_BASE * multiplier;
+        const generalChallengesGold = (completedGeneral * BASE_REWARD) * multiplier;
+        const generalCompletionBonus = (completedGeneral === MAX_GENERAL) ? completionBonusAmount : 0;
+        const roleChallengesGold = (completedRole * BASE_REWARD) * multiplier;
+        const roleCompletionBonus = (completedRole === MAX_ROLE) ? completionBonusAmount : 0;
+        const totalGold = generalChallengesGold + generalCompletionBonus + roleChallengesGold + roleCompletionBonus;
+        
+        // UI Update: Gold Per Challenge
+        const goldPerChallengeElement = document.getElementById('gold-per-challenge');
+        if (goldPerChallengeElement) {{
+            const singleChallengeGold = BASE_REWARD * multiplier; 
+            goldPerChallengeElement.textContent = singleChallengeGold.toFixed(2) + "\u00A0Gold\u00A0Bars";
+        }}
+
+        // UI Update: Completion Bonus element
+        const completionBonusElement = document.getElementById('completion-bonus-reward');
+        if (completionBonusElement) {{
+            const bonusRewardText = completionBonusAmount.toFixed(2) + "\u00A0Gold\u00A0Bars";
+            completionBonusElement.textContent = bonusRewardText;
+        }}
+
+
+        return totalGold.toFixed(2);
+    }}
+
+    // --- STREAK AND GOLD LOGIC (END) ---
+    
+    // The index_mod_date_str is a simple string, no complex escaping needed here
+    const currentVersion = "{index_mod_date_str}"; 
     const storedVersion = localStorage.getItem("challenge_version");
 
     if (storedVersion !== currentVersion) {{
@@ -1926,11 +2185,7 @@ document.addEventListener("DOMContentLoaded", function() {{
         }});
         localStorage.setItem("challenge_version", currentVersion);
     }}
-
-    const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
-    const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
-    const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
-
+    
     // Function to dim headings when all visible challenges for a role are completed
     function updateRoleHeadingCompletion() {{
         document.querySelectorAll('.role-container').forEach(roleContainer => {{
@@ -1950,7 +2205,6 @@ document.addEventListener("DOMContentLoaded", function() {{
     function updateCounters() {{
         const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
         const generalTotal = generalCheckboxes.length;
-
         const roleDone = Math.min(
             Array.from(roleCheckboxes).filter(cb => {{
                 return cb.checked && cb.closest('.role-challenge')?.style.display !== 'none';
@@ -1959,76 +2213,52 @@ document.addEventListener("DOMContentLoaded", function() {{
         );
         const roleTotal = 9;
 
-        console.log('updateCounters:', {{ roleDone }}, {{ roleTotal }}, 'roleCheckboxes:', roleCheckboxes.length);
-
+        // --- Update General and Role Counters ---
         const generalCounter = document.getElementById('general-counter');
         const roleCounter = document.getElementById('role-counter');
 
         if (generalCounter) {{
-            generalCounter.textContent = `${{generalDone}}/${{generalTotal}}`;
-            // Add or remove glow on general counter
-            if (generalDone === generalTotal) {{
-                generalCounter.classList.add('counter-glow');
-            }} else {{
-                generalCounter.classList.remove('counter-glow');
-            }}
+            generalCounter.textContent = generalDone + "/" + generalTotal;
+            generalCounter.classList.toggle('counter-glow', generalDone === generalTotal);
         }}
         if (roleCounter) {{
-            roleCounter.textContent = `${{roleDone}}/${{roleTotal}}`;
-            // Add or remove glow on role counter
-            if (roleDone === roleTotal) {{
-                roleCounter.classList.add('counter-glow');
-            }} else {{
-                roleCounter.classList.remove('counter-glow');
-            }}
+            roleCounter.textContent = roleDone + "/" + roleTotal;
+            roleCounter.classList.toggle('counter-glow', roleDone === roleTotal);
+        }}
+        
+        // --- Update Streak UI (reflects the latest LS_STREAK_COUNT) ---
+        const streakElement = document.getElementById('current-streak');
+        if (streakElement) {{
+            const currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
+            streakElement.textContent = currentStreak + " Days";
+        }}
+        
+        // --- Update Gold Totals ---
+        const totalGold = calculateDailyGoldTotal(generalDone, roleDone);
+        const goldDisplay = document.getElementById('daily-gold-total');
+
+        if (goldDisplay) {{
+            goldDisplay.textContent = totalGold + "\u00A0Gold\u00A0Bars";
         }}
 
+        // --- Update Dims and Toggles ---
         const rolesContainer = document.getElementById('roles-container') || document.body;
-
-        if (roleDone === roleTotal) {{
-            rolesContainer.classList.add('all-roles-completed');
-
-            roleCheckboxes.forEach(cb => {{
-                cb.disabled = !cb.checked;
-            }});
-
-            const toggles = rolesContainer.querySelectorAll('.difficulty-toggle');
-            toggles.forEach(toggle => {{
-                toggle.disabled = true;
-                toggle.classList.add('dimmed-text');
-            }});
-
-        }} else {{
-            rolesContainer.classList.remove('all-roles-completed');
-
-            roleCheckboxes.forEach(cb => {{
-                cb.disabled = false;
-            }});
-
-            const toggles = rolesContainer.querySelectorAll('.difficulty-toggle');
-            toggles.forEach(toggle => {{
-                toggle.disabled = false;
-                toggle.classList.remove('dimmed-text');
-            }});
-        }}
-
-        // Dim all role challenges and descriptions except checked ones if all completed
-        const allDone = roleDone === roleTotal;
-
+        rolesContainer.classList.toggle('all-roles-completed', roleDone === roleTotal);
         roleCheckboxes.forEach(cb => {{
+            cb.disabled = (roleDone === roleTotal) && !cb.checked;
             const challenge = cb.closest('.role-challenge');
-            if (!challenge) return;
-
-            let description = challenge.querySelector('.role-challenge-desc');
-
-            if (description) {{
-                description.classList.toggle('dimmed', allDone && !cb.checked);
-            }}
-            challenge.classList.toggle('dimmed', allDone && !cb.checked);
+            if(challenge) challenge.classList.toggle('dimmed', (roleDone === roleTotal) && !cb.checked);
+        }});
+        document.querySelectorAll('.difficulty-toggle').forEach(toggle => {{
+            toggle.disabled = roleDone === roleTotal;
+            toggle.classList.toggle('dimmed-text', roleDone === roleTotal);
         }});
 
         updateRoleHeadingCompletion();
     }}
+    
+    // --- Initialize Streak (Must run before UI updates) ---
+    loadStreak();
 
     allCheckboxes.forEach(cb => {{
         const key = cb.id;
@@ -2048,7 +2278,9 @@ document.addEventListener("DOMContentLoaded", function() {{
                 wrapper.classList.toggle('completed', cb.checked);
             }}
             localStorage.setItem(key, cb.checked);
-            updateCounters();
+            
+            // CRITICAL: Call the unified handler for streak/multiplier updates
+            handleStreakUpdate(cb.checked);
         }});
     }});
 
@@ -2065,8 +2297,8 @@ document.addEventListener("DOMContentLoaded", function() {{
         if (toggle) {{
             toggle.dataset.difficulty = difficulty;
             const desc = difficulty === 'easy' ? 'Rank 1–5'
-                        : difficulty === 'med' ? 'Rank 6–14'
-                        : 'Rank 15+';
+                : difficulty === 'med' ? 'Rank 6–14'
+                : 'Rank 15+';
 
             toggle.textContent = desc;
         }}
@@ -2084,7 +2316,6 @@ document.addEventListener("DOMContentLoaded", function() {{
 
     toggles.forEach(toggle => {{
         toggle.addEventListener('click', () => {{
-            console.log('Difficulty toggle clicked, current difficulty:', toggle.dataset.difficulty);
             const roleContainer = toggle.closest('.role-container');
             const currentDifficulty = toggle.dataset.difficulty || 'easy';
             const newDifficulty = nextDifficulty(currentDifficulty);
@@ -2096,22 +2327,8 @@ document.addEventListener("DOMContentLoaded", function() {{
         updateRoleDifficulty(roleContainer, toggle.dataset.difficulty || 'easy');
     }});
 
+    // CRITICAL: Final call to update everything after loading all states.
     updateCounters();
-}});
-
-
-
-
-// ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Hide the Pause Process Button For Remote Visitors, Only For Local          //
-// ////////////////////////////////////////////////////////////////////////////////////// //
-
-document.addEventListener("DOMContentLoaded", function () {{
-    const isLocal = location.protocol === "file:" || location.hostname === "localhost";
-    const pauseBtn = document.getElementById("pause-btn");
-    if (!isLocal && pauseBtn) {{
-        pauseBtn.style.display = "none";
-    }}
 }});
 
 

@@ -247,7 +247,7 @@ predefined_challenges = [
     {"name": "Indian Tobacco picked", "key": "mpgc_indian_tobacco_picked", "category": ["plants", "indian_tobacco"],
              "description": "Fast travel to Rhodes, ride north and cross the railway line at the big red barn.\nOn your left are a few patches of Indian Tobbaco near to the left side of the road."},
     {"name": "Items sold to a Fence", "key": "mpgc_shop_sell_to_fence", "category": ["shops", "fence",],
-             "description": "Emerald Ranch, Rhodes, Thieves Landing and Saint Denis market all have a Fence."},
+             "description": "Emerald Ranch, Rhodes, Thieves Landing, Van Horn and Saint Denis market all have a Fence."},
     {"name": "Items sold to Gus", "key": "mpgc_shop_sell_to_trapper", "category": ["shops", "trapper"],
              "description": "Beaver Teeth and Wolf Hearts are a good thing to sell, as Cripps can't use those for trader role."},
     {"name": "James Langton missions completed", "key": "mpgc_gfh_james_langton_wins", "category": ["gfh", "langton"], "showgoal": "yes"},
