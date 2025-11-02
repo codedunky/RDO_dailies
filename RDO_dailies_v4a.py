@@ -1128,7 +1128,14 @@ html_output = f'''
             margin-top: 0;
             margin: 0;
         }}
-
+        
+        
+        .gold-flash {{
+            /* Define the bright, temporary state */
+            color: gold !important; /* Force a bright gold color */
+            text-shadow: 0 0 5px #ffd700, 0 0 10px #ffcc00; /* Subtle outer glow */
+            transition: all 0.1s ease-in; /* Quick transition to the bright state */
+        }}
             
             
 
@@ -2223,7 +2230,7 @@ document.addEventListener("DOMContentLoaded", function() {{
         );
         const roleTotal = 9;
 
-        // --- Update General and Role Counters ---
+        // --- Update General and Role Counters (omitted for brevity) ---
         const generalCounter = document.getElementById('general-counter');
         const roleCounter = document.getElementById('role-counter');
 
@@ -2243,15 +2250,32 @@ document.addEventListener("DOMContentLoaded", function() {{
             streakElement.textContent = currentStreak + " Days";
         }}
         
-        // --- Update Gold Totals ---
+        // --- Update Gold Totals and Trigger Flash ---
         const totalGold = calculateDailyGoldTotal(generalDone, roleDone);
         const goldDisplay = document.getElementById('daily-gold-total');
 
         if (goldDisplay) {{
+            // Check if the displayed value is different from the calculated value (to prevent flashing on page load)
+            const isGoldChanging = goldDisplay.textContent.trim() !== (totalGold + "\u00A0Gold\u00A0Bars");
+
             goldDisplay.textContent = totalGold + "\u00A0Gold\u00A0Bars";
+
+            if (isGoldChanging) {{
+                // 1. Remove the class first (to reset the animation)
+                goldDisplay.classList.remove('gold-flash'); 
+                
+                // 2. Immediately add the class to trigger the bright glow
+                void goldDisplay.offsetWidth; // Force a reflow for instant re-application
+                goldDisplay.classList.add('gold-flash');
+                
+                // 3. Remove the class after 200ms to end the flash effect
+                setTimeout(() => {{
+                    goldDisplay.classList.remove('gold-flash');
+                }}, 200); 
+            }}
         }}
 
-        // --- Update Dims and Toggles ---
+        // --- Update Dims and Toggles (omitted for brevity) ---
         const rolesContainer = document.getElementById('roles-container') || document.body;
         rolesContainer.classList.toggle('all-roles-completed', roleDone === roleTotal);
         roleCheckboxes.forEach(cb => {{
@@ -2266,6 +2290,8 @@ document.addEventListener("DOMContentLoaded", function() {{
 
         updateRoleHeadingCompletion();
     }}
+    
+    
     
     // --- Initialize Streak (Must run before UI updates) ---
     loadStreak();
