@@ -18,7 +18,9 @@ script_dir = os.path.dirname(os.path.abspath(__file__))  # the directory where t
 os.makedirs(os.path.join(script_dir, "jsonFiles"), exist_ok=True)  # Check folder exists
 
 local_filename = os.path.join(script_dir, "jsonFiles", "index.json") # Creates the filepath and assign to variable
+local_filename_nazar = os.path.join(script_dir, "jsonFiles", "nazar.json") # Creates the filepath for Nazar location and assign to variable
 print("Initial 'local_filename':  ", local_filename)
+print("Initial 'local_filename_nazar':  ", local_filename_nazar)
 
 
 ####################################################################################################################
@@ -1130,15 +1132,46 @@ html_output = f'''
         }}
         
         
-        .gold-flash {{
-            /* Define the bright, temporary state */
-            color: #FFFFAA !important; /* Lighter, brighter gold color */
-            text-shadow: 
-                0 0 8px #FFD700,  /* Brighter inner glow */
-                0 0 20px #FFCC00; /* Stronger outer glow */
-            transition: all 0.1s ease-in; /* Quick transition to the bright state */
+     
+        
+        
+        /* Ensure the animation class uses the 1000ms duration */
+        .gold-exciting-flash {{
+            animation: simpleGoldGlow 1000ms ease-out forwards;
         }}
+
+        /* Define the simple glow keyframes */
+        /* Ensure the animation class uses the 1ms duration for an instant state change */
+        .gold-exciting-flash {{
+            animation: instantWhiteGlow 1ms forwards;
+        }}
+
+        @keyframes instantWhiteGlow {{
+            /* 0% Start: Text and glow go instantly white */
+            0% {{
+                color: white !important; 
+                text-shadow: 
+                    0 0 2px white,
+                    0 0 4px #eeeeee; /* Strong white/silver glow */
+                opacity: 1;
+            }}
             
+            /* 100% End: We keep it at the flash state so the JavaScript timeout controls the duration */
+            100% {{
+                color: white !important;
+                text-shadow: 
+                    0 0 3px white,
+                    0 0 6px #eeeeee;
+                opacity: 1;
+            }}
+        }}
+        
+        /* Set the animation class to use the correct keyframes and the JS duration */
+        .gold-exciting-flash {{
+            /* The 1000ms duration is crucial, matching your JavaScript setTimeout */
+            animation: instantWhiteGlow 1000ms forwards;
+        }}
+
             
 
 
@@ -1780,6 +1813,13 @@ html_output = f'''
                     <span id="daily-gold-total" style="color: #FFC107; text-align: right; flex-basis: 30%;">0.00 Gold Bars</span>
                 </p>
                 
+                <!-- 7 Day Cycle Gold Total Stat -->
+                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
+                    <span style="font-weight: 500; flex-basis: 70%;">7 Day Gold Total:</span>
+                    <!-- Changed from font-weight: bold; to color: #FFC107; -->
+                    <span id="cycle-gold-total" style="color: #FFC107; text-align: right; flex-basis: 30%;">0.00 Gold Bars</span>
+                </p>
+                
                 
             </div>
 
@@ -1977,6 +2017,13 @@ document.addEventListener("DOMContentLoaded", function() {{
     const LS_STREAK_FOR_MULTIPLIER = 'rdoStreakForMultiplier'; 
     const MAX_RDO_STREAK = 28; // Enforce the maximum visual and reward streak
     
+    // ** KEYS FOR GOLD TOTALS **
+    const LS_CYCLE_GOLD_TOTAL = 'rdoCycleGoldTotal';
+    const LS_STREAK_GOLD_TOTAL = 'rdoStreakGoldTotal';
+    // ** -------------------------- **
+    
+    
+    
     // --- ELEMENT SELECTORS (SCOPE FIX) ---
     const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
     const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
@@ -2128,7 +2175,8 @@ document.addEventListener("DOMContentLoaded", function() {{
                 // STREAK BREAK: Reset to 0 if the gap is > 1 day.
                 currentStreak = 0; 
                 setStreakCount(0, false); 
-                localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, 0); 
+                localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, 0);
+                localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00'); // ✅ STREAK BROKEN RESET
                 console.log("Streak Broken! Reset to 0 days.");
                 
             }} else if (daysDifference === 1) {{
@@ -2141,12 +2189,22 @@ document.addEventListener("DOMContentLoaded", function() {{
                     currentStreak = 0; 
                     setStreakCount(0, false); // Resets LS_STREAK_COUNT to 0, clears completion flags.
                     localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, 0); // Locks multiplier at 1.0x
-                    
+                    localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00'); // ✅ CYCLE COMPLETE RESET
                     console.log("Streak Cycle Complete! Reset to 0 days for new cycle.");
                     
                 }} else {{
                     // Regular new day logic: lock the multiplier to previous streak.
                     localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
+                    
+                    // 🌟 NEW LOGIC FOR 7-DAY TIER ROLLOVER 🌟
+                    // If the currentStreak is a multiple of 7 (and > 0),
+                    // it means the player completed a reward tier yesterday (day 7, 14, or 21).
+                    // We reset the Gold Total now for the start of the next tier (day 8, 15, or 22).
+                    if (currentStreak > 0 && currentStreak % 7 === 0) {{
+                        localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00'); // ✅ TIER ROLLOVER RESET
+                        console.log("Streak Tier Rollover detected! Resetting Cycle Gold Total.");
+                    }}
+                    // 🌟 END NEW LOGIC 🌟
                 }}
 
                 // Clear completion status keys to allow handleStreakUpdate to increment for the new day's first tick.
@@ -2241,61 +2299,117 @@ document.addEventListener("DOMContentLoaded", function() {{
         }});
     }}
 
-    function updateCounters() {{
-        const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
-        const generalTotal = generalCheckboxes.length;
-        const roleDone = Math.min(
-            Array.from(roleCheckboxes).filter(cb => {{
-                return cb.checked && cb.closest('.role-challenge')?.style.display !== 'none';
-            }}).length,
-            9
-        );
-        const roleTotal = 9;
 
-        // --- Update General and Role Counters (omitted for brevity) ---
-        const generalCounter = document.getElementById('general-counter');
-        const roleCounter = document.getElementById('role-counter');
 
-        if (generalCounter) {{
-            generalCounter.textContent = generalDone + "/" + generalTotal;
-            generalCounter.classList.toggle('counter-glow', generalDone === generalTotal);
-        }}
-        if (roleCounter) {{
-            roleCounter.textContent = roleDone + "/" + roleTotal;
-            roleCounter.classList.toggle('counter-glow', roleDone === roleTotal);
-        }}
-        
-        // --- Update Streak UI (reflects the latest LS_STREAK_COUNT) ---
-        const streakElement = document.getElementById('current-streak');
-        if (streakElement) {{
-            const currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
-            streakElement.textContent = currentStreak + " Days";
-        }}
-        
-        // --- Update Gold Totals and Trigger Flash ---
-        const totalGold = calculateDailyGoldTotal(generalDone, roleDone);
-        const goldDisplay = document.getElementById('daily-gold-total');
 
-        if (goldDisplay) {{
-            // Check if the displayed value is different from the calculated value (to prevent flashing on page load)
-            const isGoldChanging = goldDisplay.textContent.trim() !== (totalGold + "\u00A0Gold\u00A0Bars");
+function updateCounters() {{
+        const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
+        const generalTotal = generalCheckboxes.length;
+        const roleDone = Math.min(
+            Array.from(roleCheckboxes).filter(cb => {{
+                return cb.checked && cb.closest('.role-challenge')?.style.display !== 'none';
+            }}).length,
+            9
+        );
+        const roleTotal = 9;
 
-            goldDisplay.textContent = totalGold + "\u00A0Gold\u00A0Bars";
+        // --- Update General and Role Counters ---
+        const generalCounter = document.getElementById('general-counter');
+        const roleCounter = document.getElementById('role-counter');
 
-            if (isGoldChanging) {{
-                // 1. Remove and re-add class to reset the animation
-                goldDisplay.classList.remove('gold-flash'); 
-                void goldDisplay.offsetWidth; 
-                goldDisplay.classList.add('gold-flash');
-                
-                // 3. Remove the class after 400ms to end the flash effect (THIS IS THE CHANGE)
-                setTimeout(() => {{
-                    goldDisplay.classList.remove('gold-flash');
-                }}, 400); 
-            }}
-        }}
+        if (generalCounter) {{
+            generalCounter.textContent = generalDone + "/" + generalTotal;
+            generalCounter.classList.toggle('counter-glow', generalDone === generalTotal);
+        }}
+        if (roleCounter) {{
+            roleCounter.textContent = roleDone + "/" + roleTotal;
+            roleCounter.classList.toggle('counter-glow', roleDone === roleTotal);
+        }}
+        
+        // --- Update Streak UI (reflects the latest LS_STREAK_COUNT) ---
+        const streakElement = document.getElementById('current-streak');
+        if (streakElement) {{
+            const currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
+            streakElement.textContent = currentStreak + " Days";
+        }}
+        
+        // --- Update Gold Totals and Trigger Flash (ROBUST LOGIC) ---
+        const totalGoldEarned = parseFloat(calculateDailyGoldTotal(generalDone, roleDone)); // Daily total
+        
+        const goldDisplay = document.getElementById('daily-gold-total');
+        const cycleGoldDisplay = document.getElementById('cycle-gold-total'); 
+        
+        // 1. Read current 7-Day Cycle Total
+        let currentStreakGold = parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL) || '0.00');
 
-        // --- Update Dims and Toggles (omitted for brevity) ---
+        // 🔥 ROBUSTNESS CHECK: If the stored value is NaN or corrupt, reset it to today's total on load.
+        if (isNaN(currentStreakGold)) {{
+            console.warn("{{Corruption detected in 7-Day Cycle Gold. Resetting to today's earned gold.}}");
+            currentStreakGold = totalGoldEarned;
+            localStorage.setItem(LS_STREAK_GOLD_TOTAL, currentStreakGold.toFixed(2));
+        }}
+
+        // 2. Prepare the new Daily Total text
+        const newGoldText = totalGoldEarned.toFixed(2) + "\u00A0Gold\u00A0Bars";
+
+        // 3. Check if the daily gold total *will* change (detecting user interaction)
+        const dailyTotalForComparison = localStorage.getItem('dailyGoldTotalForComparison') || '0.00 Gold Bars';
+        const isGoldChanging = dailyTotalForComparison !== newGoldText;
+
+        // --- CRITICAL FIX START: Always set the Daily Gold UI content on load ---
+        if (goldDisplay) {{
+            goldDisplay.textContent = newGoldText;
+        }}
+        // --- CRITICAL FIX END ---
+
+        if (isGoldChanging) {{
+            // 4. Only if the value changed (user action), update the running total and flash.
+            
+            // Calculate the difference to add/subtract using the stored comparison value
+            const oldGoldValue = parseFloat(dailyTotalForComparison.replace(/[^\d.]/g, '') || '0.00');
+            const goldDelta = totalGoldEarned - oldGoldValue;
+            
+            // Update the running 7-Day Cycle Total
+            currentStreakGold += goldDelta;
+
+            // Save the updated totals
+            localStorage.setItem(LS_STREAK_GOLD_TOTAL, currentStreakGold.toFixed(2));
+            localStorage.setItem('dailyGoldTotalForComparison', newGoldText);
+            
+            if (cycleGoldDisplay) {{
+                cycleGoldDisplay.textContent = currentStreakGold.toFixed(2) + "\u00A0Gold\u00A0Bars";
+
+                // Apply the flash animation to the 7-Day Total
+                cycleGoldDisplay.classList.remove('gold-exciting-flash');
+                void cycleGoldDisplay.offsetWidth; 
+                cycleGoldDisplay.classList.add('gold-exciting-flash');
+            }}
+
+            // Flash the Daily Total
+            goldDisplay.classList.remove('gold-exciting-flash');
+            void goldDisplay.offsetWidth; 
+            goldDisplay.classList.add('gold-exciting-flash');
+
+            // Remove the animation class from both after 1 second
+            setTimeout(() => {{
+                goldDisplay.classList.remove('gold-exciting-flash');
+                if (cycleGoldDisplay) {{
+                    cycleGoldDisplay.classList.remove('gold-exciting-flash');
+                }}
+            }}, 1000);
+            
+        }} else {{
+            // 5. If no change (initial load/no user interaction), ensure both totals are displayed.
+            
+            // Save the Daily Total for the next comparison run (fixes a start-up edge case)
+            localStorage.setItem('dailyGoldTotalForComparison', newGoldText);
+            
+            if (cycleGoldDisplay) {{
+                cycleGoldDisplay.textContent = currentStreakGold.toFixed(2) + "\u00A0Gold\u00A0Bars";
+            }}
+        }}
+
+        // --- Update Dims and Toggles (Re-inserted original logic) ---
         const rolesContainer = document.getElementById('roles-container') || document.body;
         rolesContainer.classList.toggle('all-roles-completed', roleDone === roleTotal);
         roleCheckboxes.forEach(cb => {{
@@ -2308,8 +2422,10 @@ document.addEventListener("DOMContentLoaded", function() {{
             toggle.classList.toggle('dimmed-text', roleDone === roleTotal);
         }});
 
-        updateRoleHeadingCompletion();
-    }}
+        updateRoleHeadingCompletion();
+    }}    
+    
+    
     
     
     

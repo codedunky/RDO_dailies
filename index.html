@@ -109,8 +109,48 @@
             margin-top: 0;
             margin: 0;
         }
+        
+        
+     
+        
+        
+        /* Ensure the animation class uses the 1000ms duration */
+        .gold-exciting-flash {
+            animation: simpleGoldGlow 1000ms ease-out forwards;
+        }
 
+        /* Define the simple glow keyframes */
+        /* Ensure the animation class uses the 1ms duration for an instant state change */
+        .gold-exciting-flash {
+            animation: instantWhiteGlow 1ms forwards;
+        }
+
+        @keyframes instantWhiteGlow {
+            /* 0% Start: Text and glow go instantly white */
+            0% {
+                color: white !important; 
+                text-shadow: 
+                    0 0 2px white,
+                    0 0 4px #eeeeee; /* Strong white/silver glow */
+                opacity: 1;
+            }
             
+            /* 100% End: We keep it at the flash state so the JavaScript timeout controls the duration */
+            100% {
+                color: white !important;
+                text-shadow: 
+                    0 0 3px white,
+                    0 0 6px #eeeeee;
+                opacity: 1;
+            }
+        }
+        
+        /* Set the animation class to use the correct keyframes and the JS duration */
+        .gold-exciting-flash {
+            /* The 1000ms duration is crucial, matching your JavaScript setTimeout */
+            animation: instantWhiteGlow 1000ms forwards;
+        }
+
             
 
 
@@ -689,7 +729,7 @@
                          style="position:absolute; top:0px; left:10px; width:50px; cursor:pointer;" />                    
                     <div class="banner-text-overlay">
                         <h1 class="banner-title">Daily Challenges</h1>
-                        <div class="banner-date">Sunday, 2nd November 2025</div>
+                        <div class="banner-date">Friday, 7th November 2025</div>
                     </div>
                     <div class="challenge-counters">
                         <div>General Challenges <span id="general-counter">(0/7)</span></div>
@@ -705,57 +745,63 @@
                 
         <div class="challenge" data-difficulty="None">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-02_105330b908d873ac" />
-            <span class="challenge-text">Finish a mode in Featured Series</span>
-          </label></div>
-<hr class="thin-divider">
-
-        <div class="challenge" data-difficulty="None">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-02_9ec9be53793fc90c" />
-            <span class="challenge-text">2 Free Roam Events played</span>
-          </label></div>
-<hr class="thin-divider">
-
-        <div class="challenge" data-difficulty="None">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-02_a4187247c8260904" />
-            <span class="challenge-text">3 Items sold to a Fence</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-07_ef8fd2e0ec567a18" />
+            <span class="challenge-text">5 Alaskan Ginseng picked</span>
           </label>
-          <div class="challenge-desc">Emerald Ranch, Rhodes, Thieves Landing, Van Horn and Saint Denis market all have a Fence.</div></div>
+          <div class="challenge-desc">South West of Wapiti there is a farm near Window Rock that grows ALASKAN Ginseng.
+That should get you four, then head NE past the tower and follow the rock face for another plant.</div></div>
 <hr class="thin-divider">
 
         <div class="challenge" data-difficulty="None">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-02_6fea4862ae63c35d" />
-            <span class="challenge-text">Northern Pike caught</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-07_7a27bdd2bf054ff5" />
+            <span class="challenge-text">1 Animal teeth sold</span>
           </label>
-          <div class="challenge-desc">Try Cattail Pond, or the Dakota River between Fort Wallace and Valentine.</div></div>
+          <div class="challenge-desc">Alligators are pretty easy to kill and they produce teeth, so head to Lagras and follow the road north past Harriet to find some.</div></div>
 <hr class="thin-divider">
 
         <div class="challenge" data-difficulty="None">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-02_3f44d82b7e4bf3cf" />
-            <span class="challenge-text">5 Oleander Sage picked</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-07_155d9ea37cdcae24" />
+            <span class="challenge-text">3 Cows skinned</span>
           </label>
-          <div class="challenge-desc">Go to Rhodes then head to Shady Belle, and to the northeast of the mansion, just past the tiny jetty you'll find a number of Oleander Sage plants under the trees, should be five of them there.</div></div>
+          <div class="challenge-desc">Emerald Ranch is the easiest place to find cows, fairly close to the fast travel post.</div></div>
 <hr class="thin-divider">
 
         <div class="challenge" data-difficulty="None">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-02_ce5bba278a38442c" />
-            <span class="challenge-text">Visited a shop in Strawberry</span>
-          </label></div>
-<hr class="thin-divider">
-
-        <div class="challenge" data-difficulty="None">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-02_8c0d4fd25a4501be" />
-            <span class="challenge-text">3 Wolves killed</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-07_cd4b77358d7c194f" />
+            <span class="challenge-text">3 Free Roam missions completed</span>
           </label>
-          <div class="challenge-desc">Wolves often attack between Fort Riggs and Riggs Station. Try Tall Trees, east of Aurora Basin.
-Above MacFarlane's Ranch on the road to Harriet's, or by the railway south-east of the ranch.
-Cumberland Forest can be a good location. Generally wolves tend to be out at night.</div></div>
+          <div class="challenge-desc">Look for the orange disc with the waving figure in it on the map.
+Caravan Escort missions don't seem to register.
+Free Roam missions are given out by Alden, Angus, Bonnie MacFarlane, Hector, Hamish Sinclair, Jake & Sadie Adler, Thomas, Sheriff Freeman, Anthony Foreman, Josiah Trelawny, Sean MacGuire, The Boy, Flaco Hernandez, Bray and Tammy Aberdeen, Black Belle, Mama Watson, James Langton, and Shaky.</div></div>
+<hr class="thin-divider">
+
+        <div class="challenge" data-difficulty="None">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-07_fb4834a17ccbe0df" />
+            <span class="challenge-text">5 Non-player enemies killed from cover</span>
+          </label>
+          <div class="challenge-desc">Go to Thieves Landing and kill Del Lobos. You can use the trees on the approach to hide behind.</div></div>
+<hr class="thin-divider">
+
+        <div class="challenge" data-difficulty="None">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-07_bf62aaeae976b032" />
+            <span class="challenge-text">3 Player headshot kills in Free Roam Events</span>
+          </label>
+          <div class="challenge-desc">King Of The Castle, Cold Dead Hands, Railroad Baron, and Fools Gold are probably the best option.</div></div>
+<hr class="thin-divider">
+
+        <div class="challenge" data-difficulty="None">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-07_f83682e8e34c5a0b" />
+            <span class="challenge-text">2 Whooping Cranes plucked</span>
+          </label>
+          <div class="challenge-desc">From Blackwater, go south to Quaker's Cove, and as you come down the approach road, to the left
+is a small beach, often with Whooping Cranes at the waters edge. Change lobbies to get respawns.
+Also Copperhead Landing at the east edge of Bluewater Marsh is a good area.</div></div>
 
             </div>
         </div>
@@ -767,61 +813,58 @@ Cumberland Forest can be a good location. Generally wolves tend to be out at nig
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_4233f47eefc044ce" />
-            <span class="role-challenge-text">1 Bounties brought in from New Hanover posters</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_ac3152ab262bd3e1" />
+            <span class="role-challenge-text">1 Bounties brought in from New Austin posters</span>
           </label>
-          <div class="role-challenge-desc">Valentine, Emerald Station, Van Horn and Annesburg</div></div>
+          <div class="role-challenge-desc">Armadillo, Tumbleweed and Benedict Point</div></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_9058360075f51103" />
-            <span class="role-challenge-text">1 Bounty targets lassoed from horseback</span>
-          </label>
-          <div class="role-challenge-desc">Lasso the same target three times.</div></div>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_b8c4ca28e5b32232" />
+            <span class="role-challenge-text">Bounty hunt completed with 3 min or more left</span>
+          </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_460bb7e7b36775a8" />
-            <span class="role-challenge-text">1 More than one bounty target brought in at once</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_6c9e8b1bade24bcc" />
+            <span class="role-challenge-text">Easy ($) bounty mission completed</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_0bf25948d102ca7d" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_2f425bd0ad79301e" />
+            <span class="role-challenge-text">2 Bounty targets hogtied with a Reinforced Lasso</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_12ab49b77fe9f461" />
+            <span class="role-challenge-text">Medium ($$) bounty mission completed</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_c8b8e05ac7301447" />
+            <span class="role-challenge-text">2 More than one bounty target brought in at once</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_0bf25948d102ca7d" />
             <span class="role-challenge-text">2 Bounties brought in from New Austin posters</span>
           </label>
           <div class="role-challenge-desc">Armadillo, Tumbleweed and Benedict Point</div></div>
 
-        <div class="role-challenge" data-difficulty="med">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_edd0762d5fecf97f" />
-            <span class="role-challenge-text">2 Bounties completed within one real-world hour</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_83cd663bb9ac7aa7" />
-            <span class="role-challenge-text">Bounty completed without killing an enemy or bounty target</span>
-          </label>
-          <div class="role-challenge-desc">Risky, usually bugged and won't register</div></div>
-
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_884a3c9ac86610de" />
-            <span class="role-challenge-text">2 Bounty completed with at least one other Posse Member</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="hard">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_83cd663bb9ac7aa7" />
-            <span class="role-challenge-text">Bounty completed without killing an enemy or bounty target</span>
-          </label>
-          <div class="role-challenge-desc">Risky, usually bugged and won't register</div></div>
-
-        <div class="role-challenge" data-difficulty="hard">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_4d1b4a5176eaec8f" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_4d1b4a5176eaec8f" />
             <span class="role-challenge-text">3 Bounty targets brought in</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_aac61ef1b09f3212" />
+            <span class="role-challenge-text">1 Hard ($$$) or Legendary Bounty mission completed</span>
           </label></div>
 </div>
 <hr class="thin-divider" />
@@ -830,59 +873,60 @@ Cumberland Forest can be a good location. Generally wolves tend to be out at nig
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_ad26031174779a0b" />
-            <span class="role-challenge-text">5280 Distance Delivery Wagon traveled on mission</span>
-          </label>
-          <div class="role-challenge-desc">Use a Change Appearance solo lobby so it registers</div></div>
-
-        <div class="role-challenge" data-difficulty="easy">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_b512f6595eae9a32" />
-            <span class="role-challenge-text">$50.00 Money made from trading</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_1b37d5390da7fba5" />
+            <span class="role-challenge-text">Donated deadly predator carcass or skin</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_ca28dcbb25fc64e7" />
-            <span class="role-challenge-text">1 Resupply completed with 3 mins left</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_a5f40489e673a5fb" />
+            <span class="role-challenge-text">1 Goods sold to local buyer</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_9c5204c7a9cfaa79" />
+            <span class="role-challenge-text">High Quality Camp Stew recipes completed</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_04b4bb74b06bffc6" />
-            <span class="role-challenge-text">10559 Distance Delivery Wagon traveled on mission</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_1dff07eb13dbbe2e" />
+            <span class="role-challenge-text">5 Medium animal carcasses donated to Cripps</span>
           </label>
-          <div class="role-challenge-desc">Use a Change Appearance solo lobby so it registers</div></div>
+          <div class="role-challenge-desc">Emerald Ranch, for sheep, turkeys, & foxes.
+Racoons, Geese, Cranes, Herons, & Pelicans</div></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_73fcf139b8fc40c3" />
-            <span class="role-challenge-text">2 Goods sold to local buyer</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_c83ce9a8299ee053" />
+            <span class="role-challenge-text">1 Resupply completed with 4 mins left</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_117475bd85ffba3c" />
-            <span class="role-challenge-text">4 Perfect carcasses donated to Cripps</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_17b20f9106a44b29" />
+            <span class="role-challenge-text">1 Superior Quality Camp Stew recipes completed</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_94c4a5f307bd95b4" />
+            <span class="role-challenge-text">6 Perfect carcasses donated to Cripps</span>
           </label>
           <div class="role-challenge-desc">Perfect pelts don't count. Try Emerald Ranch sheep.</div></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_17eb7ba375c36585" />
-            <span class="role-challenge-text">3 Camp Stews eaten</span>
-          </label></div>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_64c9ecc0da996a74" />
+            <span class="role-challenge-text">2 Resupply missions completed</span>
+          </label>
+          <div class="role-challenge-desc">Buggy, often won't register</div></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_3de860b9058453d1" />
-            <span class="role-challenge-text">3 Donated deadly predator carcass or skin</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="hard">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_3b59724647115f0a" />
-            <span class="role-challenge-text">$200.00 Money made from trading</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_24c423f98a62e788" />
+            <span class="role-challenge-text">10 Small animal carcasses donated to Cripps</span>
           </label></div>
 </div>
 <hr class="thin-divider" />
@@ -891,57 +935,57 @@ Cumberland Forest can be a good location. Generally wolves tend to be out at nig
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_af78eab5de3bd9a2" />
-            <span class="role-challenge-text">1 American Wild Flowers found</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_40ee57e3eff733aa" />
+            <span class="role-challenge-text">1 Collectibles found with a Shovel</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_ae9a1be38d2bdd62" />
-            <span class="role-challenge-text">1 Antique Alcohol Bottles found</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="easy">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_0f439d76db88f688" />
-            <span class="role-challenge-text">2 Collectibles collected</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_1380002badf743ef" />
-            <span class="role-challenge-text">2 Arrowheads found</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_a7dbe46321a815cf" />
-            <span class="role-challenge-text">3 Bird Eggs found</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_ece7524890cea1a3" />
+            <span class="role-challenge-text">1 Collectibles looted from non-player enemies</span>
           </label>
-          <div class="role-challenge-desc">Keep less than 5 duck eggs in your satchel, and you can then pick 5 of them at once</div></div>
+          <div class="role-challenge-desc">Gold Teeth count for this</div></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_400b97ffcd828b1c" />
+            <span class="role-challenge-text">1 Lost Jewelry found</span>
+          </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_7f6e662324122c98" />
-            <span class="role-challenge-text">4 Collectibles collected</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_2fe014c782337625" />
+            <span class="role-challenge-text">2 Antique Alcohol Bottles found</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_547e5ac1600566e6" />
+            <span class="role-challenge-text">2 Collectibles sold to Madam Nazar</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_01cfdcd21eab2b39" />
+            <span class="role-challenge-text">2 Tarot Cards found</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_7412647babd68c64" />
-            <span class="role-challenge-text">3 Arrowheads found</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_98be3bcfdd3cbf7e" />
+            <span class="role-challenge-text">6 Collectibles collected</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_7cbb4f59e33c458c" />
-            <span class="role-challenge-text">2 Collectibles found with a Metal Detector</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="hard">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_97b28daff39dbff5" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_97b28daff39dbff5" />
             <span class="role-challenge-text">3 Collector Maps used</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_9e5b72f6a24b7d39" />
+            <span class="role-challenge-text">3 Family Heirlooms found</span>
           </label></div>
 </div>
 <hr class="thin-divider" />
@@ -950,58 +994,58 @@ Cumberland Forest can be a good location. Generally wolves tend to be out at nig
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_fb6dc36349dc79c9" />
-            <span class="role-challenge-text">$50.00 Money made from moonshine sold</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_119b104a967e8b9d" />
+            <span class="role-challenge-text">Completed regular or better moonshine recipe</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_f6ab0cbde3ffe0f2" />
-            <span class="role-challenge-text">Moonshine of any type sold to a buyer</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_f86d8cb4d98186fd" />
+            <span class="role-challenge-text">Drank own weak or higher strength moonshine</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_e80f66ee60aa8aee" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_e80f66ee60aa8aee" />
             <span class="role-challenge-text">Moonshine sold with 3 mins left</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_0a71c46eada42c8f" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_0a71c46eada42c8f" />
             <span class="role-challenge-text">Crafted Toxic Moonshine</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_bc42d8f8821a9c52" />
-            <span class="role-challenge-text">1 Moonshine Bar - Drunken player interaction</span>
-          </label>
-          <div class="role-challenge-desc">If solo, use Y then B button combo as entering shack</div></div>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_9736e514df2f5ec9" />
+            <span class="role-challenge-text">Moonshine Bar - Danced for 1 min</span>
+          </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_8f895dc71bc9e233" />
-            <span class="role-challenge-text">1 Moonshine Story Mission completed</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_f26447c28caa4dd9" />
+            <span class="role-challenge-text">2 Moonshine served to other players at a bar</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_e038419111804667" />
-            <span class="role-challenge-text">4827 Distance Moonshine Wagon traveled on mission</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_3fe6bec7eb88d56f" />
+            <span class="role-challenge-text">Completed special moonshine recipe</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_13b5b3aede9acffc" />
-            <span class="role-challenge-text">3 Moonshine Bootlegger Missions completed</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_bf63086bf4d7da82" />
+            <span class="role-challenge-text">2 Crafted Toxic Moonshine</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_0f4883a6fe3ffe92" />
-            <span class="role-challenge-text">2 Played with a band for 2 mins</span>
-          </label></div>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_19439ef0d80686ab" />
+            <span class="role-challenge-text">2 Moonshine Bar - Drunken player interaction</span>
+          </label>
+          <div class="role-challenge-desc">If solo, use Y then B button combo as entering shack</div></div>
 </div>
 <hr class="thin-divider" />
 <div class="role-container">
@@ -1009,55 +1053,55 @@ Cumberland Forest can be a good location. Generally wolves tend to be out at nig
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_a04f5ec0bd736c6b" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_a04f5ec0bd736c6b" />
             <span class="role-challenge-text">1 Blending Tonics crafted or used</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_cf51af02d7363d67" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_cf51af02d7363d67" />
             <span class="role-challenge-text">Don't kill an animal for 12 game hours</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_284a4be7f5835d48" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_284a4be7f5835d48" />
             <span class="role-challenge-text">1 Legendary Animals photographed</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_a04f5ec0bd736c6b" />
-            <span class="role-challenge-text">1 Blending Tonics crafted or used</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_c3e539a86cd5b9ff" />
+            <span class="role-challenge-text">5 Crafted or cooked at Wilderness Camp</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_f85c94c66f41aaf4" />
-            <span class="role-challenge-text">1 Legendary Animals found using pheromones</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_780f4b91650f4e33" />
+            <span class="role-challenge-text">Don't kill an animal for 18 game hours</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_f9c3c5a2a3a7658a" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_f9c3c5a2a3a7658a" />
             <span class="role-challenge-text">1 Sedated animals revived</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_c36d02f902de2cbc" />
-            <span class="role-challenge-text">Don't kill an animal for 24 game hours</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_6cdbce1b8ac129af" />
+            <span class="role-challenge-text">2 Blending Tonics crafted or used</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_9a50d23e61c79c00" />
-            <span class="role-challenge-text">2 Legendary Animals found using pheromones</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_0896959a770cb9bb" />
+            <span class="role-challenge-text">2 Hardy Tonics used when too hot or cold</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-02_284a4be7f5835d48" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-07_284a4be7f5835d48" />
             <span class="role-challenge-text">1 Legendary Animals photographed</span>
           </label></div>
 </div>
@@ -1098,6 +1142,23 @@ Cumberland Forest can be a good location. Generally wolves tend to be out at nig
                     <span id="completion-bonus-reward" style="color: #FFC107; text-align: right; flex-basis: 30%;">0.00 Gold Bars</span>
                 </p>
                 
+                
+                
+                <!-- Daily Gold Total Stat -->
+                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
+                    <span style="font-weight: 500; flex-basis: 70%;">Daily Gold Total:</span>
+                    <!-- Changed from font-weight: bold; to color: #FFC107; -->
+                    <span id="daily-gold-total" style="color: #FFC107; text-align: right; flex-basis: 30%;">0.00 Gold Bars</span>
+                </p>
+                
+                <!-- 7 Day Cycle Gold Total Stat -->
+                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
+                    <span style="font-weight: 500; flex-basis: 70%;">7 Day Gold Total:</span>
+                    <!-- Changed from font-weight: bold; to color: #FFC107; -->
+                    <span id="cycle-gold-total" style="color: #FFC107; text-align: right; flex-basis: 30%;">0.00 Gold Bars</span>
+                </p>
+                
+                
             </div>
 
 
@@ -1124,7 +1185,11 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 <!-- End of Statcounter Code -->  
   
   
-  
+###############################################################################################################################################################  
+
+
+
+
 
 
 <script>
@@ -1221,7 +1286,7 @@ function updateRDOClock() {
 
 function updateBanner() {
     const hour = getInGameHour();
-    console.log("Current in-game hour:", hour);
+    // console.log("Current in-game hour:", hour);
     const banner = document.querySelector('.banner-image');
 
     if (hour >= 22 || hour < 5) {
@@ -1289,6 +1354,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const LS_CHALLENGE_STATUS = 'rdoChallengeStatus';
     const LS_STREAK_FOR_MULTIPLIER = 'rdoStreakForMultiplier'; 
     const MAX_RDO_STREAK = 28; // Enforce the maximum visual and reward streak
+    
+    // ** KEYS FOR GOLD TOTALS **
+    const LS_CYCLE_GOLD_TOTAL = 'rdoCycleGoldTotal';
+    const LS_STREAK_GOLD_TOTAL = 'rdoStreakGoldTotal';
+    // ** -------------------------- **
+    
+    
     
     // --- ELEMENT SELECTORS (SCOPE FIX) ---
     const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
@@ -1417,7 +1489,7 @@ document.addEventListener("DOMContentLoaded", function() {
         updateCounters();
     }
     
-    /**
+/**
      * Loads the streak from local storage, performs the break check, and sets the GOLD MULTIPLIER lock.
      */
     function loadStreak() {
@@ -1425,7 +1497,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const lastCompletionDateStr = localStorage.getItem(LS_LAST_COMPLETION_DATE);
         const currentDayKey = getRDODayKey();
         
-        // --- PYTHON OVERRIDE CHECK ---
+        // --- PYTHON OVERRIDE CHECK (No change) ---
         if (PYTHON_STREAK_OVERRIDE > 0) {
             setStreakCount(PYTHON_STREAK_OVERRIDE, true); 
             currentStreak = PYTHON_STREAK_OVERRIDE; 
@@ -1438,20 +1510,48 @@ document.addEventListener("DOMContentLoaded", function() {
             const daysDifference = getDateDifferenceInDays(currentDayKey, lastCompletionDateStr);
             
             if (daysDifference > 1) {
+                // STREAK BREAK: Reset to 0 if the gap is > 1 day.
                 currentStreak = 0; 
                 setStreakCount(0, false); 
-                localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, 0); 
+                localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, 0);
+                localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00'); // ✅ STREAK BROKEN RESET
                 console.log("Streak Broken! Reset to 0 days.");
                 
             } else if (daysDifference === 1) {
-                // NEW DAY: Multiplier is locked to yesterday's streak (currentStreak holds yesterday's value).
-                localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
+                // NEW DAY DETECTED
                 
-                // Clear completion status keys to allow handleStreakUpdate to increment the streak.
+                // CRITICAL FIX: If the streak was 28 (or more, just in case), force a full reset to 0.
+                if (currentStreak >= MAX_RDO_STREAK) {
+                    
+                    // Reset to Day 0, clear completion status, and reset multiplier lock.
+                    currentStreak = 0; 
+                    setStreakCount(0, false); // Resets LS_STREAK_COUNT to 0, clears completion flags.
+                    localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, 0); // Locks multiplier at 1.0x
+                    localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00'); // ✅ CYCLE COMPLETE RESET
+                    console.log("Streak Cycle Complete! Reset to 0 days for new cycle.");
+                    
+                } else {
+                    // Regular new day logic: lock the multiplier to previous streak.
+                    localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
+                    
+                    // 🌟 NEW LOGIC FOR 7-DAY TIER ROLLOVER 🌟
+                    // If the currentStreak is a multiple of 7 (and > 0),
+                    // it means the player completed a reward tier yesterday (day 7, 14, or 21).
+                    // We reset the Gold Total now for the start of the next tier (day 8, 15, or 22).
+                    if (currentStreak > 0 && currentStreak % 7 === 0) {
+                        localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00'); // ✅ TIER ROLLOVER RESET
+                        console.log("Streak Tier Rollover detected! Resetting Cycle Gold Total.");
+                    }
+                    // 🌟 END NEW LOGIC 🌟
+                }
+
+                // Clear completion status keys to allow handleStreakUpdate to increment for the new day's first tick.
                 localStorage.removeItem(LS_CHALLENGE_STATUS);
                 localStorage.removeItem(LS_LAST_COMPLETION_DATE); 
                 
-                console.log("New RDO Day. Multiplier locked to previous streak of " + currentStreak + " days.");
+                if (currentStreak < MAX_RDO_STREAK) {
+                    console.log("New RDO Day. Multiplier locked to previous streak of " + currentStreak + " days.");
+                }
             }
 
         } else if (currentStreak > 0) {
@@ -1459,7 +1559,7 @@ document.addEventListener("DOMContentLoaded", function() {
             localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
         }
 
-        // --- INITIAL UI DISPLAY ---
+        // --- INITIAL UI DISPLAY (No change) ---
         const streakElement = document.getElementById('current-streak');
         const multiplierElement = document.getElementById('streak-multiplier');
 
@@ -1473,7 +1573,6 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("UI STREAK UPDATED. Streak: " + currentStreak + " Multiplier: " + multiplier.toFixed(1) + "x");
         }
     }
-
     function calculateDailyGoldTotal(completedGeneral, completedRole) {
         const BASE_REWARD = 0.10; 
         const COMPLETION_BONUS_BASE = 0.30; 
@@ -1510,7 +1609,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // --- STREAK AND GOLD LOGIC (END) ---
     
     // The index_mod_date_str is a simple string, no complex escaping needed here
-    const currentVersion = "2025-11-02_11-32-27"; 
+    const currentVersion = "2025-11-07_20-47-15"; 
     const storedVersion = localStorage.getItem("challenge_version");
 
     if (storedVersion !== currentVersion) {
@@ -1538,46 +1637,117 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    function updateCounters() {
-        const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
-        const generalTotal = generalCheckboxes.length;
-        const roleDone = Math.min(
-            Array.from(roleCheckboxes).filter(cb => {
-                return cb.checked && cb.closest('.role-challenge')?.style.display !== 'none';
-            }).length,
-            9
-        );
-        const roleTotal = 9;
 
-        // --- Update General and Role Counters ---
-        const generalCounter = document.getElementById('general-counter');
-        const roleCounter = document.getElementById('role-counter');
 
-        if (generalCounter) {
-            generalCounter.textContent = generalDone + "/" + generalTotal;
-            generalCounter.classList.toggle('counter-glow', generalDone === generalTotal);
-        }
-        if (roleCounter) {
-            roleCounter.textContent = roleDone + "/" + roleTotal;
-            roleCounter.classList.toggle('counter-glow', roleDone === roleTotal);
-        }
-        
-        // --- Update Streak UI (reflects the latest LS_STREAK_COUNT) ---
-        const streakElement = document.getElementById('current-streak');
-        if (streakElement) {
-            const currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
-            streakElement.textContent = currentStreak + " Days";
-        }
-        
-        // --- Update Gold Totals ---
-        const totalGold = calculateDailyGoldTotal(generalDone, roleDone);
-        const goldDisplay = document.getElementById('daily-gold-total');
 
-        if (goldDisplay) {
-            goldDisplay.textContent = totalGold + " Gold Bars";
-        }
+function updateCounters() {
+        const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
+        const generalTotal = generalCheckboxes.length;
+        const roleDone = Math.min(
+            Array.from(roleCheckboxes).filter(cb => {
+                return cb.checked && cb.closest('.role-challenge')?.style.display !== 'none';
+            }).length,
+            9
+        );
+        const roleTotal = 9;
 
-        // --- Update Dims and Toggles ---
+        // --- Update General and Role Counters ---
+        const generalCounter = document.getElementById('general-counter');
+        const roleCounter = document.getElementById('role-counter');
+
+        if (generalCounter) {
+            generalCounter.textContent = generalDone + "/" + generalTotal;
+            generalCounter.classList.toggle('counter-glow', generalDone === generalTotal);
+        }
+        if (roleCounter) {
+            roleCounter.textContent = roleDone + "/" + roleTotal;
+            roleCounter.classList.toggle('counter-glow', roleDone === roleTotal);
+        }
+        
+        // --- Update Streak UI (reflects the latest LS_STREAK_COUNT) ---
+        const streakElement = document.getElementById('current-streak');
+        if (streakElement) {
+            const currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
+            streakElement.textContent = currentStreak + " Days";
+        }
+        
+        // --- Update Gold Totals and Trigger Flash (ROBUST LOGIC) ---
+        const totalGoldEarned = parseFloat(calculateDailyGoldTotal(generalDone, roleDone)); // Daily total
+        
+        const goldDisplay = document.getElementById('daily-gold-total');
+        const cycleGoldDisplay = document.getElementById('cycle-gold-total'); 
+        
+        // 1. Read current 7-Day Cycle Total
+        let currentStreakGold = parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL) || '0.00');
+
+        // 🔥 ROBUSTNESS CHECK: If the stored value is NaN or corrupt, reset it to today's total on load.
+        if (isNaN(currentStreakGold)) {
+            console.warn("{Corruption detected in 7-Day Cycle Gold. Resetting to today's earned gold.}");
+            currentStreakGold = totalGoldEarned;
+            localStorage.setItem(LS_STREAK_GOLD_TOTAL, currentStreakGold.toFixed(2));
+        }
+
+        // 2. Prepare the new Daily Total text
+        const newGoldText = totalGoldEarned.toFixed(2) + " Gold Bars";
+
+        // 3. Check if the daily gold total *will* change (detecting user interaction)
+        const dailyTotalForComparison = localStorage.getItem('dailyGoldTotalForComparison') || '0.00 Gold Bars';
+        const isGoldChanging = dailyTotalForComparison !== newGoldText;
+
+        // --- CRITICAL FIX START: Always set the Daily Gold UI content on load ---
+        if (goldDisplay) {
+            goldDisplay.textContent = newGoldText;
+        }
+        // --- CRITICAL FIX END ---
+
+        if (isGoldChanging) {
+            // 4. Only if the value changed (user action), update the running total and flash.
+            
+            // Calculate the difference to add/subtract using the stored comparison value
+            const oldGoldValue = parseFloat(dailyTotalForComparison.replace(/[^\d.]/g, '') || '0.00');
+            const goldDelta = totalGoldEarned - oldGoldValue;
+            
+            // Update the running 7-Day Cycle Total
+            currentStreakGold += goldDelta;
+
+            // Save the updated totals
+            localStorage.setItem(LS_STREAK_GOLD_TOTAL, currentStreakGold.toFixed(2));
+            localStorage.setItem('dailyGoldTotalForComparison', newGoldText);
+            
+            if (cycleGoldDisplay) {
+                cycleGoldDisplay.textContent = currentStreakGold.toFixed(2) + " Gold Bars";
+
+                // Apply the flash animation to the 7-Day Total
+                cycleGoldDisplay.classList.remove('gold-exciting-flash');
+                void cycleGoldDisplay.offsetWidth; 
+                cycleGoldDisplay.classList.add('gold-exciting-flash');
+            }
+
+            // Flash the Daily Total
+            goldDisplay.classList.remove('gold-exciting-flash');
+            void goldDisplay.offsetWidth; 
+            goldDisplay.classList.add('gold-exciting-flash');
+
+            // Remove the animation class from both after 1 second
+            setTimeout(() => {
+                goldDisplay.classList.remove('gold-exciting-flash');
+                if (cycleGoldDisplay) {
+                    cycleGoldDisplay.classList.remove('gold-exciting-flash');
+                }
+            }, 1000);
+            
+        } else {
+            // 5. If no change (initial load/no user interaction), ensure both totals are displayed.
+            
+            // Save the Daily Total for the next comparison run (fixes a start-up edge case)
+            localStorage.setItem('dailyGoldTotalForComparison', newGoldText);
+            
+            if (cycleGoldDisplay) {
+                cycleGoldDisplay.textContent = currentStreakGold.toFixed(2) + " Gold Bars";
+            }
+        }
+
+        // --- Update Dims and Toggles (Re-inserted original logic) ---
         const rolesContainer = document.getElementById('roles-container') || document.body;
         rolesContainer.classList.toggle('all-roles-completed', roleDone === roleTotal);
         roleCheckboxes.forEach(cb => {
@@ -1590,8 +1760,12 @@ document.addEventListener("DOMContentLoaded", function() {
             toggle.classList.toggle('dimmed-text', roleDone === roleTotal);
         });
 
-        updateRoleHeadingCompletion();
-    }
+        updateRoleHeadingCompletion();
+    }    
+    
+    
+    
+    
     
     // --- Initialize Streak (Must run before UI updates) ---
     loadStreak();
