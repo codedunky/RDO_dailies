@@ -1614,33 +1614,24 @@ html_output = f'''
 
 /* ==== Global Checkbox Role Challenge Completion Styling (9 out of 9)==== */
 
-        /* Per role heading dim */
-        .role-heading.dimmed {{
-          color: #888;
-          opacity: 0.6;
-          transition: color 0.3s, opacity 0.3s;
-        }}
 
-        /* Global dim of all role headings and challenge texts */
+        /* Global dimming for all text elements when all roles are complete */
         .all-roles-completed .role-heading,
-        .all-roles-completed .role-challenge-label span {{
-          color: #888;
-          opacity: 0.5;
+        .all-roles-completed .role-challenge-label span, /* Targets the Challenge Name */
+        .all-roles-completed .role-challenge-desc, /* ✅ NEW: Targets the Description Element */
+        .all-roles-completed .role-challenge p /* General Paragraph Fallback */
+        {{
+          color: #888 !important; 
+          opacity: 0.5 !important; /* Forces dimming, overriding competing rules */
           transition: color 0.3s, opacity 0.3s;
         }}
-        
-        .challenge-description.dimmed,
-        .role-challenge p.dimmed {{
-            opacity: 0.5;
-            color: #888888;  /* mid grey */
-            transition: opacity 0.3s ease, color 0.3s ease;
-        }}
 
-        /* But keep checkboxes fully visible and interactive */
+        /* Ensure checkboxes remain fully visible and interactive */
         .all-roles-completed input[type="checkbox"] {{
           opacity: 1 !important;
           pointer-events: auto;
         }}
+        
         
     /*############ RDO-CLOCK SECTION ############*/        
         .rdo-clock {{
@@ -2556,6 +2547,9 @@ document.addEventListener('DOMContentLoaded', () => {{
 
 
 </script>
+
+
+
 
 
 
