@@ -1198,6 +1198,24 @@ document.addEventListener("DOMContentLoaded", function() {{
         return `<span>${{parts[0]}}</span><span class="gold-decimal">.${{parts[1]}}</span> Gold Bars`;
     }}
 
+    // --- DEBUGGING FUNCTION RESTORED ---
+    function debugGoldStats(source) {{
+        console.group(`%cGOLD & STREAK DEBUG @ ${{source}}`, 'color: #FFC107; background: #333; padding: 4px; border-radius: 4px;');
+        console.table({{
+            "RDO Day Key": getRDODayKey(),
+            "File Date Key": getChallengeDateKey(),
+            "Streak Count": localStorage.getItem(LS_STREAK_COUNT) || '0',
+            "Multiplier Lock": localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) || '0',
+            "Daily Gold (Comp)": localStorage.getItem('dailyGoldTotalForComparison') || '0.00',
+            "7-Day Cycle": localStorage.getItem(LS_STREAK_GOLD_TOTAL) || '0.00',
+            "Running Total": localStorage.getItem(LS_STREAK_GOLD_TOTAL_RUNNING) || '0.00'
+        }});
+        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
+        console.log("Last 28 Days Gold Log:");
+        console.table(goldLog);
+        console.groupEnd();
+    }}
+
     function calculateDailyGoldTotal(completedGeneral, completedRole) {{
         const BASE_REWARD = 0.10; 
         const COMPLETION_BONUS_BASE = 0.30; 
@@ -1309,14 +1327,12 @@ document.addEventListener("DOMContentLoaded", function() {{
                 const humanDate = date.toLocaleDateString('en-GB', {{ weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }});
                 const streakText = entry.streak ? `Day ${{entry.streak}} (Week ${{Math.floor((entry.streak - 1) / 7) + 1}})` : 'No Streak';
                 
-                // --- RESTORED STAR LOGIC ---
                 let star = '';
                 if (entry.general === 7 && entry.role === 9) {{
                     star = ' <span style="color: #FFD700;">⭐</span>';
                 }} else if (entry.general === 7 || entry.role === 9) {{
                     star = ' <span style="filter: grayscale(100%) brightness(1.3);">⭐</span>';
                 }}
-                // ---------------------------
                 
                 infoDisplay.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; font-size: 0.9rem;">
@@ -1333,7 +1349,7 @@ document.addEventListener("DOMContentLoaded", function() {{
                 bar.style.boxShadow = 'none';
                 tooltipLeaveTimer = setTimeout(() => {{
                     infoDisplay.innerHTML = '&nbsp;';
-                }}, 50);
+                }}, 200);  /* Delay before clearing tooltip text when mouse leaves bar */
             }});
         }});
     }}
@@ -1433,6 +1449,8 @@ document.addEventListener("DOMContentLoaded", function() {{
         }});
         
         renderGoldLogChart();
+        // --- DEBUG LOG ---
+        debugGoldStats("updateCounters");
     }}
     
     function handleStreakUpdate(isTicked) {{
@@ -1512,6 +1530,7 @@ document.addEventListener("DOMContentLoaded", function() {{
 
     loadStreak();
     updateCounters();
+    debugGoldStats("Initial Load");
     
     window.addEventListener('load', renderGoldLogChart);
     window.addEventListener('resize', renderGoldLogChart);
