@@ -446,6 +446,13 @@ if end_time < now:
         try:
             with open(local_filename, 'r', encoding='utf-8') as f:
                 index_data = json.load(f)
+                
+            # !!! INSERT THESE 3 LINES HERE !!!
+            # Refresh the start_timestamp so the HTML and IDs get the NEW date, not the old one
+            start_timestamp, human_readable_date = get_index_start_date(local_filename)
+            start_date_str = datetime.datetime.utcfromtimestamp(start_timestamp).strftime("%Y-%m-%d")
+            # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            
             # Access the data
             end_time = index_data.get("endTime", 0)
             start_time = index_data.get("startTime", 0)
@@ -1032,7 +1039,10 @@ print("\n")
 
 # Define the JavaScript as a separate f-string to correctly inject Python variables
 # without conflicting with JavaScript's own syntax.
+
+
 javascript_code = f'''
+
 
 
 
@@ -1050,12 +1060,11 @@ fetch('http://127.0.0.1:6969/status')
       }}
     }})
     .catch(error => {{
-      // Server is unreachable
       document.getElementById('pauseBtn').style.display = 'none';
     }});
 
 // ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Resize text size dynamically based on container width for better accuracy  //
+// JavaScript: Banner and Clock Logic                                                     //
 // ////////////////////////////////////////////////////////////////////////////////////// //
 
 function resizeBannerText() {{
@@ -1070,7 +1079,6 @@ function resizeBannerText() {{
     const containerWidth = container.offsetWidth;
     const minWidth = 400;
     const maxWidth = 850;
-
     const scale = Math.max(minWidth, Math.min(containerWidth, maxWidth)) / maxWidth;
 
     title.style.fontSize = (2.5 * scale) + 'rem';
@@ -1078,104 +1086,53 @@ function resizeBannerText() {{
     counters.style.fontSize = (1.25 * scale) + 'rem';
     
     if (clock) {{
-    clock.style.fontSize = (2 * scale) + 'rem';
+        clock.style.fontSize = (2 * scale) + 'rem';
     }}
 }}
 
 window.addEventListener('resize', resizeBannerText);
 window.addEventListener('load', resizeBannerText);
 
-// ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: In-Game clock routine                                                      //
-// ////////////////////////////////////////////////////////////////////////////////////// //
-
-const offsetSeconds = -600;  // -10 minutes offset
+const offsetSeconds = -600; // -10 minutes offset for game clock
 
 function getInGameHour() {{
     const now = new Date();
     const utcSeconds = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
     const gameSeconds = (utcSeconds * 30 + offsetSeconds) % 86400;
-    const gameHours = Math.floor(gameSeconds / 3600);
-    const gameMinutes = Math.floor((gameSeconds % 3600) / 60);
-    return gameHours + gameMinutes / 60;
+    return Math.floor(gameSeconds / 3600) + Math.floor((gameSeconds % 3600) / 60) / 60;
 }}
 
-function updateRDOClock() {{
+function updateAllTimeFunctions() {{
     const hourFloat = getInGameHour();
     const gameHours = Math.floor(hourFloat).toString().padStart(2, '0');
     const gameMinutes = Math.floor((hourFloat % 1) * 60).toString().padStart(2, '0');
     document.getElementById("rdo-clock").textContent = `${{gameHours}}:${{gameMinutes}}`;
-}}
 
-// ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Swap banner image between 10pm and 5am                                     //
-// ////////////////////////////////////////////////////////////////////////////////////// //
-
-function updateBanner() {{
-    const hour = getInGameHour();
     const banner = document.querySelector('.banner-image');
-
-    if (hour >= 22 || hour < 5) {{
-        if (!banner.src.endsWith("RDO_Banner_Wide_Night.jpg")) {{
-            banner.src = "HTML/images/RDO_Banner_Wide_Night.jpg";
-        }}
-    }} else {{
-        if (!banner.src.endsWith("RDO_Banner_Wide.jpg")) {{
-            banner.src = "HTML/images/RDO_Banner_Wide.jpg";
-        }}
-    }}
-}}
-
-// ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Change clock glow colour between 10pm and 5am                              //
-// ////////////////////////////////////////////////////////////////////////////////////// //
-
-function updateClockGlow() {{
-    const hour = getInGameHour();
     const clock = document.querySelector('.rdo-clock');
-
-    if (hour >= 22 || hour < 5) {{
+    
+    if (hourFloat >= 22 || hourFloat < 5) {{
+        if (!banner.src.endsWith("RDO_Banner_Wide_Night.jpg")) banner.src = "HTML/images/RDO_Banner_Wide_Night.jpg";
         clock.classList.add('night-glow');
     }} else {{
+        if (!banner.src.endsWith("RDO_Banner_Wide.jpg")) banner.src = "HTML/images/RDO_Banner_Wide.jpg";
         clock.classList.remove('night-glow');
     }}
-}}
-
-// ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Call various time related functions                                        //
-// ////////////////////////////////////////////////////////////////////////////////////// //
-
-function updateAllTimeFunctions() {{
-    updateRDOClock();
-    updateBanner();
-    updateClockGlow();
 }}
 
 setInterval(updateAllTimeFunctions, 1000);
 updateAllTimeFunctions();
 
 // ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Main logic for toggling, persistence, counters, and difficulty switching  //
+// JavaScript: Main Logic                                                                 //
 // ////////////////////////////////////////////////////////////////////////////////////// //
 
 document.addEventListener("DOMContentLoaded", function() {{
 
     // --- CONSTANTS INJECTED FROM PYTHON ---
     const PYTHON_STREAK_OVERRIDE = {manual_streak};
-    const PYTHON_CHALLENGE_TIMESTAMP = "{start_timestamp}";
+    const PYTHON_CHALLENGE_TIMESTAMP = {start_timestamp}; 
 
-    // --- DAILY RESET LOGIC ---
-    const lastKnownTimestamp = localStorage.getItem('rdoLastKnownTimestamp');
-
-    if (lastKnownTimestamp !== PYTHON_CHALLENGE_TIMESTAMP) {{
-        Object.keys(localStorage).forEach(key => {{
-            if (key.includes('_challenge_') || key.includes('role-challenge_')) {{
-                localStorage.removeItem(key);
-            }}
-        }});
-        localStorage.setItem('dailyGoldTotalForComparison', '0.00 Gold Bars');
-    }}
-    
     // --- LOCAL STORAGE KEYS ---
     const LS_STREAK_COUNT = 'rdoStreakCount';
     const LS_LAST_COMPLETION_DATE = 'rdoLastCompletionDate';
@@ -1185,6 +1142,7 @@ document.addEventListener("DOMContentLoaded", function() {{
     const LS_STREAK_GOLD_TOTAL = 'rdoStreakGoldTotal';
     const LS_STREAK_GOLD_TOTAL_RUNNING = 'rdoStreakGoldTotalRunning';
     const LS_GOLD_LOG = 'rdoGoldLog';
+    const LS_LAST_KNOWN_TIMESTAMP = 'rdoLastKnownTimestamp';
     
     // --- ELEMENT SELECTORS ---
     const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
@@ -1192,6 +1150,7 @@ document.addEventListener("DOMContentLoaded", function() {{
     const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
     
     // --- UTILITY FUNCTIONS ---
+    
     function getRDODayKey() {{
         const now = new Date();
         const resetTimeHours = 6; 
@@ -1199,10 +1158,12 @@ document.addEventListener("DOMContentLoaded", function() {{
         if (date.getUTCHours() < resetTimeHours) {{
             date.setUTCDate(date.getUTCDate() - 1);
         }}
-        const year = date.getUTCFullYear();
-        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(date.getUTCDate()).padStart(2, '0');
-        return `${{year}}-${{month}}-${{day}}`;
+        return date.toISOString().split('T')[0];
+    }}
+
+    function getChallengeDateKey() {{
+        const date = new Date(PYTHON_CHALLENGE_TIMESTAMP * 1000);
+        return date.toISOString().split('T')[0];
     }}
 
     function getDateDifferenceInDays(dateStr1, dateStr2) {{
@@ -1214,7 +1175,6 @@ document.addEventListener("DOMContentLoaded", function() {{
     function setStreakCount(newCount, setCompleted) {{
         const count = Math.min(Math.max(0, newCount), MAX_RDO_STREAK); 
         localStorage.setItem(LS_STREAK_COUNT, count);
-        
         if (setCompleted) {{
             localStorage.setItem(LS_LAST_COMPLETION_DATE, getRDODayKey());
             localStorage.setItem(LS_CHALLENGE_STATUS, 'completed');
@@ -1232,6 +1192,12 @@ document.addEventListener("DOMContentLoaded", function() {{
         return 1.0; 
     }}
 
+    function formatGoldForDisplay(goldValue) {{
+        const fixedValue = goldValue.toFixed(2);
+        const parts = fixedValue.split('.');
+        return `<span>${{parts[0]}}</span><span class="gold-decimal">.${{parts[1]}}</span> Gold Bars`;
+    }}
+
     function calculateDailyGoldTotal(completedGeneral, completedRole) {{
         const BASE_REWARD = 0.10; 
         const COMPLETION_BONUS_BASE = 0.30; 
@@ -1241,145 +1207,61 @@ document.addEventListener("DOMContentLoaded", function() {{
         const generalBonus = (completedGeneral === 7) ? completionBonusAmount : 0;
         const roleGold = (completedRole * BASE_REWARD) * multiplier;
         const roleBonus = (completedRole === 9) ? completionBonusAmount : 0;
-        const totalGold = generalGold + generalBonus + roleGold + roleBonus;
         
         document.getElementById('gold-per-challenge').innerHTML = formatGoldForDisplay(BASE_REWARD * multiplier);
         document.getElementById('completion-bonus-reward').innerHTML = formatGoldForDisplay(completionBonusAmount);
         
-        return Math.round(totalGold * 100) / 100;
-    }}
-    
-    function formatGoldForDisplay(goldValue) {{
-        const fixedValue = goldValue.toFixed(2);
-        const parts = fixedValue.split('.');
-        const integerPart = parts[0];
-        const decimalPart = parts[1];
-        return `<span>${{integerPart}}</span><span class="gold-decimal">.${{decimalPart}}</span> Gold Bars`;
+        return Math.round((generalGold + generalBonus + roleGold + roleBonus) * 100) / 100;
     }}
 
     function logDailyGold(goldAmount, streakCount, generalCount, roleCount) {{
         const today = getRDODayKey();
-        
-        // --- STRICT DATE CHECK ---
-        // 1. Get the date of the file currently loaded in Python
-        const challengeDateObj = new Date(PYTHON_CHALLENGE_TIMESTAMP * 1000);
-        const cYear = challengeDateObj.getUTCFullYear();
-        const cMonth = String(challengeDateObj.getUTCMonth() + 1).padStart(2, '0');
-        const cDay = String(challengeDateObj.getUTCDate()).padStart(2, '0');
-        const challengeDateKey = `${{cYear}}-${{cMonth}}-${{cDay}}`;
-
-        // 2. Compare with the real RDO Date. 
-        // If they don't match, the data is stale. DO NOT LOG.
-        if (challengeDateKey !== today) {{
-            console.warn(`Strict Block: File date (${{challengeDateKey}}) does not match RDO date (${{today}}). Log skipped.`);
-            return; 
-        }}
-        // -------------------------
+        if (getChallengeDateKey() !== today) return;
 
         let goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
         const todayEntryIndex = goldLog.findIndex(entry => entry.date === today);
-
-        const newEntry = {{
-            date: today,
-            gold: goldAmount,
-            streak: streakCount,
-            general: generalCount,
-            role: roleCount
-        }};
+        const newEntry = {{ date: today, gold: goldAmount, streak: streakCount, general: generalCount, role: roleCount }};
 
         if (todayEntryIndex > -1) {{
             goldLog[todayEntryIndex] = newEntry;
         }} else {{
             goldLog.push(newEntry);
         }}
-        
-        while (goldLog.length > 28) {{
-            goldLog.shift();
-        }}
+        while (goldLog.length > 28) goldLog.shift();
         localStorage.setItem(LS_GOLD_LOG, JSON.stringify(goldLog));
     }}
-
-    function debugGoldStats(source) {{
-        console.group(`%cGOLD & STREAK DEBUG @ ${{source}}`, 'color: #FFC107; background: #333; padding: 4px; border-radius: 4px;');
-        console.table({{
-            "RDO Day Key": getRDODayKey(),
-            "Challenge Data Timestamp": PYTHON_CHALLENGE_TIMESTAMP,
-            "Streak Count": localStorage.getItem(LS_STREAK_COUNT) || '0',
-            "Multiplier Lock": localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) || '0',
-            "Last Completion Date": localStorage.getItem(LS_LAST_COMPLETION_DATE) || 'N/A',
-            "Daily Status": localStorage.getItem(LS_CHALLENGE_STATUS) || 'incomplete',
-            "Daily Gold (for Delta)": localStorage.getItem('dailyGoldTotalForComparison') || '0.00 Gold Bars',
-            "7-Day Cycle Gold": localStorage.getItem(LS_STREAK_GOLD_TOTAL) || '0.00',
-            "Running Streak Gold": localStorage.getItem(LS_STREAK_GOLD_TOTAL_RUNNING) || '0.00'
-        }});
-        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
-        console.log("Last 28 Days Gold Log:");
-        console.table(goldLog);
-        console.groupEnd();
-    }}
-
-    function getHumanReadableDate(date) {{
-        const weekdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-        const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AAU", "SEP", "OCT", "NOV", "DEC"];
-        
-        const day = date.getUTCDate();
-        const weekday = weekdays[date.getUTCDay()];
-        const month = months[date.getUTCMonth()];
-        const year = date.getUTCFullYear();
-        
-        let suffix = 'th';
-        if (day % 10 === 1 && day !== 11) suffix = 'st';
-        if (day % 10 === 2 && day !== 12) suffix = 'nd';
-        if (day % 10 === 3 && day !== 13) suffix = 'rd';
-
-        return `${{weekday}}, ${{day}}${{suffix}} ${{month}} ${{year}}`;
-    }}
     
-function renderGoldLogChart() {{
+    function renderGoldLogChart() {{
         const GOLD_CHART_MULTIPLIER = 12; 
         const container = document.getElementById('gold-log-chart-container');
         const infoDisplay = document.getElementById('chart-info-display');
         if (!container || !infoDisplay) return;
 
-        // --- AUDIO SETUP ---
+        // Audio Context Setup
         if (!window.rdoAudioCtx) {{
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             window.rdoAudioCtx = new AudioContext();
-
             const unlockAudio = () => {{
-                const ctx = window.rdoAudioCtx;
-                if (ctx.state === 'suspended') {{
-                    ctx.resume().then(() => {{
-                        document.removeEventListener('click', unlockAudio);
-                        document.removeEventListener('keydown', unlockAudio);
-                    }});
-                }}
+                if (window.rdoAudioCtx.state === 'suspended') window.rdoAudioCtx.resume();
+                document.removeEventListener('click', unlockAudio);
             }};
-
             document.addEventListener('click', unlockAudio);
-            document.addEventListener('keydown', unlockAudio);
         }}
         
         function playHoverTick() {{
             const ctx = window.rdoAudioCtx;
             if (!ctx || ctx.state === 'suspended') return;
-            
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
-            
             osc.connect(gain);
             gain.connect(ctx.destination);
-            
             osc.type = 'triangle'; 
             osc.frequency.setValueAtTime(1200, ctx.currentTime);
-            
             gain.gain.setValueAtTime(0.2, ctx.currentTime); 
             gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
-            
             osc.start();
             osc.stop(ctx.currentTime + 0.05);
         }}
-        // -------------------
 
         infoDisplay.innerHTML = '&nbsp;';
         const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
@@ -1391,21 +1273,15 @@ function renderGoldLogChart() {{
         }}
 
         function getBarColorForStreak(streak) {{
-            if (!streak || streak === 0) return '#555555';
+            if (!streak) return '#555555';
             if (streak >= 22) return '#FFD200'; 
             if (streak >= 15) return '#E4B800'; 
             if (streak >= 8)  return '#C59A00'; 
             return '#A57C00';                   
         }}
-
-        const styles = window.getComputedStyle(container);
-        const gap = parseFloat(styles.gap) || 2;
-        const totalInnerWidth = container.clientWidth - (parseFloat(styles.paddingLeft) + parseFloat(styles.paddingRight));
-        const totalGapWidth = gap * (28 - 1);
-        const availableWidthForBars = totalInnerWidth - totalGapWidth;
-        const barWidth = Math.max(Math.floor(availableWidthForBars / 28), 1);
-
-        // --- ANTI-FLICKER TIMER VARIABLE ---
+        
+        const availableWidth = container.clientWidth - 4; 
+        const barWidth = Math.max(Math.floor(availableWidth / 28) - 2, 2);
         let tooltipLeaveTimer;
 
         goldLog.forEach(entry => {{
@@ -1417,132 +1293,78 @@ function renderGoldLogChart() {{
             const bar = document.createElement('div');
             bar.className = 'chart-bar';
             bar.style.height = `${{barHeight}}px`;
-            
-            const originalColor = getBarColorForStreak(entry.streak);
-            bar.style.backgroundColor = originalColor;
-            
-            bar.style.transition = 'background-color 0.05s, box-shadow 0.05s';
+            bar.style.backgroundColor = getBarColorForStreak(entry.streak);
 
             wrapper.appendChild(bar);
             container.appendChild(wrapper);
 
-            const date = new Date(entry.date + 'T12:00:00Z');
+            const date = new Date(entry.date); 
 
             wrapper.addEventListener('mouseenter', () => {{
-                // 1. CANCEL THE CLEAR: If coming from another bar, stop the text from disappearing
                 if (tooltipLeaveTimer) clearTimeout(tooltipLeaveTimer);
-
                 bar.style.backgroundColor = '#FFFFFF';
                 bar.style.boxShadow = '0 0 8px rgba(255, 255, 255, 0.9)';
                 playHoverTick();
 
-                const placeholder = '-';
-                const streakDay = entry.streak || 0;
-                const streakText = streakDay > 0
-                    ? `Day ${{streakDay}} (Week ${{Math.floor((streakDay - 1) / 7) + 1}})`
-                    : `Day ${{placeholder}} (Week ${{placeholder}})`;
-
-                const generalCount = entry.general !== undefined ? entry.general : placeholder;
-                const roleCount = entry.role !== undefined ? entry.role : placeholder;
-                const challengesText = `Gen: ${{generalCount}}/7, Role: ${{roleCount}}/9`;
+                const humanDate = date.toLocaleDateString('en-GB', {{ weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }});
+                const streakText = entry.streak ? `Day ${{entry.streak}} (Week ${{Math.floor((entry.streak - 1) / 7) + 1}})` : 'No Streak';
                 
-                const genDone = entry.general === 7;
-                const roleDone = entry.role === 9;
-                let starIndicator = '';
-
-                if (genDone && roleDone) {{
-                    starIndicator = ' <span style="color: #FFD700;">⭐</span>';
-                }} else if (genDone || roleDone) {{
-                    starIndicator = ' <span style="filter: grayscale(100%) brightness(1.3);">⭐</span>';
+                // --- RESTORED STAR LOGIC ---
+                let star = '';
+                if (entry.general === 7 && entry.role === 9) {{
+                    star = ' <span style="color: #FFD700;">⭐</span>';
+                }} else if (entry.general === 7 || entry.role === 9) {{
+                    star = ' <span style="filter: grayscale(100%) brightness(1.3);">⭐</span>';
                 }}
-
-                const tooltipHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; font-size: 0.9rem; margin-bottom: 2px;">
-                        <span style="font-weight: bold;">${{getHumanReadableDate(date)}}</span>
-                        <span style="font-size: 110%;">${{entry.gold.toFixed(2)}} Gold${{starIndicator}}</span>
+                // ---------------------------
+                
+                infoDisplay.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; font-size: 0.9rem;">
+                        <span style="font-weight: bold;">${{humanDate}}</span>
+                        <span>${{entry.gold.toFixed(2)}} Gold${{star}}</span>
                     </div>
-                    <div style="font-size: 0.8rem; color: #999; line-height: 1.2;">
-                        <div>Streak: ${{streakText}}</div>
-                        <div>Challenges: ${{challengesText}}</div>
-                    </div>
+                    <div style="font-size: 0.8rem; color: #999;">Streak: ${{streakText}} | Gen: ${{entry.general}}/7, Role: ${{entry.role}}/9</div>
                 `;
-                infoDisplay.innerHTML = tooltipHTML;
                 infoDisplay.style.color = '#aaa';
             }});
 
             wrapper.addEventListener('mouseleave', () => {{
-                bar.style.backgroundColor = originalColor;
+                bar.style.backgroundColor = getBarColorForStreak(entry.streak);
                 bar.style.boxShadow = 'none';
-                
-                // 2. DELAY THE CLEAR: Wait 50ms before clearing text. 
-                // If user enters another bar in this time, step 1 cancels this.
                 tooltipLeaveTimer = setTimeout(() => {{
                     infoDisplay.innerHTML = '&nbsp;';
-                    infoDisplay.style.color = '#888';
                 }}, 50);
             }});
         }});
     }}
+
+    // --- CORE UPDATE LOGIC ---
     
-    
-    
-    // --- CORE LOGIC FUNCTIONS ---
     function loadStreak() {{
         let currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
-        const lastCompletionDateStr = localStorage.getItem(LS_LAST_COMPLETION_DATE);
-        const currentDayKey = getRDODayKey();
-        
         if (PYTHON_STREAK_OVERRIDE > -1) {{
-            setStreakCount(PYTHON_STREAK_OVERRIDE, true); 
             currentStreak = PYTHON_STREAK_OVERRIDE; 
-            localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
+            setStreakCount(currentStreak, true);
         }}
         
+        const lastCompletionDateStr = localStorage.getItem(LS_LAST_COMPLETION_DATE);
         if (lastCompletionDateStr) {{
-            const daysDifference = getDateDifferenceInDays(currentDayKey, lastCompletionDateStr);
-            
-            if (daysDifference > 1) {{
-                currentStreak = 0; 
-                setStreakCount(0, false); 
-                localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, 0);
+            const diff = getDateDifferenceInDays(getRDODayKey(), lastCompletionDateStr);
+            if (diff > 1 || (diff === 1 && currentStreak >= MAX_RDO_STREAK)) {{
+                currentStreak = 0;
+                setStreakCount(0, false);
                 localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00');
                 localStorage.setItem(LS_STREAK_GOLD_TOTAL_RUNNING, '0.00');
-            }} else if (daysDifference === 1) {{
-                if (currentStreak >= MAX_RDO_STREAK) {{
-                    currentStreak = 0; 
-                    setStreakCount(0, false);
-                    localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, 0);
-                    localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00');
-                    localStorage.setItem(LS_STREAK_GOLD_TOTAL_RUNNING, '0.00');
-                }} else {{
-                    localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
-                }}
+            }}
+            if (diff >= 1) {{
                 localStorage.removeItem(LS_CHALLENGE_STATUS);
                 localStorage.removeItem(LS_LAST_COMPLETION_DATE); 
-                localStorage.setItem('dailyGoldTotalForComparison', '0.00 Gold Bars');
+                localStorage.setItem('dailyGoldTotalForComparison', formatGoldForDisplay(0.0));
             }}
-        }} else if (currentStreak > 0) {{
-             localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
         }}
+        
+        localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
         document.getElementById('current-streak').textContent = `${{currentStreak}} Days`;
-    }}
-
-    function handleStreakUpdate(isTicked) {{
-        const challengesCompleted = Array.from(allCheckboxes).filter(cb => cb.checked).length;
-        const currentStatus = localStorage.getItem(LS_CHALLENGE_STATUS);
-        const lockedStreakForMultiplier = parseInt(localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) || '0', 10);
-        
-        if (isTicked && challengesCompleted > 0 && currentStatus !== 'completed') {{
-            const newStreak = lockedStreakForMultiplier + 1;
-            if (newStreak > 0 && newStreak % 7 === 0) {{
-                localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00');
-            }}
-            setStreakCount(newStreak, true);
-        }} else if (!isTicked && challengesCompleted === 0 && currentStatus === 'completed') {{
-            setStreakCount(lockedStreakForMultiplier, false);
-        }}
-        
-        updateCounters();
     }}
 
     function updateCounters() {{
@@ -1557,191 +1379,156 @@ function renderGoldLogChart() {{
         document.getElementById('role-counter').textContent = `${{roleDone}}/9`;
         document.getElementById('role-counter').classList.toggle('counter-glow', roleDone === 9);
         
-        const currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
-        document.getElementById('current-streak').textContent = `${{currentStreak}} Days`;
-        
         const dailyGoldTotal = calculateDailyGoldTotal(generalDone, roleDone);
-        
-        logDailyGold(dailyGoldTotal, currentStreak, generalDone, roleDone);
-        
+        const currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
         const goldDisplay = document.getElementById('daily-gold-total');
-        const cycleGoldDisplay = document.getElementById('cycle-gold-total');
-        const streakGoldDisplay = document.getElementById('streak-gold-total');
         
-        const dailyTotalForComparison = localStorage.getItem('dailyGoldTotalForComparison') || '0.00 Gold Bars';
-        const newGoldHTML = formatGoldForDisplay(dailyGoldTotal);
-
-        if (dailyTotalForComparison !== newGoldHTML) {{
-            const oldGoldValue = parseFloat(dailyTotalForComparison.replace(/<[^>]*>| Gold Bars/g, '').replace(' .', '.') || '0.00');
-            const goldDelta = dailyGoldTotal - oldGoldValue;
+        const isDataCurrent = (getChallengeDateKey() === getRDODayKey());
+        
+        if (isDataCurrent) {{
+            logDailyGold(dailyGoldTotal, currentStreak, generalDone, roleDone);
             
-            let currentCycleGold = parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL) || '0.00');
-            let runningStreakGold = parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL_RUNNING) || '0.00');
+            const newGoldHTML = formatGoldForDisplay(dailyGoldTotal);
+            const dailyTotalForComparison = localStorage.getItem('dailyGoldTotalForComparison') || formatGoldForDisplay(0.0);
 
-            currentCycleGold += goldDelta;
-            runningStreakGold += goldDelta;
+            if (dailyTotalForComparison !== newGoldHTML) {{
+                const oldVal = parseFloat(dailyTotalForComparison.replace(/[^0-9.]/g, '') || '0');
+                const delta = dailyGoldTotal - oldVal;
+                
+                let cycleGold = parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL) || '0.00') + delta;
+                let runGold = parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL_RUNNING) || '0.00') + delta;
 
-            localStorage.setItem(LS_STREAK_GOLD_TOTAL, currentCycleGold.toFixed(2));
-            localStorage.setItem(LS_STREAK_GOLD_TOTAL_RUNNING, runningStreakGold.toFixed(2));
-            localStorage.setItem('dailyGoldTotalForComparison', newGoldHTML);
+                localStorage.setItem(LS_STREAK_GOLD_TOTAL, cycleGold.toFixed(2));
+                localStorage.setItem(LS_STREAK_GOLD_TOTAL_RUNNING, runGold.toFixed(2));
+                localStorage.setItem('dailyGoldTotalForComparison', newGoldHTML);
 
-            [goldDisplay, cycleGoldDisplay, streakGoldDisplay].forEach(el => {{
-                if (el) {{
-                    el.classList.remove('gold-exciting-flash');
-                    void el.offsetWidth;
-                    el.classList.add('gold-exciting-flash');
-                }}
-            }});
-            setTimeout(() => {{
-                [goldDisplay, cycleGoldDisplay, streakGoldDisplay].forEach(el => {{
-                    if (el) el.classList.remove('gold-exciting-flash');
+                ['daily-gold-total', 'cycle-gold-total', 'streak-gold-total'].forEach(id => {{
+                    const el = document.getElementById(id);
+                    if(el) {{
+                        el.classList.remove('gold-exciting-flash');
+                        void el.offsetWidth; 
+                        el.classList.add('gold-exciting-flash');
+                        setTimeout(() => {{
+                            el.classList.remove('gold-exciting-flash');
+                        }}, 1000);
+                    }}
                 }});
-            }}, 1000);
+            }}
+            goldDisplay.innerHTML = newGoldHTML;
+        }} else {{
+            goldDisplay.innerHTML = '<span style="color: #888; font-size: 0.8em;">PREVIOUS DAY DATA</span>';
         }}
 
-        goldDisplay.innerHTML = newGoldHTML;
-        cycleGoldDisplay.innerHTML = formatGoldForDisplay(parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL) || '0.00'));
-        streakGoldDisplay.innerHTML = formatGoldForDisplay(parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL_RUNNING) || '0.00'));
+        document.getElementById('cycle-gold-total').innerHTML = formatGoldForDisplay(parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL) || '0.00'));
+        document.getElementById('streak-gold-total').innerHTML = formatGoldForDisplay(parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL_RUNNING) || '0.00'));
 
         const rolesContainer = document.getElementById('roles-container') || document.body;
         rolesContainer.classList.toggle('all-roles-completed', roleDone === 9);
-        document.querySelectorAll('.difficulty-toggle').forEach(toggle => {{
-            toggle.classList.toggle('dimmed-text', roleDone === 9);
-        }});
-        updateRoleHeadingCompletion();
-        renderGoldLogChart();
-
-        localStorage.setItem('rdoLastKnownTimestamp', PYTHON_CHALLENGE_TIMESTAMP);
-        debugGoldStats("updateCounters");
-    }}
-    
-    // --- EVENT LISTENERS & INITIALIZATION ---
-
-    function updateRoleHeadingCompletion() {{
+        document.querySelectorAll('.difficulty-toggle').forEach(toggle => toggle.classList.toggle('dimmed-text', roleDone === 9));
+        
         document.querySelectorAll('.role-container').forEach(roleContainer => {{
-            const visibleChallenges = Array.from(roleContainer.querySelectorAll('.role-challenge')).filter(ch => ch.style.display !== 'none');
-            const allCompleted = visibleChallenges.length > 0 && visibleChallenges.every(ch => ch.querySelector('.challenge-checkbox')?.checked);
-            const heading = roleContainer.querySelector('.role-heading');
-            if (heading) {{
-                heading.classList.toggle('dimmed', allCompleted);
-            }}
+            const visible = Array.from(roleContainer.querySelectorAll('.role-challenge')).filter(ch => ch.style.display !== 'none');
+            const allComp = visible.length > 0 && visible.every(ch => ch.querySelector('.challenge-checkbox')?.checked);
+            roleContainer.querySelector('.role-heading')?.classList.toggle('dimmed', allComp);
         }});
-    }}
-
-    function adjustStreak(amount) {{
-        let currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
-        const newStreak = Math.min(MAX_RDO_STREAK, Math.max(0, currentStreak + amount));
-        if (newStreak !== currentStreak) {{
-            localStorage.setItem(LS_STREAK_COUNT, newStreak);
-            localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, newStreak);
-            if (newStreak === 0) {{
-                localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00');
-                localStorage.setItem(LS_STREAK_GOLD_TOTAL_RUNNING, '0.00');
-            }}
-            updateCounters();
-        }}
-    }}
-
-    document.getElementById('streak-up').addEventListener('click', () => adjustStreak(1));
-    document.getElementById('streak-down').addEventListener('click', () => adjustStreak(-1));
-
-    function setRoleDifficultyView(roleContainer, difficulty) {{
-        roleContainer.querySelectorAll('.role-challenge').forEach(challenge => {{
-            challenge.style.display = (challenge.dataset.difficulty === difficulty) ? '' : 'none';
-        }});
-        const toggle = roleContainer.querySelector('.difficulty-toggle');
-        if (toggle) {{
-            toggle.dataset.difficulty = difficulty;
-            const desc = difficulty === 'easy' ? 'Rank 1–5' : difficulty === 'med' ? 'Rank 6–14' : 'Rank 15+';
-            toggle.textContent = `(${{difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}}: ${{desc}})`;
-        }}
-    }}
-
-    function cleanupHiddenTickedChallenges(roleContainer) {{
-        roleContainer.querySelectorAll('.role-challenge[style*="display: none"] .challenge-checkbox:checked').forEach(checkbox => {{
-            checkbox.checked = false;
-            const key = `${{PYTHON_CHALLENGE_TIMESTAMP}}_${{checkbox.id}}`;
-            localStorage.setItem(key, false);
-            handleStreakUpdate(false);
-        }});
+        
+        renderGoldLogChart();
     }}
     
-    function nextDifficulty(current) {{
-        if (current === 'easy') return 'med';
-        if (current === 'med') return 'hard';
-        return 'easy';
+    function handleStreakUpdate(isTicked) {{
+        const checkedCount = Array.from(allCheckboxes).filter(cb => cb.checked).length;
+        const currentStatus = localStorage.getItem(LS_CHALLENGE_STATUS);
+        const lockedStreak = parseInt(localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) || '0', 10);
+        
+        if (isTicked && checkedCount > 0 && currentStatus !== 'completed') {{
+            const newStreak = lockedStreak + 1;
+            if (newStreak > 0 && newStreak % 7 === 0) localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00');
+            setStreakCount(newStreak, true);
+        }} else if (!isTicked && checkedCount === 0 && currentStatus === 'completed') {{
+            setStreakCount(lockedStreak, false);
+        }}
+        updateCounters();
     }}
 
-    // --- INITIALIZATION SEQUENCE ---
-
-    // 1. Set up the difficulty view for each role.
-    document.querySelectorAll('.difficulty-toggle').forEach(toggle => {{
-        const roleContainer = toggle.closest('.role-container');
-        const roleHeadingElement = roleContainer.querySelector('.role-heading');
-        let roleName = 'generic-role';
-        if (roleHeadingElement) {{
-            const headingText = roleHeadingElement.cloneNode(true);
-            headingText.querySelector('.difficulty-toggle')?.remove();
-            roleName = headingText.textContent.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-        }}
-        const lsKey = `difficulty_${{roleName}}`;
-        const savedDifficulty = localStorage.getItem(lsKey) || 'hard'; 
-        
-        setRoleDifficultyView(roleContainer, savedDifficulty); 
-        
-        toggle.addEventListener('click', () => {{
-            if (toggle.classList.contains('dimmed-text')) return;
-            const newDifficulty = nextDifficulty(toggle.dataset.difficulty || 'hard');
-            localStorage.setItem(lsKey, newDifficulty);
-            
-            setRoleDifficultyView(roleContainer, newDifficulty);
-            cleanupHiddenTickedChallenges(roleContainer);
-        }});
-    }});
+    // --- INIT ---
     
-    // 2. Now that view is correct, load states and attach event listeners.
+    const dailyKeyCheck = localStorage.getItem(LS_LAST_KNOWN_TIMESTAMP);
+    if (dailyKeyCheck != PYTHON_CHALLENGE_TIMESTAMP) {{
+        Object.keys(localStorage).forEach(k => {{ if(k.includes('_challenge_')) localStorage.removeItem(k); }});
+        localStorage.setItem('dailyGoldTotalForComparison', formatGoldForDisplay(0.0));
+    }}
+    
+    localStorage.setItem(LS_LAST_KNOWN_TIMESTAMP, PYTHON_CHALLENGE_TIMESTAMP);
+    
     allCheckboxes.forEach(cb => {{
         const key = `${{PYTHON_CHALLENGE_TIMESTAMP}}_${{cb.id}}`;
         cb.checked = localStorage.getItem(key) === "true";
-        const wrapper = cb.closest('.challenge') || cb.closest('.role-challenge');
-        if (wrapper) {{
-            wrapper.classList.toggle('completed', cb.checked);
-        }}
+        if(cb.checked) cb.closest('div').classList.add('completed');
         
         cb.addEventListener('change', () => {{
-            if (wrapper) {{
-                wrapper.classList.toggle('completed', cb.checked);
-            }}
+            cb.closest('div').classList.toggle('completed', cb.checked);
             localStorage.setItem(key, cb.checked);
             handleStreakUpdate(cb.checked);
         }});
     }});
-    
-    // 3. Load streak and run initial counter calculations.
+
+    document.getElementById('streak-up').addEventListener('click', () => {{ 
+        localStorage.setItem(LS_STREAK_COUNT, Math.min(28, parseInt(localStorage.getItem(LS_STREAK_COUNT)||0)+1)); 
+        localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, localStorage.getItem(LS_STREAK_COUNT));
+        updateCounters(); 
+    }});
+    document.getElementById('streak-down').addEventListener('click', () => {{ 
+        localStorage.setItem(LS_STREAK_COUNT, Math.max(0, parseInt(localStorage.getItem(LS_STREAK_COUNT)||0)-1)); 
+        localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, localStorage.getItem(LS_STREAK_COUNT));
+        updateCounters(); 
+    }});
+
+    document.querySelectorAll('.difficulty-toggle').forEach(toggle => {{
+        const roleContainer = toggle.closest('.role-container');
+        const roleName = roleContainer.querySelector('.role-heading').textContent.split('(')[0].trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+        const lsKey = `difficulty_${{roleName}}`;
+        
+        function setView(diff) {{
+            roleContainer.querySelectorAll('.role-challenge').forEach(ch => ch.style.display = (ch.dataset.difficulty === diff) ? '' : 'none');
+            toggle.dataset.difficulty = diff;
+            const desc = diff === 'easy' ? 'Rank 1–5' : diff === 'med' ? 'Rank 6–14' : 'Rank 15+';
+            toggle.textContent = `(${{diff.charAt(0).toUpperCase() + diff.slice(1)}}: ${{desc}})`;
+        }}
+        
+        setView(localStorage.getItem(lsKey) || 'hard');
+        
+        toggle.addEventListener('click', () => {{
+            if (toggle.classList.contains('dimmed-text')) return;
+            const next = toggle.dataset.difficulty === 'easy' ? 'med' : toggle.dataset.difficulty === 'med' ? 'hard' : 'easy';
+            localStorage.setItem(lsKey, next);
+            setView(next);
+            roleContainer.querySelectorAll('.role-challenge[style*="display: none"] .challenge-checkbox:checked').forEach(cb => {{
+                cb.checked = false;
+                localStorage.setItem(`${{PYTHON_CHALLENGE_TIMESTAMP}}_${{cb.id}}`, false);
+            }});
+            handleStreakUpdate(false);
+        }});
+    }});
+
     loadStreak();
     updateCounters();
-    debugGoldStats("Initial Page Load");
     
-    // FIX FOR 1-PIXEL BAR BUG: Attach listeners to render chart after page is fully loaded/resized.
     window.addEventListener('load', renderGoldLogChart);
     window.addEventListener('resize', renderGoldLogChart);
 }});
 
-// ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Pause Button Code                                                          //
-// ////////////////////////////////////////////////////////////////////////////////////// //
-
 document.addEventListener('DOMContentLoaded', () => {{
     document.getElementById('pauseBtn').addEventListener('click', () => {{
-      fetch('http://127.0.0.1:6969/pause', {{
-        method: 'POST'
-      }})
-      .then(response => response.text())
-      .then(data => alert('Server response: ' + data))
-      .catch(error => alert('Error: ' + error));
+      fetch('http://127.0.0.1:6969/pause', {{ method: 'POST' }})
+      .then(r => r.text()).then(d => alert(d)).catch(e => alert(e));
     }});
 }});
 </script>
+
+
+
+
+
 
 
 
