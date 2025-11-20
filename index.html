@@ -66,109 +66,6 @@
           overflow: visible; /* allow images to stick outside */
           /* margin-left: -10px;shift left */
         }
-        
-        
-        /* COLUMN 3: BONUS INFO - Fixed to 250px wide */
-        .bonus-container {
-            padding: 7px;
-            background-color: #111; /*Dark grey background*/
-            display: flex;
-            flex-direction: column;
-            /* --- FIXED WIDTH CHANGES --- */
-            width: 250px; 
-            min-width: 250px; 
-            max-width: 850px;
-            /*flex-shrink: 0; Ensures this column does not shrink, prioritizing the fixed width */
-            /* --------------------------- */
-        }
-        
-
-        .stats-heading {
-            font-family: 'RDOFont', sans-serif;
-            font-size: 1.3rem;
-            margin-top: 0;
-            margin-bottom: 5px;
-            border-bottom: 2px solid #555;
-            padding-bottom: 5px;
-            color: #666666; /* PRESERVED: Keeping the original color */
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-            
-        }
-        
-        .stats-text {
-            font-family: 'hapna', sans-serif; /* Example font */
-            font-size: .9rem;
-            color: #aaa;
-            white-space: pre-wrap; /* allows \n line breaks in descriptions */
-            letter-spacing: -0.05em; 
-            margin-top: 0;
-            margin: 0;
-        }
-
-        /* *** FIX: Styling for non-shifting streak adjustment controls *** */
-        #streak-controls {
-            opacity: 0;
-            visibility: hidden;
-            color: #999;
-            cursor: pointer;
-            user-select: none;
-            font-size: 0.8rem;
-            margin-left: 10px;
-            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
-        }
-        #streak-container:hover #streak-controls {
-            opacity: 1;
-            visibility: visible;
-        }
-        #streak-up, #streak-down {
-            padding: 0 4px;
-        }
-        #streak-up:hover, #streak-down:hover {
-            color: #fff;
-        }
-        
-     
-        
-        
-        /* Ensure the animation class uses the 1000ms duration */
-        .gold-exciting-flash {
-            animation: simpleGoldGlow 1000ms ease-out forwards;
-        }
-
-        /* Define the simple glow keyframes */
-        /* Ensure the animation class uses the 1ms duration for an instant state change */
-        .gold-exciting-flash {
-            animation: instantWhiteGlow 1ms forwards;
-        }
-
-        @keyframes instantWhiteGlow {
-            /* 0% Start: Text and glow go instantly white */
-            0% {
-                color: white !important; 
-                text-shadow: 
-                    0 0 2px white,
-                    0 0 4px #eeeeee; /* Strong white/silver glow */
-                opacity: 1;
-            }
-            
-            /* 100% End: We keep it at the flash state so the JavaScript timeout controls the duration */
-            100% {
-                color: white !important;
-                text-shadow: 
-                    0 0 3px white,
-                    0 0 6px #eeeeee;
-                opacity: 1;
-            }
-        }
-        
-        /* Set the animation class to use the correct keyframes and the JS duration */
-        .gold-exciting-flash {
-            /* The 1000ms duration is crucial, matching your JavaScript setTimeout */
-            animation: instantWhiteGlow 1000ms forwards;
-        }
-
-            
-
 
         .banner-container {
           position: sticky;
@@ -305,15 +202,6 @@
 /*  Role challenges switching logic as browser viewport narrows  */
 /* ############################################################# */
         
-        /* NEW: Rule to hide the bonus container when screen is 1600px or less (The Requirement) */
-        @media (max-width: 1600px) {
-            .bonus-container {
-                display: none; 
-          }
-        }
-        
-        
-        
         /* Narrow screens: column layout, sidebar below main */
         @media (max-width: 1320px) {
           body {
@@ -324,7 +212,7 @@
             .main-container {
             flex-direction: column;
             align-items: center;
-            width: 100%;    /* allow children to fill horizontally */
+            width: 100%; /* allow children to fill horizontally */
             align-items: stretch; /* <— THIS is the key */
             min-width: 420px;
           }
@@ -332,8 +220,8 @@
           .sidebar-container {
             width: 100% !important; 
             max-width: 850px !important;
-            margin-left: 0;    /* center below main container */
-          }      
+            margin-left: 0; /* center below main container */
+          }
         }
 
         /* === Challenge checkboxes with wrapped text aligned properly === */
@@ -404,7 +292,8 @@
           font-size: 1rem;
           color: #999999;
           padding-bottom: 7px;
-          white-space: pre-wrap;  /* Preserve \n line breaks and wrap long lines */
+          white-space: pre-wrap;  /* Preserve 
+ line breaks and wrap long lines */
           line-height: 1.2;  /* smaller numbers = tighter spacing */
         }
         
@@ -467,7 +356,8 @@
             font-size: 1rem;
             color: #aaa;
             margin-left: 6px; /* aligns under the role challenge text */
-            white-space: pre-wrap; /* allows \n line breaks in descriptions */
+            white-space: pre-wrap; /* allows 
+ line breaks in descriptions */
             transform: scaleX(0.925); /* reduce width to 90% */
         }
         
@@ -609,29 +499,33 @@
 
 /* ==== Global Checkbox Role Challenge Completion Styling (9 out of 9)==== */
 
-
-        /* Global dimming for all text elements when all roles are complete */
-        .all-roles-completed .role-heading,
-        .all-roles-completed .role-challenge-label span, /* Targets the Challenge Name */
-        .all-roles-completed .role-challenge-desc, /* ✅ NEW: Targets the Description Element */
-        .all-roles-completed .role-challenge p /* General Paragraph Fallback */
-        {
-          color: #888 !important; 
-          opacity: 0.5 !important; /* Forces dimming, overriding competing rules */
+        /* Per role heading dim */
+        .role-heading.dimmed {
+          color: #888;
+          opacity: 0.6;
           transition: color 0.3s, opacity 0.3s;
         }
 
-        /* When 9/9 roles are complete, make the entire DIV of any unticked challenge non-interactive */
-        .all-roles-completed .role-challenge:not(.completed) {
-            pointer-events: none;
-            cursor: default;
-        }
-
-        /* Then, specifically dim the checkbox inside that disabled DIV for visual feedback */
-        .all-roles-completed .role-challenge:not(.completed) input[type="checkbox"] {
-            opacity: 0.35 !important;
+        /* Global dim of all role headings and challenge texts */
+        .all-roles-completed .role-heading,
+        .all-roles-completed .role-challenge-label span {
+          color: #888;
+          opacity: 0.5;
+          transition: color 0.3s, opacity 0.3s;
         }
         
+        .challenge-description.dimmed,
+        .role-challenge p.dimmed {
+            opacity: 0.5;
+            color: #888888;  /* mid grey */
+            transition: opacity 0.3s ease, color 0.3s ease;
+        }
+
+        /* But keep checkboxes fully visible and interactive */
+        .all-roles-completed input[type="checkbox"] {
+          opacity: 1 !important;
+          pointer-events: auto;
+        }
         
     /*############ RDO-CLOCK SECTION ############*/        
         .rdo-clock {
@@ -726,53 +620,6 @@
           filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
           transform: scale(1.05);
         }
-
-    /*############ GOLD LOG CHART ############*/
-        #gold-log-chart-container {
-            display: flex;
-            justify-content: flex-start; /* Aligns bars to the left */
-            align-items: flex-end;
-            height: 75px;
-            width: 100%;
-            background-color: #151515;
-            border: 1px solid #000;
-            border-radius: 8px;
-            padding: 2px;
-            box-sizing: border-box;
-            gap: 2px;
-            overflow: hidden; /* Prevents scrollbar */
-        }
-
-        .chart-bar-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            height: 100%;
-        }
-
-        .chart-bar {
-            width: 100%;
-            background-color: #B8860B; /* Darker Gold */
-            border-radius: 2px 2px 0 0;
-            transition: background-color 0.2s ease;
-            min-height: 1px;
-        }
-        
-        .chart-bar-wrapper:hover .chart-bar {
-            background-color: #FFE957; /* Brighter gold for highlight */
-        }
-        
-        .chart-info-display {
-            color: #5b5b5b;
-            font-family: 'hapna', sans-serif; /* Use hapna font */
-            font-size: 0.8rem;
-            text-align: left; /* Justify left */
-            padding-left: 5px; /* Add some padding */
-            height: 1.2em;
-            margin-top: -3px; /* reduce or increase to move graph's 'tooltip' text up or down */
-            transition: color 0.2s;
-            letter-spacing: -0.05em; /* Add this line for narrower text */
-        }
         
     </style>
 </head>
@@ -786,7 +633,7 @@
                          style="position:absolute; top:0px; left:10px; width:50px; cursor:pointer;" />                    
                     <div class="banner-text-overlay">
                         <h1 class="banner-title">Daily Challenges</h1>
-                        <div class="banner-date">Wednesday, 19th November 2025</div>
+                        <div class="banner-date">Thursday, 20th November 2025</div>
                     </div>
                     <div class="challenge-counters">
                         <div>General Challenges <span id="general-counter">(0/7)</span></div>
@@ -802,125 +649,120 @@
                 
         <div class="challenge" data-difficulty="None">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-19_f2b5d9d1bfb2cea1" />
-            <span class="challenge-text">5 Candies eaten</span>
-          </label>
-          <div class="challenge-desc">Peppermints, Candies, and Chocolate Bars all count for this challenge.</div></div>
-<hr class="thin-divider">
-
-        <div class="challenge" data-difficulty="None">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-19_d5d3011cb82b018d" />
-            <span class="challenge-text">3 Cooked Seasoned Plump Bird</span>
-          </label>
-          <div class="challenge-desc">Chickens and Turkeys give you plump bird meat when plucked. Rathskeller Fork usually has lot of chickens to kill.</div></div>
-<hr class="thin-divider">
-
-        <div class="challenge" data-difficulty="None">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-19_e9dd8650ec01ba6b" />
-            <span class="challenge-text">1 Egrets skinned</span>
-          </label>
-          <div class="challenge-desc">Ride along the railway line west out of Saint Denis, go over the bridge to the ruined building next to the railway siding. You will often find egrets at the water's edge around there.</div></div>
-<hr class="thin-divider">
-
-        <div class="challenge" data-difficulty="None">
-          <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-19_84b13f982a8a5ceb" />
-            <span class="challenge-text">Finish Showdown in Shootout Series</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-20_1414ff290f842cf0" />
+            <span class="challenge-text">1 Bonnie MacFarlane missions completed</span>
           </label></div>
 <hr class="thin-divider">
 
         <div class="challenge" data-difficulty="None">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-19_6a561970445ae13a" />
-            <span class="challenge-text">3 Non-player enemy hats shot off</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-20_0280de0909d30b18" />
+            <span class="challenge-text">3 Cooked Seasoned Prime Beef</span>
           </label>
-          <div class="challenge-desc">Moonshiner roadblocks with a varmint rifle at a distance, or get a wanted level and fend off the law.</div></div>
+          <div class="challenge-desc">Beef comes mainly from cows and oxen, but bison will also work.</div></div>
 <hr class="thin-divider">
 
         <div class="challenge" data-difficulty="None">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-19_b85d9233a63663c0" />
-            <span class="challenge-text">5 Whole animal carcasses sold</span>
-          </label>
-          <div class="challenge-desc">Sell at any butchers, ones at Blackwater and Rhodes are very close to the fast travel posts.</div></div>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-20_2b21f959b05ee27b" />
+            <span class="challenge-text">5280 Distance traveled on a mount with a Posse Member</span>
+          </label></div>
 <hr class="thin-divider">
 
         <div class="challenge" data-difficulty="None">
           <label>
-            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-19_fb405c333275ac87" />
-            <span class="challenge-text">5 Wintergreen Berries picked</span>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-20_dc532658699e49c2" />
+            <span class="challenge-text">Finish Race in Race Series</span>
+          </label></div>
+<hr class="thin-divider">
+
+        <div class="challenge" data-difficulty="None">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-20_ddcabf001f633f9f" />
+            <span class="challenge-text">5 Fresh produce eaten</span>
           </label>
-          <div class="challenge-desc">Cumberland Forest, north east of Valentine, is the best place to find them.
-There's a good patch around the road the runs through 'FOREST' on the map</div></div>
+          <div class="challenge-desc">Apples, Pears, Carrots, Peaches, Beets and Corn should all count for this one. Things like berries and mushrooms don't work.</div></div>
+<hr class="thin-divider">
+
+        <div class="challenge" data-difficulty="None">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-20_a8ac5400ce8bb192" />
+            <span class="challenge-text">3 Player kills with melee in Showdowns</span>
+          </label></div>
+<hr class="thin-divider">
+
+        <div class="challenge" data-difficulty="None">
+          <label>
+            <input type="checkbox" class="challenge-checkbox" id="challenge_2025-11-20_1b2c7b4524023c12" />
+            <span class="challenge-text">2 Seagulls plucked</span>
+          </label>
+          <div class="challenge-desc">A good location is the little spit of land at the south east corner of Blackwater, level with 'Flat Iron' on the map. You can also find them north of the town, along the mouth of the Upper Montana river.
+Often some on the piers at Thieves Landing too, or try Annesburg and Van Horn coastlines. The rocks south of Van Horn lighthorse often have plenty</div></div>
 
             </div>
         </div>
 
-<!-- COLUMN 2: ROLE CHALLENGES -->
-        <div class="sidebar-container" id="roles-container">
+        <div class="sidebar-container">
             <div class="role-container">
   <h3 class="role-heading" id="role-bounty-hunter">Bounty Hunter&nbsp; <span class="difficulty-toggle RDOFont" data-difficulty="hard">(Hard: Rank 15+)</span></h3>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_6fec530458ece8d1" />
-            <span class="role-challenge-text">1 Bounties brought in from Lemoyne posters</span>
-          </label>
-          <div class="role-challenge-desc">Rhodes and Saint Denis</div></div>
-
-        <div class="role-challenge" data-difficulty="easy">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_b8c4ca28e5b32232" />
-            <span class="role-challenge-text">Bounty hunt completed with 3 min or more left</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="easy">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_9058360075f51103" />
-            <span class="role-challenge-text">1 Bounty targets lassoed from horseback</span>
-          </label>
-          <div class="role-challenge-desc">Lasso the same target three times.</div></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_ca1fa9508588e161" />
-            <span class="role-challenge-text">1 Bounty targets taken down with Bolas</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_ac3afb5ca88ab135" />
-            <span class="role-challenge-text">2 Eagle Eye used to track a bounty target</span>
-          </label>
-          <div class="role-challenge-desc">Can shoot with tracking arrow and then track them</div></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_12ab49b77fe9f461" />
-            <span class="role-challenge-text">Medium ($$) bounty mission completed</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="hard">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_d2cbf59582cea939" />
-            <span class="role-challenge-text">2 Bounties brought in from New Hanover posters</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_4233f47eefc044ce" />
+            <span class="role-challenge-text">1 Bounties brought in from New Hanover posters</span>
           </label>
           <div class="role-challenge-desc">Valentine, Emerald Station, Van Horn and Annesburg</div></div>
 
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_83cd663bb9ac7aa7" />
+            <span class="role-challenge-text">Bounty completed without killing an enemy or bounty target</span>
+          </label>
+          <div class="role-challenge-desc">Risky, usually bugged and won't register</div></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_7c140dc80ee8b55b" />
+            <span class="role-challenge-text">1 Bounty targets hogtied with a Reinforced Lasso</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_0bf25948d102ca7d" />
+            <span class="role-challenge-text">2 Bounties brought in from New Austin posters</span>
+          </label>
+          <div class="role-challenge-desc">Armadillo, Tumbleweed and Benedict Point</div></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_83cd663bb9ac7aa7" />
+            <span class="role-challenge-text">Bounty completed without killing an enemy or bounty target</span>
+          </label>
+          <div class="role-challenge-desc">Risky, usually bugged and won't register</div></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_16775e1c2359a314" />
+            <span class="role-challenge-text">1 Bounty targets tagged with Tracking Arrow</span>
+          </label></div>
+
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_9cf0553b25c3bc6d" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_2e411e0641ca28cd" />
+            <span class="role-challenge-text">Bounty hunt completed with 5 min or more left</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_9cf0553b25c3bc6d" />
             <span class="role-challenge-text">2 Bounty targets taken down with Bolas</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_bed74dacf3ac8c33" />
-            <span class="role-challenge-text">3 Eagle Eye used to track a bounty target</span>
-          </label>
-          <div class="role-challenge-desc">Can shoot with tracking arrow and then track them</div></div>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_4a008830b82fce96" />
+            <span class="role-challenge-text">3 More than one bounty target brought in at once</span>
+          </label></div>
 </div>
 <hr class="thin-divider" />
 <div class="role-container">
@@ -928,62 +770,60 @@ There's a good patch around the road the runs through 'FOREST' on the map</div><
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_77a29b58bb7c1ef1" />
-            <span class="role-challenge-text">1 Camp Stews eaten</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_30cdbf75eaa0b789" />
+            <span class="role-challenge-text">5 Donations to Cripps</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_d1de3ee140a1adfa" />
-            <span class="role-challenge-text">5 Carcasses donated within 10 minutes</span>
-          </label></div>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_9a129523fe2ccb95" />
+            <span class="role-challenge-text">2 Large animal carcasses donated to Cripps</span>
+          </label>
+          <div class="role-challenge-desc">Deer, Pronghorn, Bighorn Ram, Panther, Cougar, Wolf</div></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_83bdbc4ad4f16e1c" />
-            <span class="role-challenge-text">2 Perfect carcasses donated to Cripps</span>
-          </label>
-          <div class="role-challenge-desc">Perfect pelts don't count. Try Emerald Ranch sheep.</div></div>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_ca28dcbb25fc64e7" />
+            <span class="role-challenge-text">1 Resupply completed with 3 mins left</span>
+          </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_1dff07eb13dbbe2e" />
-            <span class="role-challenge-text">5 Medium animal carcasses donated to Cripps</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_04b4bb74b06bffc6" />
+            <span class="role-challenge-text">10559 Distance Delivery Wagon traveled on mission</span>
           </label>
-          <div class="role-challenge-desc">Emerald Ranch, for sheep, turkeys, & foxes.
-Racoons, Geese, Cranes, Herons, & Pelicans</div></div>
+          <div class="role-challenge-desc">Use a Change Appearance solo lobby so it registers</div></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_64c9ecc0da996a74" />
-            <span class="role-challenge-text">2 Resupply missions completed</span>
-          </label>
-          <div class="role-challenge-desc">Buggy, often won't register</div></div>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_73fcf139b8fc40c3" />
+            <span class="role-challenge-text">2 Goods sold to local buyer</span>
+          </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_d48016ddc4f1f1a9" />
-            <span class="role-challenge-text">6 Small animal carcasses donated to Cripps</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_c83ce9a8299ee053" />
+            <span class="role-challenge-text">1 Resupply completed with 4 mins left</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_e111737a83591fbc" />
-            <span class="role-challenge-text">20 Donations to Cripps</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_4e216c392f6b24b9" />
+            <span class="role-challenge-text">20 Carcasses donated within 10 minutes</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_64c9ecc0da996a74" />
-            <span class="role-challenge-text">2 Resupply missions completed</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_a54ddaa847862b1b" />
+            <span class="role-challenge-text">2 Goods sold to distant buyer</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_e2fc25cd87a58806" />
+            <span class="role-challenge-text">6 Large animal carcasses donated to Cripps</span>
           </label>
-          <div class="role-challenge-desc">Buggy, often won't register</div></div>
-
-        <div class="role-challenge" data-difficulty="hard">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_24c423f98a62e788" />
-            <span class="role-challenge-text">10 Small animal carcasses donated to Cripps</span>
-          </label></div>
+          <div class="role-challenge-desc">Deer, Pronghorn, Bighorn Ram, Panther, Cougar, Wolf</div></div>
 </div>
 <hr class="thin-divider" />
 <div class="role-container">
@@ -991,57 +831,56 @@ Racoons, Geese, Cranes, Herons, & Pelicans</div></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_40ee57e3eff733aa" />
-            <span class="role-challenge-text">1 Collectibles found with a Shovel</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_af78eab5de3bd9a2" />
+            <span class="role-challenge-text">1 American Wild Flowers found</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_91abffe00f2be824" />
-            <span class="role-challenge-text">1 Collectibles sold to Madam Nazar</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_0f439d76db88f688" />
+            <span class="role-challenge-text">2 Collectibles collected</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_22cc5639eda6d34f" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_22cc5639eda6d34f" />
             <span class="role-challenge-text">1 Collector Maps used</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_2cbde4a278703e2b" />
-            <span class="role-challenge-text">1 Collectibles found with a Metal Detector</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_31c73b6630729e40" />
+            <span class="role-challenge-text">1 Antique Alcohol drunk</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_45abe4cf53ac2233" />
-            <span class="role-challenge-text">2 Collectibles looted from non-player enemies</span>
-          </label>
-          <div class="role-challenge-desc">Gold Teeth count for this</div></div>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_f23eb6801814f708" />
+            <span class="role-challenge-text">2 Collector Maps used</span>
+          </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_01cfdcd21eab2b39" />
-            <span class="role-challenge-text">2 Tarot Cards found</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_058a7b03b7913562" />
+            <span class="role-challenge-text">2 Fossils found</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_4e6a6092efc63336" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_319d53e1ab59e4c6" />
+            <span class="role-challenge-text">3 American Wild Flowers found</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_4e6a6092efc63336" />
             <span class="role-challenge-text">3 Antique Alcohol Bottles found</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_7412647babd68c64" />
-            <span class="role-challenge-text">3 Arrowheads found</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="hard">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_3a442299f7f8a757" />
-            <span class="role-challenge-text">3 Fossils found</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_31c73b6630729e40" />
+            <span class="role-challenge-text">1 Antique Alcohol drunk</span>
           </label></div>
 </div>
 <hr class="thin-divider" />
@@ -1050,56 +889,56 @@ Racoons, Geese, Cranes, Herons, & Pelicans</div></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_b922faf42e9c14e1" />
-            <span class="role-challenge-text">Moonshine Bar - Changed décor</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_fb6dc36349dc79c9" />
+            <span class="role-challenge-text">$50.00 Money made from moonshine sold</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_36737553f1be60af" />
-            <span class="role-challenge-text">1 Moonshine Bootlegger Missions completed</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="easy">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_8f895dc71bc9e233" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_8f895dc71bc9e233" />
             <span class="role-challenge-text">1 Moonshine Story Mission completed</span>
           </label></div>
 
-        <div class="role-challenge" data-difficulty="med">
+        <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_0c3e86f05c02a608" />
-            <span class="role-challenge-text">Completed improved or better moonshine recipe</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_edb53ecaa26a1f6b" />
+            <span class="role-challenge-text">Moonshine sold with at least 10 bottles intact</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_b90ddfa74a9a0ed2" />
-            <span class="role-challenge-text">Moonshine sold with 4 mins left</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_7c1fd384380f9df6" />
+            <span class="role-challenge-text">$100.00 Money made from moonshine sold</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_ac3946ad0b3c7dff" />
-            <span class="role-challenge-text">Moonshine sold with at least 15 bottles intact</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_f3459e4f3292f9af" />
+            <span class="role-challenge-text">2 Moonshine Bootlegger Missions completed</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_8f895dc71bc9e233" />
+            <span class="role-challenge-text">1 Moonshine Story Mission completed</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_2529c09bd2ba077b" />
-            <span class="role-challenge-text">$200.00 Money made from moonshine sold</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="hard">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_13b5b3aede9acffc" />
-            <span class="role-challenge-text">3 Moonshine Bootlegger Missions completed</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="hard">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_0b81da59c5133188" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_0b81da59c5133188" />
             <span class="role-challenge-text">2 Moonshine Story Mission completed</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_28d09d85ebe15bb6" />
+            <span class="role-challenge-text">Moonshine sold with 5 mins left</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_81cf0ee7813f2ae3" />
+            <span class="role-challenge-text">Moonshine sold with at least 18 bottles intact</span>
           </label></div>
 </div>
 <hr class="thin-divider" />
@@ -1108,121 +947,67 @@ Racoons, Geese, Cranes, Herons, & Pelicans</div></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_a04f5ec0bd736c6b" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_a04f5ec0bd736c6b" />
             <span class="role-challenge-text">1 Blending Tonics crafted or used</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_cf51af02d7363d67" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_cf51af02d7363d67" />
             <span class="role-challenge-text">Don't kill an animal for 12 game hours</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_284a4be7f5835d48" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_284a4be7f5835d48" />
             <span class="role-challenge-text">1 Legendary Animals photographed</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_a04f5ec0bd736c6b" />
-            <span class="role-challenge-text">1 Blending Tonics crafted or used</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_c3e539a86cd5b9ff" />
-            <span class="role-challenge-text">5 Crafted or cooked at Wilderness Camp</span>
-          </label></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_221236541d4abf9a" />
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_221236541d4abf9a" />
             <span class="role-challenge-text">1 Hardy Tonics used when too hot or cold</span>
           </label></div>
 
-        <div class="role-challenge" data-difficulty="hard">
+        <div class="role-challenge" data-difficulty="med">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_6cdbce1b8ac129af" />
-            <span class="role-challenge-text">2 Blending Tonics crafted or used</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_f85c94c66f41aaf4" />
+            <span class="role-challenge-text">1 Legendary Animals found using pheromones</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_f9c3c5a2a3a7658a" />
+            <span class="role-challenge-text">1 Sedated animals revived</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_9c900a7864af7125" />
-            <span class="role-challenge-text">7 Crafted or cooked at Wilderness Camp</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_c36d02f902de2cbc" />
+            <span class="role-challenge-text">Don't kill an animal for 24 game hours</span>
           </label></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <label class="role-challenge-label">
-            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-19_0896959a770cb9bb" />
-            <span class="role-challenge-text">2 Hardy Tonics used when too hot or cold</span>
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_9a50d23e61c79c00" />
+            <span class="role-challenge-text">2 Legendary Animals found using pheromones</span>
+          </label></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <label class="role-challenge-label">
+            <input type="checkbox" class="challenge-checkbox" id="role-challenge_2025-11-20_284a4be7f5835d48" />
+            <span class="role-challenge-text">1 Legendary Animals photographed</span>
           </label></div>
 </div>
 
             
-            <hr class="api-credit-separator" />
+        <hr class="api-credit-separator" />
             
-            <div class="api-credit">
-                <span class="api-label">Data provided by:&nbsp;</span>
-                <a href="https://rdo.gg/api" target="_blank" class="api-link">rdo.gg API</a>
-            </div>
+        <div class="api-credit">
+          <span class="api-label">Data provided by:&nbsp;</span>
+          <a href="https://rdo.gg/api" target="_blank" class="api-link">rdo.gg API</a>
         </div>
-
-<!-- COLUMN 3: BONUS INFO (Now the final column, cleared of content) -->
-        <div class="bonus-container" id="bonus-container">
-            <h3 class="stats-heading" style="color: #666666;">Bonus Info</h3>
-            
-            <div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: left; color: #E0E0E0; font-family: sans-serif;">
-                
-                <!-- *** FIX: Restructured Streak HTML for proper alignment *** -->
-                <p class="stats-text" id="streak-container" style="margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                    <span style="display: flex; align-items: center; white-space: nowrap;">
-                        <span style="font-weight: 500;">Daily Challenge Streak:</span>
-                        <span id="streak-controls">
-                            <span id="streak-down">▼</span><span id="streak-up">▲</span>
-                        </span>
-                    </span>
-                    <span id="current-streak" style="color: #FFC107; text-align: right;">0 Days</span>
-                </p>
-
-                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
-                    <span style="font-weight: 500;">Gold Per Challenge:</span>
-                    <span id="gold-per-challenge" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
-                </p>
-                
-                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
-                    <span style="font-weight: 500;">Completion Reward:</span>
-                    <span id="completion-bonus-reward" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
-                </p>
-                
-                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
-                    <span style="font-weight: 500;">Daily Gold Total:</span>
-                    <span id="daily-gold-total" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
-                </p>
-                
-                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
-                    <span style="font-weight: 500;">7 Day Gold Total:</span>
-                    <span id="cycle-gold-total" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
-                </p>
-                
-                <p class="stats-text" style="display: flex; justify-content: space-between; width: 100%;">
-                    <span style="font-weight: 500;">Streak Gold Total:</span>
-                    <span id="streak-gold-total" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
-                </p>
-                
-            </div>
-
-            <!-- Gold Log Chart Container -->
-            <h3 class="stats-heading" style="color: #666666; margin-top: 15px;">Gold Log (Last 28 Days)</h3>
-            <div id="gold-log-chart-container">
-                <!-- Bars will be injected here by JavaScript -->
-            </div>
-            <div id="chart-info-display" class="chart-info-display">&nbsp;</div>
-
-
-        <!-- END COLUMN 3 -->
+        </div>
     </div> 
   
   
@@ -1245,9 +1030,7 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 <!-- End of Statcounter Code -->  
   
   
-
-
-
+  
 
 
 <script>
@@ -1255,6 +1038,7 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 // JavaScript: Check if flask server is running and show or hide button accordingly       //
 // ////////////////////////////////////////////////////////////////////////////////////// //
 
+// Check if the server is running
 fetch('http://127.0.0.1:6969/status')
     .then(response => {
       if (response.ok) {
@@ -1264,11 +1048,16 @@ fetch('http://127.0.0.1:6969/status')
       }
     })
     .catch(error => {
+      // Server is unreachable
       document.getElementById('pauseBtn').style.display = 'none';
     });
 
+
+
+
+
 // ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Banner and Clock Logic                                                     //
+// JavaScript: Resize text size dynamically based on container width for better accuracy  //
 // ////////////////////////////////////////////////////////////////////////////////////// //
 
 function resizeBannerText() {
@@ -1283,6 +1072,7 @@ function resizeBannerText() {
     const containerWidth = container.offsetWidth;
     const minWidth = 400;
     const maxWidth = 850;
+
     const scale = Math.max(minWidth, Math.min(containerWidth, maxWidth)) / maxWidth;
 
     title.style.fontSize = (2.5 * scale) + 'rem';
@@ -1290,443 +1080,325 @@ function resizeBannerText() {
     counters.style.fontSize = (1.25 * scale) + 'rem';
     
     if (clock) {
-        clock.style.fontSize = (2 * scale) + 'rem';
+    // Let's match the clock font scaling to date's scale, maybe slightly bigger if you want
+    clock.style.fontSize = (2 * scale) + 'rem';
     }
+    
+    
 }
 
 window.addEventListener('resize', resizeBannerText);
 window.addEventListener('load', resizeBannerText);
 
-const offsetSeconds = -600; // -10 minutes offset for game clock
+
+
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: In-Game clock routine                                                      //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+const offsetSeconds = -600;  // -10 minutes offset
 
 function getInGameHour() {
     const now = new Date();
     const utcSeconds = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
+
+    // Game time calculation: 1 real second = 30 game seconds
     const gameSeconds = (utcSeconds * 30 + offsetSeconds) % 86400;
-    return Math.floor(gameSeconds / 3600) + Math.floor((gameSeconds % 3600) / 60) / 60;
+
+    const gameHours = Math.floor(gameSeconds / 3600);
+    const gameMinutes = Math.floor((gameSeconds % 3600) / 60);
+
+    return gameHours + gameMinutes / 60;
 }
 
-function updateAllTimeFunctions() {
+function updateRDOClock() {
     const hourFloat = getInGameHour();
     const gameHours = Math.floor(hourFloat).toString().padStart(2, '0');
     const gameMinutes = Math.floor((hourFloat % 1) * 60).toString().padStart(2, '0');
-    document.getElementById("rdo-clock").textContent = `${gameHours}:${gameMinutes}`;
 
+    document.getElementById("rdo-clock").textContent = `${gameHours}:${gameMinutes}`;
+}
+
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: Swap banner image between 10pm and 5am                                     //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+function updateBanner() {
+    const hour = getInGameHour();
+    console.log("Current in-game hour:", hour);
     const banner = document.querySelector('.banner-image');
+
+    if (hour >= 22 || hour < 5) {
+        if (!banner.src.endsWith("RDO_Banner_Wide_Night.jpg")) {
+            console.log("Switching to night banner");
+            banner.src = "HTML/images/RDO_Banner_Wide_Night.jpg";
+        }
+    } else {
+        if (!banner.src.endsWith("RDO_Banner_Wide.jpg")) {
+            console.log("Switching to day banner");
+            banner.src = "HTML/images/RDO_Banner_Wide.jpg";
+        }
+    }
+}
+
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: Change clock glow colour between 10pm and 5am                              //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+function updateClockGlow() {
+    const hour = getInGameHour();
     const clock = document.querySelector('.rdo-clock');
-    
-    if (hourFloat >= 22 || hourFloat < 5) {
-        if (!banner.src.endsWith("RDO_Banner_Wide_Night.jpg")) banner.src = "HTML/images/RDO_Banner_Wide_Night.jpg";
+
+    if (hour >= 22 || hour < 5) {
         clock.classList.add('night-glow');
     } else {
-        if (!banner.src.endsWith("RDO_Banner_Wide.jpg")) banner.src = "HTML/images/RDO_Banner_Wide.jpg";
         clock.classList.remove('night-glow');
     }
 }
 
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: Call various time related functions                                        //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+function updateAllTimeFunctions() {
+    updateRDOClock();
+    updateBanner();
+    updateClockGlow();
+}
+
+// Use a single interval to keep everything in sync
 setInterval(updateAllTimeFunctions, 1000);
 updateAllTimeFunctions();
 
+
 // ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Main Logic                                                                 //
+// JavaScript: Main logic for toggling, persistence, counters, and difficulty switching   //
 // ////////////////////////////////////////////////////////////////////////////////////// //
 
 document.addEventListener("DOMContentLoaded", function() {
+    const currentVersion = "2025-11-20_07-27-52";
+    const storedVersion = localStorage.getItem("challenge_version");
 
-    // --- CONSTANTS INJECTED FROM PYTHON ---
-    const PYTHON_STREAK_OVERRIDE = -1;
-    const PYTHON_CHALLENGE_TIMESTAMP = 1763532000; 
+    if (storedVersion !== currentVersion) {
+        Object.keys(localStorage).forEach(key => {
+            if (key.startsWith("role-challenge_") || key.startsWith("challenge_")) {
+                localStorage.removeItem(key);
+            }
+        });
+        localStorage.setItem("challenge_version", currentVersion);
+    }
 
-    // --- LOCAL STORAGE KEYS ---
-    const LS_STREAK_COUNT = 'rdoStreakCount';
-    const LS_LAST_COMPLETION_DATE = 'rdoLastCompletionDate';
-    const LS_CHALLENGE_STATUS = 'rdoChallengeStatus';
-    const LS_STREAK_FOR_MULTIPLIER = 'rdoStreakForMultiplier'; 
-    const MAX_RDO_STREAK = 28;
-    const LS_STREAK_GOLD_TOTAL = 'rdoStreakGoldTotal';
-    const LS_STREAK_GOLD_TOTAL_RUNNING = 'rdoStreakGoldTotalRunning';
-    const LS_GOLD_LOG = 'rdoGoldLog';
-    const LS_LAST_KNOWN_TIMESTAMP = 'rdoLastKnownTimestamp';
-    
-    // --- ELEMENT SELECTORS ---
     const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
     const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
     const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
-    
-    // --- UTILITY FUNCTIONS ---
-    
-    function getRDODayKey() {
-        const now = new Date();
-        const resetTimeHours = 6; 
-        const date = new Date(now.getTime());
-        if (date.getUTCHours() < resetTimeHours) {
-            date.setUTCDate(date.getUTCDate() - 1);
-        }
-        return date.toISOString().split('T')[0];
-    }
 
-    function getChallengeDateKey() {
-        const date = new Date(PYTHON_CHALLENGE_TIMESTAMP * 1000);
-        return date.toISOString().split('T')[0];
-    }
-
-    function getDateDifferenceInDays(dateStr1, dateStr2) {
-        const date1 = new Date(`${dateStr1}T12:00:00Z`);
-        const date2 = new Date(`${dateStr2}T12:00:00Z`);
-        return Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
-    }
-    
-    function setStreakCount(newCount, setCompleted) {
-        const count = Math.min(Math.max(0, newCount), MAX_RDO_STREAK); 
-        localStorage.setItem(LS_STREAK_COUNT, count);
-        if (setCompleted) {
-            localStorage.setItem(LS_LAST_COMPLETION_DATE, getRDODayKey());
-            localStorage.setItem(LS_CHALLENGE_STATUS, 'completed');
-        } else {
-            localStorage.removeItem(LS_LAST_COMPLETION_DATE);
-            localStorage.removeItem(LS_CHALLENGE_STATUS);
-        }
-    }
-
-    function getMultiplier() { 
-        const lockedStreak = parseInt(localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) || '0', 10);
-        if (lockedStreak >= 21) return 2.5;
-        if (lockedStreak >= 14) return 2.0;
-        if (lockedStreak >= 7) return 1.5;
-        return 1.0; 
-    }
-
-    function formatGoldForDisplay(goldValue) {
-        const fixedValue = goldValue.toFixed(2);
-        const parts = fixedValue.split('.');
-        return `<span>${parts[0]}</span><span class="gold-decimal">.${parts[1]}</span> Gold Bars`;
-    }
-
-    function calculateDailyGoldTotal(completedGeneral, completedRole) {
-        const BASE_REWARD = 0.10; 
-        const COMPLETION_BONUS_BASE = 0.30; 
-        const multiplier = getMultiplier();
-        const completionBonusAmount = COMPLETION_BONUS_BASE * multiplier;
-        const generalGold = (completedGeneral * BASE_REWARD) * multiplier;
-        const generalBonus = (completedGeneral === 7) ? completionBonusAmount : 0;
-        const roleGold = (completedRole * BASE_REWARD) * multiplier;
-        const roleBonus = (completedRole === 9) ? completionBonusAmount : 0;
-        
-        document.getElementById('gold-per-challenge').innerHTML = formatGoldForDisplay(BASE_REWARD * multiplier);
-        document.getElementById('completion-bonus-reward').innerHTML = formatGoldForDisplay(completionBonusAmount);
-        
-        return Math.round((generalGold + generalBonus + roleGold + roleBonus) * 100) / 100;
-    }
-
-    function logDailyGold(goldAmount, streakCount, generalCount, roleCount) {
-        const today = getRDODayKey();
-        if (getChallengeDateKey() !== today) return;
-
-        let goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
-        const todayEntryIndex = goldLog.findIndex(entry => entry.date === today);
-        const newEntry = { date: today, gold: goldAmount, streak: streakCount, general: generalCount, role: roleCount };
-
-        if (todayEntryIndex > -1) {
-            goldLog[todayEntryIndex] = newEntry;
-        } else {
-            goldLog.push(newEntry);
-        }
-        while (goldLog.length > 28) goldLog.shift();
-        localStorage.setItem(LS_GOLD_LOG, JSON.stringify(goldLog));
-    }
-    
-    function renderGoldLogChart() {
-        const GOLD_CHART_MULTIPLIER = 12; 
-        const container = document.getElementById('gold-log-chart-container');
-        const infoDisplay = document.getElementById('chart-info-display');
-        if (!container || !infoDisplay) return;
-
-        // Audio Context Setup
-        if (!window.rdoAudioCtx) {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            window.rdoAudioCtx = new AudioContext();
-            const unlockAudio = () => {
-                if (window.rdoAudioCtx.state === 'suspended') window.rdoAudioCtx.resume();
-                document.removeEventListener('click', unlockAudio);
-            };
-            document.addEventListener('click', unlockAudio);
-        }
-        
-        function playHoverTick() {
-            const ctx = window.rdoAudioCtx;
-            if (!ctx || ctx.state === 'suspended') return;
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.type = 'triangle'; 
-            osc.frequency.setValueAtTime(1200, ctx.currentTime);
-            gain.gain.setValueAtTime(0.2, ctx.currentTime); 
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.05);
-        }
-
-        infoDisplay.innerHTML = '&nbsp;';
-        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
-        container.innerHTML = '';
-
-        if (goldLog.length === 0) {
-            container.innerHTML = '<p style="color: #666; font-size: 0.8rem; text-align: center; width: 100%;">No gold data logged yet.</p>';
-            return;
-        }
-
-        function getBarColorForStreak(streak) {
-            if (!streak) return '#555555';
-            if (streak >= 22) return '#FFD200'; 
-            if (streak >= 15) return '#E4B800'; 
-            if (streak >= 8)  return '#C59A00'; 
-            return '#A57C00';                   
-        }
-        
-        const availableWidth = container.clientWidth - 4; 
-        const barWidth = Math.max(Math.floor(availableWidth / 28) - 2, 2);
-        let tooltipLeaveTimer;
-
-        goldLog.forEach(entry => {
-            const barHeight = Math.max((entry.gold * GOLD_CHART_MULTIPLIER), 0);
-            const wrapper = document.createElement('div');
-            wrapper.className = 'chart-bar-wrapper';
-            wrapper.style.width = `${barWidth}px`;
-            
-            const bar = document.createElement('div');
-            bar.className = 'chart-bar';
-            bar.style.height = `${barHeight}px`;
-            bar.style.backgroundColor = getBarColorForStreak(entry.streak);
-
-            wrapper.appendChild(bar);
-            container.appendChild(wrapper);
-
-            const date = new Date(entry.date); 
-
-            wrapper.addEventListener('mouseenter', () => {
-                if (tooltipLeaveTimer) clearTimeout(tooltipLeaveTimer);
-                bar.style.backgroundColor = '#FFFFFF';
-                bar.style.boxShadow = '0 0 8px rgba(255, 255, 255, 0.9)';
-                playHoverTick();
-
-                const humanDate = date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-                const streakText = entry.streak ? `Day ${entry.streak} (Week ${Math.floor((entry.streak - 1) / 7) + 1})` : 'No Streak';
-                
-                // --- RESTORED STAR LOGIC ---
-                let star = '';
-                if (entry.general === 7 && entry.role === 9) {
-                    star = ' <span style="color: #FFD700;">⭐</span>';
-                } else if (entry.general === 7 || entry.role === 9) {
-                    star = ' <span style="filter: grayscale(100%) brightness(1.3);">⭐</span>';
-                }
-                // ---------------------------
-                
-                infoDisplay.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; font-size: 0.9rem;">
-                        <span style="font-weight: bold;">${humanDate}</span>
-                        <span>${entry.gold.toFixed(2)} Gold${star}</span>
-                    </div>
-                    <div style="font-size: 0.8rem; color: #999;">Streak: ${streakText} | Gen: ${entry.general}/7, Role: ${entry.role}/9</div>
-                `;
-                infoDisplay.style.color = '#aaa';
+    // Function to dim headings when all visible challenges for a role are completed
+    function updateRoleHeadingCompletion() {
+        document.querySelectorAll('.role-container').forEach(roleContainer => {
+            const visibleChallenges = Array.from(roleContainer.querySelectorAll('.role-challenge')).filter(ch => ch.style.display !== 'none');
+            const allCompleted = visibleChallenges.length > 0 && visibleChallenges.every(ch => {
+                const cb = ch.querySelector('.challenge-checkbox');
+                return cb && cb.checked;
             });
 
-            wrapper.addEventListener('mouseleave', () => {
-                bar.style.backgroundColor = getBarColorForStreak(entry.streak);
-                bar.style.boxShadow = 'none';
-                tooltipLeaveTimer = setTimeout(() => {
-                    infoDisplay.innerHTML = '&nbsp;';
-                }, 50);
-            });
+            const heading = roleContainer.querySelector('.role-heading');
+            if (heading) {
+                heading.classList.toggle('dimmed', allCompleted);
+            }
         });
-    }
-
-    // --- CORE UPDATE LOGIC ---
-    
-    function loadStreak() {
-        let currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
-        if (PYTHON_STREAK_OVERRIDE > -1) {
-            currentStreak = PYTHON_STREAK_OVERRIDE; 
-            setStreakCount(currentStreak, true);
-        }
-        
-        const lastCompletionDateStr = localStorage.getItem(LS_LAST_COMPLETION_DATE);
-        if (lastCompletionDateStr) {
-            const diff = getDateDifferenceInDays(getRDODayKey(), lastCompletionDateStr);
-            if (diff > 1 || (diff === 1 && currentStreak >= MAX_RDO_STREAK)) {
-                currentStreak = 0;
-                setStreakCount(0, false);
-                localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00');
-                localStorage.setItem(LS_STREAK_GOLD_TOTAL_RUNNING, '0.00');
-            }
-            if (diff >= 1) {
-                localStorage.removeItem(LS_CHALLENGE_STATUS);
-                localStorage.removeItem(LS_LAST_COMPLETION_DATE); 
-                localStorage.setItem('dailyGoldTotalForComparison', formatGoldForDisplay(0.0));
-            }
-        }
-        
-        localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
-        document.getElementById('current-streak').textContent = `${currentStreak} Days`;
     }
 
     function updateCounters() {
         const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
+        const generalTotal = generalCheckboxes.length;
+
         const roleDone = Math.min(
-            Array.from(roleCheckboxes).filter(cb => cb.checked && cb.closest('.role-challenge')?.style.display !== 'none').length,
+            Array.from(roleCheckboxes).filter(cb => {
+                return cb.checked && cb.closest('.role-challenge')?.style.display !== 'none';
+            }).length,
             9
         );
+        const roleTotal = 9;
 
-        document.getElementById('general-counter').textContent = `${generalDone}/7`;
-        document.getElementById('general-counter').classList.toggle('counter-glow', generalDone === 7);
-        document.getElementById('role-counter').textContent = `${roleDone}/9`;
-        document.getElementById('role-counter').classList.toggle('counter-glow', roleDone === 9);
-        
-        const dailyGoldTotal = calculateDailyGoldTotal(generalDone, roleDone);
-        const currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
-        const goldDisplay = document.getElementById('daily-gold-total');
-        
-        const isDataCurrent = (getChallengeDateKey() === getRDODayKey());
-        
-        if (isDataCurrent) {
-            logDailyGold(dailyGoldTotal, currentStreak, generalDone, roleDone);
-            
-            const newGoldHTML = formatGoldForDisplay(dailyGoldTotal);
-            const dailyTotalForComparison = localStorage.getItem('dailyGoldTotalForComparison') || formatGoldForDisplay(0.0);
+        console.log('updateCounters:', { roleDone }, { roleTotal }, 'roleCheckboxes:', roleCheckboxes.length);
 
-            if (dailyTotalForComparison !== newGoldHTML) {
-                const oldVal = parseFloat(dailyTotalForComparison.replace(/[^0-9.]/g, '') || '0');
-                const delta = dailyGoldTotal - oldVal;
-                
-                let cycleGold = parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL) || '0.00') + delta;
-                let runGold = parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL_RUNNING) || '0.00') + delta;
+        const generalCounter = document.getElementById('general-counter');
+        const roleCounter = document.getElementById('role-counter');
 
-                localStorage.setItem(LS_STREAK_GOLD_TOTAL, cycleGold.toFixed(2));
-                localStorage.setItem(LS_STREAK_GOLD_TOTAL_RUNNING, runGold.toFixed(2));
-                localStorage.setItem('dailyGoldTotalForComparison', newGoldHTML);
-
-                ['daily-gold-total', 'cycle-gold-total', 'streak-gold-total'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if(el) {
-                        el.classList.remove('gold-exciting-flash');
-                        void el.offsetWidth; 
-                        el.classList.add('gold-exciting-flash');
-                        setTimeout(() => {
-                            el.classList.remove('gold-exciting-flash');
-                        }, 1000);
-                    }
-                });
+        if (generalCounter) {
+            generalCounter.textContent = `${generalDone}/${generalTotal}`;
+            // Add or remove glow on general counter
+            if (generalDone === generalTotal) {
+                generalCounter.classList.add('counter-glow');
+            } else {
+                generalCounter.classList.remove('counter-glow');
             }
-            goldDisplay.innerHTML = newGoldHTML;
-        } else {
-            goldDisplay.innerHTML = '<span style="color: #888; font-size: 0.8em;">PREVIOUS DAY DATA</span>';
         }
-
-        document.getElementById('cycle-gold-total').innerHTML = formatGoldForDisplay(parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL) || '0.00'));
-        document.getElementById('streak-gold-total').innerHTML = formatGoldForDisplay(parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL_RUNNING) || '0.00'));
+        if (roleCounter) {
+            roleCounter.textContent = `${roleDone}/${roleTotal}`;
+            // Add or remove glow on role counter
+            if (roleDone === roleTotal) {
+                roleCounter.classList.add('counter-glow');
+            } else {
+                roleCounter.classList.remove('counter-glow');
+            }
+        }
 
         const rolesContainer = document.getElementById('roles-container') || document.body;
-        rolesContainer.classList.toggle('all-roles-completed', roleDone === 9);
-        document.querySelectorAll('.difficulty-toggle').forEach(toggle => toggle.classList.toggle('dimmed-text', roleDone === 9));
-        
-        document.querySelectorAll('.role-container').forEach(roleContainer => {
-            const visible = Array.from(roleContainer.querySelectorAll('.role-challenge')).filter(ch => ch.style.display !== 'none');
-            const allComp = visible.length > 0 && visible.every(ch => ch.querySelector('.challenge-checkbox')?.checked);
-            roleContainer.querySelector('.role-heading')?.classList.toggle('dimmed', allComp);
-        });
-        
-        renderGoldLogChart();
-    }
-    
-    function handleStreakUpdate(isTicked) {
-        const checkedCount = Array.from(allCheckboxes).filter(cb => cb.checked).length;
-        const currentStatus = localStorage.getItem(LS_CHALLENGE_STATUS);
-        const lockedStreak = parseInt(localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) || '0', 10);
-        
-        if (isTicked && checkedCount > 0 && currentStatus !== 'completed') {
-            const newStreak = lockedStreak + 1;
-            if (newStreak > 0 && newStreak % 7 === 0) localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00');
-            setStreakCount(newStreak, true);
-        } else if (!isTicked && checkedCount === 0 && currentStatus === 'completed') {
-            setStreakCount(lockedStreak, false);
-        }
-        updateCounters();
-    }
 
-    // --- INIT ---
-    
-    const dailyKeyCheck = localStorage.getItem(LS_LAST_KNOWN_TIMESTAMP);
-    if (dailyKeyCheck != PYTHON_CHALLENGE_TIMESTAMP) {
-        Object.keys(localStorage).forEach(k => { if(k.includes('_challenge_')) localStorage.removeItem(k); });
-        localStorage.setItem('dailyGoldTotalForComparison', formatGoldForDisplay(0.0));
-    }
-    
-    localStorage.setItem(LS_LAST_KNOWN_TIMESTAMP, PYTHON_CHALLENGE_TIMESTAMP);
-    
-    allCheckboxes.forEach(cb => {
-        const key = `${PYTHON_CHALLENGE_TIMESTAMP}_${cb.id}`;
-        cb.checked = localStorage.getItem(key) === "true";
-        if(cb.checked) cb.closest('div').classList.add('completed');
-        
-        cb.addEventListener('change', () => {
-            cb.closest('div').classList.toggle('completed', cb.checked);
-            localStorage.setItem(key, cb.checked);
-            handleStreakUpdate(cb.checked);
-        });
-    });
+        if (roleDone === roleTotal) {
+            rolesContainer.classList.add('all-roles-completed');
 
-    document.getElementById('streak-up').addEventListener('click', () => { 
-        localStorage.setItem(LS_STREAK_COUNT, Math.min(28, parseInt(localStorage.getItem(LS_STREAK_COUNT)||0)+1)); 
-        localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, localStorage.getItem(LS_STREAK_COUNT));
-        updateCounters(); 
-    });
-    document.getElementById('streak-down').addEventListener('click', () => { 
-        localStorage.setItem(LS_STREAK_COUNT, Math.max(0, parseInt(localStorage.getItem(LS_STREAK_COUNT)||0)-1)); 
-        localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, localStorage.getItem(LS_STREAK_COUNT));
-        updateCounters(); 
-    });
-
-    document.querySelectorAll('.difficulty-toggle').forEach(toggle => {
-        const roleContainer = toggle.closest('.role-container');
-        const roleName = roleContainer.querySelector('.role-heading').textContent.split('(')[0].trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-        const lsKey = `difficulty_${roleName}`;
-        
-        function setView(diff) {
-            roleContainer.querySelectorAll('.role-challenge').forEach(ch => ch.style.display = (ch.dataset.difficulty === diff) ? '' : 'none');
-            toggle.dataset.difficulty = diff;
-            const desc = diff === 'easy' ? 'Rank 1–5' : diff === 'med' ? 'Rank 6–14' : 'Rank 15+';
-            toggle.textContent = `(${diff.charAt(0).toUpperCase() + diff.slice(1)}: ${desc})`;
-        }
-        
-        setView(localStorage.getItem(lsKey) || 'hard');
-        
-        toggle.addEventListener('click', () => {
-            if (toggle.classList.contains('dimmed-text')) return;
-            const next = toggle.dataset.difficulty === 'easy' ? 'med' : toggle.dataset.difficulty === 'med' ? 'hard' : 'easy';
-            localStorage.setItem(lsKey, next);
-            setView(next);
-            roleContainer.querySelectorAll('.role-challenge[style*="display: none"] .challenge-checkbox:checked').forEach(cb => {
-                cb.checked = false;
-                localStorage.setItem(`${PYTHON_CHALLENGE_TIMESTAMP}_${cb.id}`, false);
+            roleCheckboxes.forEach(cb => {
+                cb.disabled = !cb.checked;
             });
-            handleStreakUpdate(false);
+
+            const toggles = rolesContainer.querySelectorAll('.difficulty-toggle');
+            toggles.forEach(toggle => {
+                toggle.disabled = true;
+                toggle.classList.add('dimmed-text');
+            });
+
+        } else {
+            rolesContainer.classList.remove('all-roles-completed');
+
+            roleCheckboxes.forEach(cb => {
+                cb.disabled = false;
+            });
+
+            const toggles = rolesContainer.querySelectorAll('.difficulty-toggle');
+            toggles.forEach(toggle => {
+                toggle.disabled = false;
+                toggle.classList.remove('dimmed-text');
+            });
+        }
+
+        // Dim all role challenges and descriptions except checked ones if all completed
+        const allDone = roleDone === roleTotal;
+
+        roleCheckboxes.forEach(cb => {
+            const challenge = cb.closest('.role-challenge');
+            if (!challenge) return;
+
+            let description = challenge.querySelector('.role-challenge-desc');
+
+            if (description) {
+                description.classList.toggle('dimmed', allDone && !cb.checked);
+            }
+            challenge.classList.toggle('dimmed', allDone && !cb.checked);
+        });
+
+        updateRoleHeadingCompletion();
+    }
+
+    allCheckboxes.forEach(cb => {
+        const key = cb.id;
+        const saved = localStorage.getItem(key);
+
+        cb.checked = saved === "true";
+
+        const wrapper = cb.closest('.challenge') || cb.closest('.role-challenge');
+        if (cb.checked && wrapper) {
+            wrapper.classList.add('completed');
+        } else if (wrapper) {
+            wrapper.classList.remove('completed');
+        }
+
+        cb.addEventListener('change', () => {
+            if (wrapper) {
+                wrapper.classList.toggle('completed', cb.checked);
+            }
+            localStorage.setItem(key, cb.checked);
+            updateCounters();
         });
     });
 
-    loadStreak();
+    // Difficulty toggle logic
+    function updateRoleDifficulty(roleContainer, difficulty) {
+        const challenges = roleContainer.querySelectorAll('.role-challenge');
+
+        challenges.forEach(challenge => {
+            const challengeDifficulty = challenge.getAttribute('data-difficulty') || 'easy';
+            challenge.style.display = (challengeDifficulty === difficulty) ? '' : 'none';
+        });
+
+        const toggle = roleContainer.querySelector('.difficulty-toggle');
+        if (toggle) {
+            toggle.dataset.difficulty = difficulty;
+            const desc = difficulty === 'easy' ? 'Rank 1–5'
+                        : difficulty === 'med' ? 'Rank 6–14'
+                        : 'Rank 15+';
+
+            toggle.textContent = desc;
+        }
+
+        updateRoleHeadingCompletion();
+    }
+
+    function nextDifficulty(current) {
+        if (current === 'easy') return 'med';
+        if (current === 'med') return 'hard';
+        return 'easy';
+    }
+
+    const toggles = document.querySelectorAll('.difficulty-toggle');
+
+    toggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            console.log('Difficulty toggle clicked, current difficulty:', toggle.dataset.difficulty);
+            const roleContainer = toggle.closest('.role-container');
+            const currentDifficulty = toggle.dataset.difficulty || 'easy';
+            const newDifficulty = nextDifficulty(currentDifficulty);
+            updateRoleDifficulty(roleContainer, newDifficulty);
+            updateCounters();
+        });
+
+        const roleContainer = toggle.closest('.role-container');
+        updateRoleDifficulty(roleContainer, toggle.dataset.difficulty || 'easy');
+    });
+
     updateCounters();
-    
-    window.addEventListener('load', renderGoldLogChart);
-    window.addEventListener('resize', renderGoldLogChart);
 });
+
+
+
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: Hide the Pause Process Button For Remote Visitors, Only For Local          //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+document.addEventListener("DOMContentLoaded", function () {
+    const isLocal = location.protocol === "file:" || location.hostname === "localhost";
+    const pauseBtn = document.getElementById("pause-btn");
+    if (!isLocal && pauseBtn) {
+        pauseBtn.style.display = "none";
+    }
+});
+
+
+
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// JavaScript: Pause Button Code                                                          //
+// ////////////////////////////////////////////////////////////////////////////////////// //
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('pauseBtn').addEventListener('click', () => {
-      fetch('http://127.0.0.1:6969/pause', { method: 'POST' })
-      .then(r => r.text()).then(d => alert(d)).catch(e => alert(e));
+      fetch('http://127.0.0.1:6969/pause', {
+        method: 'POST'
+      })
+      .then(response => response.text())
+      .then(data => alert('Server response: ' + data))
+      .catch(error => alert('Error: ' + error));
     });
 });
+
+
+
 </script>
 
 
@@ -1737,6 +1409,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  
+
+
+
+
+
+
 </body>
 </html>
