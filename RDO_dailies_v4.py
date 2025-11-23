@@ -39,6 +39,10 @@ DESCRIPTION_MODE = "auto"
 
 manual_streak = -1		# Set the number of days for the daily streak
                         # -1 will set it to use the current stored value
+                        
+                        
+#   Toggle browser console debugging for Gold Totals
+ENABLE_JS_DEBUG = True                        
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
@@ -1046,6 +1050,9 @@ javascript_code = f'''
 
 
 
+
+
+
 <script>
 // ////////////////////////////////////////////////////////////////////////////////////// //
 // JavaScript: Check if flask server is running and show or hide button accordingly       //
@@ -1132,6 +1139,7 @@ document.addEventListener("DOMContentLoaded", function() {{
     // --- CONSTANTS INJECTED FROM PYTHON ---
     const PYTHON_STREAK_OVERRIDE = {manual_streak};
     const PYTHON_CHALLENGE_TIMESTAMP = {start_timestamp}; 
+    const PYTHON_ENABLE_DEBUG = {str(ENABLE_JS_DEBUG).lower()};
 
     // --- LOCAL STORAGE KEYS ---
     const LS_STREAK_COUNT = 'rdoStreakCount';
@@ -1139,8 +1147,6 @@ document.addEventListener("DOMContentLoaded", function() {{
     const LS_CHALLENGE_STATUS = 'rdoChallengeStatus';
     const LS_STREAK_FOR_MULTIPLIER = 'rdoStreakForMultiplier'; 
     const MAX_RDO_STREAK = 28;
-    const LS_STREAK_GOLD_TOTAL = 'rdoStreakGoldTotal';
-    const LS_STREAK_GOLD_TOTAL_RUNNING = 'rdoStreakGoldTotalRunning';
     const LS_GOLD_LOG = 'rdoGoldLog';
     const LS_LAST_KNOWN_TIMESTAMP = 'rdoLastKnownTimestamp';
     
@@ -1186,10 +1192,10 @@ document.addEventListener("DOMContentLoaded", function() {{
 
     function getMultiplier() {{ 
         const lockedStreak = parseInt(localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) || '0', 10);
-        if (lockedStreak >= 21) return 2.5;
-        if (lockedStreak >= 14) return 2.0;
-        if (lockedStreak >= 7) return 1.5;
-        return 1.0; 
+        if (lockedStreak >= 22) return 2.5; // Days 22-28
+        if (lockedStreak >= 15) return 2.0; // Days 15-21
+        if (lockedStreak >= 8) return 1.5;  // Days 8-14
+        return 1.0;                         // Days 1-7
     }}
 
     function formatGoldForDisplay(goldValue) {{
@@ -1198,21 +1204,24 @@ document.addEventListener("DOMContentLoaded", function() {{
         return `<span>${{parts[0]}}</span><span class="gold-decimal">.${{parts[1]}}</span> Gold Bars`;
     }}
 
-    // --- DEBUGGING FUNCTION RESTORED ---
-    function debugGoldStats(source) {{
-        console.group(`%cGOLD & STREAK DEBUG @ ${{source}}`, 'color: #FFC107; background: #333; padding: 4px; border-radius: 4px;');
+    // --- DEBUGGING FUNCTION ---
+    function debugGoldStats(daily, week, running, goldLog) {{
+        if (!PYTHON_ENABLE_DEBUG) return;
+
+        console.group(`%cRDO GOLD STATS`, 'color: #000; background: #FFC107; padding: 4px; border-radius: 4px; font-weight: bold;');
+        
         console.table({{
-            "RDO Day Key": getRDODayKey(),
-            "File Date Key": getChallengeDateKey(),
-            "Streak Count": localStorage.getItem(LS_STREAK_COUNT) || '0',
-            "Multiplier Lock": localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) || '0',
-            "Daily Gold (Comp)": localStorage.getItem('dailyGoldTotalForComparison') || '0.00',
-            "7-Day Cycle": localStorage.getItem(LS_STREAK_GOLD_TOTAL) || '0.00',
-            "Running Total": localStorage.getItem(LS_STREAK_GOLD_TOTAL_RUNNING) || '0.00'
+            "Current Streak": localStorage.getItem(LS_STREAK_COUNT) + " Days",
+            "Multiplier Lock": localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) + " Days",
+            "Daily Total": daily.toFixed(2),
+            "Streak Week Total": week.toFixed(2),
+            "Streak Running Total": running.toFixed(2)
         }});
-        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
-        console.log("Last 28 Days Gold Log:");
+
+        console.groupCollapsed("Full Gold Log History");
         console.table(goldLog);
+        console.groupEnd();
+        
         console.groupEnd();
     }}
 
@@ -1247,6 +1256,55 @@ document.addEventListener("DOMContentLoaded", function() {{
         }}
         while (goldLog.length > 28) goldLog.shift();
         localStorage.setItem(LS_GOLD_LOG, JSON.stringify(goldLog));
+    }}
+    
+    // UPDATED FUNCTION: Smarter "Current Streak" Calculation
+    function calculateLogSums(currentStreak) {{
+        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
+        
+        // 1. Calculate Week Total (Range based)
+        let minWeekStreak = 1;
+        if (currentStreak >= 22) minWeekStreak = 22;
+        else if (currentStreak >= 15) minWeekStreak = 15;
+        else if (currentStreak >= 8) minWeekStreak = 8;
+        else minWeekStreak = 1;
+        
+        const maxWeekStreak = minWeekStreak + 6;
+
+        let weekTotal = 0.0;
+        let runningTotal = 0.0;
+        
+        // Loop forward for Week Total (simple range check)
+        goldLog.forEach(entry => {{
+            const val = parseFloat(entry.gold || 0);
+            const s = parseInt(entry.streak || 0);
+            if (s >= minWeekStreak && s <= maxWeekStreak && s > 0) {{
+                weekTotal += val;
+            }}
+        }});
+        
+        // 2. Calculate Running Total (Backwards contiguous check)
+        let lastStreakVal = -1;
+        
+        for (let i = goldLog.length - 1; i >= 0; i--) {{
+            const entry = goldLog[i];
+            const s = parseInt(entry.streak || 0);
+            
+            if (s === 0) break;
+            
+            // Discontinuity Check: If streak jumps UP going backwards (e.g. 1 -> 28), it's a new cycle.
+            if (lastStreakVal !== -1 && s >= lastStreakVal) {{
+                break;
+            }}
+
+            runningTotal += parseFloat(entry.gold || 0);
+
+            if (s === 1) break;
+
+            lastStreakVal = s;
+        }}
+        
+        return {{ week: weekTotal, running: runningTotal }};
     }}
     
     function renderGoldLogChart() {{
@@ -1349,7 +1407,7 @@ document.addEventListener("DOMContentLoaded", function() {{
                 bar.style.boxShadow = 'none';
                 tooltipLeaveTimer = setTimeout(() => {{
                     infoDisplay.innerHTML = '&nbsp;';
-                }}, 200);  /* Delay before clearing tooltip text when mouse leaves bar */
+                }}, 200);
             }});
         }});
     }}
@@ -1369,13 +1427,10 @@ document.addEventListener("DOMContentLoaded", function() {{
             if (diff > 1 || (diff === 1 && currentStreak >= MAX_RDO_STREAK)) {{
                 currentStreak = 0;
                 setStreakCount(0, false);
-                localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00');
-                localStorage.setItem(LS_STREAK_GOLD_TOTAL_RUNNING, '0.00');
             }}
             if (diff >= 1) {{
                 localStorage.removeItem(LS_CHALLENGE_STATUS);
                 localStorage.removeItem(LS_LAST_COMPLETION_DATE); 
-                localStorage.setItem('dailyGoldTotalForComparison', formatGoldForDisplay(0.0));
             }}
         }}
         
@@ -1401,45 +1456,39 @@ document.addEventListener("DOMContentLoaded", function() {{
         document.getElementById('current-streak').textContent = `${{currentStreak}} Days`; 
         
         const goldDisplay = document.getElementById('daily-gold-total');
-        
         const isDataCurrent = (getChallengeDateKey() === getRDODayKey());
         
         if (isDataCurrent) {{
+            // 1. Log today's calculated gold (and streak) to localStorage
             logDailyGold(dailyGoldTotal, currentStreak, generalDone, roleDone);
-            
-            const newGoldHTML = formatGoldForDisplay(dailyGoldTotal);
-            const dailyTotalForComparison = localStorage.getItem('dailyGoldTotalForComparison') || formatGoldForDisplay(0.0);
-
-            if (dailyTotalForComparison !== newGoldHTML) {{
-                const oldVal = parseFloat(dailyTotalForComparison.replace(/[^0-9.]/g, '') || '0');
-                const delta = dailyGoldTotal - oldVal;
-                
-                let cycleGold = parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL) || '0.00') + delta;
-                let runGold = parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL_RUNNING) || '0.00') + delta;
-
-                localStorage.setItem(LS_STREAK_GOLD_TOTAL, cycleGold.toFixed(2));
-                localStorage.setItem(LS_STREAK_GOLD_TOTAL_RUNNING, runGold.toFixed(2));
-                localStorage.setItem('dailyGoldTotalForComparison', newGoldHTML);
-
-                ['daily-gold-total', 'cycle-gold-total', 'streak-gold-total'].forEach(id => {{
-                    const el = document.getElementById(id);
-                    if(el) {{
-                        el.classList.remove('gold-exciting-flash');
-                        void el.offsetWidth; 
-                        el.classList.add('gold-exciting-flash');
-                        setTimeout(() => {{
-                            el.classList.remove('gold-exciting-flash');
-                        }}, 1000);
-                    }}
-                }});
-            }}
-            goldDisplay.innerHTML = newGoldHTML;
+            goldDisplay.innerHTML = formatGoldForDisplay(dailyGoldTotal);
         }} else {{
             goldDisplay.innerHTML = '<span style="color: #888; font-size: 0.8em;">PREVIOUS DAY DATA</span>';
         }}
 
-        document.getElementById('cycle-gold-total').innerHTML = formatGoldForDisplay(parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL) || '0.00'));
-        document.getElementById('streak-gold-total').innerHTML = formatGoldForDisplay(parseFloat(localStorage.getItem(LS_STREAK_GOLD_TOTAL_RUNNING) || '0.00'));
+        // 2. Calculate Week/Running totals by summing the Log
+        const sums = calculateLogSums(currentStreak);
+        
+        // 3. Update DOM with flash effect if values changed
+        const newCycleHTML = formatGoldForDisplay(sums.week);
+        const cycleEl = document.getElementById('cycle-gold-total');
+        if (cycleEl.innerHTML !== newCycleHTML) {{
+             cycleEl.innerHTML = newCycleHTML;
+             cycleEl.classList.remove('gold-exciting-flash');
+             void cycleEl.offsetWidth; 
+             cycleEl.classList.add('gold-exciting-flash');
+             setTimeout(() => cycleEl.classList.remove('gold-exciting-flash'), 1000);
+        }}
+        
+        const newStreakHTML = formatGoldForDisplay(sums.running);
+        const streakEl = document.getElementById('streak-gold-total');
+        if (streakEl.innerHTML !== newStreakHTML) {{
+             streakEl.innerHTML = newStreakHTML;
+             streakEl.classList.remove('gold-exciting-flash');
+             void streakEl.offsetWidth; 
+             streakEl.classList.add('gold-exciting-flash');
+             setTimeout(() => streakEl.classList.remove('gold-exciting-flash'), 1000);
+        }}
 
         const rolesContainer = document.getElementById('roles-container') || document.body;
         rolesContainer.classList.toggle('all-roles-completed', roleDone === 9);
@@ -1453,7 +1502,8 @@ document.addEventListener("DOMContentLoaded", function() {{
         
         renderGoldLogChart();
         // --- DEBUG LOG ---
-        debugGoldStats("updateCounters");
+        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
+        debugGoldStats(dailyGoldTotal, sums.week, sums.running, goldLog);
     }}
     
     function handleStreakUpdate(isTicked) {{
@@ -1463,7 +1513,6 @@ document.addEventListener("DOMContentLoaded", function() {{
         
         if (isTicked && checkedCount > 0 && currentStatus !== 'completed') {{
             const newStreak = lockedStreak + 1;
-            if (newStreak > 0 && newStreak % 7 === 0) localStorage.setItem(LS_STREAK_GOLD_TOTAL, '0.00');
             setStreakCount(newStreak, true);
         }} else if (!isTicked && checkedCount === 0 && currentStatus === 'completed') {{
             setStreakCount(lockedStreak, false);
@@ -1476,7 +1525,6 @@ document.addEventListener("DOMContentLoaded", function() {{
     const dailyKeyCheck = localStorage.getItem(LS_LAST_KNOWN_TIMESTAMP);
     if (dailyKeyCheck != PYTHON_CHALLENGE_TIMESTAMP) {{
         Object.keys(localStorage).forEach(k => {{ if(k.includes('_challenge_')) localStorage.removeItem(k); }});
-        localStorage.setItem('dailyGoldTotalForComparison', formatGoldForDisplay(0.0));
     }}
     
     localStorage.setItem(LS_LAST_KNOWN_TIMESTAMP, PYTHON_CHALLENGE_TIMESTAMP);
@@ -1533,7 +1581,6 @@ document.addEventListener("DOMContentLoaded", function() {{
 
     loadStreak();
     updateCounters();
-    debugGoldStats("Initial Load");
     
     window.addEventListener('load', renderGoldLogChart);
     window.addEventListener('resize', renderGoldLogChart);
@@ -1546,6 +1593,7 @@ document.addEventListener('DOMContentLoaded', () => {{
     }});
 }});
 </script>
+
 
 
 
@@ -2426,7 +2474,7 @@ html_output = f'''
                 </p>
                 
                 <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
-                    <span style="font-weight: 500;">7 Day Gold Total:</span>
+                    <span style="font-weight: 500;">Streak Week Gold Total:</span>
                     <span id="cycle-gold-total" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
                 </p>
                 
