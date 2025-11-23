@@ -1397,6 +1397,9 @@ document.addEventListener("DOMContentLoaded", function() {{
         
         const dailyGoldTotal = calculateDailyGoldTotal(generalDone, roleDone);
         const currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
+        
+        document.getElementById('current-streak').textContent = `${{currentStreak}} Days`; 
+        
         const goldDisplay = document.getElementById('daily-gold-total');
         
         const isDataCurrent = (getChallengeDateKey() === getRDODayKey());
