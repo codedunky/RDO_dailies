@@ -1053,6 +1053,7 @@ javascript_code = f'''
 
 
 
+
 <script>
 // ////////////////////////////////////////////////////////////////////////////////////// //
 // JavaScript: Check if flask server is running and show or hide button accordingly       //
@@ -1191,10 +1192,13 @@ document.addEventListener("DOMContentLoaded", function() {{
     }}
 
     function getMultiplier() {{ 
-        const lockedStreak = parseInt(localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) || '0', 10);
-        if (lockedStreak >= 22) return 2.5; // Days 22-28
-        if (lockedStreak >= 15) return 2.0; // Days 15-21
-        if (lockedStreak >= 8) return 1.5;  // Days 8-14
+        // FIX: Use LS_STREAK_COUNT (current status) instead of LS_STREAK_FOR_MULTIPLIER (start of day baseline)
+        // This ensures the multiplier updates immediately visually when the streak increments (e.g. 7 -> 8).
+        const currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
+        
+        if (currentStreak >= 22) return 2.5; // Days 22-28
+        if (currentStreak >= 15) return 2.0; // Days 15-21
+        if (currentStreak >= 8) return 1.5;  // Days 8-14
         return 1.0;                         // Days 1-7
     }}
 
@@ -1211,8 +1215,9 @@ document.addEventListener("DOMContentLoaded", function() {{
         console.group(`%cRDO GOLD STATS`, 'color: #000; background: #FFC107; padding: 4px; border-radius: 4px; font-weight: bold;');
         
         console.table({{
-            "Current Streak": localStorage.getItem(LS_STREAK_COUNT) + " Days",
-            "Multiplier Lock": localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) + " Days",
+            "Current Streak (Live)": localStorage.getItem(LS_STREAK_COUNT) + " Days",
+            "Multiplier Lock (Base)": localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) + " Days",
+            "Multiplier Value": getMultiplier() + "x",
             "Daily Total": daily.toFixed(2),
             "Streak Week Total": week.toFixed(2),
             "Streak Running Total": running.toFixed(2)
@@ -1258,48 +1263,48 @@ document.addEventListener("DOMContentLoaded", function() {{
         localStorage.setItem(LS_GOLD_LOG, JSON.stringify(goldLog));
     }}
     
-    // UPDATED FUNCTION: Smarter "Current Streak" Calculation
+// UPDATED FUNCTION: Fixed calculation to prevent summing previous cycle's weeks
     function calculateLogSums(currentStreak) {{
         const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
         
-        // 1. Calculate Week Total (Range based)
+        // 1. Determine the minimum streak day for the current week bracket
         let minWeekStreak = 1;
         if (currentStreak >= 22) minWeekStreak = 22;
         else if (currentStreak >= 15) minWeekStreak = 15;
         else if (currentStreak >= 8) minWeekStreak = 8;
-        else minWeekStreak = 1;
         
-        const maxWeekStreak = minWeekStreak + 6;
-
         let weekTotal = 0.0;
         let runningTotal = 0.0;
         
-        // Loop forward for Week Total (simple range check)
-        goldLog.forEach(entry => {{
-            const val = parseFloat(entry.gold || 0);
-            const s = parseInt(entry.streak || 0);
-            if (s >= minWeekStreak && s <= maxWeekStreak && s > 0) {{
-                weekTotal += val;
-            }}
-        }});
-        
-        // 2. Calculate Running Total (Backwards contiguous check)
+        // Track the streak number of the previous iteration (initially -1)
         let lastStreakVal = -1;
         
+        // Loop BACKWARDS through the log (newest to oldest)
         for (let i = goldLog.length - 1; i >= 0; i--) {{
             const entry = goldLog[i];
+            const val = parseFloat(entry.gold || 0);
             const s = parseInt(entry.streak || 0);
             
+            // If we hit a 0 streak or data is missing, stop calculations
             if (s === 0) break;
             
-            // Discontinuity Check: If streak jumps UP going backwards (e.g. 1 -> 28), it's a new cycle.
-            if (lastStreakVal !== -1 && s >= lastStreakVal) {{
+            // CYCLE BOUNDARY CHECK:
+            // If the streak number jumps UP while going backwards (e.g., 1 -> 28),
+            // we have crossed into the previous 28-day cycle. Stop the running total.
+            if (lastStreakVal !== -1 && s > lastStreakVal) {{
                 break;
             }}
 
-            runningTotal += parseFloat(entry.gold || 0);
+            // Add to Running Total (Streak Gold Total)
+            runningTotal += val;
 
-            if (s === 1) break;
+            // WEEK TOTAL CHECK:
+            // Only add to the week total if the streak is within the current bracket.
+            // Since we break the loop above if we cross a cycle boundary, 
+            // this simply filters out days 1-21 if we are in week 4 (22-28).
+            if (s >= minWeekStreak) {{
+                weekTotal += val;
+            }}
 
             lastStreakVal = s;
         }}
@@ -1593,6 +1598,7 @@ document.addEventListener('DOMContentLoaded', () => {{
     }});
 }});
 </script>
+
 
 
 
