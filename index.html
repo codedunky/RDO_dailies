@@ -813,7 +813,7 @@
             <input type="checkbox" class="challenge-checkbox" id="challenge_2025-12-19_acaa1a01c3cdeb79" />
             <span class="challenge-text">750 Distance non-player enemy dragged from horseback</span>
           </label>
-          <div class="challenge-desc">Dragging someone protecting a bounty target is a good way to get this.</div></div>
+          <div class="challenge-desc">Find a lone traveller out on the open road, lasso them and release them. They should turn red on the map, so lasso them again and drag them behind you for a while.</div></div>
 <hr class="thin-divider">
 
         <div class="challenge" data-difficulty="None">
@@ -1172,13 +1172,13 @@ Racoons, Geese, Cranes, Herons, & Pelicans</div></div>
             </div>
         </div>
 
-<!-- COLUMN 3: BONUS INFO (Now the final column, cleared of content) -->
+    
+<!-- COLUMN 3: BONUS INFO -->
         <div class="bonus-container" id="bonus-container">
             <h3 class="stats-heading" style="color: #666666;">Bonus Info</h3>
             
             <div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: left; color: #E0E0E0; font-family: sans-serif;">
                 
-                <!-- *** FIX: Restructured Streak HTML for proper alignment *** -->
                 <p class="stats-text" id="streak-container" style="margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; width: 100%;">
                     <span style="display: flex; align-items: center; white-space: nowrap;">
                         <span style="font-weight: 500;">Daily Challenge Streak:</span>
@@ -1223,9 +1223,35 @@ Racoons, Geese, Cranes, Herons, & Pelicans</div></div>
             </div>
             <div id="chart-info-display" class="chart-info-display">&nbsp;</div>
 
+<!-- NAZAR LOCATION SECTION -->
+            <h3 class="stats-heading" style="color: #666666; margin-top: 35px;">Where Is Madam Nazar Today?</h3>
+            
+            <div style="padding: 6px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: center;">
+                <div style="color: #b00000; font-family: 'RDOFont', sans-serif; font-size: 1.4rem; letter-spacing: 0.05em; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); margin-bottom: 8px;">
+                    Window Rock
+                </div>
+                
+                <!-- Image with toggle logic -->
+                <img src="HTML/images/nazar/RDO_Nazar___p_1_ambarino___p_4_window_rock.png" 
+                     id="nazar-map-img"
+                     alt="Nazar Location Map" 
+                     data-standard="HTML/images/nazar/RDO_Nazar___p_1_ambarino___p_4_window_rock.png"
+                     data-zoom="HTML/images/nazar/RDO_Nazar___p_1_ambarino___p_4_window_rock___zoom.png"
+                     data-has-zoom="true"
+                     onclick="toggleNazarZoom(this)"
+                     style="width: 100%; height: auto; border-radius: 4px; border: 1px solid #333; display: block; cursor: pointer; transition: transform 0.1s;" 
+                />
+                
+                <!-- Tiny hint text if zoom exists -->
+                <div style="font-size: 0.7rem; color: #444; margin-top: 4px; display: block;">
+                    (Click map to zoom)
+                </div>
+            </div>
 
         <!-- END COLUMN 3 -->
-    </div> 
+    </div>
+
+  
   
   
 <!-- Default Statcounter code for RDO_dailies - codedunky
@@ -1332,6 +1358,35 @@ function updateAllTimeFunctions() {
 
 setInterval(updateAllTimeFunctions, 1000);
 updateAllTimeFunctions();
+
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// Toggle Nazar Map Zoom                                                                  //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+
+    function toggleNazarZoom(img) {
+        if (img.dataset.hasZoom !== "true") return;
+
+        // Check if currently showing the standard image
+        // We compare the end of the string to avoid absolute/relative path mismatches
+        const currentSrc = img.src.split('/').pop();
+        const stdSrc = img.dataset.standard.split('/').pop();
+
+        if (currentSrc === stdSrc) {
+            // Switch to Zoom
+            img.src = img.dataset.zoom;
+        } else {
+            // Switch back to Standard
+            img.src = img.dataset.standard;
+        }
+    }
+    // Expose to window so onclick can find it
+    window.toggleNazarZoom = toggleNazarZoom;
+
+
+
+
+
 
 // ////////////////////////////////////////////////////////////////////////////////////// //
 // JavaScript: Main Logic                                                                 //

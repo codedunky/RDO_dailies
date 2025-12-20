@@ -1,0 +1,14 @@
+{
+  "updated": 1766124031,
+  "startTime": 1766124000,
+  "endTime": 1766210399,
+  "id": "MPSW_LOCATION_10",
+  "state": "p_1_ambarino",
+  "location": "p_4_window_rock",
+  "landmark": "p_4_window_rock",
+  "meta": {
+    "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
+    "provider": "Alloc8or",
+    "special_thanks": []
+  }
+}
