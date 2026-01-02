@@ -12,8 +12,6 @@ import sys
 from typing import Any
 import hashlib  # For the checkbox id's
 
-# Set a variable to control if index.json will download without user prompt
-autoDownload = True
 
 # Set the path to your local index.json file in a relative subfolder called 'jsonFiles'
 script_dir = os.path.dirname(os.path.abspath(__file__))  # the directory where the script is
@@ -26,16 +24,31 @@ print("Initial 'local_filename_nazar':  ", local_filename_nazar)
 
 
 ####################################################################################################################
-# Set whether using description2 (for testing)
-USE_DESCRIPTION2 = True
 
+
+
+    
 # #### CONFIG FLAGS #### #
 #####################################################
-#   Override mode: "auto", "force1", or "force2"
-#   auto   = pick based on even/odd calendar day
-#   force1 = always use description (description1)
-#   force2 = always use description2
+#   Override mode: "auto" or "forceX"
+#   auto   = rotate based on date
+#   forceX = force a specific number (e.g. "force1", "force3").
+#            If the number is higher than available descriptions, 
+#            it uses the highest one available.
 DESCRIPTION_MODE = "auto"
+
+
+# Set a variable to control if index.json will download without user prompt
+autoDownload = True
+
+
+# Block all API downloads (True = offline mode/testing, False = normal operation)
+BLOCK_DOWNLOADS = False 
+
+
+# Set to True to see [Desc #X] at the end of text
+DEBUG_DESCRIPTION = True
+  
 
 manual_streak = -1		# Set the number of days for the daily streak
                         # -1 will set it to use the current stored value
@@ -68,7 +81,7 @@ COLORS = {
     "igreen":          "\033[92m",
     "iyellow":         "\033[93m",
     "iblue":           "\033[94m",
-    "ipurple":        "\033[95m",
+    "ipurple":         "\033[95m",
     "icyan":           "\033[96m",
     "iwhite":          "\033[97m",
     "bblack":          "\033[40m",
@@ -91,7 +104,7 @@ COLORS = {
 }
 
 # Current debug level: 0=L0 (off), 1=L1, 2=L2, 3=L3, 4=L4
-CURRENT_DEBUG_LEVEL = 0
+CURRENT_DEBUG_LEVEL = 1
 
 # Map string levels to numeric levels
 LEVEL_MAP = {
@@ -215,12 +228,15 @@ import time
 
 def get_index_start_date(local_filename):
     """
-    Reads the index JSON file and returns:
-    - The raw Unix timestamp for startTime (or current time fallback)
-    - The formatted start date string "YYYY-MM-DD" (UTC)
+    Reads the index JSON file and returns start time.
+    Silently defaults to current time if file is missing.
     """
-    #debug_print("L1", "local_filename", local_filename)
-    #print(f"[DEBUG] Looking for index.json at: {os.path.abspath(local_filename)}")
+    now = int(time.time())
+    date_str = datetime.datetime.utcfromtimestamp(now).strftime('%Y-%m-%d')
+
+    if not os.path.exists(local_filename):
+        # File missing: return current time, no error print needed
+        return now, date_str
 
     try:
         with open(local_filename, 'r', encoding='utf-8') as f:
@@ -231,15 +247,12 @@ def get_index_start_date(local_filename):
             date_str = dt.strftime('%Y-%m-%d')
             return start_time, date_str
         else:
-            now = int(time.time())
-            date_str = datetime.datetime.utcfromtimestamp(now).strftime('%Y-%m-%d')
             return now, date_str
     except Exception as e:
-        debug_print("L1", "bred", "Error loading index.json file")
-        print("Error loading index.json:", e)
-        now = int(time.time())
-        date_str = datetime.datetime.utcfromtimestamp(now).strftime('%Y-%m-%d')
+        # Only print error if file exists but is corrupt
+        debug_print("L1", "bred", f"Error reading existing index.json: {e}")
         return now, date_str
+
 
 # Usage
 start_timestamp, human_readable_date = get_index_start_date(local_filename)
@@ -290,6 +303,9 @@ def timestamp_to_date(timestamp):
 #need this to get the unique build time so tickbox logic works with local storage caching
 
 def get_index_mod_date_str(local_filename):
+    if not os.path.exists(local_filename):
+        return datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        
     try:
         mod_timestamp = os.path.getmtime(local_filename)
         dt = datetime.datetime.fromtimestamp(mod_timestamp)
@@ -391,80 +407,95 @@ else:   #  If the index.json is not found, it will go and download it from the a
 
 
 # Check if the index has expired by comparing 'endTime' in index.json to current time.
+# Convert timestamp to readable format for debug
+index_expiry_readable = datetime.datetime.fromtimestamp(end_time).strftime('%Y-%m-%d %H:%M:%S')
+
 if end_time < now:
-    debug_print("L2", "idarkyellow", f"The index.json has expired (endTime: {end_time}). Current time: {now}.")
-    print
+    debug_print("L1", "idarkyellow", f"INDEX: File expired (Expires: {index_expiry_readable}). Downloading new file...")
 
     # Decide whether to prompt or just download
     if file_exists:
         if autoDownload:
-            debug_print("L3", "bgreen", "autoDownload is True")
+            debug_print("L3", "bgreen", "INDEX: File exists locally, but autoDownload is True")
             download_now = True
+            print("INDEX: download_now: ",download_now)
         else:
-            user_input = input("Do you want to download the latest index.json from rdo.gg? (y/n): ").strip().lower()
+            user_input = input("INDEX: Do you want to download the latest index.json from rdo.gg? (y/n): ").strip().lower()
             download_now = (user_input == 'y')
     else:
         # No file exists, so download immediately
         download_now = True
+else:
+    # This is the new "Valid" message
+    debug_print("L1", "byellow", f"INDEX: File valid (Expires: {index_expiry_readable}). Using cached json.")
+    download_now = False
+    
+    
+# --- BLOCK DOWNLOADS CHECK ---
+if BLOCK_DOWNLOADS and download_now:
+    debug_print("L1", "bred", "INDEX: Download skipped (BLOCK_DOWNLOADS = True).")
+    download_now = False
+# ----------------------------------    
+    
 
-    # Logic to do backup of existing index.json file before new download
-    if download_now:
-        # Only backup if start_time != 0
-        if file_exists and start_time != 0:
-            # Define the backup folder as a subfolder called 'indexJsonBackups'
-            backup_folder = os.path.join(os.path.dirname(local_filename), 'indexJsonBackups')
-            # Create the backup folder if it doesn't exist
-            os.makedirs(backup_folder, exist_ok=True)
-            
-            # Construct the backup filename
-            backup_filename = f"index_{datetime.datetime.fromtimestamp(start_time).strftime('%Y-%m-%d')}.json"
-            # Full path for backup
-            backup_path = os.path.join(backup_folder, backup_filename)
-            
-            try:
-                os.rename(local_filename, backup_path)
-                debug_print("L2", "igreen", "Backed up old index.json to:  ", backup_path)
-            except Exception as e:
-                debug_print("L1", "ired", f"Failed to backup old file: {e}")
-        else:
-            print("Skipping backup")     
-
+# Logic to do backup of existing index.json file before new download
+if download_now:
+    # Only backup if start_time != 0
+    if file_exists and start_time != 0:
+        # Define the backup folder as a subfolder called 'indexJsonBackups'
+        backup_folder = os.path.join(os.path.dirname(local_filename), 'indexJsonBackups')
+        # Create the backup folder if it doesn't exist
+        os.makedirs(backup_folder, exist_ok=True)
         
+        # Construct the backup filename
+        backup_filename = f"index_{datetime.datetime.fromtimestamp(start_time).strftime('%Y-%m-%d')}.json"
+        # Full path for backup
+        backup_path = os.path.join(backup_folder, backup_filename)
         
-        # Download new index.json
         try:
-            headers = {'User-Agent': 'Mozilla/5.0'}
-            req = urllib.request.Request(url, headers=headers)
-            with urllib.request.urlopen(req) as response:
-                data_bytes = response.read()
-                data_str = data_bytes.decode('utf-8')
-                data = json.loads(data_str)
-                # Save the new data to the file
-                with open(local_filename, 'w', encoding='utf-8') as f:
-                    json.dump(data, f, indent=2)
-                    print("downloaded new index.json file")
+            os.rename(local_filename, backup_path)
+            debug_print("L2", "igreen", "Backed up old index.json to:  ", backup_path)
         except Exception as e:
-            print(f"Error during download: {e}")
+            debug_print("L1", "ired", f"Failed to backup old file: {e}")
+    else:
+        print("Skipping backup")     
 
-        # Now, read the data from the saved file
-        try:
-            with open(local_filename, 'r', encoding='utf-8') as f:
-                index_data = json.load(f)
-                
-            # !!! INSERT THESE 3 LINES HERE !!!
-            # Refresh the start_timestamp so the HTML and IDs get the NEW date, not the old one
-            start_timestamp, human_readable_date = get_index_start_date(local_filename)
-            start_date_str = datetime.datetime.utcfromtimestamp(start_timestamp).strftime("%Y-%m-%d")
-            # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    
+    
+    # Download new index.json
+    try:
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req) as response:
+            data_bytes = response.read()
+            data_str = data_bytes.decode('utf-8')
+            data = json.loads(data_str)
+            # Save the new data to the file
+            with open(local_filename, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=2)
+                print("downloaded new index.json file")
+    except Exception as e:
+        print(f"Error during download: {e}")
+
+    # Now, read the data from the saved file
+    try:
+        with open(local_filename, 'r', encoding='utf-8') as f:
+            index_data = json.load(f)
             
-            # Access the data
-            end_time = index_data.get("endTime", 0)
-            start_time = index_data.get("startTime", 0)
-            print(f"startTime: {timestamp_to_date(start_time)}, endTime: {timestamp_to_date(end_time)}")
-        except Exception as e:
-            print(f"Error reading {local_filename}: {e}")
-            
-        time.sleep(10)        
+        # !!! INSERT THESE 3 LINES HERE !!!
+        # Refresh the start_timestamp so the HTML and IDs get the NEW date, not the old one
+        start_timestamp, human_readable_date = get_index_start_date(local_filename)
+        start_date_str = datetime.datetime.utcfromtimestamp(start_timestamp).strftime("%Y-%m-%d")
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
+        # Access the data
+        end_time = index_data.get("endTime", 0)
+        start_time = index_data.get("startTime", 0)
+        print(f"startTime: {timestamp_to_date(start_time)}, endTime: {timestamp_to_date(end_time)}")
+    except Exception as e:
+        print(f"Error reading {local_filename}: {e}")
+        
+    time.sleep(10)        
 
 
 
@@ -479,8 +510,16 @@ nazar_url = "https://api.rdo.gg/nazar"
 nazar_data = {}
 nazar_location_text = "Location Unknown"
 
+# Define Image Paths
+placeholder_path = "HTML/images/nazar/RDO_Nazar___Placeholder.png"
+nazar_final_img_src = placeholder_path 
+nazar_zoom_src = ""
+nazar_has_zoom = "false"
+nazar_cursor_style = "default"
+
 # 1. Check/Download Logic
 download_nazar = False
+valid_nazar_data = False 
 now = int(time.time())
 
 if os.path.exists(local_filename_nazar):
@@ -490,15 +529,28 @@ if os.path.exists(local_filename_nazar):
         nazar_end_time = nazar_data.get('endTime', 0)
         
         if nazar_end_time < now:
-            debug_print("L2", "idarkyellow", f"Nazar file expired. Downloading...")
+            debug_print("L1", "idarkyellow", f"NAZAR: Nazar file expired. Downloading...")
             download_nazar = True
+            valid_nazar_data = False 
         else:
             download_nazar = False
+            valid_nazar_data = True 
+            nazar_expiry_readable = datetime.datetime.fromtimestamp(nazar_end_time).strftime('%Y-%m-%d %H:%M:%S')
+            debug_print("L1", "byellow", f"NAZAR: File valid (Expires: {nazar_expiry_readable}). Using cached json.")
+
     except Exception as e:
-        print(f"Error reading local nazar.json: {e}")
+        print(f"NAZAR: Error reading local nazar.json: {e}")
         download_nazar = True
+        valid_nazar_data = False
 else:
     download_nazar = True
+    valid_nazar_data = False
+
+# --- NEW: BLOCK DOWNLOADS CHECK ---
+if BLOCK_DOWNLOADS and download_nazar:
+    debug_print("L1", "ired", "NAZAR: Download skipped (BLOCK_DOWNLOADS = True).")
+    download_nazar = False
+# ----------------------------------
 
 if download_nazar:
     try:
@@ -510,60 +562,262 @@ if download_nazar:
             with open(local_filename_nazar, 'w', encoding='utf-8') as f:
                 json.dump(new_nazar_data, f, indent=2)
             nazar_data = new_nazar_data
-            print("downloaded new nazar.json file")
+            valid_nazar_data = True 
+            print("NAZAR: downloaded new nazar.json file")
     except Exception as e:
-        print(f"Error during Nazar download: {e}")
+        print(f"NAZAR: Error during Nazar download: {e}")
 
-# 2. Process Data
-raw_state = nazar_data.get('state', 'unknown_state')
-raw_location = nazar_data.get('location', 'unknown_location')
+# 2. Process Data ONLY if valid
+if valid_nazar_data:
+    raw_state = nazar_data.get('state', 'unknown_state')
+    raw_location = nazar_data.get('location', 'unknown_location')
 
-# Prettify Text
-def prettify_nazar_key(key):
-    if not key or not isinstance(key, str): return "Unknown"
-    parts = key.split('_')
-    if len(parts) > 2 and parts[0] == 'p' and parts[1].isdigit():
-        clean_parts = parts[2:]
+    def prettify_nazar_key(key):
+        if not key or not isinstance(key, str): return "Unknown"
+        parts = key.split('_')
+        if len(parts) > 2 and len(parts[0]) == 1 and parts[1].isdigit():
+            clean_parts = parts[2:]
+        else:
+            clean_parts = parts
+        return " ".join(word.title() for word in clean_parts)
+
+    nazar_location_text = prettify_nazar_key(raw_location)
+
+    nazar_img_filename = f"RDO_Nazar___{raw_state}___{raw_location}.png"
+    nazar_zoom_filename = f"RDO_Nazar___{raw_state}___{raw_location}___zoom.png"
+
+    relative_img_path = f"HTML/images/nazar/{nazar_img_filename}"
+    absolute_img_path = os.path.join(script_dir, "HTML", "images", "nazar", nazar_img_filename)
+    relative_zoom_path = f"HTML/images/nazar/{nazar_zoom_filename}"
+    absolute_zoom_path = os.path.join(script_dir, "HTML", "images", "nazar", nazar_zoom_filename)
+
+    if os.path.exists(absolute_img_path):
+        nazar_final_img_src = relative_img_path
+        debug_print("L2", "NAZAR: Found specific Nazar map image.")
     else:
-        clean_parts = parts
-    return " ".join(word.title() for word in clean_parts)
+        nazar_final_img_src = placeholder_path
+        debug_print("L2", "NAZAR: Specific image not found, using placeholder.")
 
-nazar_location_text = prettify_nazar_key(raw_location)
+    if os.path.exists(absolute_zoom_path):
+        nazar_zoom_src = relative_zoom_path
+        nazar_has_zoom = "true"
+        nazar_cursor_style = "pointer"
+        debug_print("L2", "NAZAR: Found zoomed Nazar image.")
+    else:
+        nazar_zoom_src = ""
+        nazar_has_zoom = "false"
+        nazar_cursor_style = "default"
 
-# 3. Image Logic (Main and Zoom)
-# Construct filenames
-nazar_img_filename = f"RDO_Nazar___{raw_state}___{raw_location}.png"
-nazar_zoom_filename = f"RDO_Nazar___{raw_state}___{raw_location}___zoom.png"
-
-# Define paths
-relative_img_path = f"HTML/images/nazar/{nazar_img_filename}"
-absolute_img_path = os.path.join(script_dir, "HTML", "images", "nazar", nazar_img_filename)
-
-relative_zoom_path = f"HTML/images/nazar/{nazar_zoom_filename}"
-absolute_zoom_path = os.path.join(script_dir, "HTML", "images", "nazar", nazar_zoom_filename)
-
-placeholder_path = "HTML/images/nazar/RDO_Nazar___Placeholder.png"
-
-# Check Main Image
-if os.path.exists(absolute_img_path):
-    nazar_final_img_src = relative_img_path
-    debug_print("L2", "Found specific Nazar map image.")
 else:
+    # Logic for when data is invalid (Expired AND Download Failed/Blocked)
+    debug_print("L1", "ired", "NAZAR: Data invalid/expired/blocked. Using placeholder.")
+    nazar_location_text = "Location Unknown"
     nazar_final_img_src = placeholder_path
-    debug_print("L2", "Specific image not found, using placeholder.")
-
-# Check Zoom Image
-if os.path.exists(absolute_zoom_path):
-    nazar_zoom_src = relative_zoom_path
-    nazar_has_zoom = "true"
-    nazar_cursor_style = "pointer"
-    debug_print("L2", "Found zoomed Nazar image.")
-else:
     nazar_zoom_src = ""
     nazar_has_zoom = "false"
     nazar_cursor_style = "default"
 
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# EVENTS.JSON LOAD/DOWNLOAD LOGIC
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+local_filename_events = os.path.join(script_dir, "jsonFiles", "events.json") 
+events_url = "https://api.rdo.gg/events/"
+download_events = False
+
+# --- CONFIG: Rate Limiting ---
+# 3 Hours in seconds (3 * 60 * 60 = 10800)
+EVENTS_COOLDOWN_SECONDS = 10800 
+
+# Calculate the timestamp for the most recent "Tuesday 9:00 AM UTC"
+now_utc = datetime.datetime.utcnow()
+today_9am = now_utc.replace(hour=9, minute=0, second=0, microsecond=0)
+
+# Python weekdays: Mon=0, Tue=1, ... Sun=6. We want Tuesday (1).
+days_since_tuesday = (now_utc.weekday() - 1) % 7
+
+# If today is Tuesday but BEFORE 9 AM, count previous Tuesday
+if days_since_tuesday == 0 and now_utc < today_9am:
+    days_since_tuesday = 7
+
+latest_update_datetime = today_9am - datetime.timedelta(days=days_since_tuesday)
+latest_update_timestamp = latest_update_datetime.timestamp()
+
+debug_print("L1", "igreen", f"EVENTS: Latest expected API update (Last Tuesday 9am): {latest_update_datetime} (Timestamp: {latest_update_timestamp})")
+
+
+# 1. Check if we have the file and if it is up to date
+if os.path.exists(local_filename_events):
+    
+    # --- NEW: Check physical file age to prevent API spamming ---
+    last_modified_time = os.path.getmtime(local_filename_events)
+    time_since_download = int(time.time()) - last_modified_time
+    
+    # If downloaded recently (within cooldown), skip all logic and use cached file
+    if time_since_download < EVENTS_COOLDOWN_SECONDS:
+        debug_print("L1", "igreen", f"EVENTS: File downloaded recently ({int(time_since_download/60)} mins ago). Skipping API check.")
+        download_events = False
+        
+    else:
+        # File is older than 3 hours, so now we check the internal content
+        try:
+            with open(local_filename_events, 'r', encoding='utf-8') as f:
+                existing_data = json.load(f)
+                
+            # Get the 'updated' timestamp from inside the JSON file
+            local_updated_ts = existing_data.get('updated', 0)
+            
+            debug_print("L1", "igreen", f"EVENTS: Local events.json 'updated' timestamp: {local_updated_ts}")
+
+            # Logic: If file's internal timestamp is OLDER than most recent Tuesday 9am
+            if local_updated_ts < latest_update_timestamp:
+                debug_print("L0", "idarkyellow", "EVENTS: Local events.json content is outdated. Downloading new schedule...")
+                download_events = True
+            else:
+                debug_print("L0", "bgreen", "EVENTS: Local events.json is up to date. Not downloading from API")
+                download_events = False
+                
+        except Exception as e:
+            print(f"EVENTS: Error reading local events.json: {e}")
+            download_events = True
+else:
+    debug_print("L0", "idarkyellow", "EVENTS: events.json not found. Downloading...")
+    download_events = True
+    
+    
+# --- BLOCK DOWNLOADS CHECK ---
+if BLOCK_DOWNLOADS and download_events:
+    debug_print("L1", "bred", "EVENTS: Download skipped (BLOCK_DOWNLOADS = True).")
+    download_events = False
+# ----------------------------------    
+
+
+# 2. Perform Download if needed
+if download_events:
+    try:
+        debug_print("L2", "igreen", "EVENTS: Downloading events.json from API...")
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        req = urllib.request.Request(events_url, headers=headers)
+        with urllib.request.urlopen(req) as response:
+            data_bytes = response.read()
+            data_str = data_bytes.decode('utf-8')
+            new_events_data = json.loads(data_str)
+            with open(local_filename_events, 'w', encoding='utf-8') as f:
+                json.dump(new_events_data, f, indent=2)
+        print("EVENTS: Successfully downloaded new events.json file.")
+    except Exception as e:
+        print(f"EVENTS: Error during Events download: {e}")
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
+
+
+
+
+
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# EVENTS DATA EXTRACTION FOR JS
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+def get_events_data_for_js(json_file):
+    events_list = []
+    
+    # 1. Define a mapping dictionary for specific IDs or Variations
+    #    This translates the internal code to the specific in-game title.
+    NAME_OVERRIDES = {
+        # --- Generic Challenges (id: "challenges", variation: "...") ---
+        "hunting": "Wild Animal Kills",
+        "headshot_kills": "Headshot Kills",
+        "longarm_kills": "Longarm Kills",
+        "sidearm_kills": "Sidearm Kills",
+        "horseback_kills": "Horseback Kills",
+        "melee_kills": "Melee Kills",
+        "bow_kills": "Bow Kills",
+        "fishing": "Lake Fishing Challenge", 
+        
+        # --- Specific Events (id: "...") ---
+        "hot_property": "Cold Dead Hands",
+        "dispatch_rider": "Dispatch Rider",
+        "king_of_the_castle": "King of the Castle",
+        "railroad_baron": "Railroad Baron",
+        "master_archer": "Master Archer",
+        "wildlife_photographer": "Wildlife Photographer",
+        "fool_gold": "Fool's Gold",
+        
+        # --- Role Events ---
+        "legendary_bounties": "Legendary Bounty",
+        "condor_egg": "Condor Egg",
+        "salvage": "Salvage",
+        "trade_route": "Trade Route",
+        "manhunt": "Manhunt",
+        "day_of_reckoning": "Day of Reckoning",
+        "wild_animal_tagging": "Wild Animal Tagging"
+    }
+
+    try:
+        if not os.path.exists(json_file):
+            return "[]" # Return empty JSON array string
+
+        with open(json_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        target_categories = ['standard', 'themed', 'role'] # Added 'role' just in case you want those too
+        
+        for cat in target_categories:
+            if cat not in data: continue
+            schedule_dict = data[cat]
+            
+            for time_key, event_data in schedule_dict.items():
+                
+                # Extract raw data
+                evt_id = event_data.get('id')
+                evt_var = event_data.get('variation') # This is "hunting", "fishing", etc.
+                evt_alt = event_data.get('alt')
+                
+                display_name = "Unknown Event"
+
+                # LOGIC FLOW:
+                # 1. If it's a "Challenge" (randomized type), look at the 'variation'
+                if evt_id == "challenges" and evt_var:
+                    # Check our dictionary, otherwise title case the variation (e.g. "hunting" -> "Hunting")
+                    display_name = NAME_OVERRIDES.get(evt_var, evt_var.replace('_', ' ').title())
+                    display_name += " Challenge" # Add "Challenge" to the end for clarity
+                
+                # 2. If the ID is in our override list (e.g. "hot_property" -> "Cold Dead Hands")
+                elif evt_id in NAME_OVERRIDES:
+                    display_name = NAME_OVERRIDES[evt_id]
+                    
+                # 3. Fallback: Use 'alt' or prettify the 'id'
+                elif evt_alt:
+                    display_name = evt_alt.replace('_', ' ').title()
+                else:
+                    display_name = evt_id.replace('_', ' ').title()
+                
+                # Append to list
+                events_list.append({
+                    "time": time_key,  # "09:00"
+                    "name": display_name,
+                    "cat": cat
+                })
+                
+        # Return as a JSON string to be injected into JS
+        return json.dumps(events_list)
+
+    except Exception as e:
+        print(f"Error preparing events for JS: {e}")
+        return "[]"
+
+# Get the JSON string data 
+events_js_data = get_events_data_for_js(local_filename_events)
+debug_print("L2", "Generated Events Data for JS")
+
 
 
 
@@ -574,18 +828,29 @@ else:
 
 def extract_challenges_with_roles(index):
     combined = []
+    
+    # Safety check: if index data is missing/empty, return empty list immediately
+    if not index:
+        return []
 
     # General challenges (not tied to a specific role or difficulty)
+    # .get() safely returns [] if "general" key is missing
     for challenge in index.get("general", []):
         combined.append({**challenge, "role": "general", "difficulty": None})
 
     # Role-based challenges across easy, med, hard
     for difficulty in ["easy", "med", "hard"]:
-        for role, challenges in index[difficulty].items():
+        # Use .get() to safely retrieve the dictionary for that difficulty, 
+        # defaulting to an empty dict {} if the key is missing.
+        difficulty_data = index.get(difficulty, {})
+        
+        for role, challenges in difficulty_data.items():
             for challenge in challenges:
                 combined.append({**challenge, "role": role, "difficulty": difficulty})
 
     return combined
+
+
 
 # Normalize keys by uppercasing and stripping whitespace (no prefix removal)
 def normalize_key(key):
@@ -601,14 +866,10 @@ all_challenge_definitions = (
     + moonshiner
 )
 
-# Build a lookup table from all sources: exact key -> details including optional description and showgoal
+# Build a lookup table from all sources: exact key -> All details
+# We use the whole 'ch' object so we don't lose description3, description4, etc.
 detail_lookup = {
-    normalize_key(ch["key"]): {
-        "name": ch["name"],
-        "description": ch.get("description"),
-        "description2": ch.get("description2"),
-        "showgoal": ch.get("showgoal", "n")
-    }
+    normalize_key(ch["key"]): ch
     for ch in all_challenge_definitions
 }
 
@@ -620,54 +881,126 @@ final_list = []
 
 for ch in indexed_challenges:
     title_upper = normalize_key(ch["title"])
+    
+    # Get the static details (descriptions, name, etc) from our local data files
     details = detail_lookup.get(title_upper, {})
 
+    # Create the entry
     entry = {
+        # 1. Default keys to prevent crashes if missing in details
+        "name": None,
+        
+        # 2. Unpack local details. This brings in description3, description4, etc.
+        # WARNING: This also brings in 'category' as a LIST (e.g. ['plants']), which caused the error.
+        **details,
+        
+        # 3. Set/Overwrite with API specific data.
+        # CRITICAL: This overwrites the 'category' LIST with the 'category' STRING (e.g. 'general')
         "title": ch["title"],
         "goal": ch["goal"],
-        "category": ch["role"],
+        "category": ch["role"], 
         "difficulty": ch["difficulty"],
-        "name": details.get("name"),
-        "description": details.get("description"),
-        "description2": details.get("description2"),
+        
+        # 4. Handle showgoal logic (prefer local value, default to "n")
         "showgoal": details.get("showgoal", "n")
     }
+    
     final_list.append(entry)
     
 
-#Choosing either description or description2
+# Choosing the description to use from any available ones
 def get_printable_description(details):
     """
-    Return the appropriate description text based on the flag (or random logic)
+    Dynamically collects all available descriptions.
+    Selects one based on deterministic rotation or dynamic "forceX" flags.
+    Appends [#X] if DEBUG_DESCRIPTION is True.
     """
-    desc1 = details.get("description")
-    desc2 = details.get("description2")
-
-    # Fallback if no alternate description
-    if not desc2:
-        return desc1
     
+    # ---------------------------------------------------------
+    # 1. DYNAMICALLY BUILD THE LIST OF OPTIONS
+    # ---------------------------------------------------------
+    options = []
     
-    # --- Manual override modes ---
-    if DESCRIPTION_MODE == "force1":
-        debug_print("L2", "Force1 is set, so forcing description")
-        return desc1
-    elif DESCRIPTION_MODE == "force2":
-        debug_print("L2", "Force2 is set, so forcing description2")
-        return desc2
+    # Add the primary description (Index 0)
+    if details.get("description"):
+        options.append(details["description"])
+        
+    # Dynamic search for description2, description3, etc.
+    i = 2
+    while True:
+        key = f"description{i}"
+        val = details.get(key)
+        if val:
+            options.append(val)
+            i += 1
+        else:
+            break
+            
+    # If no descriptions exist, return None
+    if not options:
+        return None
+        
+    count = len(options)
+    selection_index = 0
 
-    # --- Auto mode: alternate by calendar day ---
-    today = datetime.date.today()
-    if today.day % 2 == 0:
-        # even-numbered day
-        debug_print("L2", "Even Numbered Day, using description2")
-        return desc2
+    # ---------------------------------------------------------
+    # 2. DETERMINE SELECTION INDEX
+    # ---------------------------------------------------------
+    
+    # Handle "forceX" logic (force1, force2, force10, etc.)
+    if DESCRIPTION_MODE.startswith("force"):
+        try:
+            # Extract the number part (e.g. "force5" -> "5")
+            num_str = DESCRIPTION_MODE.replace("force", "")
+            
+            if num_str.isdigit():
+                # Convert to integer and adjust for 0-based index (Force1 = Index 0)
+                req_num = int(num_str)
+                target_index = req_num - 1
+                
+                # CLAMP LOGIC:
+                # If target is less than 0, use 0.
+                # If target is greater than the last index, use the last index.
+                # e.g. If force5 requested but only 2 items exist, use item 2 (index 1).
+                selection_index = max(0, min(target_index, count - 1))
+            else:
+                # Fallback if someone typed just "force"
+                selection_index = 0
+                
+        except Exception:
+            selection_index = 0
+
     else:
-        # odd-numbered day
-        debug_print("L2", "Odd Numbered Day, using description")
-        return desc1
+        # --- AUTO MODE: DETERMINISTIC ROTATION ---
+        challenge_name = details.get("name") or details.get("title") or "unknown"
+        
+        # Create stable integer hash
+        name_hash = int(hashlib.md5(challenge_name.encode('utf-8')).hexdigest(), 16)
+        
+        # Day ID from start_timestamp
+        day_id = int(start_timestamp / 86400) + 0
+        ##########################################
+        ##########################################
+        ##########################################
+        ##########################################
     
+        # Formula: (Day + NameHash) % Count
+        selection_index = (day_id + name_hash) % count
+
+    # ---------------------------------------------------------
+    # 3. RETRIEVE TEXT AND APPEND DEBUG INFO
+    # ---------------------------------------------------------
+    final_text = options[selection_index]
     
+    if DEBUG_DESCRIPTION:
+        # +1 makes it human readable (Index 0 = Desc #1, Index 1 = Desc #2)
+        final_text += f" [#{selection_index + 1}]"
+        
+    debug_print("L3", f"Rotator: '{details.get('name')}' selected index {selection_index} ({selection_index+1}/{count})")
+    
+    return final_text
+
+
     
 
 # Desired print order for categories and difficulty
@@ -706,7 +1039,7 @@ for category in category_order:
             debug_print("L3", "iblue", "text: ", debugtext),
                         
             chosen_description = get_printable_description(item)
-            debug_print("L1", "Chosen Description: ", chosen_description)
+            debug_print("L2", "Chosen Description: ", chosen_description)
             
             output_json.append({
                 "text": f"{goal_display}{item['name'] or item['title']}",
@@ -1069,12 +1402,63 @@ def render_role_challenge_block(block):
 ####################################
 # Generate HTML for each difficulty#
 ####################################
-html_easy_general, html_easy_roles = generate_html_for_difficulty(challenges, "easy")
-html_med_general,  html_med_roles  = generate_html_for_difficulty(challenges, "med")
-html_hard_general, html_hard_roles = generate_html_for_difficulty(challenges, "hard")
+
+# Define fallback HTML for missing data
+NO_DATA_HTML = '''
+<div class="challenge">
+  <label>
+    <span class="challenge-text" style="color: #d00; font-style: italic;">
+      Challenge Data Missing (File Not Found)
+    </span>
+  </label>
+  <div class="challenge-desc">Could not load index.json and download was blocked/failed.</div>
+</div>
+'''
+
+NO_DATA_ROLE_HTML = '''
+<div class="role-challenge">
+  <div class="role-challenge-text" style="color: #d00; font-style: italic;">
+    Role Data Missing
+  </div>
+</div>
+'''
+
+if not challenges:
+    # --- DATA MISSING SCENARIO ---
+    debug_print("L1", "ired", "ALERT: No challenges found. Generating fallback HTML.")
+    
+    # Override the previously generated (and empty) html_general
+    html_general = NO_DATA_HTML
+    
+    # Set the fallback for Role Challenges variables (just in case they are referenced)
+    html_easy_roles = NO_DATA_ROLE_HTML
+    html_med_roles  = NO_DATA_ROLE_HTML
+    html_hard_roles = NO_DATA_ROLE_HTML
+    
+    # Assign the fallback to the actual variable used in the HTML output
+    selected_html_roles = NO_DATA_ROLE_HTML
+
+else:
+    # --- NORMAL SCENARIO ---
+    # This generates the role HTML strings based on difficulty
+    html_easy_general, html_easy_roles = generate_html_for_difficulty(challenges, "easy")
+    html_med_general,  html_med_roles  = generate_html_for_difficulty(challenges, "med")
+    html_hard_general, html_hard_roles = generate_html_for_difficulty(challenges, "hard")
+    
+    # Note: We do NOT overwrite 'html_general' here because it was already 
+    # correctly generated (with dividers) by 'render_general_challenges_with_dividers' earlier.
+
+    # Select the specific role HTML based on the difficulty filter
+    difficulty_roles_map = {
+        "easy": html_easy_roles,
+        "med": html_med_roles,
+        #"hard": html_hard_roles
+    }
+    selected_html_roles = difficulty_roles_map.get(filter_difficulty, html_hard_roles)
 
 
-
+# ---------------------------------------------------------------------------------------
+# Debug Prints
 debug_print("L2", "bblue", "Generated html_easy_roles")
 debug_print("L3", "iblue", "html_easy_roles:   ", html_easy_roles)
 print ("-" * 120)
@@ -1084,17 +1468,7 @@ print ("-" * 120)
 debug_print("L2", "bred", "Generated html_hard_roles")
 debug_print("L3", "ired", "html_hard_roles:   ", html_hard_roles)
 print ("-" * 120)
-
-#---------------------------------------------------------------------------------------
-difficulty_roles_map = {
-    "easy": html_easy_roles,
-    "med": html_med_roles,
-    #"hard": html_hard_roles
-}
-
-selected_html_roles = difficulty_roles_map.get(filter_difficulty, html_hard_roles)
-#---------------------------------------------------------------------------------------
-
+# ---------------------------------------------------------------------------------------
 
 
 
@@ -1391,6 +1765,131 @@ document.addEventListener("DOMContentLoaded", function() {{
         while (goldLog.length > 28) goldLog.shift();
         localStorage.setItem(LS_GOLD_LOG, JSON.stringify(goldLog));
     }}
+    
+    
+    // --- EVENTS DATA FROM PYTHON ---
+    const RAW_EVENTS_DATA = {events_js_data}; 
+
+    // ////////////////////////////////////////////////////////////////////////////////////// //
+    // JavaScript: Dynamic Upcoming Events Logic                                              //
+    // ////////////////////////////////////////////////////////////////////////////////////// //
+
+function updateUpcomingEvents() {{
+        const container = document.getElementById('upcoming-events-list');
+        if (!container || !RAW_EVENTS_DATA.length) return;
+
+        const now = new Date();
+        const JOIN_WINDOW_MS = 3 * 60 * 1000; // 3 minutes
+
+        let candidates = [];
+        
+        function getEventDate(timeStr, dayOffset) {{
+            const [h, m] = timeStr.split(':').map(Number);
+            const d = new Date();
+            d.setUTCHours(h, m, 0, 0);
+            if (dayOffset > 0) {{
+                d.setUTCDate(d.getUTCDate() + dayOffset);
+            }}
+            return d;
+        }}
+
+        RAW_EVENTS_DATA.forEach(evt => {{
+            const t1 = getEventDate(evt.time, 0);
+            candidates.push({{ ...evt, dt: t1 }});
+            const t2 = getEventDate(evt.time, 1);
+            candidates.push({{ ...evt, dt: t2 }});
+        }});
+
+        const activeEvents = candidates.filter(e => {{
+            return (e.dt.getTime() + JOIN_WINDOW_MS) > now.getTime();
+        }});
+
+        activeEvents.sort((a, b) => a.dt - b.dt);
+        const next5 = activeEvents.slice(0, 5);
+
+        let html = '<ul style="list-style: none; padding: 0; margin: 0;">';
+        
+        next5.forEach(e => {{
+            const diffMs = e.dt - now; 
+            
+            let timeDisplay = "";
+            let rowBgColor = "transparent"; 
+            let rowPadding = "1px 0"; 
+            let textColor = "#ccc";
+            let timeColor = "#bbb";   
+            let textClass = "";
+            
+            // Define truncation limit (Default: 25 chars)
+            let maxNameLength = 27; 
+
+            if (diffMs > 0) {{
+                // === FUTURE EVENT ===
+                const diffMins = Math.floor(diffMs / 60000);
+                if (diffMins < 60) {{
+                    timeDisplay = `${{diffMins}}m`;
+                }} else {{
+                    const h = Math.floor(diffMins / 60);
+                    const m = diffMins % 60;
+                    timeDisplay = `${{h}}h ${{m}}m`;
+                }}
+            }} else {{
+                // === ACTIVE / STARTED EVENT ===
+                textClass = "active-event-glow";
+                
+                // NEW: Reduce name length to make room for "Join Now" text
+                maxNameLength = 27; 
+                
+                const msPast = Math.abs(diffMs);
+                rowPadding = "2px 4px"; 
+                textColor = "#fff"; 
+                timeColor = "#ddd"; 
+
+                if (msPast < 60000) {{
+                    rowBgColor = "#333333";
+                    timeDisplay = "Now";
+                }} else if (msPast < 120000) {{
+                    rowBgColor = "#555500"; 
+                    timeDisplay = "Now";
+                }} else {{
+                    rowBgColor = "#550000";
+                    timeDisplay = "<1min";
+                }}
+            }}
+            
+            // Apply Dynamic Truncation
+            let nameDisplay = e.name;
+            if (nameDisplay.length > maxNameLength) {{
+                nameDisplay = nameDisplay.substring(0, maxNameLength - 2) + "..";
+            }}
+            
+            const eventTimeStr = e.time; 
+
+            html += `
+            <li style="display: flex; justify-content: space-between; align-items: center; padding: ${{rowPadding}}; border-bottom: 1px solid #1a1a1a; font-size: 0.85rem; color: ${{textColor}}; background-color: ${{rowBgColor}}; border-radius: 2px; margin-bottom: 1px; transition: background-color 0.5s;">
+                <div style="line-height: 1;">
+                    <span class="${{textClass}}" style="font-family: 'hapna', sans-serif; letter-spacing: -0.05em;">${{nameDisplay}}</span>
+                    <span style="font-size: 0.7rem; color: ${{timeColor}}; margin-left: 4px; letter-spacing: -0.05em;">(${{timeDisplay}})</span>
+                </div>
+                <span class="${{textClass}}" style="color: #FFC107; font-family: 'RDOFont', sans-serif; font-size: 1.0rem; letter-spacing: 1px; line-height: 1;">${{eventTimeStr}}</span>
+            </li>
+            `;
+        }});
+        
+        html += '</ul>';
+        container.innerHTML = html;
+    }}
+    
+    
+    
+    
+    
+    // Run immediately, then every second to keep "minutes remaining" accurate
+    setInterval(updateUpcomingEvents, 1000);
+    // Also run on load
+    window.addEventListener('load', updateUpcomingEvents);
+    
+    
+    
     
 // UPDATED FUNCTION: Fixed calculation to prevent summing previous cycle's weeks
     function calculateLogSums(currentStreak) {{
@@ -2210,6 +2709,7 @@ html_output = f'''
             /* Space between different role challenges */
             .role-challenge {{
               margin-bottom: .6rem; /* adjust as needed */
+              margin-top: -1px;     /* <--- THIS LINE to pull it up */
             }}
 
         .role-challenge-text {{
@@ -2225,11 +2725,13 @@ html_output = f'''
         }}
         .role-challenge-desc {{
             font-family: 'hapna', sans-serif; /* Example font */
-            font-size: 1rem;
+            font-size: .95rem;
             color: #aaa;
             margin-left: 6px; /* aligns under the role challenge text */
             white-space: pre-wrap; /* allows \\n line breaks in descriptions */
             transform: scaleX(0.925); /* reduce width to 90% */
+            line-height: 0.99;  /* <--- ADD THIS LINE (Lower number = tighter gap) */
+            margin-top: 1px;   /* <--- OPTIONAL: Pulls description closer to the title */
         }}
         
         /*  ##### Role Challenges Tickboxes ##### */
@@ -2535,6 +3037,32 @@ html_output = f'''
             letter-spacing: -0.05em; /* Add this line for narrower text */
         }}
         
+        
+/* === UPDATED: Tighter Pulse Animation === */
+        @keyframes urgentPulse {{
+            0% {{ 
+                /* Very tight shadow to keep text crisp */
+                text-shadow: 0 0 1px #fff; 
+                color: #fff;
+            }}
+            50% {{ 
+                /* Reduced blur radius (5px/8px instead of 15px/25px) */
+                text-shadow: 0 0 5px #fff, 0 0 8px #FFD700; 
+                color: #fffae6;
+            }}
+            100% {{ 
+                text-shadow: 0 0 1px #fff; 
+                color: #fff;
+            }}
+        }}
+
+        .active-event-glow {{
+            animation: urgentPulse 1.5s infinite ease-in-out;
+        }}
+        
+        
+        
+        
     </style>
 </head>
 <body>
@@ -2579,11 +3107,11 @@ html_output = f'''
     
 <!-- COLUMN 3: BONUS INFO -->
         <div class="bonus-container" id="bonus-container">
-            <h3 class="stats-heading" style="color: #666666;">Bonus Info</h3>
+            <h3 class="stats-heading" style="color: #666666; margin-bottom: 1px; padding-bottom: 0px;">Bonus Info</h3>
             
-            <div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: left; color: #E0E0E0; font-family: sans-serif;">
+<div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: left; color: #E0E0E0; font-family: sans-serif;">
                 
-                <p class="stats-text" id="streak-container" style="margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <p class="stats-text" id="streak-container" style="margin-bottom: 0px; display: flex; justify-content: space-between; align-items: center; width: 100%;">
                     <span style="display: flex; align-items: center; white-space: nowrap;">
                         <span style="font-weight: 500;">Daily Challenge Streak:</span>
                         <span id="streak-controls">
@@ -2593,22 +3121,22 @@ html_output = f'''
                     <span id="current-streak" style="color: #FFC107; text-align: right;">0 Days</span>
                 </p>
 
-                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
+                <p class="stats-text" style="margin-bottom: 0px; display: flex; justify-content: space-between; width: 100%;">
                     <span style="font-weight: 500;">Gold Per Challenge:</span>
                     <span id="gold-per-challenge" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
                 </p>
                 
-                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
+                <p class="stats-text" style="margin-bottom: 0px; display: flex; justify-content: space-between; width: 100%;">
                     <span style="font-weight: 500;">Completion Reward:</span>
                     <span id="completion-bonus-reward" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
                 </p>
                 
-                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
+                <p class="stats-text" style="margin-bottom: 0px; display: flex; justify-content: space-between; width: 100%;">
                     <span style="font-weight: 500;">Daily Gold Total:</span>
                     <span id="daily-gold-total" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
                 </p>
                 
-                <p class="stats-text" style="margin-bottom: 2px; display: flex; justify-content: space-between; width: 100%;">
+                <p class="stats-text" style="margin-bottom: 0px; display: flex; justify-content: space-between; width: 100%;">
                     <span style="font-weight: 500;">Streak Week Gold Total:</span>
                     <span id="cycle-gold-total" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
                 </p>
@@ -2619,19 +3147,23 @@ html_output = f'''
                 </p>
                 
             </div>
-
+            
+            
             <!-- Gold Log Chart Container -->
-            <h3 class="stats-heading" style="color: #666666; margin-top: 15px;">Gold Log (Last 28 Days)</h3>
-            <div id="gold-log-chart-container">
+                
+            <h3 class="stats-heading" style="color: #666666; margin-top: 15px; margin-bottom: 1px; padding-bottom: 0px;">Gold Log (Last 28 Days)</h3>
+
+  
+             <div id="gold-log-chart-container">
                 <!-- Bars will be injected here by JavaScript -->
             </div>
             <div id="chart-info-display" class="chart-info-display">&nbsp;</div>
 
+
 <!-- NAZAR LOCATION SECTION -->
-            <h3 class="stats-heading" style="color: #666666; margin-top: 35px;">Where Is Madam Nazar Today?</h3>
-            
-            <div style="padding: 6px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: center;">
-                <div style="color: #b00000; font-family: 'RDOFont', sans-serif; font-size: 1.4rem; letter-spacing: 0.05em; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); margin-bottom: 8px;">
+            <h3 class="stats-heading" style="color: #666666; margin-top: 30px; margin-bottom: 1px; padding-bottom: 0px;">Where Is Madam Nazar Today?</h3>            
+            <div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: center;">
+                <div style="color: #FFC107; font-family: 'RDOFont', sans-serif; font-size: 1.4rem; letter-spacing: 0.05em; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); margin-bottom: 2px; line-height: 1.1;">
                     {nazar_location_text}
                 </div>
                 
@@ -2647,13 +3179,25 @@ html_output = f'''
                 />
                 
                 <!-- Tiny hint text if zoom exists -->
-                <div style="font-size: 0.7rem; color: #444; margin-top: 4px; display: {'block' if nazar_has_zoom == 'true' else 'none'};">
+                <div style="font-size: 0.7rem; color: #777; margin-top: 1px; display: {'block' if nazar_has_zoom == 'true' else 'none'};">
                     (Click map to zoom)
                 </div>
             </div>
-
-        <!-- END COLUMN 3 -->
-    </div>
+            
+            
+<!-- UPCOMING EVENTS SECTION (NEW) -->
+            <h3 class="stats-heading" style="color: #666666; margin-top: 20px; margin-bottom: 1px; padding-bottom: 0px;">Upcoming Events</h3>
+            <div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; min-height: 85px;">
+                <div id="upcoming-events-list">
+                    <div style="text-align:center; padding:10px; color:#555; font-size:0.8rem;">Loading Events...</div>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            
 
   
   
