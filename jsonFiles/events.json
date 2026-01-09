@@ -1,0 +1,399 @@
+{
+  "updated": 1767695881,
+  "hash": "B04CB665B9310F00C9E707767735630148FE8987",
+  "standard": {
+    "00:00": {
+      "id": "hot_property",
+      "alt": "cold_dead_hands",
+      "text": "hp_intro",
+      "icon": "fme_hot_property",
+      "combat": "pvp",
+      "variation": null
+    },
+    "00:45": {
+      "id": "king_of_the_rails",
+      "alt": "railroad_baron",
+      "text": "fme_kotr_name",
+      "icon": "fme_king_of_the_rail",
+      "combat": "pvp",
+      "variation": null
+    },
+    "01:30": {
+      "id": "challenges",
+      "alt": null,
+      "text": "fmechal_variation_hunting_name",
+      "icon": "toast_mp_freemode_challenge",
+      "combat": "none",
+      "variation": "hunting"
+    },
+    "02:15": {
+      "id": "golden_hat",
+      "alt": "fools_gold",
+      "text": "gh_name",
+      "icon": "fme_golden_hat",
+      "combat": "pvp",
+      "variation": null
+    },
+    "03:00": {
+      "id": "challenges",
+      "alt": null,
+      "text": null,
+      "icon": "toast_mp_freemode_challenge",
+      "combat": null,
+      "variation": null
+    },
+    "03:45": {
+      "id": "wildlife_photographer",
+      "alt": null,
+      "text": "fme_wp_name",
+      "icon": "fme_role_wildlife_photographer",
+      "combat": "none",
+      "variation": null
+    },
+    "04:30": {
+      "id": "king_of_the_castle",
+      "alt": null,
+      "text": "fme_kotc_variation_ffa_name",
+      "icon": "fme_king_of_the_castle",
+      "combat": "pvp",
+      "variation": null
+    },
+    "05:15": {
+      "id": "challenges",
+      "alt": null,
+      "text": "fmechal_variation_fishing_swamp_name",
+      "icon": "toast_mp_freemode_challenge",
+      "combat": "none",
+      "variation": "fishing_swamp"
+    },
+    "06:00": {
+      "id": "dead_drop",
+      "alt": "dispatch_rider",
+      "text": "dd_intro",
+      "icon": "fme_dead_drop",
+      "combat": "pvp",
+      "variation": null
+    },
+    "06:45": {
+      "id": "challenges",
+      "alt": null,
+      "text": null,
+      "icon": "toast_mp_freemode_challenge",
+      "combat": null,
+      "variation": null
+    },
+    "07:30": {
+      "id": "wildlife_photographer",
+      "alt": null,
+      "text": "fme_wp_name",
+      "icon": "fme_role_wildlife_photographer",
+      "combat": "none",
+      "variation": null
+    },
+    "08:15": {
+      "id": "king_of_the_rails",
+      "alt": "railroad_baron",
+      "text": "fme_kotr_name",
+      "icon": "fme_king_of_the_rail",
+      "combat": "pvp",
+      "variation": null
+    },
+    "09:00": {
+      "id": "archery",
+      "alt": "master_archer",
+      "text": "fmarch_name",
+      "icon": "fme_archery",
+      "combat": "pve",
+      "variation": null
+    },
+    "09:45": {
+      "id": "wildlife_photographer",
+      "alt": null,
+      "text": "fme_wp_name",
+      "icon": "fme_role_wildlife_photographer",
+      "combat": "none",
+      "variation": null
+    },
+    "10:30": {
+      "id": "challenges",
+      "alt": null,
+      "text": "fmechal_variation_fishing_lake_name",
+      "icon": "toast_mp_freemode_challenge",
+      "combat": "none",
+      "variation": "fishing_lake"
+    },
+    "11:15": {
+      "id": "king_of_the_castle",
+      "alt": null,
+      "text": "fme_kotc_variation_ffa_name",
+      "icon": "fme_king_of_the_castle",
+      "combat": "pvp",
+      "variation": null
+    },
+    "12:00": {
+      "id": "hot_property",
+      "alt": "cold_dead_hands",
+      "text": "hp_intro",
+      "icon": "fme_hot_property",
+      "combat": "pvp",
+      "variation": null
+    },
+    "12:45": {
+      "id": "king_of_the_rails",
+      "alt": "railroad_baron",
+      "text": "fme_kotr_name",
+      "icon": "fme_king_of_the_rail",
+      "combat": "pvp",
+      "variation": null
+    },
+    "13:30": {
+      "id": "challenges",
+      "alt": null,
+      "text": "fmechal_variation_hunting_name",
+      "icon": "toast_mp_freemode_challenge",
+      "combat": "none",
+      "variation": "hunting"
+    },
+    "14:15": {
+      "id": "golden_hat",
+      "alt": "fools_gold",
+      "text": "gh_name",
+      "icon": "fme_golden_hat",
+      "combat": "pvp",
+      "variation": null
+    },
+    "15:00": {
+      "id": "challenges",
+      "alt": null,
+      "text": null,
+      "icon": "toast_mp_freemode_challenge",
+      "combat": null,
+      "variation": null
+    },
+    "15:45": {
+      "id": "wildlife_photographer",
+      "alt": null,
+      "text": "fme_wp_name",
+      "icon": "fme_role_wildlife_photographer",
+      "combat": "none",
+      "variation": null
+    },
+    "16:30": {
+      "id": "king_of_the_castle",
+      "alt": null,
+      "text": "fme_kotc_variation_ffa_name",
+      "icon": "fme_king_of_the_castle",
+      "combat": "pvp",
+      "variation": null
+    },
+    "17:15": {
+      "id": "challenges",
+      "alt": null,
+      "text": "fmechal_variation_fishing_swamp_name",
+      "icon": "toast_mp_freemode_challenge",
+      "combat": "none",
+      "variation": "fishing_swamp"
+    },
+    "18:00": {
+      "id": "dead_drop",
+      "alt": "dispatch_rider",
+      "text": "dd_intro",
+      "icon": "fme_dead_drop",
+      "combat": "pvp",
+      "variation": null
+    },
+    "18:45": {
+      "id": "challenges",
+      "alt": null,
+      "text": null,
+      "icon": "toast_mp_freemode_challenge",
+      "combat": null,
+      "variation": null
+    },
+    "19:30": {
+      "id": "wildlife_photographer",
+      "alt": null,
+      "text": "fme_wp_name",
+      "icon": "fme_role_wildlife_photographer",
+      "combat": "none",
+      "variation": null
+    },
+    "20:15": {
+      "id": "king_of_the_rails",
+      "alt": "railroad_baron",
+      "text": "fme_kotr_name",
+      "icon": "fme_king_of_the_rail",
+      "combat": "pvp",
+      "variation": null
+    },
+    "21:00": {
+      "id": "archery",
+      "alt": "master_archer",
+      "text": "fmarch_name",
+      "icon": "fme_archery",
+      "combat": "pve",
+      "variation": null
+    },
+    "21:45": {
+      "id": "wildlife_photographer",
+      "alt": null,
+      "text": "fme_wp_name",
+      "icon": "fme_role_wildlife_photographer",
+      "combat": "none",
+      "variation": null
+    },
+    "22:30": {
+      "id": "challenges",
+      "alt": null,
+      "text": "fmechal_variation_fishing_lake_name",
+      "icon": "toast_mp_freemode_challenge",
+      "combat": "none",
+      "variation": "fishing_lake"
+    },
+    "23:15": {
+      "id": "king_of_the_castle",
+      "alt": null,
+      "text": "fme_kotc_variation_ffa_name",
+      "icon": "fme_king_of_the_castle",
+      "combat": "pvp",
+      "variation": null
+    }
+  },
+  "themed": {
+    "00:22": {
+      "id": "protect_legendary_animal",
+      "alt": null,
+      "text": "fme_pla_name",
+      "icon": "fme_role_protect_legendary_animal",
+      "combat": "pve",
+      "variation": null
+    },
+    "01:52": {
+      "id": "escaped_convicts",
+      "alt": "day_of_reckoning",
+      "text": "fme_esc_name",
+      "icon": "fme_role_greatest_bounty_hunter",
+      "combat": "pvp",
+      "variation": null
+    },
+    "03:22": {
+      "id": "animal_tagging",
+      "alt": null,
+      "text": "fme_at_name",
+      "icon": "fme_role_animal_tagging",
+      "combat": "none",
+      "variation": null
+    },
+    "04:52": {
+      "id": "round_up",
+      "alt": "manhunt",
+      "text": "fme_ru_name",
+      "icon": "fme_role_round_up",
+      "combat": "pve",
+      "variation": null
+    },
+    "06:22": {
+      "id": "supply_train",
+      "alt": "trade_route",
+      "text": "fme_st_name",
+      "icon": "fme_role_supply_train",
+      "combat": "pve",
+      "variation": null
+    },
+    "07:52": {
+      "id": "condor_egg",
+      "alt": null,
+      "text": "fme_ce_name",
+      "icon": "fme_role_condor_egg",
+      "combat": "pve",
+      "variation": null
+    },
+    "09:22": {
+      "id": "escaped_convicts",
+      "alt": "day_of_reckoning",
+      "text": "fme_esc_name",
+      "icon": "fme_role_greatest_bounty_hunter",
+      "combat": "pvp",
+      "variation": null
+    },
+    "10:52": {
+      "id": "protect_legendary_animal",
+      "alt": null,
+      "text": "fme_pla_name",
+      "icon": "fme_role_protect_legendary_animal",
+      "combat": "pve",
+      "variation": null
+    },
+    "12:22": {
+      "id": "round_up",
+      "alt": "manhunt",
+      "text": "fme_ru_name",
+      "icon": "fme_role_round_up",
+      "combat": "pve",
+      "variation": null
+    },
+    "13:52": {
+      "id": "wreckage",
+      "alt": "salvage",
+      "text": "fme_wk_name",
+      "icon": "fme_role_wreckage",
+      "combat": "pve",
+      "variation": null
+    },
+    "15:22": {
+      "id": "escaped_convicts",
+      "alt": "day_of_reckoning",
+      "text": "fme_esc_name",
+      "icon": "fme_role_greatest_bounty_hunter",
+      "combat": "pvp",
+      "variation": null
+    },
+    "16:52": {
+      "id": "animal_tagging",
+      "alt": null,
+      "text": "fme_at_name",
+      "icon": "fme_role_animal_tagging",
+      "combat": "none",
+      "variation": null
+    },
+    "18:22": {
+      "id": "round_up",
+      "alt": "manhunt",
+      "text": "fme_ru_name",
+      "icon": "fme_role_round_up",
+      "combat": "pve",
+      "variation": null
+    },
+    "19:52": {
+      "id": "supply_train",
+      "alt": "trade_route",
+      "text": "fme_st_name",
+      "icon": "fme_role_supply_train",
+      "combat": "pve",
+      "variation": null
+    },
+    "21:22": {
+      "id": "condor_egg",
+      "alt": null,
+      "text": "fme_ce_name",
+      "icon": "fme_role_condor_egg",
+      "combat": "pve",
+      "variation": null
+    },
+    "22:52": {
+      "id": "escaped_convicts",
+      "alt": "day_of_reckoning",
+      "text": "fme_esc_name",
+      "icon": "fme_role_greatest_bounty_hunter",
+      "combat": "pvp",
+      "variation": null
+    }
+  },
+  "meta": {
+    "documentation": "https://rdo.gg/api#tag/free-roam-events/operation/get-events",
+    "provider": "Senexis",
+    "special_thanks": [
+      "Alloc8or"
+    ]
+  }
+}
