@@ -574,11 +574,34 @@ if valid_nazar_data:
 
     def prettify_nazar_key(key):
         if not key or not isinstance(key, str): return "Unknown"
-        parts = key.split('_')
+
+
+        # 1. Parse and Strip Prefix (Standard Logic)
+        # We convert to lower first to ensure consistency
+        parts = key.lower().split('_')
+
+        # Logic: If starts with "p_3_" or similar, strip the first two parts
         if len(parts) > 2 and len(parts[0]) == 1 and parts[1].isdigit():
             clean_parts = parts[2:]
         else:
             clean_parts = parts
+
+        # 2. Reconstruct the "clean" key (e.g., "ocreaghs_run")
+        clean_key = "_".join(clean_parts)
+        
+        # 3. Define Overrides for specific spelling/punctuation
+        NAZAR_OVERRIDES = {
+            "ocreaghs_run": "O'Creagh's Run",
+            "macfarlanes_ranch": "MacFarlane's Ranch"
+            }
+
+        debug_print("L2", "iyellow", "NAZAR: clean_key:", clean_key)
+
+        # 4. Check if the raw key exists in overrides (case-insensitive)
+        if clean_key in NAZAR_OVERRIDES:
+            debug_print("L2", "ipurple", "NAZAR: Override exists")
+            return NAZAR_OVERRIDES[clean_key]
+
         return " ".join(word.title() for word in clean_parts)
 
     nazar_location_text = prettify_nazar_key(raw_location)
@@ -1628,6 +1651,43 @@ updateAllTimeFunctions();
     }}
     // Expose to window so onclick can find it
     window.toggleNazarZoom = toggleNazarZoom;
+    
+    
+    
+    
+    
+// ////////////////////////////////////////////////////////////////////////////////////// //
+    // JavaScript: Nazar Map 5-Second Dissolve Logic                                          //
+    // ////////////////////////////////////////////////////////////////////////////////////// //
+    
+    setTimeout(() => {{
+        const img = document.getElementById('nazar-map-img');
+        if (!img) return;
+
+        // Get the filenames to compare (ignoring full URL paths)
+        const currentFilename = img.src.split('/').pop();
+        const targetSrc = img.dataset.finalTarget;
+        const targetFilename = targetSrc.split('/').pop();
+
+        // If the current image is ALREADY the target (or no target exists), do nothing
+        if (currentFilename === targetFilename || !targetSrc) return;
+
+        // 1. Fade Out
+        img.style.opacity = 0;
+
+        // 2. Wait for fade out, then swap source and Fade In
+        setTimeout(() => {{
+            img.src = targetSrc;
+            
+            // Important: Update the data-standard attribute so the zoom logic 
+            // knows this new image is now the "Standard" base to zoom from.
+            img.dataset.standard = targetSrc; 
+            
+            // 3. Fade In
+            img.style.opacity = 1;
+        }}, 800); // Wait 800ms (matches CSS transition)
+
+    }}, 5000); // 5000ms = 5 seconds delay    
 
 
 
@@ -3061,6 +3121,13 @@ html_output = f'''
         }}
         
         
+        /* NAZAR DISSOLVE EFFECT */
+        #nazar-map-img {{
+            transition: opacity 0.8s ease-in-out;
+            opacity: 1;
+        }}        
+        
+        
         
         
     </style>
@@ -3167,16 +3234,20 @@ html_output = f'''
                     {nazar_location_text}
                 </div>
                 
-                <!-- Image with toggle logic -->
-                <img src="{nazar_final_img_src}" 
+                    
+                <!-- Image with toggle logic and 5s dissolve -->
+                <img src="{placeholder_path}" 
                      id="nazar-map-img"
                      alt="Nazar Location Map" 
+                     data-final-target="{nazar_final_img_src}"
                      data-standard="{nazar_final_img_src}"
                      data-zoom="{nazar_zoom_src}"
                      data-has-zoom="{nazar_has_zoom}"
                      onclick="toggleNazarZoom(this)"
-                     style="width: 100%; height: auto; border-radius: 4px; border: 1px solid #333; display: block; cursor: {nazar_cursor_style}; transition: transform 0.1s;" 
+                     style="width: 100%; height: auto; border-radius: 4px; border: 1px solid #333; display: block; cursor: {nazar_cursor_style};" 
                 />
+
+  
                 
                 <!-- Tiny hint text if zoom exists -->
                 <div style="font-size: 0.7rem; color: #777; margin-top: 1px; display: {'block' if nazar_has_zoom == 'true' else 'none'};">
