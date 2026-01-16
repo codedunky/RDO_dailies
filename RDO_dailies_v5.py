@@ -2435,18 +2435,18 @@ html_output = f'''
         }}
         
         
-        /* COLUMN 3: BONUS INFO - Fixed to 250px wide */
+        /* COLUMN 3: BONUS INFO - Base styles */
         .bonus-container {{
             padding: 7px;
             background-color: #111; /*Dark grey background*/
             display: flex;
             flex-direction: column;
-            /* --- FIXED WIDTH CHANGES --- */
+            
+            /* Fixed width for Desktop (3-column layout) */
             width: 250px; 
             min-width: 250px; 
-            max-width: 850px;
-            /*flex-shrink: 0; Ensures this column does not shrink, prioritizing the fixed width */
-            /* --------------------------- */
+            
+            /* We remove max-width here to let flexbox handle it normally in row mode */
         }}
         
 
@@ -2672,16 +2672,32 @@ html_output = f'''
 /*  Role challenges switching logic as browser viewport narrows  */
 /* ############################################################# */
         
-        /* NEW: Rule to hide the bonus container when screen is 1600px or less (The Requirement) */
+        /* 
+           Scenario 1: Tablet/Intermediate Width (< 1600px)
+           Layout: General and Roles side-by-side (if they fit), 
+           Bonus Container wraps to the bottom line.
+        */
         @media (max-width: 1600px) {{
             .bonus-container {{
-                display: none; 
-          }}
+                display: flex !important;
+                flex-direction: column;
+                order: 3;             /* Moves it to the end */
+                margin-top: 15px;     /* Gap above it */
+                
+                width: 100% !important;
+                /* CAP THE WIDTH: Keeps graphics looking good, matches sidebar width */
+                max-width: 450px !important; 
+                
+                /* FIX SCALING: Remove min-width so it shrinks on small screens */
+                min-width: 0 !important;
+            }}
         }}
         
-        
-        
-        /* Narrow screens: column layout, sidebar below main */
+        /* 
+           Scenario 2: Mobile/Narrow Width (< 1320px)
+           Layout: Single column stack. 
+           General -> Roles -> Bonus (all centered)
+        */
         @media (max-width: 1320px) {{
           body {{
             flex-direction: column;
@@ -2692,15 +2708,23 @@ html_output = f'''
             flex-direction: column;
             align-items: center;
             width: 100%;    /* allow children to fill horizontally */
-            align-items: stretch; /* <— THIS is the key */
-            min-width: 420px;
+            align-items: stretch; 
+            min-width: 0;   /* Prevent lock-up on tiny screens */
           }}
           
           .sidebar-container {{
             width: 100% !important; 
             max-width: 850px !important;
             margin-left: 0;    /* center below main container */
-          }}      
+          }} 
+
+          .bonus-container {{
+            margin-left: auto !important;
+            margin-right: auto !important; /* Centers the block */
+            width: 100% !important;
+            max-width: 450px !important;   /* Maintained width cap */
+            min-width: 0 !important;       /* Ensure it scales down on mobile */
+          }}     
         }}
 
         /* === Challenge checkboxes with wrapped text aligned properly === */
@@ -3396,6 +3420,9 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 </body>
 </html>
 '''
+
+
+
 
 # Write to file
 with open("index.html", "w", encoding="utf-8") as f:
