@@ -1,49 +1,39 @@
-name: RDO Dailies v3.
+name: RDO Dailies v5
 
 on:
   schedule:
     - cron: '10 7 * * *'  # Runs at 07:10 UTC every day
   
-  workflow_dispatch:  # <-- this enables the manual "Run workflow" button
+  workflow_dispatch:  # Enables the manual "Run workflow" button
+
+# This permission block is required for the action to push changes back to the repo
+permissions:
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.x'
 
-    #- name: Install dependencies
-    #  run: |
-    #    pip install -r requirements.txt  # if you have dependencies
-
     - name: Run script to generate index.html
       run: |
-        python RDO_dailies_v3.py
+        # Make sure RDO_dailies_v5.py is in your repository!
+        python RDO_dailies_v5.py
 
-    - name: Debug - Show output files
-      run: |
-        echo "Current directory: $(pwd)"
-        ls -R
-    
-    - name: Commit and push generated file
+    - name: Commit and push generated files
       run: |
         git config --global user.name 'github-actions'
         git config --global user.email 'actions@github.com'
-        git add index.html jsonFiles/index.json
-        git commit -m "Update index.html and index.json" || echo "No changes to commit"
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
-    - name: Debug - List output files
-      run: |
-        echo "Current directory:"
-        pwd
-        echo "Files:"
-        ls -R
+        # CHANGED: Now adds index.html AND any JSON file (nazar, events, index)
+        git add index.html jsonFiles/*.json
+        
+        git commit -m "Auto-update RDO Dailies v5" || echo "No changes to commit"
+        git push
