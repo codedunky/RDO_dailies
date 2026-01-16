@@ -722,7 +722,7 @@ if os.path.exists(local_filename_events):
                 
                 # If it's Thursday through Monday, assume no update is coming.
                 else:
-                    debug_print("L0", "bgreen", "EVENTS: Old data detected, but we already checked this week. Assuming no update. (Thurs-Mon Logic)")
+                    debug_print("L0", "byellow", "EVENTS: Old data detected, but we already checked this week. Assuming no update. (Thurs-Mon Logic)")
                     download_events = False
 
     except Exception as e:
@@ -2105,20 +2105,40 @@ function updateUpcomingEvents() {{
                 const humanDate = date.toLocaleDateString('en-GB', {{ weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }});
                 const streakText = entry.streak ? `Day ${{entry.streak}} (Week ${{Math.floor((entry.streak - 1) / 7) + 1}})` : 'No Streak';
                 
-                let star = '';
+                // --- STABLE STAR LOGIC ---
+                // Default: Empty outline star, very faint
+                let starChar = '☆'; 
+                let starStyle = 'color: #444; opacity: 0.3; font-weight: normal;'; 
+
+                // Gold Star Logic (Both Done: 7/7 General AND 9/9 Role)
                 if (entry.general === 7 && entry.role === 9) {{
-                    star = ' <span style="color: #FFD700;">⭐</span>';
-                }} else if (entry.general === 7 || entry.role === 9) {{
-                    star = ' <span style="filter: grayscale(100%) brightness(1.3);">⭐</span>';
+                    starChar = '★'; 
+                    // "Pop" Effect: Two layers of text-shadow. 
+                    // 1. Tight Gold Glow (4px)
+                    // 2. Wider Orange Glow (10px) to simulate heat/radiance
+                    starStyle = 'color: #FFD700; text-shadow: 0 0 4px #FFD700, 0 0 10px #FFA500;';
+                }} 
+                // Silver Star Logic (One Done)
+                else if (entry.general === 7 || entry.role === 9) {{
+                    starChar = '★'; 
+                    // Subtle, single-layer cool glow
+                    starStyle = 'color: #C0C0C0; text-shadow: 0 0 3px rgba(192, 192, 192, 0.5);';
                 }}
                 
+                // Construct HTML using the new Stable Grid classes
+                // Note: JS template variables are escaped as ${{variable}}
                 infoDisplay.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; font-size: 0.9rem;">
-                        <span style="font-weight: bold;">${{humanDate}}</span>
-                        <span>${{entry.gold.toFixed(2)}} Gold${{star}}</span>
+                    <div class="tooltip-top-row">
+                        <span class="tooltip-date">${{humanDate}}</span>
+                        <span class="tooltip-gold">${{entry.gold.toFixed(2)}} Gold</span>
+                        <span class="tooltip-star" style="${{starStyle}}">${{starChar}}</span>
                     </div>
-                    <div style="font-size: 0.8rem; color: #999;">Streak: ${{streakText}} | Gen: ${{entry.general}}/7, Role: ${{entry.role}}/9</div>
+                    <div class="tooltip-bottom-row">
+                        <span>Streak: ${{streakText}}</span>
+                        <span>Gen: ${{entry.general}}/7 | Role: ${{entry.role}}/9</span>
+                    </div>
                 `;
+                
                 infoDisplay.style.color = '#aaa';
             }});
 
@@ -3114,15 +3134,67 @@ html_output = f'''
         
         .chart-info-display {{
             color: #5b5b5b;
-            font-family: 'hapna', sans-serif; /* Use hapna font */
+            font-family: 'hapna', sans-serif;
             font-size: 0.8rem;
-            text-align: left; /* Justify left */
-            padding-left: 5px; /* Add some padding */
-            height: 1.2em;
-            margin-top: -3px; /* reduce or increase to move graph's 'tooltip' text up or down */
-            transition: color 0.2s;
-            letter-spacing: -0.05em; /* Add this line for narrower text */
+            
+            /* TIGHTENING FIXES: */
+            height: 30px;        /* Fixed compact height (approx 2 lines) to prevent pushing content down */
+            min-height: 0;       /* Remove the large min-height from previous attempt */
+            margin-top: 0px;     /* Reset top margin */
+            padding-left: 5px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center content vertically in the 30px box */
+            gap: 2px;            /* Tiny gap between the two rows */
         }}
+
+        .tooltip-top-row {{
+            display: grid;
+            grid-template-columns: 1fr auto 20px; 
+            align-items: center;
+            width: 100%;
+            
+            /* TIGHTENING FIXES: */
+            border-bottom: 1px solid #222;
+            padding-bottom: 0px; /* Remove padding */
+            margin-bottom: 0px;  /* Remove margin */
+            line-height: 1.1;    /* Tight line height */
+        }}
+
+        .tooltip-date {{
+            font-weight: bold;
+            color: #bbb;
+            white-space: nowrap;
+        }}
+
+        .tooltip-gold {{
+            text-align: right;
+            padding-right: 5px;
+            color: #FFC107; 
+            font-feature-settings: "tnum";
+        }}
+
+        .tooltip-star {{
+            text-align: center;
+            font-size: 0.9rem; /* Slightly smaller star to fit line height */
+            line-height: 1;
+            padding-top: 1px;  /* Visual alignment */
+        }}
+
+        .tooltip-bottom-row {{
+            font-size: 0.75rem;
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+            
+            /* TIGHTENING FIXES: */
+            line-height: 1.1; /* Tight line height */
+            margin-top: 0px;
+        }}
+        
+        
+        
         
         
 /* === UPDATED: Tighter Pulse Animation === */
