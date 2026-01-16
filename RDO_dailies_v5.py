@@ -495,7 +495,7 @@ if download_now:
     except Exception as e:
         print(f"Error reading {local_filename}: {e}")
         
-    time.sleep(10)        
+        
 
 
 
@@ -640,108 +640,135 @@ else:
     nazar_has_zoom = "false"
     nazar_cursor_style = "default"
 
-# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# EVENTS JSON DOWNLOAD CHECKS
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
 
-
-
-# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# EVENTS.JSON LOAD/DOWNLOAD LOGIC
-# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 local_filename_events = os.path.join(script_dir, "jsonFiles", "events.json") 
 events_url = "https://api.rdo.gg/events/"
 download_events = False
 
-# --- CONFIG: Rate Limiting ---
-# 3 Hours in seconds (3 * 60 * 60 = 10800)
-EVENTS_COOLDOWN_SECONDS = 10800 
+# Short cooldown for "Update Day" (Tuesday/Wednesday) - 3 Hours
+COOLDOWN_SHORT = 10800 
 
-# Calculate the timestamp for the most recent "Tuesday 9:00 AM UTC"
+# --------------------------------------------------------------------------------------
+# 1. CALCULATE TIMESTAMPS
+# --------------------------------------------------------------------------------------
 now_utc = datetime.datetime.utcnow()
 today_9am = now_utc.replace(hour=9, minute=0, second=0, microsecond=0)
-
-# Python weekdays: Mon=0, Tue=1, ... Sun=6. We want Tuesday (1).
 days_since_tuesday = (now_utc.weekday() - 1) % 7
 
-# If today is Tuesday but BEFORE 9 AM, count previous Tuesday
+# Adjust to find the most recent Tuesday 9 AM
 if days_since_tuesday == 0 and now_utc < today_9am:
     days_since_tuesday = 7
 
-latest_update_datetime = today_9am - datetime.timedelta(days=days_since_tuesday)
-latest_update_timestamp = latest_update_datetime.timestamp()
+latest_window_start_dt = today_9am - datetime.timedelta(days=days_since_tuesday)
+latest_window_start_ts = latest_window_start_dt.timestamp()
 
-debug_print("L1", "igreen", f"EVENTS: Latest expected API update (Last Tuesday 9am): {latest_update_datetime} (Timestamp: {latest_update_timestamp})")
+debug_print("L1", "igreen", f"EVENTS: Current Update Window started: {latest_window_start_dt}")
 
-
-# 1. Check if we have the file and if it is up to date
+# --------------------------------------------------------------------------------------
+# 2. CHECK LOCAL FILE STATUS
+# --------------------------------------------------------------------------------------
 if os.path.exists(local_filename_events):
-    
-    # --- NEW: Check physical file age to prevent API spamming ---
-    last_modified_time = os.path.getmtime(local_filename_events)
-    time_since_download = int(time.time()) - last_modified_time
-    
-    # If downloaded recently (within cooldown), skip all logic and use cached file
-    if time_since_download < EVENTS_COOLDOWN_SECONDS:
-        debug_print("L1", "igreen", f"EVENTS: File downloaded recently ({int(time_since_download/60)} mins ago). Skipping API check.")
-        download_events = False
+    try:
+        # Get when we LAST checked the API (Physical file modification time)
+        last_api_check_ts = os.path.getmtime(local_filename_events)
         
-    else:
-        # File is older than 3 hours, so now we check the internal content
-        try:
-            with open(local_filename_events, 'r', encoding='utf-8') as f:
-                existing_data = json.load(f)
-                
-            # Get the 'updated' timestamp from inside the JSON file
-            local_updated_ts = existing_data.get('updated', 0)
-            
-            debug_print("L1", "igreen", f"EVENTS: Local events.json 'updated' timestamp: {local_updated_ts}")
+        # Read the internal content date (When Rockstar actually updated)
+        with open(local_filename_events, 'r', encoding='utf-8') as f:
+            existing_data = json.load(f)
+        
+        local_content_ts = existing_data.get('updated', 0)
+        readable_local_date = datetime.datetime.fromtimestamp(local_content_ts)
+        debug_print("L1", "igreen", f"EVENTS: Local File Internal Date: {readable_local_date}")
 
-            # Logic: If file's internal timestamp is OLDER than most recent Tuesday 9am
-            if local_updated_ts < latest_update_timestamp:
-                debug_print("L0", "idarkyellow", "EVENTS: Local events.json content is outdated. Downloading new schedule...")
+        # ------------------------------------------------------------------
+        # DECISION LOGIC
+        # ------------------------------------------------------------------
+        
+        # 1. SUCCESS: The file contains data from the current window.
+        if local_content_ts >= latest_window_start_ts:
+            debug_print("L0", "bgreen", "EVENTS: Schedule is fully up to date.")
+            download_events = False
+
+        # 2. OLD DATA: The file is old. Have we checked recently?
+        else:
+            # Did we check the API *after* the update window opened?
+            checked_this_week = last_api_check_ts > latest_window_start_ts
+            
+            if not checked_this_week:
+                debug_print("L0", "idarkyellow", "EVENTS: New update window open. We haven't checked yet. Downloading...")
                 download_events = True
             else:
-                debug_print("L0", "bgreen", "EVENTS: Local events.json is up to date. Not downloading from API")
-                download_events = False
+                # We HAVE checked this week, but the data was still old.
+                # Should we keep checking? Depends on the day.
                 
-        except Exception as e:
-            print(f"EVENTS: Error reading local events.json: {e}")
-            download_events = True
+                # 0=Mon, 1=Tue, 2=Wed, 3=Thu...
+                current_day = now_utc.weekday()
+                
+                # If it's Tuesday (1) or Wednesday (2), keep checking periodically
+                if current_day in [1, 2]:
+                    time_since_check = int(time.time()) - last_api_check_ts
+                    if time_since_check < COOLDOWN_SHORT:
+                        debug_print("L0", "bgreen", f"EVENTS: Update late (Tue/Wed). Keeping cache ({int(time_since_check/60)} mins old).")
+                        download_events = False
+                    else:
+                        debug_print("L0", "idarkyellow", "EVENTS: Update late (Tue/Wed). Cooldown expired. Checking API again...")
+                        download_events = True
+                
+                # If it's Thursday through Monday, assume no update is coming.
+                else:
+                    debug_print("L0", "bgreen", "EVENTS: Old data detected, but we already checked this week. Assuming no update. (Thurs-Mon Logic)")
+                    download_events = False
+
+    except Exception as e:
+        print(f"EVENTS: Error reading local file ({e}). Forcing download.")
+        download_events = True
 else:
-    debug_print("L0", "idarkyellow", "EVENTS: events.json not found. Downloading...")
+    debug_print("L0", "idarkyellow", "EVENTS: File not found. Downloading...")
     download_events = True
-    
-    
+
 # --- BLOCK DOWNLOADS CHECK ---
-if BLOCK_DOWNLOADS and download_events:
+if 'BLOCK_DOWNLOADS' in globals() and BLOCK_DOWNLOADS and download_events:
     debug_print("L1", "bred", "EVENTS: Download skipped (BLOCK_DOWNLOADS = True).")
     download_events = False
-# ----------------------------------    
 
-
-# 2. Perform Download if needed
+# --------------------------------------------------------------------------------------
+# 3. PERFORM DOWNLOAD
+# --------------------------------------------------------------------------------------
 if download_events:
     try:
         debug_print("L2", "igreen", "EVENTS: Downloading events.json from API...")
         headers = {'User-Agent': 'Mozilla/5.0'}
         req = urllib.request.Request(events_url, headers=headers)
+        
         with urllib.request.urlopen(req) as response:
             data_bytes = response.read()
             data_str = data_bytes.decode('utf-8')
             new_events_data = json.loads(data_str)
+            
+            # Write to file (This updates the 'mtime' used for tracking 'last_api_check_ts')
             with open(local_filename_events, 'w', encoding='utf-8') as f:
                 json.dump(new_events_data, f, indent=2)
-        print("EVENTS: Successfully downloaded new events.json file.")
+                
+        print("EVENTS: Download complete.")
+        
     except Exception as e:
-        print(f"EVENTS: Error during Events download: {e}")
-
-# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------  
-
-
+        print(f"EVENTS: Download failed: {e}")
+        
+ 
 
 
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# PAUSE CONSOLE TO SHOW API DOWNLOAD LOGIC MESSAGES
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+       
+# Wait to show debug info for downloads.
+time.sleep(10)
 
 
 
