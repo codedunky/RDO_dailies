@@ -1,11 +1,11 @@
 {
-  "updated": 1769234431,
-  "startTime": 1769234400,
-  "endTime": 1769320799,
-  "id": "MPSW_LOCATION_08",
-  "state": "p_1_lemoyne",
-  "location": "p_4_bolger_glade",
-  "landmark": "p_4_braithwaite_manor",
+  "updated": 1769320830,
+  "startTime": 1769320800,
+  "endTime": 1769407199,
+  "id": "MPSW_LOCATION_00",
+  "state": "p_1_new_austin",
+  "location": "p_4_plainview",
+  "landmark": "p_4_benedict_point",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
