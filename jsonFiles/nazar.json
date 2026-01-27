@@ -1,11 +1,11 @@
 {
-  "updated": 1769407230,
-  "startTime": 1769407200,
-  "endTime": 1769493599,
-  "id": "MPSW_LOCATION_08",
-  "state": "p_1_lemoyne",
-  "location": "p_4_bolger_glade",
-  "landmark": "p_4_braithwaite_manor",
+  "updated": 1769493630,
+  "startTime": 1769493600,
+  "endTime": 1769579999,
+  "id": "MPSW_LOCATION_02",
+  "state": "p_1_new_austin",
+  "location": "p_4_manteca_falls",
+  "landmark": "p_4_thieves_landing",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
