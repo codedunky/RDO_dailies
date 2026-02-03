@@ -1,11 +1,11 @@
 {
-  "updated": 1770012030,
-  "startTime": 1770012000,
-  "endTime": 1770098399,
-  "id": "MPSW_LOCATION_07",
-  "state": "p_1_ambarino",
-  "location": "p_3_ocreaghs_run",
-  "landmark": "p_3_ocreaghs_run",
+  "updated": 1770098430,
+  "startTime": 1770098400,
+  "endTime": 1770184799,
+  "id": "MPSW_LOCATION_11",
+  "state": "p_1_new_hanover",
+  "location": "w_5_black_balsam_rise",
+  "landmark": "p_6_annesburg",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
