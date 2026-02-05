@@ -1,11 +1,11 @@
 {
-  "updated": 1770184830,
-  "startTime": 1770184800,
-  "endTime": 1770271199,
-  "id": "MPSW_LOCATION_05",
-  "state": "p_1_new_hanover",
-  "location": "p_4_emerald_ranch",
-  "landmark": "p_4_emerald_ranch",
+  "updated": 1770271231,
+  "startTime": 1770271200,
+  "endTime": 1770357599,
+  "id": "MPSW_LOCATION_04",
+  "state": "p_1_west_elizabeth",
+  "location": "p_3_little_creek_river",
+  "landmark": "p_4_wallace_station",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
