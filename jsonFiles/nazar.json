@@ -1,11 +1,11 @@
 {
-  "updated": 1769925630,
-  "startTime": 1769925600,
-  "endTime": 1770011999,
-  "id": "MPSW_LOCATION_05",
-  "state": "p_1_new_hanover",
-  "location": "p_4_emerald_ranch",
-  "landmark": "p_4_emerald_ranch",
+  "updated": 1770616830,
+  "startTime": 1770616800,
+  "endTime": 1770703199,
+  "id": "MPSW_LOCATION_03",
+  "state": "p_1_west_elizabeth",
+  "location": "p_4_manzanita_post",
+  "landmark": "p_4_manzanita_post",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
