@@ -1,11 +1,11 @@
 {
-  "updated": 1770703230,
-  "startTime": 1770703200,
-  "endTime": 1770789599,
-  "id": "MPSW_LOCATION_01",
-  "state": "p_1_new_austin",
-  "location": "p_4_twin_rocks",
-  "landmark": "p_4_armadillo",
+  "updated": 1770789631,
+  "startTime": 1770789600,
+  "endTime": 1770875999,
+  "id": "MPSW_LOCATION_07",
+  "state": "p_1_ambarino",
+  "location": "p_3_ocreaghs_run",
+  "landmark": "p_3_ocreaghs_run",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
