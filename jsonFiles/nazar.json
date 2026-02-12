@@ -1,11 +1,11 @@
 {
-  "updated": 1770789631,
-  "startTime": 1770789600,
-  "endTime": 1770875999,
-  "id": "MPSW_LOCATION_07",
-  "state": "p_1_ambarino",
-  "location": "p_3_ocreaghs_run",
-  "landmark": "p_3_ocreaghs_run",
+  "updated": 1770876030,
+  "startTime": 1770876000,
+  "endTime": 1770962399,
+  "id": "MPSW_LOCATION_03",
+  "state": "p_1_west_elizabeth",
+  "location": "p_4_manzanita_post",
+  "landmark": "p_4_manzanita_post",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
