@@ -2327,33 +2327,65 @@ function updateUpcomingEvents() {{
         updateCounters(); 
     }});
 
-    document.querySelectorAll('.difficulty-toggle').forEach(toggle => {{
+document.querySelectorAll('.difficulty-toggle').forEach(toggle => {{
         const roleContainer = toggle.closest('.role-container');
+        // Create unique key for storage
         const roleName = roleContainer.querySelector('.role-heading').textContent.split('(')[0].trim().toLowerCase().replace(/[^a-z0-9]/g, '');
         const lsKey = `difficulty_${{roleName}}`;
         
         function setView(diff) {{
-            roleContainer.querySelectorAll('.role-challenge').forEach(ch => ch.style.display = (ch.dataset.difficulty === diff) ? '' : 'none');
+            // 1. Show/Hide challenges
+            roleContainer.querySelectorAll('.role-challenge').forEach(ch => {{
+                // If diff is 'none', everything hides.
+                // If diff is 'easy', only easy shows.
+                ch.style.display = (ch.dataset.difficulty === diff) ? '' : 'none';
+            }});
+            
             toggle.dataset.difficulty = diff;
-            const desc = diff === 'easy' ? 'Rank 1–5' : diff === 'med' ? 'Rank 6–14' : 'Rank 15+';
-            toggle.textContent = `(${{diff.charAt(0).toUpperCase() + diff.slice(1)}}: ${{desc}})`;
+            
+            // 2. Visual Label Logic
+            if (diff === 'none') {{
+                toggle.textContent = '(Unpurchased)';
+                toggle.style.color = '#777';      // Greyed out
+                toggle.style.fontStyle = 'italic';
+            }} else {{
+                toggle.style.color = '#dd0000';   // Active Red
+                toggle.style.fontStyle = 'normal';
+                
+                const desc = diff === 'easy' ? 'Rank 1–5' : diff === 'med' ? 'Rank 6–14' : 'Rank 15+';
+                const label = diff.charAt(0).toUpperCase() + diff.slice(1);
+                toggle.textContent = `(${{label}}: ${{desc}})`;
+            }}
         }}
         
+        // Load saved state (default 'hard')
         setView(localStorage.getItem(lsKey) || 'hard');
         
         toggle.addEventListener('click', () => {{
             if (toggle.classList.contains('dimmed-text')) return;
-            const next = toggle.dataset.difficulty === 'easy' ? 'med' : toggle.dataset.difficulty === 'med' ? 'hard' : 'easy';
+            
+            // Cycle: Easy -> Med -> Hard -> None -> Easy
+            const current = toggle.dataset.difficulty;
+            let next = 'easy';
+            
+            if (current === 'easy') next = 'med';
+            else if (current === 'med') next = 'hard';
+            else if (current === 'hard') next = 'none'; // Unpurchased state
+            else next = 'easy';
+            
             localStorage.setItem(lsKey, next);
             setView(next);
-            roleContainer.querySelectorAll('.role-challenge[style*="display: none"] .challenge-checkbox:checked').forEach(cb => {{
-                cb.checked = false;
-                localStorage.setItem(`${{PYTHON_CHALLENGE_TIMESTAMP}}_${{cb.id}}`, false);
-            }});
+
+            // *** FIX: We removed the code that unticks hidden boxes here. ***
+            // The checkboxes stay checked in the background.
+            // updateCounters() will exclude them from the Total/Gold count 
+            // because it checks for (style.display !== 'none').
+            
             handleStreakUpdate(false);
         }});
     }});
-
+    
+    
     loadStreak();
     updateCounters();
     
