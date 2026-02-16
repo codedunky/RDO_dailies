@@ -1,11 +1,11 @@
 {
-  "updated": 1771135230,
-  "startTime": 1771135200,
-  "endTime": 1771221599,
-  "id": "MPSW_LOCATION_09",
+  "updated": 1771221630,
+  "startTime": 1771221600,
+  "endTime": 1771307999,
+  "id": "MPSW_LOCATION_08",
   "state": "p_1_lemoyne",
-  "location": "w_4_copperhead_landing",
-  "landmark": "p_4_van_horn_trading_post",
+  "location": "p_4_bolger_glade",
+  "landmark": "p_4_braithwaite_manor",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
