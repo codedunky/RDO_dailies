@@ -1,11 +1,11 @@
 {
-  "updated": 1771221630,
-  "startTime": 1771221600,
-  "endTime": 1771307999,
-  "id": "MPSW_LOCATION_08",
-  "state": "p_1_lemoyne",
-  "location": "p_4_bolger_glade",
-  "landmark": "p_4_braithwaite_manor",
+  "updated": 1771308031,
+  "startTime": 1771308000,
+  "endTime": 1771394399,
+  "id": "MPSW_LOCATION_05",
+  "state": "p_1_new_hanover",
+  "location": "p_4_emerald_ranch",
+  "landmark": "p_4_emerald_ranch",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
