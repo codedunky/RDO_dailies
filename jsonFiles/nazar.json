@@ -1,11 +1,11 @@
 {
-  "updated": 1772258431,
-  "startTime": 1772258400,
-  "endTime": 1772344799,
-  "id": "MPSW_LOCATION_02",
-  "state": "p_1_new_austin",
-  "location": "p_4_manteca_falls",
-  "landmark": "p_4_thieves_landing",
+  "updated": 1772344809,
+  "startTime": 1772344800,
+  "endTime": 1772431199,
+  "id": "MPSW_LOCATION_06",
+  "state": "p_1_new_hanover",
+  "location": "w_5_limpany",
+  "landmark": "p_4_flatneck_station",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
