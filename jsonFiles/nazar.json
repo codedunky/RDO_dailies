@@ -1,11 +1,11 @@
 {
-  "updated": 1773381631,
-  "startTime": 1773381600,
-  "endTime": 1773467999,
-  "id": "MPSW_LOCATION_09",
-  "state": "p_1_lemoyne",
-  "location": "w_4_copperhead_landing",
-  "landmark": "p_4_van_horn_trading_post",
+  "updated": 1773468030,
+  "startTime": 1773468000,
+  "endTime": 1773554399,
+  "id": "MPSW_LOCATION_05",
+  "state": "p_1_new_hanover",
+  "location": "p_4_emerald_ranch",
+  "landmark": "p_4_emerald_ranch",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
