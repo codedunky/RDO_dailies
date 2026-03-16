@@ -95,7 +95,7 @@ COLORS = {
     "bRESET":          "\033[49m",
     "bbrightblack":    "\033[100m",
     "bbrightred":      "\033[101m",
-    "bbrightgreen":    "\033[102m",
+    "bbrightgreen":    "\033[102m\033[30m",
     "bbrightyellow":   "\033[103m\033[30m",
     "bbrightblue":     "\033[104m",
     "bbrightpurple":   "\033[105m",
@@ -214,6 +214,21 @@ def debug_print(
         print(f"{indent_str}{color_code}{line}{COLORS['ireset']}")
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+# Status variables
+status_index = "INDEX:  Unknown"
+status_nazar = "NAZAR:  Unknown"
+status_events = "EVENTS: Unknown"
+
+BG_RED = "\033[101m"
+BG_YELLOW = "\033[30;43m"
+BG_GREEN = "\033[30;42m"
+BG_RESET = "\033[0m"
+
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+
 
 
 
@@ -412,6 +427,7 @@ index_expiry_readable = datetime.datetime.fromtimestamp(end_time).strftime('%Y-%
 
 if end_time < now:
     debug_print("L1", "idarkyellow", f"INDEX: File expired (Expires: {index_expiry_readable}). Downloading new file...")
+    status_index = f"{BG_GREEN}INDEX:  New json file downloaded successfully.{BG_RESET}"
 
     # Decide whether to prompt or just download
     if file_exists:
@@ -428,6 +444,7 @@ if end_time < now:
 else:
     # This is the new "Valid" message
     debug_print("L1", "byellow", f"INDEX: File valid (Expires: {index_expiry_readable}). Using cached json.")
+    status_index = f"{BG_YELLOW}INDEX:  File valid (Expires: {index_expiry_readable}). Using cached json. {BG_RESET}"
     download_now = False
     
     
@@ -492,6 +509,7 @@ if download_now:
         end_time = index_data.get("endTime", 0)
         start_time = index_data.get("startTime", 0)
         print(f"startTime: {timestamp_to_date(start_time)}, endTime: {timestamp_to_date(end_time)}")
+        status_index = status_index + (f" - (endTime: {timestamp_to_date(end_time)})")
     except Exception as e:
         print(f"Error reading {local_filename}: {e}")
         
@@ -523,6 +541,7 @@ valid_nazar_data = False
 now = int(time.time())
 
 if os.path.exists(local_filename_nazar):
+    print("NAZAR")
     try:
         with open(local_filename_nazar, 'r', encoding='utf-8') as f:
             nazar_data = json.load(f)
@@ -537,6 +556,8 @@ if os.path.exists(local_filename_nazar):
             valid_nazar_data = True 
             nazar_expiry_readable = datetime.datetime.fromtimestamp(nazar_end_time).strftime('%Y-%m-%d %H:%M:%S')
             debug_print("L1", "byellow", f"NAZAR: File valid (Expires: {nazar_expiry_readable}). Using cached json.")
+            status_nazar = f"{BG_YELLOW}NAZAR:  File valid (Expires: {nazar_expiry_readable}). Using cached json. {BG_RESET}"
+
 
     except Exception as e:
         print(f"NAZAR: Error reading local nazar.json: {e}")
@@ -564,8 +585,10 @@ if download_nazar:
             nazar_data = new_nazar_data
             valid_nazar_data = True 
             print("NAZAR: downloaded new nazar.json file")
+            status_nazar = f"{BG_GREEN}NAZAR:  New json file downloaded successfully.{BG_RESET}"
     except Exception as e:
         print(f"NAZAR: Error during Nazar download: {e}")
+        status_nazar = f"{BG_RED}NAZAR:  Error Downloading.{BG_RESET}"
 
 # 2. Process Data ONLY if valid
 if valid_nazar_data:
@@ -706,6 +729,7 @@ if os.path.exists(local_filename_events):
         # 1. SUCCESS: The file contains data from the current window.
         if local_content_ts >= latest_window_start_ts:
             debug_print("L0", "bgreen", "EVENTS: Schedule is fully up to date.")
+            status_events = f"{BG_YELLOW}EVENTS: File valid (Begins:  {readable_local_date}). Using cached json. {BG_RESET}"
             download_events = False
 
         # 2. OLD DATA: The file is old. Have we checked recently?
@@ -736,6 +760,7 @@ if os.path.exists(local_filename_events):
                 # If it's Thursday through Monday, assume no update is coming.
                 else:
                     debug_print("L0", "byellow", "EVENTS: Old data detected, but we already checked this week. Assuming no update. (Thurs-Mon Logic)")
+                    status_events = f"{BG_YELLOW}EVENTS: File valid (Begins:  {readable_local_date}). Using cached json. {BG_RESET}"
                     download_events = False
 
     except Exception as e:
@@ -769,9 +794,11 @@ if download_events:
                 json.dump(new_events_data, f, indent=2)
                 
         print("EVENTS: Download complete.")
+        status_events = f"{BG_GREEN}EVENTS: New json file downloaded successfully.{BG_RESET}"
         
     except Exception as e:
         print(f"EVENTS: Download failed: {e}")
+        status_events = f"{BG_RED}EVENTS: New json file failed to download.{BG_RESET}"
         
  
 
@@ -781,7 +808,7 @@ if download_events:
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
        
 # Wait to show debug info for downloads.
-time.sleep(10)
+time.sleep(2)
 
 
 
@@ -3497,3 +3524,7 @@ with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_output)
 
 print("HTML output written to index.html")
+
+print(status_index)
+print(status_nazar)
+print(status_events)
