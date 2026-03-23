@@ -1,5 +1,4 @@
 
-
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 import datetime
 import time
@@ -13,7 +12,7 @@ from typing import Any
 import hashlib  # For the checkbox id's
 
 
-# Set the path to your local index.json file in a relative subfolder called 'jsonFiles'
+# Set the path to your local index.json file in a relative subfolder called 'jsonFiles'.
 script_dir = os.path.dirname(os.path.abspath(__file__))  # the directory where the script is
 os.makedirs(os.path.join(script_dir, "jsonFiles"), exist_ok=True)  # Check folder exists
 
@@ -159,7 +158,7 @@ def debug_print(
     # Determine the color:
     # If second argument exists and is a string, treat it as color
     color = None
-    message_parts = []
+    message_parts =[]
 
     if len(args) > 1:
         second_arg = args[1]
@@ -170,17 +169,12 @@ def debug_print(
             # No color specified, message parts start from second argument
             message_parts = args[1:]
     else:
-        message_parts = []
+        message_parts =[]
 
     # If no color specified, use default for level
-    if color is None:
-        #Looks up the color name associated with level_upper in the DEFAULT_LEVEL_COLORS dictionary.
-        #If the color name isn't found in COLORS, it defaults to 'iblue'.
-        default_color_name = DEFAULT_LEVEL_COLORS.get(level_upper, 'iblue')
-        color_code = COLORS.get(default_color_name, COLORS["iblue"])
-    else:
-        # Uses the provided color string to look up the ANSI code.
-        # If the specified color isn't in COLORS, defaults to 'icyan'.
+    default_color_name = DEFAULT_LEVEL_COLORS.get(level_upper, 'iblue')
+    color_code = COLORS.get(default_color_name, COLORS["iblue"])
+    if color is not None:
         color_code = COLORS.get(color, COLORS["icyan"])
 
     # Get caller line number
@@ -347,9 +341,6 @@ from RDO_challenges_data import (
 
 # Initialize index_data with a default empty dict
 index_data = {}
-
-# Set the path to your local index.json file
-#local_filename = r"C:\Users\Dunk\Documents\Thonny Bits\RDO\RDO_dailies\jsonFiles\index.json"
 
 # Set the path to your local index.json file in a relative subfolder called 'jsonFiles'
 script_dir = os.path.dirname(os.path.abspath(__file__))  # the directory where the script is
@@ -817,7 +808,7 @@ time.sleep(2)
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 def get_events_data_for_js(json_file):
-    events_list = []
+    events_list =[]
     
     # 1. Define a mapping dictionary for specific IDs or Variations
     #    This translates the internal code to the specific in-game title.
@@ -917,15 +908,15 @@ debug_print("L2", "Generated Events Data for JS")
 
 
 def extract_challenges_with_roles(index):
-    combined = []
+    combined =[]
     
     # Safety check: if index data is missing/empty, return empty list immediately
     if not index:
-        return []
+        return[]
 
     # General challenges (not tied to a specific role or difficulty)
-    # .get() safely returns [] if "general" key is missing
-    for challenge in index.get("general", []):
+    # .get() safely returns[] if "general" key is missing
+    for challenge in index.get("general",[]):
         combined.append({**challenge, "role": "general", "difficulty": None})
 
     # Role-based challenges across easy, med, hard
@@ -967,7 +958,7 @@ detail_lookup = {
 indexed_challenges = extract_challenges_with_roles(index_data)
 
 # Final result list
-final_list = []
+final_list =[]
 
 for ch in indexed_challenges:
     title_upper = normalize_key(ch["title"])
@@ -1009,7 +1000,7 @@ def get_printable_description(details):
     # ---------------------------------------------------------
     # 1. DYNAMICALLY BUILD THE LIST OF OPTIONS
     # ---------------------------------------------------------
-    options = []
+    options =[]
     
     # Add the primary description (Index 0)
     if details.get("description"):
@@ -1084,7 +1075,7 @@ def get_printable_description(details):
     
     if DEBUG_DESCRIPTION:
         # +1 makes it human readable (Index 0 = Desc #1, Index 1 = Desc #2)
-        final_text += f" [#{selection_index + 1}]"
+        final_text += f"[#{selection_index + 1}]"
         
     debug_print("L3", f"Rotator: '{details.get('name')}' selected index {selection_index} ({selection_index+1}/{count})")
     
@@ -1094,18 +1085,18 @@ def get_printable_description(details):
     
 
 # Desired print order for categories and difficulty
-category_order = ["general", "bounty_hunter", "trader", "collector", "moonshiner", "naturalist"]
+category_order =["general", "bounty_hunter", "trader", "collector", "moonshiner", "naturalist"]
 difficulty_order = [None, "easy", "med", "hard"]
 
 # Group and sort challenges for JSON output
-output_json = []
+output_json =[]
 grouped_json = defaultdict(lambda: defaultdict(list))
 for item in final_list:
     grouped_json[item["category"]][item["difficulty"]].append(item)
 
 for category in category_order:
     for difficulty in difficulty_order:
-        items = grouped_json.get(category, {}).get(difficulty, [])
+        items = grouped_json.get(category, {}).get(difficulty,[])
         for item in sorted(items, key=lambda x: x["name"] or x["title"]):
             goal_display = ""
 
@@ -1207,7 +1198,7 @@ challenges = data['final_name']
 general_challenges = [c for c in challenges if c["category"] == "general"]
 hard_role_challenges = [c for c in challenges if c["category"] != "general" and c["difficulty"] == "hard"]
 
-role_keys = ["bounty_hunter", "trader", "collector", "moonshiner", "naturalist"]
+role_keys =["bounty_hunter", "trader", "collector", "moonshiner", "naturalist"]
 
 role_names = {
     "bounty_hunter": "Bounty Hunter",
@@ -1370,7 +1361,7 @@ def generate_html_for_difficulty(challenges, filter_difficulty):
         grouped_by_role[c['category']].append(c)
 
     # Separate general challenges and role-specific challenges
-    general_challenges = grouped_by_role.get("general", [])
+    general_challenges = grouped_by_role.get("general",[])
 
     # Render the general challenges HTML block
     html_general = '<h2 class="general-heading">General Challenges <span id="general-counter">(0/0)</span></h2>\n'
@@ -1469,7 +1460,7 @@ def render_role_challenge_block(block):
 #     grouped_roles[c["category"]].append(c)
 # 
 # html_hard_roles = ""
-# role_keys = ["bounty_hunter", "trader", "collector", "moonshiner", "naturalist"]
+# role_keys =["bounty_hunter", "trader", "collector", "moonshiner", "naturalist"]
 # for idx, role in enumerate(role_keys):
 #     if role in grouped_roles:
 #         html_hard_roles += f'<h3 class="role-heading">{role_names[role]}</h3>'
@@ -1902,7 +1893,7 @@ document.addEventListener("DOMContentLoaded", function() {{
         const today = getRDODayKey();
         if (getChallengeDateKey() !== today) return;
 
-        let goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
+        let goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) ||[];
         const todayEntryIndex = goldLog.findIndex(entry => entry.date === today);
         const newEntry = {{ date: today, gold: goldAmount, streak: streakCount, general: generalCount, role: roleCount }};
 
@@ -1923,17 +1914,37 @@ document.addEventListener("DOMContentLoaded", function() {{
     // JavaScript: Dynamic Upcoming Events Logic                                              //
     // ////////////////////////////////////////////////////////////////////////////////////// //
 
+    const LS_EVENT_OFFSET = 'rdoEventOffset';
+    let currentEventOffset = parseInt(localStorage.getItem(LS_EVENT_OFFSET) || '0', 10);
+
+    function updateOffsetDisplay() {{
+        const display = document.getElementById('event-offset-display');
+        if (!display) return;
+        if (currentEventOffset > 0) {{
+            display.textContent = '+' + currentEventOffset + 's';
+            display.style.color = '#88ff88';
+        }} else if (currentEventOffset < 0) {{
+            display.textContent = currentEventOffset + 's';
+            display.style.color = '#ff8888';
+        }} else {{
+            display.textContent = '0s';
+            display.style.color = '#999';
+        }}
+    }}
+
 function updateUpcomingEvents() {{
         const container = document.getElementById('upcoming-events-list');
         if (!container || !RAW_EVENTS_DATA.length) return;
 
         const now = new Date();
         const JOIN_WINDOW_MS = 3 * 60 * 1000; // 3 minutes
+        
+        const offsetMs = currentEventOffset * 1000;
 
         let candidates = [];
         
         function getEventDate(timeStr, dayOffset) {{
-            const [h, m] = timeStr.split(':').map(Number);
+            const[h, m] = timeStr.split(':').map(Number);
             const d = new Date();
             d.setUTCHours(h, m, 0, 0);
             if (dayOffset > 0) {{
@@ -1950,7 +1961,7 @@ function updateUpcomingEvents() {{
         }});
 
         const activeEvents = candidates.filter(e => {{
-            return (e.dt.getTime() + JOIN_WINDOW_MS) > now.getTime();
+            return (e.dt.getTime() + offsetMs + JOIN_WINDOW_MS) > now.getTime();
         }});
 
         activeEvents.sort((a, b) => a.dt - b.dt);
@@ -1959,7 +1970,7 @@ function updateUpcomingEvents() {{
         let html = '<ul style="list-style: none; padding: 0; margin: 0;">';
         
         next5.forEach(e => {{
-            const diffMs = e.dt - now; 
+            const diffMs = (e.dt.getTime() + offsetMs) - now.getTime(); 
             
             let timeDisplay = "";
             let rowBgColor = "transparent"; 
@@ -2037,12 +2048,34 @@ function updateUpcomingEvents() {{
     // Also run on load
     window.addEventListener('load', updateUpcomingEvents);
     
+    // Bind event offset controls
+    const offsetUp = document.getElementById('event-offset-up');
+    const offsetDown = document.getElementById('event-offset-down');
     
+    if (offsetUp) {{
+        offsetUp.addEventListener('click', () => {{
+            currentEventOffset += 1;
+            localStorage.setItem(LS_EVENT_OFFSET, currentEventOffset);
+            updateOffsetDisplay();
+            updateUpcomingEvents();
+        }});
+    }}
+    
+    if (offsetDown) {{
+        offsetDown.addEventListener('click', () => {{
+            currentEventOffset -= 1;
+            localStorage.setItem(LS_EVENT_OFFSET, currentEventOffset);
+            updateOffsetDisplay();
+            updateUpcomingEvents();
+        }});
+    }}
+    
+    updateOffsetDisplay();
     
     
 // UPDATED FUNCTION: Fixed calculation to prevent summing previous cycle's weeks
     function calculateLogSums(currentStreak) {{
-        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
+        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) ||[];
         
         // 1. Determine the minimum streak day for the current week bracket
         let minWeekStreak = 1;
@@ -2122,7 +2155,7 @@ function updateUpcomingEvents() {{
         }}
 
         infoDisplay.innerHTML = '&nbsp;';
-        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
+        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) ||[];
         container.innerHTML = '';
 
         if (goldLog.length === 0) {{
@@ -2304,7 +2337,7 @@ function updateUpcomingEvents() {{
         
         renderGoldLogChart();
         // --- DEBUG LOG ---
-        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
+        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) ||[];
         debugGoldStats(dailyGoldTotal, sums.week, sums.running, goldLog);
     }}
     
@@ -2585,6 +2618,30 @@ html_output = f'''
             padding: 0 4px;
         }}
         #streak-up:hover, #streak-down:hover {{
+            color: #fff;
+        }}
+        
+        /* Event Offset Controls */
+        #event-offset-controls {{
+            opacity: 0;
+            visibility: hidden;
+            color: #999;
+            user-select: none;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+            font-family: Arial, sans-serif;
+            letter-spacing: normal;
+        }}
+        #events-heading-container:hover #event-offset-controls {{
+            opacity: 1;
+            visibility: visible;
+        }}
+        #event-offset-up, #event-offset-down {{
+            padding: 0 4px;
+            cursor: pointer;
+        }}
+        #event-offset-up:hover, #event-offset-down:hover {{
             color: #fff;
         }}
         
@@ -3475,7 +3532,13 @@ html_output = f'''
             
             
 <!-- UPCOMING EVENTS SECTION (NEW) -->
-            <h3 class="stats-heading" style="color: #666666; margin-top: 20px; margin-bottom: 1px; padding-bottom: 0px;">Upcoming Events</h3>
+            <h3 class="stats-heading" id="events-heading-container" style="color: #666666; margin-top: 20px; margin-bottom: 1px; padding-bottom: 0px; display: flex; justify-content: space-between; align-items: center;">
+                <span>Upcoming Events</span>
+                <span id="event-offset-controls">
+                    <span id="event-offset-display">0s</span>
+                    <span id="event-offset-down" title="Start events earlier">▼</span><span id="event-offset-up" title="Start events later">▲</span>
+                </span>
+            </h3>
             <div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; min-height: 85px;">
                 <div id="upcoming-events-list">
                     <div style="text-align:center; padding:10px; color:#555; font-size:0.8rem;">Loading Events...</div>
