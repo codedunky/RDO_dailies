@@ -1,4 +1,3 @@
-
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 import datetime
 import time
@@ -12,7 +11,7 @@ from typing import Any
 import hashlib  # For the checkbox id's
 
 
-# Set the path to your local index.json file in a relative subfolder called 'jsonFiles'.
+# Set the path to your local index.json file in a relative subfolder called 'jsonFiles'
 script_dir = os.path.dirname(os.path.abspath(__file__))  # the directory where the script is
 os.makedirs(os.path.join(script_dir, "jsonFiles"), exist_ok=True)  # Check folder exists
 
@@ -849,7 +848,7 @@ def get_events_data_for_js(json_file):
         with open(json_file, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
-        target_categories = ['standard', 'themed', 'role'] # Added 'role' just in case you want those too
+        target_categories =['standard', 'themed', 'role'] # Added 'role' just in case you want those too
         
         for cat in target_categories:
             if cat not in data: continue
@@ -1086,7 +1085,7 @@ def get_printable_description(details):
 
 # Desired print order for categories and difficulty
 category_order =["general", "bounty_hunter", "trader", "collector", "moonshiner", "naturalist"]
-difficulty_order = [None, "easy", "med", "hard"]
+difficulty_order =[None, "easy", "med", "hard"]
 
 # Group and sort challenges for JSON output
 output_json =[]
@@ -1372,7 +1371,7 @@ def generate_html_for_difficulty(challenges, filter_difficulty):
     html_roles = ''   # <h2>Role Challenges <span id="role-counter">(0/0)</span></h2>\n'
 
     # Loop through roles that actually have challenges
-    roles_with_challenges = [role for role in role_keys if role in grouped_by_role and grouped_by_role[role]]
+    roles_with_challenges =[role for role in role_keys if role in grouped_by_role and grouped_by_role[role]]
 
     for idx, role in enumerate(roles_with_challenges):
         block = grouped_by_role[role]
@@ -1941,7 +1940,7 @@ function updateUpcomingEvents() {{
         
         const offsetMs = currentEventOffset * 1000;
 
-        let candidates = [];
+        let candidates =[];
         
         function getEventDate(timeStr, dayOffset) {{
             const[h, m] = timeStr.split(':').map(Number);
@@ -1978,6 +1977,7 @@ function updateUpcomingEvents() {{
             let textColor = "#ccc";
             let timeColor = "#bbb";   
             let textClass = "";
+            let eventTimeStr = e.time; // Default to scheduled start time
             
             // Define truncation limit (Default: 25 chars)
             let maxNameLength = 27; 
@@ -2004,6 +2004,14 @@ function updateUpcomingEvents() {{
                 textColor = "#fff"; 
                 timeColor = "#ddd"; 
 
+                // --- NEW COUNTDOWN LOGIC ---
+                const msRemaining = JOIN_WINDOW_MS - msPast;
+                const secsRemaining = Math.max(0, Math.floor(msRemaining / 1000));
+                const mins = Math.floor(secsRemaining / 60);
+                const secs = (secsRemaining % 60).toString().padStart(2, '0');
+                
+                eventTimeStr = `${{mins}}:${{secs}}`; // Override the scheduled time
+                
                 if (msPast < 60000) {{
                     rowBgColor = "#333333";
                     timeDisplay = "Now";
@@ -2022,8 +2030,6 @@ function updateUpcomingEvents() {{
                 nameDisplay = nameDisplay.substring(0, maxNameLength - 2) + "..";
             }}
             
-            const eventTimeStr = e.time; 
-
             html += `
             <li style="display: flex; justify-content: space-between; align-items: center; padding: ${{rowPadding}}; border-bottom: 1px solid #1a1a1a; font-size: 0.85rem; color: ${{textColor}}; background-color: ${{rowBgColor}}; border-radius: 2px; margin-bottom: 1px; transition: background-color 0.5s;">
                 <div style="line-height: 1;">
