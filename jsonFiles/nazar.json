@@ -1,11 +1,11 @@
 {
-  "updated": 1774245630,
-  "startTime": 1774245600,
-  "endTime": 1774331999,
-  "id": "MPSW_LOCATION_08",
-  "state": "p_1_lemoyne",
-  "location": "p_4_bolger_glade",
-  "landmark": "p_4_braithwaite_manor",
+  "updated": 1774332030,
+  "startTime": 1774332000,
+  "endTime": 1774418399,
+  "id": "MPSW_LOCATION_03",
+  "state": "p_1_west_elizabeth",
+  "location": "p_4_manzanita_post",
+  "landmark": "p_4_manzanita_post",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
