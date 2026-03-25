@@ -1,11 +1,11 @@
 {
-  "updated": 1774332030,
-  "startTime": 1774332000,
-  "endTime": 1774418399,
-  "id": "MPSW_LOCATION_03",
+  "updated": 1774418430,
+  "startTime": 1774418400,
+  "endTime": 1774504799,
+  "id": "MPSW_LOCATION_04",
   "state": "p_1_west_elizabeth",
-  "location": "p_4_manzanita_post",
-  "landmark": "p_4_manzanita_post",
+  "location": "p_3_little_creek_river",
+  "landmark": "p_4_wallace_station",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
