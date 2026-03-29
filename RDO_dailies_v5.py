@@ -1977,7 +1977,11 @@ function updateUpcomingEvents() {{
             let textColor = "#ccc";
             let timeColor = "#bbb";   
             let textClass = "";
-            let eventTimeStr = e.time; // Default to scheduled start time
+            
+            // Extract the local time automatically using the user's system timezone/DST rules
+            const localH = e.dt.getHours().toString().padStart(2, '0');
+            const localM = e.dt.getMinutes().toString().padStart(2, '0');
+            let eventTimeStr = `${{localH}}:${{localM}}`;
             
             // Define truncation limit (Default: 25 chars)
             let maxNameLength = 27; 
