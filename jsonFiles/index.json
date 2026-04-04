@@ -1,47 +1,47 @@
 {
-  "updated": 1775196031,
-  "startTime": 1775196000,
-  "endTime": 1775282399,
+  "updated": 1775282430,
+  "startTime": 1775282400,
+  "endTime": 1775368799,
   "general": [
     {
-      "id": "MPDC_AnimalsSkinned_Muskrat_00",
-      "title": "MPGC_MUSKRATS_SKINNED",
-      "goal": 2,
+      "id": "MPDC_Craft_HorseCare_00",
+      "title": "MPGC_CRAFT_HORSE_CARE",
+      "goal": 1,
       "goalFormat": "ACMP_DC_PLAYER_MENU"
     },
     {
-      "id": "MPDC_Craft_BigGame_Seasoned_00",
-      "title": "MPGC_CRAFT_BIG_GAME_SEASONED",
-      "goal": 3,
+      "id": "MPDC_Dog_Pat_00",
+      "title": "MPGC_DOG_PAT",
+      "goal": 1,
       "goalFormat": "ACMP_DC_PLAYER_MENU"
     },
     {
-      "id": "MPDC_Craft_Food_00",
-      "title": "MPGC_CRAFT_FOOD",
+      "id": "MPDC_FishCaught_Size_00",
+      "title": "MPGC_FISH_SIZE_CAUGHT",
+      "goal": 1,
+      "goalFormat": "ACMP_DC_PLAYER_MENU"
+    },
+    {
+      "id": "MPDC_GunForHire_TrainClerk_Win_00",
+      "title": "MPGC_GFH_TRAIN_CLERK_WINS",
+      "goal": 1,
+      "goalFormat": "ACMP_DC_PLAYER_MENU"
+    },
+    {
+      "id": "MPDC_HerbsPicked_WildFeverfew_00",
+      "title": "MPGC_WILD_FEVERFEW_PICKED",
       "goal": 5,
       "goalFormat": "ACMP_DC_PLAYER_MENU"
     },
     {
-      "id": "MPDC_HerbsPicked_Oregano_00",
-      "title": "MPGC_OREGANO_PICKED",
-      "goal": 5,
+      "id": "MPDC_Notoriety_NoHostility_00",
+      "title": "MPGC_NOTORIETY_NO_HOSTILITY_TIMED",
+      "goal": 1,
       "goalFormat": "ACMP_DC_PLAYER_MENU"
     },
     {
-      "id": "MPDC_Horse_TrampleKills_01",
-      "title": "MPGC_HORSE_ENEMIES_TRAMPLED",
-      "goal": 5,
-      "goalFormat": "ACMP_DC_PLAYER_MENU"
-    },
-    {
-      "id": "MPDC_Travel_01",
-      "title": "MPGC_DISTANCE_SWIM",
-      "goal": 500,
-      "goalFormat": "ACMP_DC_PLAYER_MENU"
-    },
-    {
-      "id": "MPDC_UGC_Series_Adversarial_Attempt_00",
-      "title": "MPGC_SERIES_ADVERSARIAL_ATTEMPTS",
+      "id": "MPDC_UGC_Adversary_Win_00",
+      "title": "MPGC_SHOWDOWN_WINS",
       "goal": 1,
       "goalFormat": "ACMP_DC_PLAYER_MENU"
     }
@@ -49,20 +49,20 @@
   "easy": {
     "bounty_hunter": [
       {
-        "id": "MPRC_Bounty_Location_WestElizabeth_Easy_00",
-        "title": "MPRC_BOUNTY_LOCATION_WEST_ELIZABETH",
+        "id": "MPRC_Bounty_Completed_NoKills_Easy_00",
+        "title": "MPRC_BOUNTY_COMPLETED_NO_KILLS",
+        "goal": 1,
+        "goalFormat": "ACMP_DC_PLAYER_MENU"
+      },
+      {
+        "id": "MPRC_Bounty_Location_NewAustin_Easy_00",
+        "title": "MPRC_BOUNTY_LOCATION_NEW_AUSTIN",
         "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
         "id": "MPRC_Bounty_Target_Looted_Easy_00",
         "title": "MPRC_BOUNTY_TARGETS_LOOTED",
-        "goal": 1,
-        "goalFormat": "ACMP_DC_PLAYER_MENU"
-      },
-      {
-        "id": "MPRC_Bounty_Target_Photographed_Easy_00",
-        "title": "MPRC_BOUNTY_TARGET_PHOTOGRAPHED_ALIVE",
         "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       }
@@ -75,19 +75,25 @@
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Trader_Money_Made_Easy_00",
-        "title": "MPRC_TRADER_MONEY_MADE",
-        "goal": "$50.00",
+        "id": "MPRC_Trader_Goods_Sold_Far_Away_Easy_00",
+        "title": "MPRC_TRADER_GOODS_SOLD_FAR_AWAY",
+        "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Trader_Supplies_Donated_Animal_Small_Easy_00",
-        "title": "MPRC_TRADER_SUPPLIES_DONATED_ANIMAL_SMALL",
-        "goal": 3,
+        "id": "MPRC_Trader_Resupply_Completed_Easy_00",
+        "title": "MPRC_TRADER_RESUPPLY_COMPLETED",
+        "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       }
     ],
     "collector": [
+      {
+        "id": "MPRC_Collector_Arrowheads_Easy_00",
+        "title": "MPRC_COLLECTOR_ARROWHEADS_FOUND",
+        "goal": 1,
+        "goalFormat": "ACMP_DC_PLAYER_MENU"
+      },
       {
         "id": "MPRC_Collector_Items_Looted_Easy_00",
         "title": "MPRC_COLLECTOR_ITEMS_LOOTED_ENEMY",
@@ -95,34 +101,28 @@
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Collector_Lost_Jewelry_Easy_00",
-        "title": "MPRC_COLLECTOR_LOST_JEWELRY_FOUND",
-        "goal": 1,
-        "goalFormat": "ACMP_DC_PLAYER_MENU"
-      },
-      {
-        "id": "MPRC_Collector_Tarot_Cards_Found_Easy_00",
-        "title": "MPRC_COLLECTOR_TAROT_CARDS_FOUND",
+        "id": "MPRC_Collector_Wild_Flowers_Found_Easy_00",
+        "title": "MPRC_COLLECTOR_WILD_FLOWERS_FOUND",
         "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       }
     ],
     "moonshiner": [
       {
-        "id": "MPRC_Moonshiner_Bar_Changed_Decor_Easy_00",
-        "title": "MPRC_MOONSHINER_BAR_CHANGED_DECOR",
+        "id": "MPRC_Moonshiner_Moonshine_Drank_Easy_00",
+        "title": "MPRC_MOONSHINER_MOONSHINE_DRANK_EASY",
+        "goal": 1,
+        "goalFormat": "ACMP_DC_PLAYER_MENU"
+      },
+      {
+        "id": "MPRC_Moonshiner_Moonshine_Served_Bar_Easy_00",
+        "title": "MPRC_MOONSHINER_MOONSHINE_SERVED_BAR",
         "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
         "id": "MPRC_Moonshiner_Moonshine_Sold_Buyer_Condition_Easy_00",
         "title": "MPRC_MOONSHINER_MOONSHINE_SOLD_BUYER_CONDITION_EASY",
-        "goal": 1,
-        "goalFormat": "ACMP_DC_PLAYER_MENU"
-      },
-      {
-        "id": "MPRC_Moonshiner_Recipe_Completed_Easy_00",
-        "title": "MPRC_MOONSHINER_RECIPE_COMPLETED_EASY",
         "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       }
@@ -151,8 +151,14 @@
   "med": {
     "bounty_hunter": [
       {
-        "id": "MPRC_Bounty_Location_WestElizabeth_Med_00",
-        "title": "MPRC_BOUNTY_LOCATION_WEST_ELIZABETH",
+        "id": "MPRC_Bounty_General_Delivered_Timed_Med_00",
+        "title": "MPRC_BOUNTY_GENERAL_DELIVERED_TIMED_MED",
+        "goal": 1,
+        "goalFormat": "ACMP_DC_PLAYER_MENU"
+      },
+      {
+        "id": "MPRC_Bounty_Location_Lemoyne_Med_00",
+        "title": "MPRC_BOUNTY_LOCATION_LEMOYNE",
         "goal": 2,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
@@ -161,71 +167,65 @@
         "title": "MPRC_BOUNTY_MISSION_COMPLETED_MEDIUM",
         "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
-      },
-      {
-        "id": "MPRC_Bounty_Used_Eagle_Eye_Med_00",
-        "title": "MPRC_BOUNTY_USED_EAGLE_EYE",
-        "goal": 2,
-        "goalFormat": "ACMP_DC_PLAYER_MENU"
       }
     ],
     "trader": [
       {
-        "id": "MPRC_Trader_Goods_Sold_Far_Away_Med_00",
-        "title": "MPRC_TRADER_GOODS_SOLD_FAR_AWAY",
+        "id": "MPRC_Trader_Goods_Sold_Local_Med_00",
+        "title": "MPRC_TRADER_GOODS_SOLD_LOCAL",
         "goal": 2,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Trader_Supplies_Donated_Animal_Medium_Med_00",
-        "title": "MPRC_TRADER_SUPPLIES_DONATED_ANIMAL_MEDIUM",
-        "goal": 5,
+        "id": "MPRC_Trader_Stew_Recipe_Completed_Med_00",
+        "title": "MPRC_TRADER_STEW_RECIPE_COMPLETED_SUPERIOR",
+        "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Trader_Travel_Wagon_Med_00",
-        "title": "MPRC_TRADER_TRAVEL_WAGON",
-        "goal": 10559,
+        "id": "MPRC_Trader_Supplies_Donated_Animal_Large_Med_00",
+        "title": "MPRC_TRADER_SUPPLIES_DONATED_ANIMAL_LARGE",
+        "goal": 4,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       }
     ],
     "collector": [
       {
-        "id": "MPRC_Collector_Items_Collected_Med_00",
-        "title": "MPRC_COLLECTOR_ITEMS_COLLECTED",
-        "goal": 4,
-        "goalFormat": "ACMP_DC_PLAYER_MENU"
-      },
-      {
-        "id": "MPRC_Collector_Items_Looted_Med_00",
-        "title": "MPRC_COLLECTOR_ITEMS_LOOTED_ENEMY",
+        "id": "MPRC_Collector_Items_Sold_Med_00",
+        "title": "MPRC_COLLECTOR_ITEMS_SOLD",
         "goal": 2,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Collector_Lost_Jewelry_Med_00",
-        "title": "MPRC_COLLECTOR_LOST_JEWELRY_FOUND",
+        "id": "MPRC_Collector_Used_Metal_Detector_Med_00",
+        "title": "MPRC_COLLECTOR_USED_METAL_DECTECTOR",
+        "goal": 1,
+        "goalFormat": "ACMP_DC_PLAYER_MENU"
+      },
+      {
+        "id": "MPRC_Collector_Used_Shovel_Med_00",
+        "title": "MPRC_COLLECTOR_USED_SHOVEL",
         "goal": 2,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       }
     ],
     "moonshiner": [
       {
-        "id": "MPRC_Moonshiner_Band_Played_Med_00",
-        "title": "MPRC_MOONSHINER_BAND_PLAYED_MED",
+        "id": "MPRC_Moonshiner_Marketing_Mission_Completed_Med_00",
+        "title": "MPRC_MOONSHINER_MARKETING_MISSION_COMPLETED",
+        "goal": 2,
+        "goalFormat": "ACMP_DC_PLAYER_MENU"
+      },
+      {
+        "id": "MPRC_Moonshiner_Moonshine_Drank_Med_00",
+        "title": "MPRC_MOONSHINER_MOONSHINE_DRANK_MED",
         "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Moonshiner_Money_Made_Med_00",
-        "title": "MPRC_MOONSHINER_MONEY_MADE",
-        "goal": "$100.00",
-        "goalFormat": "ACMP_DC_PLAYER_MENU"
-      },
-      {
-        "id": "MPRC_Moonshiner_Moonshine_Sold_Buyer_Condition_Med_00",
-        "title": "MPRC_MOONSHINER_MOONSHINE_SOLD_BUYER_CONDITION_MED",
-        "goal": 1,
+        "id": "MPRC_Moonshiner_Moonshine_Served_Bar_Med_00",
+        "title": "MPRC_MOONSHINER_MOONSHINE_SERVED_BAR",
+        "goal": 2,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       }
     ],
@@ -237,14 +237,14 @@
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Naturalist_Used_Hardy_Tonic_Med_00",
-        "title": "MPRC_NATURALIST_USED_HARDY_TONIC",
-        "goal": 1,
+        "id": "MPRC_Naturalist_Crafted_Wilderness_Camp_Med_00",
+        "title": "MPRC_NATURALIST_CRAFTED_COOKED_WILDERNESS_CAMP",
+        "goal": 5,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Naturalist_Used_Legendary_Bait_Med_00",
-        "title": "MPRC_NATURALIST_USED_LEGENDARY_BAIT",
+        "id": "MPRC_Naturalist_Tranq_Animal_Revived_Med_00",
+        "title": "MPRC_NATURALIST_TRANQ_ANIMAL_REVIVED",
         "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       }
@@ -253,101 +253,101 @@
   "hard": {
     "bounty_hunter": [
       {
-        "id": "MPRC_Bounty_General_Delivered_Timed_Hard_00",
-        "title": "MPRC_BOUNTY_GENERAL_DELIVERED_TIMED_HARD",
+        "id": "MPRC_Bounty_Completed_NoKills_Hard_00",
+        "title": "MPRC_BOUNTY_COMPLETED_NO_KILLS",
         "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Bounty_Player_Completed_Hard_00",
-        "title": "MPRC_BOUNTY_PLAYER_COMPLETED",
-        "goal": 1,
-        "goalFormat": "ACMP_DC_PLAYER_MENU"
-      },
-      {
-        "id": "MPRC_Bounty_Used_Tracking_Arrow_Hard_00",
-        "title": "MPRC_BOUNTY_USED_TRACK_ARROW",
+        "id": "MPRC_Bounty_Completed_Timed_Hard_00",
+        "title": "MPRC_BOUNTY_COMPLETED_TIMED",
         "goal": 2,
+        "goalFormat": "ACMP_DC_PLAYER_MENU"
+      },
+      {
+        "id": "MPRC_Bounty_Target_Looted_Hard_00",
+        "title": "MPRC_BOUNTY_TARGETS_LOOTED",
+        "goal": 3,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       }
     ],
     "trader": [
       {
-        "id": "MPRC_Trader_Resupply_Completed_Hard_00",
-        "title": "MPRC_TRADER_RESUPPLY_COMPLETED",
-        "goal": 2,
+        "id": "MPRC_Trader_Donation_Hard_00",
+        "title": "MPRC_TRADER_SUPPLIES_DONATED",
+        "goal": 20,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Trader_Supplies_Donated_Animal_Large_Hard_00",
-        "title": "MPRC_TRADER_SUPPLIES_DONATED_ANIMAL_LARGE",
-        "goal": 6,
+        "id": "MPRC_Trader_Money_Made_Hard_00",
+        "title": "MPRC_TRADER_MONEY_MADE",
+        "goal": "$200.00",
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Trader_Supplies_Donated_Predator_Hard_00",
-        "title": "MPRC_TRADER_SUPPLIES_DONATED_PREDATOR",
-        "goal": 3,
+        "id": "MPRC_Trader_Stew_Recipe_Completed_Hard_00",
+        "title": "MPRC_TRADER_STEW_RECIPE_COMPLETED_CRIPPS",
+        "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       }
     ],
     "collector": [
       {
-        "id": "MPRC_Collector_Antique_Bottles_Hard_00",
-        "title": "MPRC_COLLECTOR_ANTIQUE_BOTTLES_FOUND",
+        "id": "MPRC_Collector_Bird_Eggs_Hard_00",
+        "title": "MPRC_COLLECTOR_BIRD_EGGS_FOUND",
+        "goal": 5,
+        "goalFormat": "ACMP_DC_PLAYER_MENU"
+      },
+      {
+        "id": "MPRC_Collector_Items_Sold_Hard_00",
+        "title": "MPRC_COLLECTOR_ITEMS_SOLD",
         "goal": 3,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Collector_Arrowheads_Hard_00",
-        "title": "MPRC_COLLECTOR_ARROWHEADS_FOUND",
+        "id": "MPRC_Collector_Used_Maps_Hard_00",
+        "title": "MPRC_COLLECTOR_USED_MAP",
         "goal": 3,
-        "goalFormat": "ACMP_DC_PLAYER_MENU"
-      },
-      {
-        "id": "MPRC_Collector_Used_Metal_Detector_Hard_00",
-        "title": "MPRC_COLLECTOR_USED_METAL_DECTECTOR",
-        "goal": 2,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       }
     ],
     "moonshiner": [
       {
-        "id": "MPRC_Moonshiner_Craft_Poison_Bottle_Hard_00",
-        "title": "MPRC_MOONSHINER_CRAFT_POISON_BOTTLE",
-        "goal": 2,
-        "goalFormat": "ACMP_DC_PLAYER_MENU"
-      },
-      {
-        "id": "MPRC_Moonshiner_Moonshine_Drank_Hard_00",
-        "title": "MPRC_MOONSHINER_MOONSHINE_DRANK_HARD",
+        "id": "MPRC_Moonshiner_Bar_Changed_Decor_Hard_00",
+        "title": "MPRC_MOONSHINER_BAR_CHANGED_DECOR",
         "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Moonshiner_Travel_Wagon_Hard_00",
-        "title": "MPRC_MOONSHINER_TRAVEL_WAGON",
-        "goal": 4827,
+        "id": "MPRC_Moonshiner_Danced_Bar_Hard_00",
+        "title": "MPRC_MOONSHINER_DANCED_BAR_HARD",
+        "goal": 2,
+        "goalFormat": "ACMP_DC_PLAYER_MENU"
+      },
+      {
+        "id": "MPRC_Moonshiner_Recipe_Completed_Hard_00",
+        "title": "MPRC_MOONSHINER_RECIPE_COMPLETED_HARD",
+        "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       }
     ],
     "naturalist": [
       {
-        "id": "MPRC_Naturalist_Crafted_Wilderness_Camp_Hard_00",
-        "title": "MPRC_NATURALIST_CRAFTED_COOKED_WILDERNESS_CAMP",
-        "goal": 7,
-        "goalFormat": "ACMP_DC_PLAYER_MENU"
-      },
-      {
-        "id": "MPRC_Naturalist_Photo_Animal_Legendary_Hard_00",
-        "title": "MPRC_NATURALIST_PHOTO_ANIMAL_LEGENDARY",
+        "id": "MPRC_Naturalist_Animals_NotKilled_Timed_Hard_00",
+        "title": "MPRC_NATURALIST_DONT_KILL_ANIMALS_HARD",
         "goal": 1,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       },
       {
-        "id": "MPRC_Naturalist_Used_Hardy_Tonic_Hard_00",
-        "title": "MPRC_NATURALIST_USED_HARDY_TONIC",
+        "id": "MPRC_Naturalist_Crafted_Blending_Tonic_Hard_00",
+        "title": "MPRC_NATURALIST_CRAFTED_BLENDING_TONIC",
         "goal": 2,
+        "goalFormat": "ACMP_DC_PLAYER_MENU"
+      },
+      {
+        "id": "MPRC_Naturalist_Crafted_Wilderness_Camp_Hard_00",
+        "title": "MPRC_NATURALIST_CRAFTED_COOKED_WILDERNESS_CAMP",
+        "goal": 7,
         "goalFormat": "ACMP_DC_PLAYER_MENU"
       }
     ]
