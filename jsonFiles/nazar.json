@@ -1,11 +1,11 @@
 {
-  "updated": 1775455231,
-  "startTime": 1775455200,
-  "endTime": 1775541599,
-  "id": "MPSW_LOCATION_10",
-  "state": "p_1_ambarino",
-  "location": "p_4_window_rock",
-  "landmark": "p_4_window_rock",
+  "updated": 1775541608,
+  "startTime": 1775541600,
+  "endTime": 1775627999,
+  "id": "MPSW_LOCATION_06",
+  "state": "p_1_new_hanover",
+  "location": "w_5_limpany",
+  "landmark": "p_4_flatneck_station",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
