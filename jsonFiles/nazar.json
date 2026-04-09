@@ -1,11 +1,11 @@
 {
-  "updated": 1775628031,
-  "startTime": 1775628000,
-  "endTime": 1775714399,
-  "id": "MPSW_LOCATION_02",
-  "state": "p_1_new_austin",
-  "location": "p_4_manteca_falls",
-  "landmark": "p_4_thieves_landing",
+  "updated": 1775714407,
+  "startTime": 1775714400,
+  "endTime": 1775800799,
+  "id": "MPSW_LOCATION_03",
+  "state": "p_1_west_elizabeth",
+  "location": "p_4_manzanita_post",
+  "landmark": "p_4_manzanita_post",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
