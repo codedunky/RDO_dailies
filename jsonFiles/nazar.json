@@ -1,11 +1,11 @@
 {
-  "updated": 1776319231,
-  "startTime": 1776319200,
-  "endTime": 1776405599,
-  "id": "MPSW_LOCATION_01",
-  "state": "p_1_new_austin",
-  "location": "p_4_twin_rocks",
-  "landmark": "p_4_armadillo",
+  "updated": 1776405630,
+  "startTime": 1776405600,
+  "endTime": 1776491999,
+  "id": "MPSW_LOCATION_11",
+  "state": "p_1_new_hanover",
+  "location": "w_5_black_balsam_rise",
+  "landmark": "p_6_annesburg",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
