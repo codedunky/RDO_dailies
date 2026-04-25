@@ -1,11 +1,11 @@
 {
-  "updated": 1777010408,
-  "startTime": 1777010400,
-  "endTime": 1777096799,
-  "id": "MPSW_LOCATION_01",
+  "updated": 1777096831,
+  "startTime": 1777096800,
+  "endTime": 1777183199,
+  "id": "MPSW_LOCATION_00",
   "state": "p_1_new_austin",
-  "location": "p_4_twin_rocks",
-  "landmark": "p_4_armadillo",
+  "location": "p_4_plainview",
+  "landmark": "p_4_benedict_point",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
