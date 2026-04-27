@@ -1,11 +1,11 @@
 {
-  "updated": 1777183231,
-  "startTime": 1777183200,
-  "endTime": 1777269599,
-  "id": "MPSW_LOCATION_05",
-  "state": "p_1_new_hanover",
-  "location": "p_4_emerald_ranch",
-  "landmark": "p_4_emerald_ranch",
+  "updated": 1777269608,
+  "startTime": 1777269600,
+  "endTime": 1777355999,
+  "id": "MPSW_LOCATION_10",
+  "state": "p_1_ambarino",
+  "location": "p_4_window_rock",
+  "landmark": "p_4_window_rock",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
