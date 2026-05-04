@@ -1,11 +1,11 @@
 {
-  "updated": 1777788008,
-  "startTime": 1777788000,
-  "endTime": 1777874399,
-  "id": "MPSW_LOCATION_01",
-  "state": "p_1_new_austin",
-  "location": "p_4_twin_rocks",
-  "landmark": "p_4_armadillo",
+  "updated": 1777874431,
+  "startTime": 1777874400,
+  "endTime": 1777960799,
+  "id": "MPSW_LOCATION_06",
+  "state": "p_1_new_hanover",
+  "location": "w_5_limpany",
+  "landmark": "p_4_flatneck_station",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
