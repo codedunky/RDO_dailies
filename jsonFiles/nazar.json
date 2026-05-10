@@ -1,11 +1,11 @@
 {
-  "updated": 1778306430,
-  "startTime": 1778306400,
-  "endTime": 1778392799,
-  "id": "MPSW_LOCATION_09",
-  "state": "p_1_lemoyne",
-  "location": "w_4_copperhead_landing",
-  "landmark": "p_4_van_horn_trading_post",
+  "updated": 1778392809,
+  "startTime": 1778392800,
+  "endTime": 1778479199,
+  "id": "MPSW_LOCATION_00",
+  "state": "p_1_new_austin",
+  "location": "p_4_plainview",
+  "landmark": "p_4_benedict_point",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
