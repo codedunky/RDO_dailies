@@ -1,11 +1,11 @@
 {
-  "updated": 1778738431,
-  "startTime": 1778738400,
-  "endTime": 1778824799,
-  "id": "MPSW_LOCATION_10",
-  "state": "p_1_ambarino",
-  "location": "p_4_window_rock",
-  "landmark": "p_4_window_rock",
+  "updated": 1778824808,
+  "startTime": 1778824800,
+  "endTime": 1778911199,
+  "id": "MPSW_LOCATION_01",
+  "state": "p_1_new_austin",
+  "location": "p_4_twin_rocks",
+  "landmark": "p_4_armadillo",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
