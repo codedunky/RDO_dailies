@@ -1,11 +1,11 @@
 {
-  "updated": 1778652007,
-  "startTime": 1778652000,
-  "endTime": 1778738399,
-  "id": "MPSW_LOCATION_08",
-  "state": "p_1_lemoyne",
-  "location": "p_4_bolger_glade",
-  "landmark": "p_4_braithwaite_manor",
+  "updated": 1778911208,
+  "startTime": 1778911200,
+  "endTime": 1778997599,
+  "id": "MPSW_LOCATION_07",
+  "state": "p_1_ambarino",
+  "location": "p_3_ocreaghs_run",
+  "landmark": "p_3_ocreaghs_run",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
