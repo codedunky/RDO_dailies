@@ -999,13 +999,11 @@ def get_printable_description(details):
     # ---------------------------------------------------------
     # 1. DYNAMICALLY BUILD THE LIST OF OPTIONS
     # ---------------------------------------------------------
-    options =[]
+    options = []
     
-    # Add the primary description (Index 0)
     if details.get("description"):
         options.append(details["description"])
         
-    # Dynamic search for description2, description3, etc.
     i = 2
     while True:
         key = f"description{i}"
@@ -1016,9 +1014,8 @@ def get_printable_description(details):
         else:
             break
             
-    # If no descriptions exist, return None
     if not options:
-        return None
+        return None, [], 0
         
     count = len(options)
     selection_index = 0
@@ -1026,59 +1023,37 @@ def get_printable_description(details):
     # ---------------------------------------------------------
     # 2. DETERMINE SELECTION INDEX
     # ---------------------------------------------------------
-    
-    # Handle "forceX" logic (force1, force2, force10, etc.)
     if DESCRIPTION_MODE.startswith("force"):
         try:
-            # Extract the number part (e.g. "force5" -> "5")
             num_str = DESCRIPTION_MODE.replace("force", "")
-            
             if num_str.isdigit():
-                # Convert to integer and adjust for 0-based index (Force1 = Index 0)
-                req_num = int(num_str)
-                target_index = req_num - 1
-                
-                # CLAMP LOGIC:
-                # If target is less than 0, use 0.
-                # If target is greater than the last index, use the last index.
-                # e.g. If force5 requested but only 2 items exist, use item 2 (index 1).
+                target_index = int(num_str) - 1
                 selection_index = max(0, min(target_index, count - 1))
             else:
-                # Fallback if someone typed just "force"
                 selection_index = 0
-                
         except Exception:
             selection_index = 0
-
     else:
-        # --- AUTO MODE: DETERMINISTIC ROTATION ---
         challenge_name = details.get("name") or details.get("title") or "unknown"
-        
-        # Create stable integer hash
         name_hash = int(hashlib.md5(challenge_name.encode('utf-8')).hexdigest(), 16)
-        
-        # Day ID from start_timestamp
         day_id = int(start_timestamp / 86400) + 0
-        ##########################################
-        ##########################################
-        ##########################################
-        ##########################################
-    
-        # Formula: (Day + NameHash) % Count
         selection_index = (day_id + name_hash) % count
 
     # ---------------------------------------------------------
-    # 3. RETRIEVE TEXT AND APPEND DEBUG INFO
+    # 3. PRE-PROCESS ALL OPTIONS (APPEND DEBUG INFO)
     # ---------------------------------------------------------
-    final_text = options[selection_index]
-    
-    if DEBUG_DESCRIPTION:
-        # +1 makes it human readable (Index 0 = Desc #1, Index 1 = Desc #2)
-        final_text += f"[#{selection_index + 1}]"
-        
+    processed_options = []
+    for idx, opt in enumerate(options):
+        text = opt
+        # Only append the [#X] tag if there is more than 1 description available
+        if DEBUG_DESCRIPTION and count > 1:
+            text += f" [#{idx + 1}]"
+        processed_options.append(text)
+
+    final_text = processed_options[selection_index]
     debug_print("L3", f"Rotator: '{details.get('name')}' selected index {selection_index} ({selection_index+1}/{count})")
     
-    return final_text
+    return final_text, processed_options, selection_index
 
 
     
@@ -1118,12 +1093,15 @@ for category in category_order:
             debugtext = f"{goal_display}{item['name'] or item['title']}",
             debug_print("L3", "iblue", "text: ", debugtext),
                         
-            chosen_description = get_printable_description(item)
+            chosen_description, all_descriptions, start_index = get_printable_description(item)
             debug_print("L2", "Chosen Description: ", chosen_description)
             
             output_json.append({
                 "text": f"{goal_display}{item['name'] or item['title']}",
                 "description": chosen_description,
+                "all_descriptions": all_descriptions,
+                "desc_index": start_index,
+                "desc_loop": str(item.get("desc_loop", "yes")).lower(),
                 "category": category,
                 "difficulty": difficulty
             })
@@ -1313,17 +1291,37 @@ def render_challenge_block(block, prefix="challenge", role_name="", filter_diffi
         difficulty = c.get("difficulty", "easy")  # << NEW: Add this to support filtering
 
         # Start the challenge container with a label, checkbox, and difficulty attribute
+        desc_id = f"desc_{safe_id}"
+        
+        # Add flex-grow and margin to the label so it leaves room for the button
+        label_style = ' style="flex-grow: 1; margin-right: 15px;"'
+        label_open_mod = label_open.replace('>', f'{label_style}>')
+
         html += f'''
         <div class="{prefix}" data-difficulty="{difficulty}">
-          {label_open}
-            <input type="checkbox" class="challenge-checkbox" id="{safe_id}" />
-            <span class="{prefix}-text">{c["text"]}</span>
-          </label>'''
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
+            {label_open_mod}
+              <input type="checkbox" class="challenge-checkbox" id="{safe_id}" />
+              <span class="{prefix}-text">{c["text"]}</span>
+            </label>'''
+
+        # Render the cycle button if looping is allowed and there are >1 options
+        all_descs = c.get("all_descriptions", [])
+        desc_loop = c.get("desc_loop", "yes")
+        
+        if len(all_descs) > 1 and desc_loop != "no":
+            import json
+            safe_json = json.dumps(all_descs).replace('"', '&quot;')
+            desc_idx = c.get("desc_index", 0)
+            # Notice we pass 'event' here so we can block the label click
+            html += f'<span class="desc-cycle-btn" data-descs="{safe_json}" data-idx="{desc_idx}" data-target="{desc_id}" onclick="cycleDesc(event, this)" title="Cycle Description">↻</span>'
+
+        html += '</div>\n' # Close the flex row
 
         # Add optional description block if it exists
         if c.get("description"):
             html += f'''
-          <div class="{prefix}-desc">{c["description"]}</div>'''
+          <div id="{desc_id}" class="{prefix}-desc">{c["description"]}</div>'''
 
         # Close the challenge container
         html += '</div>\n'
@@ -1684,6 +1682,49 @@ function updateAllTimeFunctions() {{
 
 setInterval(updateAllTimeFunctions, 1000);
 updateAllTimeFunctions();
+
+
+// ////////////////////////////////////////////////////////////////////////////////////// //
+// Cycle Descriptions                                                                     //
+// ////////////////////////////////////////////////////////////////////////////////////// //
+    function cycleDesc(event, btn) {{
+        // PREVENT the click from ticking the checkbox or triggering the row
+        event.preventDefault();
+        event.stopPropagation();
+        
+        try {{
+            // Parse the stored descriptions and current index
+            const descs = JSON.parse(btn.getAttribute('data-descs'));
+            let currentIdx = parseInt(btn.getAttribute('data-idx'), 10);
+            
+            // Advance the index, loop back if we hit the end
+            currentIdx = (currentIdx + 1) % descs.length;
+            btn.setAttribute('data-idx', currentIdx);
+            
+            // Apply text to the targeted description element
+            const targetId = btn.getAttribute('data-target');
+            const targetDiv = document.getElementById(targetId);
+            if (targetDiv) {{
+                targetDiv.textContent = descs[currentIdx];
+            }}
+            
+            // Visual flair: Spin the icon 180 degrees every click
+            let rotation = parseInt(btn.getAttribute('data-rotation') || '0', 10);
+            rotation += 180;
+            
+            // Double braces for python f-string escaping
+            btn.style.transform = `rotate(${{rotation}}deg)`;
+            
+            btn.setAttribute('data-rotation', rotation);
+            
+        }} catch (e) {{
+            console.error("Error cycling description:", e);
+        }}
+    }}
+    
+    window.cycleDesc = cycleDesc;
+
+
 
 
 // ////////////////////////////////////////////////////////////////////////////////////// //
@@ -2374,13 +2415,17 @@ function updateUpcomingEvents() {{
     
     localStorage.setItem(LS_LAST_KNOWN_TIMESTAMP, PYTHON_CHALLENGE_TIMESTAMP);
     
-    allCheckboxes.forEach(cb => {{
+allCheckboxes.forEach(cb => {{
         const key = `${{PYTHON_CHALLENGE_TIMESTAMP}}_${{cb.id}}`;
         cb.checked = localStorage.getItem(key) === "true";
-        if(cb.checked) cb.closest('div').classList.add('completed');
+        
+        // FIX: Specifically target the outer container, skipping the inner flex div
+        const wrapper = cb.closest('.challenge, .role-challenge');
+        
+        if(cb.checked && wrapper) wrapper.classList.add('completed');
         
         cb.addEventListener('change', () => {{
-            cb.closest('div').classList.toggle('completed', cb.checked);
+            if(wrapper) wrapper.classList.toggle('completed', cb.checked);
             localStorage.setItem(key, cb.checked);
             handleStreakUpdate(cb.checked);
         }});
@@ -3130,6 +3175,14 @@ html_output = f'''
           text-decoration: line-through;
           opacity: 0.85;
         }}
+
+        /* Dims the toggle button and makes it unclickable when the challenge is ticked */
+        .challenge.completed .desc-cycle-btn,
+        .role-challenge.completed .desc-cycle-btn {{
+            color: #555 !important;
+            opacity: 0.5 !important;
+            pointer-events: none; /* Stops it from being clicked or hovering */
+        }}
         
         
         .role-completed {{
@@ -3154,10 +3207,21 @@ html_output = f'''
         }}
 
 
-        .role-challenge-desc.dimmed {{
-          opacity: 0.5;
-          color: #666666;
-          transition: opacity 0.3s ease, color 0.3s ease;
+        /* Description Cycle Button */
+        .desc-cycle-btn {{
+            cursor: pointer;
+            color: #ccc;           /* Brighter color so it stands out */
+            font-size: 1.2rem;
+            padding: 0 5px;        /* Increases the clickable hitbox area */
+            margin-top: -2px;      /* Fine tunes vertical alignment */
+            z-index: 10;           /* Keeps it on top of the row label */
+            user-select: none;
+            transition: color 0.2s, transform 0.3s ease;
+            display: inline-block; 
+            flex-shrink: 0;        /* Prevents icon from squishing if text wraps */
+        }}
+        .desc-cycle-btn:hover {{
+            color: #FFC107;        /* RDO Gold highlight */
         }}
 
 
@@ -3168,8 +3232,9 @@ html_output = f'''
         /* Global dimming for all text elements when all roles are complete */
         .all-roles-completed .role-heading,
         .all-roles-completed .role-challenge-label span, /* Targets the Challenge Name */
-        .all-roles-completed .role-challenge-desc, /* ✅ NEW: Targets the Description Element */
-        .all-roles-completed .role-challenge p /* General Paragraph Fallback */
+        .all-roles-completed .role-challenge-desc, /* Targets the Description Element */
+        .all-roles-completed .role-challenge p, /* General Paragraph Fallback */
+        .all-roles-completed .role-challenge:not(.completed) .desc-cycle-btn /* Targets the toggle button on unticked roles */
         {{
           color: #888 !important; 
           opacity: 0.5 !important; /* Forces dimming, overriding competing rules */
