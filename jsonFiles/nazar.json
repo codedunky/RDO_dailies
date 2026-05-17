@@ -1,11 +1,11 @@
 {
-  "updated": 1778911208,
-  "startTime": 1778911200,
-  "endTime": 1778997599,
-  "id": "MPSW_LOCATION_07",
-  "state": "p_1_ambarino",
-  "location": "p_3_ocreaghs_run",
-  "landmark": "p_3_ocreaghs_run",
+  "updated": 1778997631,
+  "startTime": 1778997600,
+  "endTime": 1779083999,
+  "id": "MPSW_LOCATION_09",
+  "state": "p_1_lemoyne",
+  "location": "w_4_copperhead_landing",
+  "landmark": "p_4_van_horn_trading_post",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
