@@ -1,11 +1,11 @@
 {
-  "updated": 1780639231,
-  "startTime": 1780639200,
-  "endTime": 1780725599,
-  "id": "MPSW_LOCATION_09",
-  "state": "p_1_lemoyne",
-  "location": "w_4_copperhead_landing",
-  "landmark": "p_4_van_horn_trading_post",
+  "updated": 1780725631,
+  "startTime": 1780725600,
+  "endTime": 1780811999,
+  "id": "MPSW_LOCATION_04",
+  "state": "p_1_west_elizabeth",
+  "location": "p_3_little_creek_river",
+  "landmark": "p_4_wallace_station",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
