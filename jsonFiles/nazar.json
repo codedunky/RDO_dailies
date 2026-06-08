@@ -1,11 +1,11 @@
 {
-  "updated": 1780812030,
-  "startTime": 1780812000,
-  "endTime": 1780898399,
-  "id": "MPSW_LOCATION_10",
-  "state": "p_1_ambarino",
-  "location": "p_4_window_rock",
-  "landmark": "p_4_window_rock",
+  "updated": 1780898431,
+  "startTime": 1780898400,
+  "endTime": 1780984799,
+  "id": "MPSW_LOCATION_08",
+  "state": "p_1_lemoyne",
+  "location": "p_4_bolger_glade",
+  "landmark": "p_4_braithwaite_manor",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
