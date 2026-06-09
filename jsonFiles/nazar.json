@@ -1,11 +1,11 @@
 {
-  "updated": 1780898431,
-  "startTime": 1780898400,
-  "endTime": 1780984799,
-  "id": "MPSW_LOCATION_08",
-  "state": "p_1_lemoyne",
-  "location": "p_4_bolger_glade",
-  "landmark": "p_4_braithwaite_manor",
+  "updated": 1780984831,
+  "startTime": 1780984800,
+  "endTime": 1781071199,
+  "id": "MPSW_LOCATION_06",
+  "state": "p_1_new_hanover",
+  "location": "w_5_limpany",
+  "landmark": "p_4_flatneck_station",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
