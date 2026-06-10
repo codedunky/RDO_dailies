@@ -793,9 +793,9 @@ if download_events:
  
 
 
-# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
 # PAUSE CONSOLE TO SHOW API DOWNLOAD LOGIC MESSAGES
-# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------
        
 # Wait to show debug info for downloads.
 time.sleep(2)
@@ -1195,7 +1195,7 @@ def stable_hash(text):
 import datetime
 
 
-###########################################################################################################################################################
+###########################################################################################################################################
 
 def render_challenge_block_old(block, prefix="challenge"):
     html = ""
@@ -1226,11 +1226,11 @@ def render_challenge_block_old(block, prefix="challenge"):
 
     return html
 
-###########################################################################################################################################################
+###########################################################################################################################################
 
 
 ## New render_general_challenge_block function adds in line dividers
-###########################################################################################################################################################
+###########################################################################################################################################
 
 def render_general_challenges_with_dividers(general_challenges):
     html = ""
@@ -1564,11 +1564,11 @@ print("#################### unix_time from index.json", unix_time, "############
 
 
 
-####################################################################################################################################
+################################################################################ //
 ##                                                                                                                                ##
 ##                                                        HTML VERSION 2                                                          ##
 ##                                                                                                                                ##
-####################################################################################################################################
+################################################################################ //
 # Get the appropriate date for the list of challenges and print it.
 unix_time = get_index_start_date(local_filename)
 human_readable_date = get_human_readable_date(unix_time)
@@ -1587,11 +1587,11 @@ print("\n")
 
 # ... (all of your existing Python code before this point) ...
 
-####################################################################################################################################
+################################################################################ //
 ##                                                                                                                                ##
 ##                                    JAVASCRIPT BLOCK (DEFINED SEPARATELY)                                                       ##
 ##                                                                                                                                ##
-####################################################################################################################################
+################################################################################ //
 
 # Define the JavaScript as a separate f-string to correctly inject Python variables
 # without conflicting with JavaScript's own syntax.
@@ -2126,6 +2126,10 @@ function updateUpcomingEvents() {{
     
 // UPDATED FUNCTION: Fixed calculation to prevent summing previous cycle's weeks
     function calculateLogSums(currentStreak) {{
+        if (currentStreak === 0) {{
+            return {{ week: 0, running: 0 }};
+        }}
+
         const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) ||[];
         
         // 1. Determine the minimum streak day for the current week bracket
@@ -2209,10 +2213,23 @@ function updateUpcomingEvents() {{
         const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) ||[];
         container.innerHTML = '';
 
-        if (goldLog.length === 0) {{
-            container.innerHTML = '<p style="color: #666; font-size: 0.8rem; text-align: center; width: 100%;">No gold data logged yet.</p>';
-            return;
+        // Generate a solid 28-day range ending today
+        const dateList = [];
+        const baseDate = new Date(getRDODayKey() + 'T12:00:00Z');
+        for (let i = 27; i >= 0; i--) {{
+            const d = new Date(baseDate.getTime() - i * 24 * 60 * 60 * 1000);
+            dateList.push(d.toISOString().split('T')[0]);
         }}
+
+        // Create a lookup map for existing logged data
+        const entryMap = {{}};
+        goldLog.forEach(entry => {{
+            entryMap[entry.date] = entry;
+        }});
+
+        const availableWidth = container.clientWidth - 4; 
+        const barWidth = Math.max(Math.floor(availableWidth / 28) - 2, 2);
+        let tooltipLeaveTimer;
 
         function getBarColorForStreak(streak) {{
             if (!streak) return '#555555';
@@ -2221,12 +2238,11 @@ function updateUpcomingEvents() {{
             if (streak >= 8)  return '#C59A00'; 
             return '#A57C00';                   
         }}
-        
-        const availableWidth = container.clientWidth - 4; 
-        const barWidth = Math.max(Math.floor(availableWidth / 28) - 2, 2);
-        let tooltipLeaveTimer;
 
-        goldLog.forEach(entry => {{
+        dateList.forEach(dateStr => {{
+            // Find logged entry, or treat as a 0-gold placeholder
+            const entry = entryMap[dateStr] || {{ date: dateStr, gold: 0, streak: 0, general: 0, role: 0, isMissing: true }};
+            
             const barHeight = Math.max((entry.gold * GOLD_CHART_MULTIPLIER), 0);
             const wrapper = document.createElement('div');
             wrapper.className = 'chart-bar-wrapper';
@@ -2234,45 +2250,48 @@ function updateUpcomingEvents() {{
             
             const bar = document.createElement('div');
             bar.className = 'chart-bar';
-            bar.style.height = `${{barHeight}}px`;
-            bar.style.backgroundColor = getBarColorForStreak(entry.streak);
+            
+            // If it's a gap (0 gold or missing), make it flat and transparent
+            if (entry.gold === 0) {{
+                bar.style.height = '0px';
+                bar.style.minHeight = '0px';
+                bar.style.backgroundColor = 'transparent';
+            }} else {{
+                bar.style.height = `${{barHeight}}px`;
+                bar.style.backgroundColor = getBarColorForStreak(entry.streak);
+            }}
 
             wrapper.appendChild(bar);
             container.appendChild(wrapper);
 
-            const date = new Date(entry.date); 
+            const date = new Date(dateStr + 'T12:00:00Z'); 
 
             wrapper.addEventListener('mouseenter', () => {{
                 if (tooltipLeaveTimer) clearTimeout(tooltipLeaveTimer);
-                bar.style.backgroundColor = '#FFFFFF';
-                bar.style.boxShadow = '0 0 8px rgba(255, 255, 255, 0.9)';
-                playHoverTick();
+                
+                // Only play tick sound and apply glow if there's actually gold logged
+                if (entry.gold > 0) {{
+                    bar.style.backgroundColor = '#FFFFFF';
+                    bar.style.boxShadow = '0 0 8px rgba(255, 255, 255, 0.9)';
+                    playHoverTick();
+                }}
 
                 const humanDate = date.toLocaleDateString('en-GB', {{ weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }});
                 const streakText = entry.streak ? `Day ${{entry.streak}} (Week ${{Math.floor((entry.streak - 1) / 7) + 1}})` : 'No Streak';
                 
                 // --- STABLE STAR LOGIC ---
-                // Default: Empty outline star, very faint
                 let starChar = '☆'; 
                 let starStyle = 'color: #444; opacity: 0.3; font-weight: normal;'; 
 
-                // Gold Star Logic (Both Done: 7/7 General AND 9/9 Role)
                 if (entry.general === 7 && entry.role === 9) {{
                     starChar = '★'; 
-                    // "Pop" Effect: Two layers of text-shadow. 
-                    // 1. Tight Gold Glow (4px)
-                    // 2. Wider Orange Glow (10px) to simulate heat/radiance
                     starStyle = 'color: #FFD700; text-shadow: 0 0 4px #FFD700, 0 0 10px #FFA500;';
                 }} 
-                // Silver Star Logic (One Done)
                 else if (entry.general === 7 || entry.role === 9) {{
                     starChar = '★'; 
-                    // Subtle, single-layer cool glow
                     starStyle = 'color: #C0C0C0; text-shadow: 0 0 3px rgba(192, 192, 192, 0.5);';
                 }}
                 
-                // Construct HTML using the new Stable Grid classes
-                // Note: JS template variables are escaped as ${{variable}}
                 infoDisplay.innerHTML = `
                     <div class="tooltip-top-row">
                         <span class="tooltip-date">${{humanDate}}</span>
@@ -2289,8 +2308,10 @@ function updateUpcomingEvents() {{
             }});
 
             wrapper.addEventListener('mouseleave', () => {{
-                bar.style.backgroundColor = getBarColorForStreak(entry.streak);
-                bar.style.boxShadow = 'none';
+                if (entry.gold > 0) {{
+                    bar.style.backgroundColor = getBarColorForStreak(entry.streak);
+                    bar.style.boxShadow = 'none';
+                }}
                 tooltipLeaveTimer = setTimeout(() => {{
                     infoDisplay.innerHTML = '&nbsp;';
                 }}, 200);
@@ -2300,29 +2321,137 @@ function updateUpcomingEvents() {{
 
     // --- CORE UPDATE LOGIC ---
     
+    // ==================== REPLACE THIS BLOCK ====================
+    function getPreviousDayKey(dateStr) {{
+        const d = new Date(dateStr + 'T12:00:00Z');
+        d.setUTCDate(d.getUTCDate() - 1);
+        return d.toISOString().split('T')[0];
+    }}
+
+    // ==================== REPLACE THIS BLOCK ====================
+    function validateStreakConsistency(currentStreak) {{
+        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
+        const todayKey = getRDODayKey();
+        const lastCompletionDateStr = localStorage.getItem(LS_LAST_COMPLETION_DATE);
+        
+        // Sort goldLog chronologically by date to prevent indexing issues
+        goldLog.sort((a, b) => a.date.localeCompare(b.date));
+        
+        // Map logs by date for fast lookup
+        const logMap = {{}};
+        goldLog.forEach(entry => {{
+            logMap[entry.date] = entry;
+        }});
+        
+        let consecutiveActive = 0;
+        let checkDateStr = getPreviousDayKey(todayKey);
+        
+        // Scan backwards for up to 28 days starting from yesterday
+        for (let i = 0; i < 28; i++) {{
+            const entry = logMap[checkDateStr];
+            if (entry && parseFloat(entry.gold || 0) > 0) {{
+                consecutiveActive++;
+                checkDateStr = getPreviousDayKey(checkDateStr);
+            }} else {{
+                // A gap was hit, stop counting
+                break;
+            }}
+        }}
+        
+        // FACTOR IN TODAY: If they have already completed challenges today,
+        // they are allowed to have consecutiveActive + 1 days of streak.
+        let maxAllowedStreak = consecutiveActive;
+        if (lastCompletionDateStr === todayKey) {{
+            maxAllowedStreak = consecutiveActive + 1;
+        }}
+        
+        console.log(`[Streak Validator] Consecutive days before today: ${{consecutiveActive}}. Max allowed streak today: ${{maxAllowedStreak}}. Saved streak: ${{currentStreak}}`);
+        
+        let finalStreak = currentStreak;
+        if (currentStreak !== maxAllowedStreak) {{
+            console.log(`[Streak Validator] Inconsistency detected. Syncing streak count from ${{currentStreak}} to ${{maxAllowedStreak}}.`);
+            finalStreak = maxAllowedStreak;
+        }}
+        
+        // --- HISTORICAL DATA HEALING PASS ---
+        let updatedLog = false;
+        goldLog.forEach(entry => {{
+            if (entry.date === todayKey) {{
+                if (entry.streak !== finalStreak) {{
+                    entry.streak = finalStreak;
+                    updatedLog = true;
+                }}
+            }} else {{
+                const diffDays = getDateDifferenceInDays(todayKey, entry.date);
+                if (diffDays > 0 && diffDays < finalStreak && parseFloat(entry.gold || 0) > 0) {{
+                    const expected = finalStreak - diffDays;
+                    if (expected > 0 && entry.streak !== expected) {{
+                        entry.streak = expected;
+                        updatedLog = true;
+                    }}
+                }}
+            }}
+        }});
+        
+        if (updatedLog) {{
+            console.log(`[Streak Validator] Historical log database healed successfully.`);
+            localStorage.setItem(LS_GOLD_LOG, JSON.stringify(goldLog));
+        }}
+        
+        return finalStreak;
+    }}
+    // ============================================================
+
     function loadStreak() {{
         let currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
+        if (isNaN(currentStreak)) currentStreak = 0;
+
+        // Perform self-correction check against actual logged history
+        const validatedStreak = validateStreakConsistency(currentStreak);
+        if (validatedStreak !== currentStreak) {{
+            currentStreak = validatedStreak;
+            localStorage.setItem(LS_STREAK_COUNT, currentStreak);
+            if (currentStreak === 0) {{
+                localStorage.removeItem(LS_LAST_COMPLETION_DATE);
+                localStorage.removeItem(LS_CHALLENGE_STATUS);
+            }}
+        }}
+
         if (PYTHON_STREAK_OVERRIDE > -1) {{
             currentStreak = PYTHON_STREAK_OVERRIDE; 
             setStreakCount(currentStreak, true);
         }}
         
         const lastCompletionDateStr = localStorage.getItem(LS_LAST_COMPLETION_DATE);
+        const todayKey = getRDODayKey();
+        
         if (lastCompletionDateStr) {{
-            const diff = getDateDifferenceInDays(getRDODayKey(), lastCompletionDateStr);
-            if (diff > 1 || (diff === 1 && currentStreak >= MAX_RDO_STREAK)) {{
+            const diff = getDateDifferenceInDays(todayKey, lastCompletionDateStr);
+            console.log(`[Streak Debug] Today Key: "${{todayKey}}", Last Completed: "${{lastCompletionDateStr}}", Diff: ${{diff}}`);
+            
+            if (isNaN(diff) || diff > 1 || (diff === 1 && currentStreak >= MAX_RDO_STREAK)) {{
+                console.log(`[Streak Debug] Streak reset triggered (difference is greater than 1 day). Resetting to 0.`);
                 currentStreak = 0;
                 setStreakCount(0, false);
-            }}
-            if (diff >= 1) {{
+            }} else if (diff === 1) {{
+                console.log(`[Streak Debug] New day detected. Preparing for new challenge progression.`);
                 localStorage.removeItem(LS_CHALLENGE_STATUS);
-                localStorage.removeItem(LS_LAST_COMPLETION_DATE); 
+            }}
+        }} else {{
+            console.log(`[Streak Debug] No last completion date found. Current Streak: ${{currentStreak}}`);
+            if (currentStreak > 0) {{
+                console.log(`[Streak Debug] Orphaned streak without completion date found. Resetting to 0.`);
+                currentStreak = 0;
+                setStreakCount(0, false);
             }}
         }}
         
         localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
         document.getElementById('current-streak').textContent = `${{currentStreak}} Days`;
     }}
+    // ============================================================
+
+    
 
     function updateCounters() {{
         const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
@@ -2531,11 +2660,11 @@ document.addEventListener('DOMContentLoaded', () => {{
 
 
 
-####################################################################################################################################
+################################################################################ //
 ##                                                                                                                                ##
 ##                                                        HTML VERSION 2                                                          ##
 ##                                                                                                                                ##
-####################################################################################################################################
+################################################################################ //
 # Get the appropriate date for the list of challenges and print it.
 unix_time, _ = get_index_start_date(local_filename)
 human_readable_date = get_human_readable_date(unix_time)
