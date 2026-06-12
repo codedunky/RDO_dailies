@@ -1,11 +1,11 @@
 {
-  "updated": 1781157631,
-  "startTime": 1781157600,
-  "endTime": 1781243999,
-  "id": "MPSW_LOCATION_01",
-  "state": "p_1_new_austin",
-  "location": "p_4_twin_rocks",
-  "landmark": "p_4_armadillo",
+  "updated": 1781244030,
+  "startTime": 1781244000,
+  "endTime": 1781330399,
+  "id": "MPSW_LOCATION_03",
+  "state": "p_1_west_elizabeth",
+  "location": "p_4_manzanita_post",
+  "landmark": "p_4_manzanita_post",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
