@@ -1,11 +1,11 @@
 {
-  "updated": 1782367231,
-  "startTime": 1782367200,
-  "endTime": 1782453599,
-  "id": "MPSW_LOCATION_04",
-  "state": "p_1_west_elizabeth",
-  "location": "p_3_little_creek_river",
-  "landmark": "p_4_wallace_station",
+  "updated": 1782453631,
+  "startTime": 1782453600,
+  "endTime": 1782539999,
+  "id": "MPSW_LOCATION_08",
+  "state": "p_1_lemoyne",
+  "location": "p_4_bolger_glade",
+  "landmark": "p_4_braithwaite_manor",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
