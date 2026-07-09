@@ -1,11 +1,11 @@
 {
-  "updated": 1783490431,
-  "startTime": 1783490400,
-  "endTime": 1783576799,
-  "id": "MPSW_LOCATION_09",
-  "state": "p_1_lemoyne",
-  "location": "w_4_copperhead_landing",
-  "landmark": "p_4_van_horn_trading_post",
+  "updated": 1783576830,
+  "startTime": 1783576800,
+  "endTime": 1783663199,
+  "id": "MPSW_LOCATION_03",
+  "state": "p_1_west_elizabeth",
+  "location": "p_4_manzanita_post",
+  "landmark": "p_4_manzanita_post",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
