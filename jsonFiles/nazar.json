@@ -1,11 +1,11 @@
 {
-  "updated": 1783576830,
-  "startTime": 1783576800,
-  "endTime": 1783663199,
-  "id": "MPSW_LOCATION_03",
-  "state": "p_1_west_elizabeth",
-  "location": "p_4_manzanita_post",
-  "landmark": "p_4_manzanita_post",
+  "updated": 1783663231,
+  "startTime": 1783663200,
+  "endTime": 1783749599,
+  "id": "MPSW_LOCATION_11",
+  "state": "p_1_new_hanover",
+  "location": "w_5_black_balsam_rise",
+  "landmark": "p_6_annesburg",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
