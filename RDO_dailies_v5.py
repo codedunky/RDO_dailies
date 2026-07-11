@@ -2328,7 +2328,6 @@ function updateUpcomingEvents() {{
         return d.toISOString().split('T')[0];
     }}
 
-    // ==================== REPLACE THIS BLOCK ====================
     function validateStreakConsistency(currentStreak) {{
         const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
         const todayKey = getRDODayKey();
@@ -2368,13 +2367,25 @@ function updateUpcomingEvents() {{
         console.log(`[Streak Validator] Consecutive days before today: ${{consecutiveActive}}. Max allowed streak today: ${{maxAllowedStreak}}. Saved streak: ${{currentStreak}}`);
         
         let finalStreak = currentStreak;
-        if (currentStreak !== maxAllowedStreak) {{
-            console.log(`[Streak Validator] Inconsistency detected. Syncing streak count from ${{currentStreak}} to ${{maxAllowedStreak}}.`);
-            finalStreak = maxAllowedStreak;
+        
+        // Safety Check: A stored streak is only invalid if it is GREATER than your actual
+        // consecutive completed days in the log. If it is less or equal (e.g., Day 2 out of 27 completions),
+        // it is completely valid.
+        if (currentStreak > maxAllowedStreak || currentStreak <= 0) {{
+            if (maxAllowedStreak >= 28) {{
+                finalStreak = ((maxAllowedStreak - 1) % 28) + 1;
+            }} else {{
+                finalStreak = maxAllowedStreak;
+            }}
+            console.log(`[Streak Validator] Inconsistency detected. Syncing/capping streak count from ${{currentStreak}} to ${{finalStreak}}.`);
         }}
         
-        // --- HISTORICAL DATA HEALING PASS ---
+        // --- HISTORICAL DATA HEALING PASS (ROLLOVER-AWARE) ---
         let updatedLog = false;
+        
+        // Helper to perform mathematically correct modulo in JavaScript
+        const safeModulo = (n, m) => ((n % m) + m) % m;
+
         goldLog.forEach(entry => {{
             if (entry.date === todayKey) {{
                 if (entry.streak !== finalStreak) {{
@@ -2383,9 +2394,11 @@ function updateUpcomingEvents() {{
                 }}
             }} else {{
                 const diffDays = getDateDifferenceInDays(todayKey, entry.date);
-                if (diffDays > 0 && diffDays < finalStreak && parseFloat(entry.gold || 0) > 0) {{
-                    const expected = finalStreak - diffDays;
-                    if (expected > 0 && entry.streak !== expected) {{
+                // Heal any entry that falls within our unbroken consecutive active window
+                if (diffDays > 0 && diffDays <= consecutiveActive && parseFloat(entry.gold || 0) > 0) {{
+                    // Rollover-aware expected streak calculation
+                    const expected = safeModulo(finalStreak - diffDays - 1, 28) + 1;
+                    if (entry.streak !== expected) {{
                         entry.streak = expected;
                         updatedLog = true;
                     }}
