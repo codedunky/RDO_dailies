@@ -1,11 +1,11 @@
 {
-  "updated": 1783922430,
-  "startTime": 1783922400,
-  "endTime": 1784008799,
-  "id": "MPSW_LOCATION_10",
-  "state": "p_1_ambarino",
-  "location": "p_4_window_rock",
-  "landmark": "p_4_window_rock",
+  "updated": 1784008831,
+  "startTime": 1784008800,
+  "endTime": 1784095199,
+  "id": "MPSW_LOCATION_09",
+  "state": "p_1_lemoyne",
+  "location": "w_4_copperhead_landing",
+  "landmark": "p_4_van_horn_trading_post",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
