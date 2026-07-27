@@ -1,11 +1,11 @@
 {
-  "updated": 1785045631,
-  "startTime": 1785045600,
-  "endTime": 1785131999,
-  "id": "MPSW_LOCATION_11",
+  "updated": 1785132031,
+  "startTime": 1785132000,
+  "endTime": 1785218399,
+  "id": "MPSW_LOCATION_05",
   "state": "p_1_new_hanover",
-  "location": "w_5_black_balsam_rise",
-  "landmark": "p_6_annesburg",
+  "location": "p_4_emerald_ranch",
+  "landmark": "p_4_emerald_ranch",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
