@@ -1,11 +1,11 @@
 {
-  "updated": 1785391231,
-  "startTime": 1785391200,
-  "endTime": 1785477599,
-  "id": "MPSW_LOCATION_03",
-  "state": "p_1_west_elizabeth",
-  "location": "p_4_manzanita_post",
-  "landmark": "p_4_manzanita_post",
+  "updated": 1785477631,
+  "startTime": 1785477600,
+  "endTime": 1785563999,
+  "id": "MPSW_LOCATION_00",
+  "state": "p_1_new_austin",
+  "location": "p_4_plainview",
+  "landmark": "p_4_benedict_point",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
