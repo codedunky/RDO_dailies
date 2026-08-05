@@ -1,11 +1,11 @@
 {
-  "updated": 1785823230,
-  "startTime": 1785823200,
-  "endTime": 1785909599,
-  "id": "MPSW_LOCATION_02",
+  "updated": 1785909608,
+  "startTime": 1785909600,
+  "endTime": 1785995999,
+  "id": "MPSW_LOCATION_00",
   "state": "p_1_new_austin",
-  "location": "p_4_manteca_falls",
-  "landmark": "p_4_thieves_landing",
+  "location": "p_4_plainview",
+  "landmark": "p_4_benedict_point",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
