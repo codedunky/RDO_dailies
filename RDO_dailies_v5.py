@@ -1833,6 +1833,9 @@ document.addEventListener("DOMContentLoaded", function() {{
     const MAX_RDO_STREAK = 28;
     const LS_GOLD_LOG = 'rdoGoldLog';
     const LS_LAST_KNOWN_TIMESTAMP = 'rdoLastKnownTimestamp';
+    const LS_CHART_VIEW_MODE = 'rdoChartViewMode';
+
+    let activeChartView = localStorage.getItem(LS_CHART_VIEW_MODE) || 'gold';
     
     // --- ELEMENT SELECTORS ---
     const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
@@ -2240,28 +2243,88 @@ function updateUpcomingEvents() {{
         }}
 
         dateList.forEach(dateStr => {{
-            // Find logged entry, or treat as a 0-gold placeholder
             const entry = entryMap[dateStr] || {{ date: dateStr, gold: 0, streak: 0, general: 0, role: 0, isMissing: true }};
             
-            const barHeight = Math.max((entry.gold * GOLD_CHART_MULTIPLIER), 0);
             const wrapper = document.createElement('div');
             wrapper.className = 'chart-bar-wrapper';
             wrapper.style.width = `${{barWidth}}px`;
             
-            const bar = document.createElement('div');
-            bar.className = 'chart-bar';
-            
-            // If it's a gap (0 gold or missing), make it flat and transparent
-            if (entry.gold === 0) {{
-                bar.style.height = '0px';
-                bar.style.minHeight = '0px';
-                bar.style.backgroundColor = 'transparent';
+            if (activeChartView === 'gold') {{
+                // --- GOLD VIEW RENDER ---
+                const barHeight = Math.max((entry.gold * GOLD_CHART_MULTIPLIER), 0);
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                
+                if (entry.gold === 0) {{
+                    bar.style.height = '0px';
+                    bar.style.minHeight = '0px';
+                    bar.style.backgroundColor = 'transparent';
+                }} else {{
+                    bar.style.height = `${{barHeight}}px`;
+                    bar.style.backgroundColor = getBarColorForStreak(entry.streak);
+                }}
+                wrapper.appendChild(bar);
             }} else {{
-                bar.style.height = `${{barHeight}}px`;
-                bar.style.backgroundColor = getBarColorForStreak(entry.streak);
+                // --- CHALLENGES VIEW RENDER ---
+                wrapper.style.display = 'flex';
+                wrapper.style.flexDirection = 'column';
+                wrapper.style.justifyContent = 'space-between';
+                wrapper.style.height = '100%';
+                
+                const totalSteps = 16;
+                const usableHeight = 71; // 75px max - 4px internal margins
+                const stepHeight = usableHeight / totalSteps;
+
+                const generalCount = entry.general || 0;
+                const roleCount = entry.role || 0;
+
+                // Rule: If both are completed, both bars turn gold
+                const bothCompleted = (generalCount === 7 && roleCount === 9);
+
+                // 1. General Bar (hanging down from top)
+                const topBar = document.createElement('div');
+                topBar.className = 'chart-bar';
+                topBar.style.borderRadius = '0 0 2px 2px'; 
+                
+                if (generalCount === 0) {{
+                    topBar.style.height = '0px';
+                    topBar.style.backgroundColor = 'transparent';
+                }} else {{
+                    topBar.style.height = `${{generalCount * stepHeight}}px`;
+                    
+                    if (bothCompleted) {{
+                        topBar.style.backgroundColor = '#FFC107'; // Gold
+                    }} else if (generalCount === 7) {{
+                        topBar.style.backgroundColor = '#999999'; // Silver
+                    }} else {{
+                        topBar.style.backgroundColor = '#E30000'; // RDR Red Shade 1 (General incomplete)
+                    }}
+                }}
+
+                // 2. Role Bar (growing up from bottom)
+                const bottomBar = document.createElement('div');
+                bottomBar.className = 'chart-bar';
+                bottomBar.style.borderRadius = '2px 2px 0 0';
+                
+                if (roleCount === 0) {{
+                    bottomBar.style.height = '0px';
+                    bottomBar.style.backgroundColor = 'transparent';
+                }} else {{
+                    bottomBar.style.height = `${{roleCount * stepHeight}}px`;
+                    
+                    if (bothCompleted) {{
+                        bottomBar.style.backgroundColor = '#FFC107'; // Gold
+                    }} else if (roleCount === 9) {{
+                        bottomBar.style.backgroundColor = '#999999'; // Silver
+                    }} else {{
+                        bottomBar.style.backgroundColor = '#E30000'; // RDR Red Shade 2 (Role incomplete - darker)
+                    }}
+                }}
+
+                wrapper.appendChild(topBar);
+                wrapper.appendChild(bottomBar);
             }}
 
-            wrapper.appendChild(bar);
             container.appendChild(wrapper);
 
             const date = new Date(dateStr + 'T12:00:00Z'); 
@@ -2269,11 +2332,19 @@ function updateUpcomingEvents() {{
             wrapper.addEventListener('mouseenter', () => {{
                 if (tooltipLeaveTimer) clearTimeout(tooltipLeaveTimer);
                 
-                // Only play tick sound and apply glow if there's actually gold logged
-                if (entry.gold > 0) {{
-                    bar.style.backgroundColor = '#FFFFFF';
-                    bar.style.boxShadow = '0 0 8px rgba(255, 255, 255, 0.9)';
+                // Audio tick and highlighting effects based on active view
+                let hasData = (activeChartView === 'gold') ? (entry.gold > 0) : ((entry.general || 0) > 0 || (entry.role || 0) > 0);
+                
+                if (hasData) {{
                     playHoverTick();
+                    const segments = wrapper.querySelectorAll('.chart-bar');
+                    segments.forEach(seg => {{
+                        if (seg.style.backgroundColor !== 'transparent') {{
+                            seg.dataset.origBg = seg.style.backgroundColor;
+                            seg.style.backgroundColor = '#FFFFFF';
+                            seg.style.boxShadow = '0 0 8px rgba(255, 255, 255, 0.9)';
+                        }}
+                    }});
                 }}
 
                 const humanDate = date.toLocaleDateString('en-GB', {{ weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }});
@@ -2308,16 +2379,24 @@ function updateUpcomingEvents() {{
             }});
 
             wrapper.addEventListener('mouseleave', () => {{
-                if (entry.gold > 0) {{
-                    bar.style.backgroundColor = getBarColorForStreak(entry.streak);
-                    bar.style.boxShadow = 'none';
-                }}
+                const segments = wrapper.querySelectorAll('.chart-bar');
+                segments.forEach(seg => {{
+                    if (seg.dataset.origBg) {{
+                        seg.style.backgroundColor = seg.dataset.origBg;
+                        seg.style.boxShadow = 'none';
+                    }}
+                }});
+                
                 tooltipLeaveTimer = setTimeout(() => {{
                     infoDisplay.innerHTML = '&nbsp;';
                 }}, 200);
             }});
         }});
     }}
+
+
+
+
 
     // --- CORE UPDATE LOGIC ---
     
@@ -2391,7 +2470,7 @@ function updateUpcomingEvents() {{
         document.getElementById('current-streak').textContent = `${{currentStreak}} Days`;
     }}
 
-    
+
 
     function updateCounters() {{
         const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
@@ -2568,6 +2647,33 @@ document.querySelectorAll('.difficulty-toggle').forEach(toggle => {{
             handleStreakUpdate(false);
         }});
     }});
+    
+    // --- CHART VIEW TOGGLE LOGIC ---
+
+    function updateToggleDisplay() {{
+        const heading = document.getElementById('gold-log-heading');
+        if (!heading) return;
+
+        if (activeChartView === 'gold') {{
+            heading.textContent = "GOLD LOG (LAST 28 DAYS)";
+        }} else {{
+            heading.textContent = "CHALLENGES (LAST 28 DAYS)";
+        }}
+    }}
+
+    const viewToggle = document.getElementById('gold-log-heading');
+    if (viewToggle) {{
+        viewToggle.addEventListener('click', () => {{
+            activeChartView = (activeChartView === 'gold') ? 'challenges' : 'gold';
+            localStorage.setItem(LS_CHART_VIEW_MODE, activeChartView);
+            updateToggleDisplay();
+            renderGoldLogChart(); 
+        }});
+    }}
+
+    updateToggleDisplay();
+
+    updateToggleDisplay();
     
     
     loadStreak();
@@ -3543,7 +3649,16 @@ html_output = f'''
         #nazar-map-img {{
             transition: opacity 0.8s ease-in-out;
             opacity: 1;
-        }}        
+        }} 
+
+
+        #chart-view-toggle:hover {{
+            color: #ffffff !important;
+        }}    
+
+        #gold-log-heading:hover {{
+            color: #888888 !important;
+        }}   
         
         
         
@@ -3636,7 +3751,9 @@ html_output = f'''
             
             <!-- Gold Log Chart Container -->
                 
-            <h3 class="stats-heading" style="color: #666666; margin-top: 15px; margin-bottom: 1px; padding-bottom: 0px;">Gold Log (Last 28 Days)</h3>
+            <h3 id="gold-log-heading" class="stats-heading" style="color: #666666; margin-top: 15px; margin-bottom: 1px; padding-bottom: 0px; cursor: pointer; user-select: none; transition: color 0.2s;">
+                GOLD LOG (LAST 28 DAYS)
+            </h3>
 
   
              <div id="gold-log-chart-container">
