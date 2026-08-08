@@ -2321,105 +2321,37 @@ function updateUpcomingEvents() {{
 
     // --- CORE UPDATE LOGIC ---
     
-    // ==================== REPLACE THIS BLOCK ====================
-    function getPreviousDayKey(dateStr) {{
-        const d = new Date(dateStr + 'T12:00:00Z');
-        d.setUTCDate(d.getUTCDate() - 1);
-        return d.toISOString().split('T')[0];
-    }}
+    // --- STREAK VALIDATION & MAINTENANCE ---
 
     function validateStreakConsistency(currentStreak) {{
-        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) || [];
-        const todayKey = getRDODayKey();
         const lastCompletionDateStr = localStorage.getItem(LS_LAST_COMPLETION_DATE);
+        const todayKey = getRDODayKey();
         
-        // Sort goldLog chronologically by date to prevent indexing issues
-        goldLog.sort((a, b) => a.date.localeCompare(b.date));
-        
-        // Map logs by date for fast lookup
-        const logMap = {{}};
-        goldLog.forEach(entry => {{
-            logMap[entry.date] = entry;
-        }});
-        
-        let consecutiveActive = 0;
-        let checkDateStr = getPreviousDayKey(todayKey);
-        
-        // Scan backwards for up to 28 days starting from yesterday
-        for (let i = 0; i < 28; i++) {{
-            const entry = logMap[checkDateStr];
-            if (entry && parseFloat(entry.gold || 0) > 0) {{
-                consecutiveActive++;
-                checkDateStr = getPreviousDayKey(checkDateStr);
-            }} else {{
-                // A gap was hit, stop counting
-                break;
+        if (!lastCompletionDateStr) {{
+            // No record of completion: Streak must be 0
+            if (currentStreak > 0) {{
+                console.log("[Streak Validator] No completion date found. Resetting streak to 0.");
+                return 0;
             }}
+            return currentStreak;
         }}
-        
-        // FACTOR IN TODAY: If they have already completed challenges today,
-        // they are allowed to have consecutiveActive + 1 days of streak.
-        let maxAllowedStreak = consecutiveActive;
-        if (lastCompletionDateStr === todayKey) {{
-            maxAllowedStreak = consecutiveActive + 1;
-        }}
-        
-        console.log(`[Streak Validator] Consecutive days before today: ${{consecutiveActive}}. Max allowed streak today: ${{maxAllowedStreak}}. Saved streak: ${{currentStreak}}`);
-        
-        let finalStreak = currentStreak;
-        
-        // Safety Check: A stored streak is only invalid if it is GREATER than your actual
-        // consecutive completed days in the log. If it is less or equal (e.g., Day 2 out of 27 completions),
-        // it is completely valid.
-        if (currentStreak > maxAllowedStreak || currentStreak <= 0) {{
-            if (maxAllowedStreak >= 28) {{
-                finalStreak = ((maxAllowedStreak - 1) % 28) + 1;
-            }} else {{
-                finalStreak = maxAllowedStreak;
-            }}
-            console.log(`[Streak Validator] Inconsistency detected. Syncing/capping streak count from ${{currentStreak}} to ${{finalStreak}}.`);
-        }}
-        
-        // --- HISTORICAL DATA HEALING PASS (ROLLOVER-AWARE) ---
-        let updatedLog = false;
-        
-        // Helper to perform mathematically correct modulo in JavaScript
-        const safeModulo = (n, m) => ((n % m) + m) % m;
 
-        goldLog.forEach(entry => {{
-            if (entry.date === todayKey) {{
-                if (entry.streak !== finalStreak) {{
-                    entry.streak = finalStreak;
-                    updatedLog = true;
-                }}
-            }} else {{
-                const diffDays = getDateDifferenceInDays(todayKey, entry.date);
-                // Heal any entry that falls within our unbroken consecutive active window
-                if (diffDays > 0 && diffDays <= consecutiveActive && parseFloat(entry.gold || 0) > 0) {{
-                    // Rollover-aware expected streak calculation
-                    const expected = safeModulo(finalStreak - diffDays - 1, 28) + 1;
-                    if (entry.streak !== expected) {{
-                        entry.streak = expected;
-                        updatedLog = true;
-                    }}
-                }}
-            }}
-        }});
-        
-        if (updatedLog) {{
-            console.log(`[Streak Validator] Historical log database healed successfully.`);
-            localStorage.setItem(LS_GOLD_LOG, JSON.stringify(goldLog));
+        const diff = getDateDifferenceInDays(todayKey, lastCompletionDateStr);
+
+        if (isNaN(diff) || diff > 1) {{
+            // A gap of more than 1 day was detected: Streak is broken
+            console.log(`[Streak Validator] Gap of ${{diff}} days detected. Resetting streak to 0.`);
+            return 0;
         }}
-        
-        return finalStreak;
+
+        return currentStreak;
     }}
-    // ============================================================
 
     function loadStreak() {{
         let currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
         if (isNaN(currentStreak)) currentStreak = 0;
 
-        // Perform self-correction check against actual logged history
+        // Trust stored streak unless a physical date gap is detected
         const validatedStreak = validateStreakConsistency(currentStreak);
         if (validatedStreak !== currentStreak) {{
             currentStreak = validatedStreak;
@@ -2430,6 +2362,7 @@ function updateUpcomingEvents() {{
             }}
         }}
 
+        // Apply Python script manual override if active
         if (PYTHON_STREAK_OVERRIDE > -1) {{
             currentStreak = PYTHON_STREAK_OVERRIDE; 
             setStreakCount(currentStreak, true);
@@ -2440,29 +2373,23 @@ function updateUpcomingEvents() {{
         
         if (lastCompletionDateStr) {{
             const diff = getDateDifferenceInDays(todayKey, lastCompletionDateStr);
-            console.log(`[Streak Debug] Today Key: "${{todayKey}}", Last Completed: "${{lastCompletionDateStr}}", Diff: ${{diff}}`);
+            console.log(`[Streak Debug] Today: "${{todayKey}}", Last Completed: "${{lastCompletionDateStr}}", Diff: ${{diff}}`);
             
-            if (isNaN(diff) || diff > 1 || (diff === 1 && currentStreak >= MAX_RDO_STREAK)) {{
-                console.log(`[Streak Debug] Streak reset triggered (difference is greater than 1 day). Resetting to 0.`);
-                currentStreak = 0;
-                setStreakCount(0, false);
-            }} else if (diff === 1) {{
-                console.log(`[Streak Debug] New day detected. Preparing for new challenge progression.`);
-                localStorage.removeItem(LS_CHALLENGE_STATUS);
-            }}
-        }} else {{
-            console.log(`[Streak Debug] No last completion date found. Current Streak: ${{currentStreak}}`);
-            if (currentStreak > 0) {{
-                console.log(`[Streak Debug] Orphaned streak without completion date found. Resetting to 0.`);
-                currentStreak = 0;
-                setStreakCount(0, false);
+            if (diff === 1) {{
+                if (currentStreak >= MAX_RDO_STREAK) {{
+                    console.log(`[Streak Debug] Day 28 completed. Rolling over to Day 0 for the new day.`);
+                    currentStreak = 0;
+                    setStreakCount(0, false);
+                }} else {{
+                    console.log(`[Streak Debug] New day detected. Preparing for new challenge progression.`);
+                    localStorage.removeItem(LS_CHALLENGE_STATUS);
+                }}
             }}
         }}
         
         localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
         document.getElementById('current-streak').textContent = `${{currentStreak}} Days`;
     }}
-    // ============================================================
 
     
 
