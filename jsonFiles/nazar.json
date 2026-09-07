@@ -1,11 +1,11 @@
 {
-  "updated": 1788674407,
-  "startTime": 1788674400,
-  "endTime": 1788760799,
-  "id": "MPSW_LOCATION_11",
+  "updated": 1788760809,
+  "startTime": 1788760800,
+  "endTime": 1788847199,
+  "id": "MPSW_LOCATION_06",
   "state": "p_1_new_hanover",
-  "location": "w_5_black_balsam_rise",
-  "landmark": "p_6_annesburg",
+  "location": "w_5_limpany",
+  "landmark": "p_4_flatneck_station",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
