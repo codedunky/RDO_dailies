@@ -1,11 +1,11 @@
 {
-  "updated": 1789452031,
-  "startTime": 1789452000,
-  "endTime": 1789538399,
-  "id": "MPSW_LOCATION_09",
-  "state": "p_1_lemoyne",
-  "location": "w_4_copperhead_landing",
-  "landmark": "p_4_van_horn_trading_post",
+  "updated": 1789538431,
+  "startTime": 1789538400,
+  "endTime": 1789624799,
+  "id": "MPSW_LOCATION_02",
+  "state": "p_1_new_austin",
+  "location": "p_4_manteca_falls",
+  "landmark": "p_4_thieves_landing",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
