@@ -1,11 +1,11 @@
 {
-  "updated": 1790316031,
-  "startTime": 1790316000,
-  "endTime": 1790402399,
-  "id": "MPSW_LOCATION_04",
-  "state": "p_1_west_elizabeth",
-  "location": "p_3_little_creek_river",
-  "landmark": "p_4_wallace_station",
+  "updated": 1790402430,
+  "startTime": 1790402400,
+  "endTime": 1790488799,
+  "id": "MPSW_LOCATION_00",
+  "state": "p_1_new_austin",
+  "location": "p_4_plainview",
+  "landmark": "p_4_benedict_point",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
