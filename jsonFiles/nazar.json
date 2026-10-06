@@ -1,11 +1,11 @@
 {
-  "updated": 1791180030,
-  "startTime": 1791180000,
-  "endTime": 1791266399,
-  "id": "MPSW_LOCATION_04",
-  "state": "p_1_west_elizabeth",
-  "location": "p_3_little_creek_river",
-  "landmark": "p_4_wallace_station",
+  "updated": 1791266430,
+  "startTime": 1791266400,
+  "endTime": 1791352799,
+  "id": "MPSW_LOCATION_02",
+  "state": "p_1_new_austin",
+  "location": "p_4_manteca_falls",
+  "landmark": "p_4_thieves_landing",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
