@@ -1,11 +1,11 @@
 {
-  "updated": 1791784808,
-  "startTime": 1791784800,
-  "endTime": 1791871199,
-  "id": "MPSW_LOCATION_06",
+  "updated": 1791871208,
+  "startTime": 1791871200,
+  "endTime": 1791957599,
+  "id": "MPSW_LOCATION_05",
   "state": "p_1_new_hanover",
-  "location": "w_5_limpany",
-  "landmark": "p_4_flatneck_station",
+  "location": "p_4_emerald_ranch",
+  "landmark": "p_4_emerald_ranch",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
