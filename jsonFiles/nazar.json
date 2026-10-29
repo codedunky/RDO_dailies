@@ -1,11 +1,11 @@
 {
-  "updated": 1793167231,
-  "startTime": 1793167200,
-  "endTime": 1793253599,
-  "id": "MPSW_LOCATION_10",
-  "state": "p_1_ambarino",
-  "location": "p_4_window_rock",
-  "landmark": "p_4_window_rock",
+  "updated": 1793253631,
+  "startTime": 1793253600,
+  "endTime": 1793339999,
+  "id": "MPSW_LOCATION_04",
+  "state": "p_1_west_elizabeth",
+  "location": "p_3_little_creek_river",
+  "landmark": "p_4_wallace_station",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
