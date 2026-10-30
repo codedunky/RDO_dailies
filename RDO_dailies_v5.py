@@ -25,6 +25,142 @@ print("Initial 'local_filename_nazar':  ", local_filename_nazar)
 
 
 
+
+
+# ==============================================================
+# FALLBACK HELPER FUNCTIONS (Place under your existing imports)
+# ==============================================================
+from datetime import datetime, timedelta, timezone
+import time
+import requests
+
+
+def get_current_rdo_window():
+  now = datetime.now(timezone.utc)
+  today_reset = now.replace(hour=6, minute=0, second=0, microsecond=0)
+  if now < today_reset:
+    start_dt = today_reset - timedelta(days=1)
+  else:
+    start_dt = today_reset
+  start_time = int(start_dt.timestamp())
+  end_time = start_time + 86399
+  return start_time, end_time
+
+
+def convert_rdodailies_to_index_format(raw_json):
+  """Converts rdo-dailies.com API structure into the rdo.gg index.json format."""
+  data_root = raw_json.get("data", {})
+  general_root = data_root.get("general", {})
+
+  # 1. Use the timestamps directly from the API payload
+  start_time = general_root.get("startTime", 0)
+  end_time = general_root.get("endTime", 0)
+
+  # Fallback to calculated timestamps if missing
+  if not start_time:
+    start_time, end_time = get_current_rdo_window()
+
+  output = {
+      "updated": int(time.time()),
+      "startTime": start_time,
+      "endTime": end_time,
+      "general": [],
+      "easy": {
+          "bounty_hunter": [],
+          "trader": [],
+          "collector": [],
+          "moonshiner": [],
+          "naturalist": [],
+      },
+      "med": {
+          "bounty_hunter": [],
+          "trader": [],
+          "collector": [],
+          "moonshiner": [],
+          "naturalist": [],
+      },
+      "hard": {
+          "bounty_hunter": [],
+          "trader": [],
+          "collector": [],
+          "moonshiner": [],
+          "naturalist": [],
+      },
+      "meta": {
+          "documentation": "https://rdo-dailies.com",
+          "provider": "rdo-dailies.com",
+          "special_thanks": [],
+      },
+  }
+
+  def format_challenge(ch):
+    desc = ch.get("description", {})
+    disp_type = ch.get("displayType", "")
+    disp_format = desc.get("formatLabel", "ACMP_DC_PLAYER_MENU")
+    desired = ch.get("desiredGoal", 1)
+
+    # 1. Timed objectives / booleans (e.g. 300000 ms, 2880000 ms) -> 1
+    if disp_type in [
+        "DISPLAY_AS_BOOL",
+        "DISPLAY_MS_TO_MINUTES",
+    ] or disp_format in [
+        "ACMP_DC_PLAYER_MENU_BOOL",
+        "ACMP_DC_PLAYER_MENU_TIMED",
+    ]:
+      goal = 1
+
+    # 2. Distance in meters (1609.5 m = 5280 ft / 1 mile)
+    elif disp_type == "DISPLAY_FEET":
+      # Convert 1609.5m -> 5280 ft (or 1 mi / 2 mi)
+      # In RDO menu, wagon missions are 5280 ft (1 mi), 10560 ft (2 mi), 15838 ft (3 mi)
+      goal = (
+          int(round((desired / 1609.5) * 5280)) if desired >= 1609.5 else int(desired)
+      )
+
+    # 3. Cash (cents to dollars)
+    elif disp_type == "DISPLAY_CASH":
+      goal = f"${desired / 100:.2f}"
+
+    # 4. Standard counts (int or float rounded)
+    else:
+      goal = int(desired) if isinstance(desired, (int, float)) else desired
+
+    return {
+        "id": ch.get("id", ""),
+        "title": desc.get("label", ch.get("id", "")),
+        "goal": goal,
+        "goalFormat": "ACMP_DC_PLAYER_MENU",
+    }
+
+  # 2. Map General Challenges
+  for ch in general_root.get("challenges", []):
+    output["general"].append(format_challenge(ch))
+
+  # 3. Map Roles for easy, med, hard
+  role_map = {
+      "CHARACTER_RANK_BOUNTY_HUNTER": "bounty_hunter",
+      "CHARACTER_RANK_TRADER": "trader",
+      "CHARACTER_RANK_COLLECTOR": "collector",
+      "CHARACTER_RANK_MOONSHINER": "moonshiner",
+      "CHARACTER_RANK_NATURALIST": "naturalist",
+  }
+
+  for tier in ["easy", "med", "hard"]:
+    tier_groups = data_root.get(tier, [])
+    for group in tier_groups:
+      role_key = role_map.get(group.get("role"))
+      if role_key:
+        for ch in group.get("challenges", []):
+          output[tier][role_key].append(format_challenge(ch))
+
+  return output
+
+
+
+
+
+
+
     
 # #### CONFIG FLAGS #### #
 #####################################################
@@ -240,7 +376,9 @@ def get_index_start_date(local_filename):
     Silently defaults to current time if file is missing.
     """
     now = int(time.time())
-    date_str = datetime.datetime.utcfromtimestamp(now).strftime('%Y-%m-%d')
+    date_str = datetime.datetime.fromtimestamp(now, datetime.timezone.utc).strftime(
+    "%Y-%m-%d"
+)
 
     if not os.path.exists(local_filename):
         # File missing: return current time, no error print needed
@@ -251,7 +389,7 @@ def get_index_start_date(local_filename):
             data = json.load(f)
         start_time = data.get('startTime')
         if start_time:
-            dt = datetime.datetime.utcfromtimestamp(start_time)
+            dt = datetime.datetime.fromtimestamp(start_time, datetime.timezone.utc)
             date_str = dt.strftime('%Y-%m-%d')
             return start_time, date_str
         else:
@@ -323,11 +461,11 @@ def get_index_mod_date_str(local_filename):
         return datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
+import datetime
 import json
+import os
+import time
+import urllib.request
 from collections import defaultdict
 from RDO_challenges_data import (
     predefined_challenges,
@@ -338,17 +476,108 @@ from RDO_challenges_data import (
     moonshiner,
 )
 
+
+# ==============================================================
+# JEAN ROPKE FALLBACK & CONVERSION HELPERS
+# ==============================================================
+def get_current_rdo_window():
+    """Returns (start_timestamp, end_timestamp) for the 06:00 UTC cycle."""
+    now = datetime.datetime.now(datetime.timezone.utc)
+    today_reset = now.replace(hour=6, minute=0, second=0, microsecond=0)
+    if now < today_reset:
+        start_dt = today_reset - datetime.timedelta(days=1)
+    else:
+        start_dt = today_reset
+    start_time = int(start_dt.timestamp())
+    end_time = start_time + 86399
+    return start_time, end_time
+
+
+def convert_jeanropke_to_rdogg(jr_data):
+    """Converts Jean Ropke's dailies.json into the rdo.gg index.json format."""
+    start_time, end_time = get_current_rdo_window()
+    output = {
+        "updated": int(time.time()),
+        "startTime": start_time,
+        "endTime": end_time,
+        "general": [],
+        "easy": {
+            "bounty_hunter": [],
+            "trader": [],
+            "collector": [],
+            "moonshiner": [],
+            "naturalist": [],
+        },
+        "med": {
+            "bounty_hunter": [],
+            "trader": [],
+            "collector": [],
+            "moonshiner": [],
+            "naturalist": [],
+        },
+        "hard": {
+            "bounty_hunter": [],
+            "trader": [],
+            "collector": [],
+            "moonshiner": [],
+            "naturalist": [],
+        },
+        "meta": {
+            "documentation": "Converted fallback from Jean Ropke data",
+            "provider": "JeanRopke",
+            "special_thanks": [],
+        },
+    }
+
+    def format_item(item):
+        if isinstance(item, str):
+            item_id = item
+            goal = 1
+        else:
+            item_id = item.get("id", "")
+            goal = item.get("target", item.get("goal", 1))
+        return {
+            "id": item_id,
+            "title": item.get("title", item_id) if isinstance(item, dict) else item_id,
+            "goal": goal,
+            "goalFormat": "ACMP_DC_PLAYER_MENU",
+        }
+
+    for item in jr_data.get("general", []):
+        output["general"].append(format_item(item))
+
+    roles = ["bounty_hunter", "trader", "collector", "moonshiner", "naturalist"]
+    for role in roles:
+        for item in jr_data.get(role, []):
+            entry = format_item(item)
+            item_id = entry["id"]
+            if "_Easy_" in item_id:
+                output["easy"][role].append(entry)
+            elif "_Med_" in item_id:
+                output["med"][role].append(entry)
+            elif "_Hard_" in item_id:
+                output["hard"][role].append(entry)
+
+    return output
+
+
+# ==============================================================
+
 # Initialize index_data with a default empty dict
 index_data = {}
 
 # Set the path to your local index.json file in a relative subfolder called 'jsonFiles'
-script_dir = os.path.dirname(os.path.abspath(__file__))  # the directory where the script is
-os.makedirs(os.path.join(script_dir, "jsonFiles"), exist_ok=True)  # Check folder exists
+script_dir = os.path.dirname(
+    os.path.abspath(__file__)
+)  # the directory where the script is
+os.makedirs(
+    os.path.join(script_dir, "jsonFiles"), exist_ok=True
+)  # Check folder exists
 
-local_filename = os.path.join(script_dir, "jsonFiles", "index.json") # Creates the filepath and assign to variable
+local_filename = os.path.join(
+    script_dir, "jsonFiles", "index.json"
+)  # Creates the filepath and assign to variable
 debug_print("L1", "local_filename:  ", local_filename)
-
-
 
 
 # URL for downloading if needed
@@ -358,53 +587,54 @@ url = "https://api.rdo.gg/challenges/index.json"
 filter_difficulty = "hard"  # Set to "easy", "med", or "hard" to filter role challenges
 
 
-
-# Load the index.json challenge data
-import urllib.request
-
-
 #############################################################################################
 ##  DEBUG FOR GITHUB
 #############################################################################################
-print(f"[DEBUG] index.json path: {local_filename}")                                         
+print(f"[DEBUG] index.json path: {local_filename}")
 print(f"[DEBUG] Does index.json exist? {os.path.exists(local_filename)}")
 
 if os.path.exists(local_filename):
-    with open(local_filename, 'r') as f:
+    with open(local_filename, "r") as f:
         data = json.load(f)
-    print(f"[DEBUG] ***** index.json endTime: {data.get('endTime')} ({timestamp_to_date(data.get('endTime'))})")
-
-    
+    print(
+        f"[DEBUG] ***** index.json endTime: {data.get('endTime')} ({timestamp_to_date(data.get('endTime'))})"
+    )
 
 #############################################################################################
 
 # Generating a unique id for tickboxes using todays date
-import datetime
 start_time_unix, human_readable_date = get_index_start_date(local_filename)
-start_date_str = datetime.datetime.utcfromtimestamp(start_time_unix).strftime("%Y-%m-%d")
-
-
+start_date_str = datetime.datetime.fromtimestamp(
+    start_time_unix, datetime.timezone.utc
+).strftime("%Y-%m-%d")
 
 
 file_exists = os.path.exists(local_filename)
- 
+
 if file_exists:
     try:
-        with open(local_filename, 'r', encoding='utf-8') as f:
-            index_data = json.load(f)  # Load JSON data from index.json file (it will all break without it as values are 0 otherwise)
+        with open(local_filename, "r", encoding="utf-8") as f:
+            index_data = json.load(
+                f
+            )  # Load JSON data from index.json file (it will all break without it as values are 0 otherwise)
             # Check if the file is outdated
-            now = int(time.time())  # Gets current time in seconds since Unix epoch, and assign to 'now'
-            end_time = index_data.get("endTime", 0)      # Tries to retrieve 'endTime' from the index_data dictionary, sets to 0 if can't
-            start_time = index_data.get("startTime", 0)  # Tries to retrieve 'startTime' from the index_data dictionary, sets to 0 if can't
-            
+            now = int(
+                time.time()
+            )  # Gets current time in seconds since Unix epoch, and assign to 'now'
+            end_time = index_data.get(
+                "endTime", 0
+            )  # Tries to retrieve 'endTime' from the index_data dictionary, sets to 0 if can't
+            start_time = index_data.get(
+                "startTime", 0
+            )  # Tries to retrieve 'startTime' from the index_data dictionary, sets to 0 if can't
+
     except FileNotFoundError:
         print(f"{local_filename} not found. Proceeding without it.")
-        # handle accordingly, e.g., initialize empty data
         now = int(time.time())
         end_time = 0
         start_time = 0
 
-else:   #  If the index.json is not found, it will go and download it from the api website.
+else:  # If the index.json is not found, it will go and download it from the api website.
     print(f"{local_filename} not found. Will download new index.json.")
     now = int(time.time())
     end_time = 0
@@ -413,97 +643,154 @@ else:   #  If the index.json is not found, it will go and download it from the a
 
 # Check if the index has expired by comparing 'endTime' in index.json to current time.
 # Convert timestamp to readable format for debug
-index_expiry_readable = datetime.datetime.fromtimestamp(end_time).strftime('%Y-%m-%d %H:%M:%S')
+index_expiry_readable = datetime.datetime.fromtimestamp(end_time).strftime(
+    "%Y-%m-%d %H:%M:%S"
+)
 
 if end_time < now:
-    debug_print("L1", "idarkyellow", f"INDEX: File expired (Expires: {index_expiry_readable}). Downloading new file...")
-    status_index = f"{BG_GREEN}INDEX:  New json file downloaded successfully.{BG_RESET}"
+    debug_print(
+        "L1",
+        "idarkyellow",
+        f"INDEX: File expired (Expires: {index_expiry_readable}). Downloading new file...",
+    )
+    status_index = (
+        f"{BG_GREEN}INDEX:  New json file downloaded successfully.{BG_RESET}"
+    )
 
     # Decide whether to prompt or just download
     if file_exists:
         if autoDownload:
-            debug_print("L3", "bgreen", "INDEX: File exists locally, but autoDownload is True")
+            debug_print(
+                "L3", "bgreen", "INDEX: File exists locally, but autoDownload is True"
+            )
             download_now = True
-            print("INDEX: download_now: ",download_now)
+            print("INDEX: download_now: ", download_now)
         else:
-            user_input = input("INDEX: Do you want to download the latest index.json from rdo.gg? (y/n): ").strip().lower()
-            download_now = (user_input == 'y')
+            user_input = (
+                input(
+                    "INDEX: Do you want to download the latest index.json from rdo.gg?"
+                    " (y/n): "
+                )
+                .strip()
+                .lower()
+            )
+            download_now = user_input == "y"
     else:
         # No file exists, so download immediately
         download_now = True
 else:
     # This is the new "Valid" message
-    debug_print("L1", "byellow", f"INDEX: File valid (Expires: {index_expiry_readable}). Using cached json.")
+    debug_print(
+        "L1",
+        "byellow",
+        f"INDEX: File valid (Expires: {index_expiry_readable}). Using cached json.",
+    )
     status_index = f"{BG_YELLOW}INDEX:  File valid (Expires: {index_expiry_readable}). Using cached json. {BG_RESET}"
     download_now = False
-    
-    
+
+
 # --- BLOCK DOWNLOADS CHECK ---
 if BLOCK_DOWNLOADS and download_now:
     debug_print("L1", "bred", "INDEX: Download skipped (BLOCK_DOWNLOADS = True).")
     download_now = False
-# ----------------------------------    
-    
+# ----------------------------------
+
 
 # Logic to do backup of existing index.json file before new download
 if download_now:
     # Only backup if start_time != 0
     if file_exists and start_time != 0:
-        # Define the backup folder as a subfolder called 'indexJsonBackups'
-        backup_folder = os.path.join(os.path.dirname(local_filename), 'indexJsonBackups')
-        # Create the backup folder if it doesn't exist
+        backup_folder = os.path.join(
+            os.path.dirname(local_filename), "indexJsonBackups"
+        )
         os.makedirs(backup_folder, exist_ok=True)
-        
-        # Construct the backup filename
+
         backup_filename = f"index_{datetime.datetime.fromtimestamp(start_time).strftime('%Y-%m-%d')}.json"
-        # Full path for backup
         backup_path = os.path.join(backup_folder, backup_filename)
-        
+
         try:
             os.rename(local_filename, backup_path)
             debug_print("L2", "igreen", "Backed up old index.json to:  ", backup_path)
         except Exception as e:
             debug_print("L1", "ired", f"Failed to backup old file: {e}")
     else:
-        print("Skipping backup")     
+        print("Skipping backup")
 
-    
-    
-    # Download new index.json
+    # -------------------------------------------------------------
+    # DOWNLOAD FROM RDO-DAILIES.COM (Primary) WITH RDO.GG (Backup)
+    # -------------------------------------------------------------
+    today_str = datetime.datetime.now(datetime.timezone.utc).strftime(
+        "%Y-%m-%d"
+    )
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            " (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        ),
+        "Accept": "application/json",
+    }
+    downloaded_data = None
+
+    # Step 1: Fetch from rdo-dailies.com
     try:
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req) as response:
-            data_bytes = response.read()
-            data_str = data_bytes.decode('utf-8')
-            data = json.loads(data_str)
-            # Save the new data to the file
-            with open(local_filename, 'w', encoding='utf-8') as f:
-                json.dump(data, f, indent=2)
-                print("downloaded new index.json file")
+      print("Attempting to download from rdo-dailies.com...")
+      primary_url = f"https://rdo-dailies.com/api/RDO/general/daily_challenges?nocache={today_str}"
+      req = urllib.request.Request(primary_url, headers=headers)
+      with urllib.request.urlopen(req, timeout=10) as response:
+        raw = json.loads(response.read().decode("utf-8"))
+        downloaded_data = convert_rdodailies_to_index_format(raw)
+        print("SUCCESS: Retrieved and converted data from rdo-dailies.com!")
     except Exception as e:
-        print(f"Error during download: {e}")
+      print(f"rdo-dailies.com failed: {e}")
+
+    # Step 2: Fallback to rdo.gg if rdo-dailies.com fails
+    if not downloaded_data:
+      try:
+        print("Falling back to rdo.gg...")
+        req = urllib.request.Request(
+            "https://api.rdo.gg/challenges/index.json", headers=headers
+        )
+        with urllib.request.urlopen(req, timeout=10) as response:
+          downloaded_data = json.loads(response.read().decode("utf-8"))
+          print("SUCCESS: Retrieved fallback data from rdo.gg!")
+      except Exception as e:
+        print(f"rdo.gg fallback also failed: {e}")
+
+    # Step 3: Write to your local index.json file
+    if downloaded_data:
+      try:
+        with open(local_filename, "w", encoding="utf-8") as f:
+          json.dump(downloaded_data, f, indent=2)
+        print(f"Saved new index.json to {local_filename}")
+      except Exception as e:
+        print(f"Error saving to {local_filename}: {e}")
+    else:
+      print("CRITICAL: Failed to get daily challenges from all providers.")
+
+
+
 
     # Now, read the data from the saved file
     try:
-        with open(local_filename, 'r', encoding='utf-8') as f:
+        with open(local_filename, "r", encoding="utf-8") as f:
             index_data = json.load(f)
-            
-        # !!! INSERT THESE 3 LINES HERE !!!
+
         # Refresh the start_timestamp so the HTML and IDs get the NEW date, not the old one
         start_timestamp, human_readable_date = get_index_start_date(local_filename)
-        start_date_str = datetime.datetime.utcfromtimestamp(start_timestamp).strftime("%Y-%m-%d")
-        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        
+        start_date_str = datetime.datetime.fromtimestamp(
+            start_timestamp, datetime.timezone.utc
+        ).strftime("%Y-%m-%d")
+
         # Access the data
         end_time = index_data.get("endTime", 0)
         start_time = index_data.get("startTime", 0)
-        print(f"startTime: {timestamp_to_date(start_time)}, endTime: {timestamp_to_date(end_time)}")
+        print(
+            f"startTime: {timestamp_to_date(start_time)}, endTime:"
+            f" {timestamp_to_date(end_time)}"
+        )
         status_index = status_index + (f" - (endTime: {timestamp_to_date(end_time)})")
     except Exception as e:
         print(f"Error reading {local_filename}: {e}")
-        
-        
 
 
 
@@ -683,7 +970,7 @@ COOLDOWN_SHORT = 10800
 # --------------------------------------------------------------------------------------
 # 1. CALCULATE TIMESTAMPS
 # --------------------------------------------------------------------------------------
-now_utc = datetime.datetime.utcnow()
+now_utc = datetime.datetime.now(datetime.timezone.utc)
 today_9am = now_utc.replace(hour=9, minute=0, second=0, microsecond=0)
 days_since_tuesday = (now_utc.weekday() - 1) % 7
 
@@ -1259,7 +1546,9 @@ def render_challenge_block(block, prefix="challenge", role_name="", filter_diffi
     start_time_unix, human_readable_date = get_index_start_date(local_filename)
 
     # Create a unique date string to ensure checkbox IDs change daily
-    start_date_str = datetime.datetime.utcfromtimestamp(start_time_unix).strftime("%Y-%m-%d")
+    start_date_str = datetime.datetime.fromtimestamp(
+        start_time_unix, datetime.timezone.utc
+    ).strftime("%Y-%m-%d")
     debug_print("L3", "bblue", "'start_date_str' for use in tickbox id:   ", start_date_str)
 
     # If this is a role challenge, add a heading and wrapper container
