@@ -29,11 +29,18 @@ jobs:
 
     - name: Commit and push generated files
       run: |
-        git config --global user.name 'github-actions'
-        git config --global user.email 'actions@github.com'
-        
-        # CHANGED: Now adds index.html AND any JSON file (nazar, events, index)
-        git add index.html jsonFiles/*.json
-        
-        git commit -m "Auto-update RDO Dailies v5" || echo "No changes to commit"
-        git push
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+        # Stage index.html and jsonFiles (or everything with git add -A)
+        git add index.html jsonFiles/ || git add -A
+
+        # Only proceed if there are actual staged changes
+        if ! git diff --staged --quiet; then
+          git commit -m "Auto-update RDO Dailies v5"
+          # Pull any remote changes first to prevent push rejection
+          git pull --rebase origin main
+          git push origin HEAD:main
+        else
+          echo "No changes to commit. Skipping push."
+        fi
