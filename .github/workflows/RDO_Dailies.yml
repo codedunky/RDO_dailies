@@ -30,10 +30,10 @@ jobs:
         git config --local user.name "github-actions[bot]"
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         
-        # 1. Stages final_challenges_output2.json, index.html, and jsonFiles/
+        # Stages all changed files (index.html, final_challenges_output2.json, and jsonFiles/)
         git add -A
         
-        # 2. Only commit and push if files actually changed
+        # Only commit and push if there are actual new changes
         if ! git diff --staged --quiet; then
           git commit -m "Auto-update RDO Dailies v5"
           git pull --rebase origin main
