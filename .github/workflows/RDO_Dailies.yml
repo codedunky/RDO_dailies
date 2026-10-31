@@ -21,6 +21,11 @@ jobs:
       with:
         python-version: '3.x'
 
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+
     - name: Run script to generate index.html
       run: |
         python RDO_dailies_v5.py
@@ -30,10 +35,8 @@ jobs:
         git config --local user.name "github-actions[bot]"
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         
-        # Stages all changed files (index.html, final_challenges_output2.json, and jsonFiles/)
         git add -A
         
-        # Only commit and push if there are actual new changes
         if ! git diff --staged --quiet; then
           git commit -m "Auto-update RDO Dailies v5"
           git pull --rebase origin main
