@@ -1,0 +1,505 @@
+{
+  "final_name": [
+    {
+      "text": "5 Candies eaten",
+      "description": "Peppermints, Candies, and Chocolate Bars all count for this challenge.",
+      "all_descriptions": [
+        "Peppermints, Candies, and Chocolate Bars all count for this challenge."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "Clothing style updated",
+      "description": "You can just go to your wardrobe and change outfit for this to register.",
+      "all_descriptions": [
+        "You can just go to your wardrobe and change outfit for this to register."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "3 Little Brown Bats collected",
+      "description": "The cave behind the waterfall at Elysian Pool, at night is probably the best spot.\nSwitch lobbies to get them to spawn if none there.",
+      "all_descriptions": [
+        "The cave behind the waterfall at Elysian Pool, at night is probably the best spot.\nSwitch lobbies to get them to spawn if none there."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "Masks worn",
+      "description": "Madam Nazar sells various masks if you don't one already.",
+      "all_descriptions": [
+        "Madam Nazar sells various masks if you don't one already."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "3 Non-player enemy hats shot off",
+      "description": "Moonshiner roadblocks with a varmint rifle at a distance, or get a wanted level and fend off the law.",
+      "all_descriptions": [
+        "Moonshiner roadblocks with a varmint rifle at a distance, or get a wanted level and fend off the law."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "Used an emote on a local",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "3 Used an emote on a player in Free Roam",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "1 Bounties brought in from New Austin posters",
+      "description": "Armadillo, Tumbleweed and Benedict Point",
+      "all_descriptions": [
+        "Armadillo, Tumbleweed and Benedict Point"
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "easy"
+    },
+    {
+      "text": "1 Bounty targets hogtied with a Reinforced Lasso",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "easy"
+    },
+    {
+      "text": "1 Living bounty targets in a photograph",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "easy"
+    },
+    {
+      "text": "2 Bounty targets lassoed from horseback",
+      "description": "You can lasso the same target over and over [#2]",
+      "all_descriptions": [
+        "Lasso the same target three times [#1]",
+        "You can lasso the same target over and over [#2]",
+        "Lasso, release, lasso, release, lasso the same target [#3]"
+      ],
+      "desc_index": 1,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "med"
+    },
+    {
+      "text": "2 Bounty targets looted",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "med"
+    },
+    {
+      "text": "1 Bounty targets taken down with Bolas",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "med"
+    },
+    {
+      "text": "2 Bounties completed within one real-world hour",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Bounty completed without killing an enemy or bounty target",
+      "description": "Bard's Crossing train track bounty might work [#3]",
+      "all_descriptions": [
+        "Risky, usually bugged and won't register [#1]",
+        "Etta Doyle bounty can work but isn't reliable [#2]",
+        "Bard's Crossing train track bounty might work [#3]"
+      ],
+      "desc_index": 2,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "hard"
+    },
+    {
+      "text": "1 Player bounties collected",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "hard"
+    },
+    {
+      "text": "High Quality Camp Stew recipes completed",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "easy"
+    },
+    {
+      "text": "2 Perfect carcasses donated to Cripps",
+      "description": "Perfect pelts don't count. Try Emerald Ranch sheep.",
+      "all_descriptions": [
+        "Perfect pelts don't count. Try Emerald Ranch sheep."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "easy"
+    },
+    {
+      "text": "1 Resupply missions completed",
+      "description": "Buggy, often won't register in public lobbies [#1]",
+      "all_descriptions": [
+        "Buggy, often won't register in public lobbies [#1]",
+        "Best to be in a solo lobby so it registers [#2]"
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "easy"
+    },
+    {
+      "text": "2 Camp Stews eaten",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "med"
+    },
+    {
+      "text": "10558 Distance Delivery Wagon traveled on mission",
+      "description": "Solo lobbies more reliable, check counter at start [#3]",
+      "all_descriptions": [
+        "Use a Change Appearance solo lobby so it registers [#1]",
+        "Check challenge total is updating as you set off [#2]",
+        "Solo lobbies more reliable, check counter at start [#3]"
+      ],
+      "desc_index": 2,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "med"
+    },
+    {
+      "text": "2 Donated deadly predator carcass or skin",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "med"
+    },
+    {
+      "text": "1 Cripps Special Camp Stew recipes completed",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "hard"
+    },
+    {
+      "text": "15837 Distance Delivery Wagon traveled on mission",
+      "description": "Solo lobbies more reliable, check counter at start [#3]",
+      "all_descriptions": [
+        "Use a Change Appearance solo lobby so it registers [#1]",
+        "Check challenge total is updating as you set off [#2]",
+        "Solo lobbies more reliable, check counter at start [#3]"
+      ],
+      "desc_index": 2,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "hard"
+    },
+    {
+      "text": "2 Goods sold to distant buyer",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "hard"
+    },
+    {
+      "text": "1 Arrowheads found",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "easy"
+    },
+    {
+      "text": "2 Collectibles collected",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "easy"
+    },
+    {
+      "text": "1 Collector Maps used",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "easy"
+    },
+    {
+      "text": "2 Coins found",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "med"
+    },
+    {
+      "text": "1 Collectibles found with a Metal Detector",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "med"
+    },
+    {
+      "text": "2 Lost Jewelry found",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "med"
+    },
+    {
+      "text": "3 Antique Alcohol Bottles found",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "hard"
+    },
+    {
+      "text": "3 Family Heirlooms found",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "hard"
+    },
+    {
+      "text": "3 Lost Jewelry found",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Moonshine Bar - Changed d\u00e9cor",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "easy"
+    },
+    {
+      "text": "1 Moonshine Story Mission completed",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Moonshine of any type sold to a buyer",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Completed improved or better moonshine recipe",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "med"
+    },
+    {
+      "text": "Crafted Toxic Moonshine",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "med"
+    },
+    {
+      "text": "Moonshine Bar - Danced for 1 min",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "med"
+    },
+    {
+      "text": "2 Crafted Toxic Moonshine",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "hard"
+    },
+    {
+      "text": "4827 Distance Moonshine Wagon traveled on mission",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Moonshine Bar - Danced for 2 mins",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "hard"
+    },
+    {
+      "text": "1 Blending Tonics crafted or used",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Don't kill an animal for 12 game hours",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "easy"
+    },
+    {
+      "text": "1 Legendary Animals photographed",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Don't kill an animal for 18 game hours",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "med"
+    },
+    {
+      "text": "1 Hardy Tonics used when too hot or cold",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "med"
+    },
+    {
+      "text": "1 Sedated animals revived",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "med"
+    },
+    {
+      "text": "2 Blending Tonics crafted or used",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "hard"
+    },
+    {
+      "text": "2 Hardy Tonics used when too hot or cold",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "hard"
+    },
+    {
+      "text": "2 Sedated animals revived",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "hard"
+    }
+  ]
+}
