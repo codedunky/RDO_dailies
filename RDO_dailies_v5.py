@@ -109,13 +109,13 @@ def convert_rdodailies_to_index_format(raw_json):
     ]:
       goal = 1
 
-    # 2. Distance in meters (1609.5 m = 5280 ft / 1 mile)
-    elif disp_type == "DISPLAY_FEET":
-      # Convert 1609.5m -> 5280 ft (or 1 mi / 2 mi)
-      # In RDO menu, wagon missions are 5280 ft (1 mi), 10560 ft (2 mi), 15838 ft (3 mi)
-      goal = (
-          int(round((desired / 1609.5) * 5280)) if desired >= 1609.5 else int(desired)
-      )
+    # 2. Distance in meters to feet (1 meter = 1 / 0.3048 feet)
+    elif (
+        disp_type == "DISPLAY_FEET" or disp_format == "ACMP_DC_PLAYER_MENU_FEET"
+    ):
+      goal = int(round(desired / 0.3048))
+      if goal == 5281:  # Guard against 1-mile float rounding
+        goal = 5280
 
     # 3. Cash (cents to dollars)
     elif disp_type == "DISPLAY_CASH":
