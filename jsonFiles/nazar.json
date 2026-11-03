@@ -1,11 +1,11 @@
 {
-  "updated": 1793599231,
-  "startTime": 1793599200,
-  "endTime": 1793685599,
-  "id": "MPSW_LOCATION_06",
-  "state": "p_1_new_hanover",
-  "location": "w_5_limpany",
-  "landmark": "p_4_flatneck_station",
+  "updated": 1793685610,
+  "startTime": 1793685600,
+  "endTime": 1793771999,
+  "id": "MPSW_LOCATION_03",
+  "state": "p_1_west_elizabeth",
+  "location": "p_4_manzanita_post",
+  "landmark": "p_4_manzanita_post",
   "meta": {
     "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
     "provider": "Alloc8or",
