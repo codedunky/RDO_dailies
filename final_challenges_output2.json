@@ -1,10 +1,10 @@
 {
   "final_name": [
     {
-      "text": "1 Animal claws sold",
-      "description": "Talons also work for this. Badgers and bears give claws when skinned.\nTake them to either a butchers or Gus to sell.",
+      "text": "5 Blackberries picked",
+      "description": "Go to Mazanita Post, there are some just to the north west of the main building. Then head directly east across the road and into the trees for more. More bushes around the junction to the north as well.",
       "all_descriptions": [
-        "Talons also work for this. Badgers and bears give claws when skinned.\nTake them to either a butchers or Gus to sell."
+        "Go to Mazanita Post, there are some just to the north west of the main building. Then head directly east across the road and into the trees for more. More bushes around the junction to the north as well."
       ],
       "desc_index": 0,
       "desc_loop": "yes",
@@ -12,7 +12,29 @@
       "difficulty": null
     },
     {
-      "text": "1 Hamish Sinclair missions completed",
+      "text": "4 Coyotes skinned",
+      "description": "During the day, circle around Armadillo and you'll probably find some, and at night, around Emerald Ranch, especially south of Joe's hut at 'Osman Grove'",
+      "all_descriptions": [
+        "During the day, circle around Armadillo and you'll probably find some, and at night, around Emerald Ranch, especially south of Joe's hut at 'Osman Grove'"
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "3 Free Roam missions completed",
+      "description": "Look for the orange disc with the waving figure in it on the map.\nFree Roam missions are given out by Alden, Angus, Bonnie MacFarlane, Hector, Hamish Sinclair, Jake & Sadie Adler, Thomas, Sheriff Freeman, Anthony Foreman, Josiah Trelawny, Sean MacGuire, The Boy, Flaco Hernandez, Bray and Tammy Aberdeen, Black Belle, Mama Watson, James Langton, and Shaky.",
+      "all_descriptions": [
+        "Look for the orange disc with the waving figure in it on the map.\nFree Roam missions are given out by Alden, Angus, Bonnie MacFarlane, Hector, Hamish Sinclair, Jake & Sadie Adler, Thomas, Sheriff Freeman, Anthony Foreman, Josiah Trelawny, Sean MacGuire, The Boy, Flaco Hernandez, Bray and Tammy Aberdeen, Black Belle, Mama Watson, James Langton, and Shaky."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "Hairstyle updated",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -21,7 +43,29 @@
       "difficulty": null
     },
     {
-      "text": "2 Horse tonics used",
+      "text": "5 Horses fed",
+      "description": "Doesn't have to be five different horses, you can just feed your own horse five times.",
+      "all_descriptions": [
+        "Doesn't have to be five different horses, you can just feed your own horse five times."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "1 Owls plucked",
+      "description": "Very difficult. In Tall Trees at Tanner's Reach they often perch around Sean's hut or the little cliff above it. Try swapping lobbies a lot. Dusk and dawn seem to improve chances, rather than at night.",
+      "all_descriptions": [
+        "Very difficult. In Tall Trees at Tanner's Reach they often perch around Sean's hut or the little cliff above it. Try swapping lobbies a lot. Dusk and dawn seem to improve chances, rather than at night."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "3 Player kills with a Shotgun in Free Roam Events",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -30,59 +74,7 @@
       "difficulty": null
     },
     {
-      "text": "3 Player kills with a Revolver in Free Roam Events",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
-    },
-    {
-      "text": "3 Player kills with a Rifle in Showdowns",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
-    },
-    {
-      "text": "5 Ram's Head picked",
-      "description": "Travel to Annesburg, then ride up the railway line to Brandywine Drop, cross the bridge, then cross the next tiny trestle, and head left into the undergrowth. Rams Head patches in this area, and also if you head over the tracks towards the waterfall, look just east of the same contour line. [#2]",
-      "all_descriptions": [
-        "Go to Cumberland Forest, just below the letter \u2018C\u2019 at the beginning of the word Cumberland on the map.\nWalk in a straight line from the Six Point Cabin path to find one, then go north, near a dark grey rock. There is another patch where the letter \u2018M\u2019 is too. [#1]",
-        "Travel to Annesburg, then ride up the railway line to Brandywine Drop, cross the bridge, then cross the next tiny trestle, and head left into the undergrowth. Rams Head patches in this area, and also if you head over the tracks towards the waterfall, look just east of the same contour line. [#2]"
-      ],
-      "desc_index": 1,
-      "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
-    },
-    {
-      "text": "3 Sockeye Salmon caught",
-      "description": "Go to Cumberland Falls, west of Valentine, and fish in the pool below the falls. Usually a few Salmon in there to catch.",
-      "all_descriptions": [
-        "Go to Cumberland Falls, west of Valentine, and fish in the pool below the falls. Usually a few Salmon in there to catch."
-      ],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
-    },
-    {
-      "text": "1 Bounties brought in from West Elizabeth posters",
-      "description": "Strawberry, Blackwater, Wallace Station, & Riggs Station",
-      "all_descriptions": [
-        "Strawberry, Blackwater, Wallace Station, & Riggs Station"
-      ],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "easy"
-    },
-    {
-      "text": "1 Bounty targets brought in",
+      "text": "Bounty hunt completed with 3 min or more left",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -91,7 +83,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "1 More than one bounty target brought in at once",
+      "text": "1 Bounty targets hogtied with a Reinforced Lasso",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -100,12 +92,19 @@
       "difficulty": "easy"
     },
     {
-      "text": "Bounty completed without killing an enemy or bounty target",
-      "description": "Risky, usually bugged and won't register [#1]",
+      "text": "1 Bounty targets looted",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "easy"
+    },
+    {
+      "text": "2 Bounties brought in from Lemoyne posters",
+      "description": "Rhodes and Saint Denis",
       "all_descriptions": [
-        "Risky, usually bugged and won't register [#1]",
-        "Etta Doyle bounty can work but isn't reliable [#2]",
-        "Bard's Crossing train track bounty might work [#3]"
+        "Rhodes and Saint Denis"
       ],
       "desc_index": 0,
       "desc_loop": "yes",
@@ -113,7 +112,7 @@
       "difficulty": "med"
     },
     {
-      "text": "2 Bounty targets looted",
+      "text": "2 Bounty targets brought in",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -122,29 +121,16 @@
       "difficulty": "med"
     },
     {
-      "text": "2 Eagle Eye used to track a bounty target",
-      "description": "Can shoot with tracking arrow and then track them",
-      "all_descriptions": [
-        "Can shoot with tracking arrow and then track them"
-      ],
+      "text": "2 More than one bounty target brought in at once",
+      "description": null,
+      "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "bounty_hunter",
       "difficulty": "med"
     },
     {
-      "text": "2 Bounties brought in from West Elizabeth posters",
-      "description": "Strawberry, Blackwater, Wallace Station, & Riggs Station",
-      "all_descriptions": [
-        "Strawberry, Blackwater, Wallace Station, & Riggs Station"
-      ],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "hard"
-    },
-    {
-      "text": "3 Bounty targets brought in",
+      "text": "Bounty hunt completed with 5 min or more left",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -153,7 +139,7 @@
       "difficulty": "hard"
     },
     {
-      "text": "3 Bounty targets hogtied with a Reinforced Lasso",
+      "text": "2 Bounty targets tagged with Tracking Arrow",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -162,7 +148,16 @@
       "difficulty": "hard"
     },
     {
-      "text": "5 Carcasses donated within 10 minutes",
+      "text": "3 Living bounty targets in a photograph",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "hard"
+    },
+    {
+      "text": "5 Donations to Cripps",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -171,7 +166,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "1 Goods sold to local buyer",
+      "text": "Goods sold to distant buyer",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -180,42 +175,13 @@
       "difficulty": "easy"
     },
     {
-      "text": "2 Large animal carcasses donated to Cripps",
-      "description": "Deer, Pronghorn, Bighorn Ram, Panther, Cougar, Wolf",
-      "all_descriptions": [
-        "Deer, Pronghorn, Bighorn Ram, Panther, Cougar, Wolf"
-      ],
+      "text": "$50.00 Money made from trading",
+      "description": null,
+      "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "trader",
       "difficulty": "easy"
-    },
-    {
-      "text": "10 Carcasses donated within 10 minutes",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "med"
-    },
-    {
-      "text": "10 Donations to Cripps",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "med"
-    },
-    {
-      "text": "1 Resupply completed with 4 mins left",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "med"
     },
     {
       "text": "2 Goods sold to distant buyer",
@@ -224,22 +190,46 @@
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "trader",
-      "difficulty": "hard"
+      "difficulty": "med"
     },
     {
-      "text": "2 Goods sold to local buyer",
+      "text": "4 Large animal carcasses donated to Cripps",
+      "description": "Deer, Pronghorn, Bighorn Ram, Panther, Cougar, Wolf",
+      "all_descriptions": [
+        "Deer, Pronghorn, Bighorn Ram, Panther, Cougar, Wolf"
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "med"
+    },
+    {
+      "text": "$100.00 Money made from trading",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "trader",
+      "difficulty": "med"
+    },
+    {
+      "text": "15838 Distance Delivery Wagon traveled on mission",
+      "description": "Check challenge total is updating as you set off [#2]",
+      "all_descriptions": [
+        "Use a Change Appearance solo lobby so it registers [#1]",
+        "Check challenge total is updating as you set off [#2]",
+        "Solo lobbies more reliable, check counter at start [#3]"
+      ],
+      "desc_index": 1,
+      "desc_loop": "yes",
+      "category": "trader",
       "difficulty": "hard"
     },
     {
-      "text": "7 Medium animal carcasses donated to Cripps",
-      "description": "Emerald Ranch, for sheep, turkeys, & foxes.\nRacoons, Geese, Cranes, Herons, & Pelicans",
+      "text": "6 Large animal carcasses donated to Cripps",
+      "description": "Deer, Pronghorn, Bighorn Ram, Panther, Cougar, Wolf",
       "all_descriptions": [
-        "Emerald Ranch, for sheep, turkeys, & foxes.\nRacoons, Geese, Cranes, Herons, & Pelicans"
+        "Deer, Pronghorn, Bighorn Ram, Panther, Cougar, Wolf"
       ],
       "desc_index": 0,
       "desc_loop": "yes",
@@ -247,7 +237,16 @@
       "difficulty": "hard"
     },
     {
-      "text": "1 Antique Alcohol drunk",
+      "text": "10 Small animal carcasses donated to Cripps",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "hard"
+    },
+    {
+      "text": "1 American Wild Flowers found",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -256,7 +255,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "1 Coins found",
+      "text": "1 Collectibles found with a Shovel",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -265,7 +264,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "1 Family Heirlooms found",
+      "text": "1 Collectibles sold to Madam Nazar",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -274,7 +273,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "2 American Wild Flowers found",
+      "text": "1 Collectibles found with a Metal Detector",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -283,7 +282,7 @@
       "difficulty": "med"
     },
     {
-      "text": "4 Collectibles collected",
+      "text": "2 Collectibles sold to Madam Nazar",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -292,7 +291,7 @@
       "difficulty": "med"
     },
     {
-      "text": "2 Collectibles found with a Shovel",
+      "text": "2 Fossils found",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -310,21 +309,7 @@
       "difficulty": "hard"
     },
     {
-      "text": "5 Bird Eggs found",
-      "description": "Duck, goose or loon eggs can be collected in multiples [#4]",
-      "all_descriptions": [
-        "Keep less than 5 duck eggs in your satchel, and you can then pick 5 of them at once [#1]",
-        "You can pick up to 5 duck eggs in one go [#2]",
-        "Carry 5 duck eggs, and you can then pick another 5 [#3]",
-        "Duck, goose or loon eggs can be collected in multiples [#4]"
-      ],
-      "desc_index": 3,
-      "desc_loop": "yes",
-      "category": "collector",
-      "difficulty": "hard"
-    },
-    {
-      "text": "3 Tarot Cards found",
+      "text": "2 Collectibles found with a Metal Detector",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -333,13 +318,13 @@
       "difficulty": "hard"
     },
     {
-      "text": "Completed regular or better moonshine recipe",
+      "text": "3 Fossils found",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
-      "category": "moonshiner",
-      "difficulty": "easy"
+      "category": "collector",
+      "difficulty": "hard"
     },
     {
       "text": "Drank own weak or higher strength moonshine",
@@ -351,7 +336,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "$50.00 Money made from moonshine sold",
+      "text": "1 Moonshine Story Mission completed",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -360,7 +345,16 @@
       "difficulty": "easy"
     },
     {
-      "text": "Drank own average or higher strength moonshine",
+      "text": "1 Moonshine served to other players at a bar",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Crafted Toxic Moonshine",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -369,7 +363,7 @@
       "difficulty": "med"
     },
     {
-      "text": "2 Moonshine Bootlegger Missions completed",
+      "text": "Moonshine sold with 4 mins left",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -378,7 +372,7 @@
       "difficulty": "med"
     },
     {
-      "text": "2 Moonshine of any type sold to a buyer",
+      "text": "Played with a band for 1 min",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -387,7 +381,18 @@
       "difficulty": "med"
     },
     {
-      "text": "4827 Distance Moonshine Wagon traveled on mission",
+      "text": "2 Moonshine Bar - Drunken player interaction",
+      "description": "If solo, use Y then B button combo as entering shack",
+      "all_descriptions": [
+        "If solo, use Y then B button combo as entering shack"
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Moonshine sold with 5 mins left",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -396,16 +401,7 @@
       "difficulty": "hard"
     },
     {
-      "text": "3 Moonshine Bootlegger Missions completed",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "moonshiner",
-      "difficulty": "hard"
-    },
-    {
-      "text": "2 Moonshine Story Mission completed",
+      "text": "Moonshine sold with at least 18 bottles intact",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -441,7 +437,16 @@
       "difficulty": "easy"
     },
     {
-      "text": "1 Hardy Tonics used when too hot or cold",
+      "text": "1 Blending Tonics crafted or used",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "med"
+    },
+    {
+      "text": "5 Crafted or cooked at Wilderness Camp",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -451,15 +456,6 @@
     },
     {
       "text": "1 Legendary Animals photographed",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "naturalist",
-      "difficulty": "med"
-    },
-    {
-      "text": "1 Sedated animals revived",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -486,7 +482,7 @@
       "difficulty": "hard"
     },
     {
-      "text": "2 Hardy Tonics used when too hot or cold",
+      "text": "2 Sedated animals revived",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
