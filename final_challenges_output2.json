@@ -1,10 +1,10 @@
 {
   "final_name": [
     {
-      "text": "5 Fresh produce eaten",
-      "description": "Apples, Pears, Carrots, Peaches, Beets and Corn should all count for this one. Things like berries and mushrooms don't work.",
+      "text": "3 Beavers skinned",
+      "description": "From Strawberry, head to Owanjia Dam, there's usually a beaver by the water as you approach. Then just keep going around the shoreline for more. Change lobbies to get more spawns. They're timid, so Blending Tonics are useful. Varmint Rifle and a head shot for clean kills.",
       "all_descriptions": [
-        "Apples, Pears, Carrots, Peaches, Beets and Corn should all count for this one. Things like berries and mushrooms don't work."
+        "From Strawberry, head to Owanjia Dam, there's usually a beaver by the water as you approach. Then just keep going around the shoreline for more. Change lobbies to get more spawns. They're timid, so Blending Tonics are useful. Varmint Rifle and a head shot for clean kills."
       ],
       "desc_index": 0,
       "desc_loop": "yes",
@@ -12,11 +12,10 @@
       "difficulty": null
     },
     {
-      "text": "5 Non-player enemies killed from cover",
-      "description": "Go to Thieves Landing and kill Del Lobos. You can use the trees on the approach to hide behind. [#1]",
+      "text": "3 Cooked Seasoned Big Game",
+      "description": "Big game can be got from Alligators, Wolves, Cougars, Panthers, Black Bears and Grizzly Bears.",
       "all_descriptions": [
-        "Go to Thieves Landing and kill Del Lobos. You can use the trees on the approach to hide behind. [#1]",
-        "Try holding off lawmen from inside the saloon at Valentine, you can hide by the door and pick them off as they ride up. [#2]"
+        "Big game can be got from Alligators, Wolves, Cougars, Panthers, Black Bears and Grizzly Bears."
       ],
       "desc_index": 0,
       "desc_loop": "yes",
@@ -24,56 +23,99 @@
       "difficulty": null
     },
     {
-      "text": "3 Player kills with a Shotgun in Showdowns",
+      "text": "4 Deer skinned",
+      "description": "Deer are fairly common over most of New Hanover, West Elizabeth and Lemoyne. Scarlett Meadows, Big Valley and to the East of Emerald station are all good spots too. Please note that Pronghorns do not count. It has to be Whitetails. A Whitetail Buck will count though.",
+      "all_descriptions": [
+        "Deer are fairly common over most of New Hanover, West Elizabeth and Lemoyne. Scarlett Meadows, Big Valley and to the East of Emerald station are all good spots too. Please note that Pronghorns do not count. It has to be Whitetails. A Whitetail Buck will count though."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "Helped someone in need",
+      "description": "At Colter in an empty lobby you'll often rescue a woman who needs to go to Adler Ranch.\nJust above the 'S' in Saint Denis is often the start of a rescue mission, as is just below the 'D' in Denis.\nOn the road out of Blackwater before Quakers Cove there's often a woman offering a rescue.",
+      "all_descriptions": [
+        "At Colter in an empty lobby you'll often rescue a woman who needs to go to Adler Ranch.\nJust above the 'S' in Saint Denis is often the start of a rescue mission, as is just below the 'D' in Denis.\nOn the road out of Blackwater before Quakers Cove there's often a woman offering a rescue."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "Jumped onto a horse from a 3m height",
+      "description": "Go to Blackwater and climb the first ladder at the back of the musical theatre, then jump on to your horse below. [#1]",
+      "all_descriptions": [
+        "Go to Blackwater and climb the first ladder at the back of the musical theatre, then jump on to your horse below. [#1]",
+        "Climb on to the stable roof at Tumbleweed. You need to just get on to the highest section of the roof before you jump, but don't go all the way to the top. [#2]",
+        "Go to Rathskeller Fork, north of Tumbleweed. Jump off from the apex off the barn roof to complete. [#3]"
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "3 Player kills with melee in Showdowns",
+      "description": "If you have a willing friend, an Elimination Showdown is a good bet, you can just rugby tackle and subdue them. Otherwise this can be very tough.",
+      "all_descriptions": [
+        "If you have a willing friend, an Elimination Showdown is a good bet, you can just rugby tackle and subdue them. Otherwise this can be very tough."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "Successfully fended off an ambush",
+      "description": "Head west out of MacFarlane's Ranch, and keep going west along the road with Pike's Basin on the right. There's often an ambush there when in a solo lobby. [#2]",
+      "all_descriptions": [
+        "The road through Black Bone Forest, at the western side of Big Valley is usually a pretty reliable ambush. Much more likely in a solo lobby though. [#1]",
+        "Head west out of MacFarlane's Ranch, and keep going west along the road with Pike's Basin on the right. There's often an ambush there when in a solo lobby. [#2]",
+        "The loop of roads beside the Dakota River as it travels below Painted Sky near Valentine has a number of ambush spots. Try a solo lobby. [#3]",
+        "Go to Lagras, head south, then turn west past Hagen Orchards towards the lake that looks like a boot at Bayall Edge. That road west of the lake often has an ambush. Solo lobby works best. [#4]",
+        "Head to Wapiti, then set a marker for 'Chez Porter' just west of Whinyard Strait. Stay there for a moment or two, and then head back to Wapiti, there's often an ambush as you cross the wooden bridge. [#5]"
+      ],
+      "desc_index": 1,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "1 Bounty targets lassoed from horseback",
+      "description": "Lasso the same target three times [#1]",
+      "all_descriptions": [
+        "Lasso the same target three times [#1]",
+        "You can lasso the same target over and over [#2]",
+        "Lasso, release, lasso, release, lasso the same target [#3]"
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Easy ($) bounty mission completed",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
+      "category": "bounty_hunter",
+      "difficulty": "easy"
     },
     {
-      "text": "5 Redfin Pickerel caught",
-      "description": "Fast travel to Blackwater, and just north of the town hall building is a little bay at the mouth of the Upper Montana River. This is the place to catch them.\nA sunny day is best, with bread bait or a special spinner.",
-      "all_descriptions": [
-        "Fast travel to Blackwater, and just north of the town hall building is a little bay at the mouth of the Upper Montana River. This is the place to catch them.\nA sunny day is best, with bread bait or a special spinner."
-      ],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
-    },
-    {
-      "text": "Self portraits taken",
+      "text": "1 Living bounty targets in a photograph",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
+      "category": "bounty_hunter",
+      "difficulty": "easy"
     },
     {
-      "text": "1 Telegram missions completed",
-      "description": "Go to Van Horn, then start the 'A Tough Businness' Telegram mission called 'Good and Dead'. Go immediately to the market and try the North and West entrances for the suspect, otherwise he's inside the market. Kill, loot and escape. Stealthy is best.",
-      "all_descriptions": [
-        "Go to Van Horn, then start the 'A Tough Businness' Telegram mission called 'Good and Dead'. Go immediately to the market and try the North and West entrances for the suspect, otherwise he's inside the market. Kill, loot and escape. Stealthy is best."
-      ],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
-    },
-    {
-      "text": "1 Waves completed in Call to Arms",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
-    },
-    {
-      "text": "1 Bounties brought in from New Hanover posters",
+      "text": "2 Bounties brought in from New Hanover posters",
       "description": "Valentine, Emerald Station, Van Horn and Annesburg",
       "all_descriptions": [
         "Valentine, Emerald Station, Van Horn and Annesburg"
@@ -81,29 +123,25 @@
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "bounty_hunter",
-      "difficulty": "easy"
+      "difficulty": "med"
     },
     {
-      "text": "Bounty completed without killing an enemy or bounty target",
-      "description": "Risky, usually bugged and won't register [#1]",
-      "all_descriptions": [
-        "Risky, usually bugged and won't register [#1]",
-        "Etta Doyle bounty can work but isn't reliable [#2]",
-        "Bard's Crossing train track bounty might work [#3]"
-      ],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "easy"
-    },
-    {
-      "text": "1 Bounty targets looted",
+      "text": "Bounty hunt completed with 4 min or more left",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "bounty_hunter",
-      "difficulty": "easy"
+      "difficulty": "med"
+    },
+    {
+      "text": "1 Bounty targets tagged with Tracking Arrow",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "med"
     },
     {
       "text": "2 Bounties brought in from New Austin posters",
@@ -114,32 +152,23 @@
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "bounty_hunter",
-      "difficulty": "med"
+      "difficulty": "hard"
     },
     {
-      "text": "2 Bounty targets brought in",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "med"
-    },
-    {
-      "text": "2 Bounty targets lassoed from horseback",
-      "description": "Lasso, release, lasso, release, lasso the same target [#3]",
+      "text": "Bounty completed without killing an enemy or bounty target",
+      "description": "Etta Doyle bounty can work but isn't reliable [#2]",
       "all_descriptions": [
-        "Lasso the same target three times [#1]",
-        "You can lasso the same target over and over [#2]",
-        "Lasso, release, lasso, release, lasso the same target [#3]"
+        "Risky, usually bugged and won't register [#1]",
+        "Etta Doyle bounty can work but isn't reliable [#2]",
+        "Bard's Crossing train track bounty might work [#3]"
       ],
-      "desc_index": 2,
+      "desc_index": 1,
       "desc_loop": "yes",
       "category": "bounty_hunter",
-      "difficulty": "med"
+      "difficulty": "hard"
     },
     {
-      "text": "2 Bounties completed within one real-world hour",
+      "text": "3 Bounty targets hogtied with a Reinforced Lasso",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -148,27 +177,30 @@
       "difficulty": "hard"
     },
     {
-      "text": "3 Eagle Eye used to track a bounty target",
-      "description": "Can shoot with tracking arrow and then track them",
+      "text": "2 Perfect carcasses donated to Cripps",
+      "description": "Perfect pelts don't count. Try Emerald Ranch sheep.",
       "all_descriptions": [
-        "Can shoot with tracking arrow and then track them"
+        "Perfect pelts don't count. Try Emerald Ranch sheep."
       ],
       "desc_index": 0,
       "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "hard"
+      "category": "trader",
+      "difficulty": "easy"
     },
     {
-      "text": "1 Hard ($$$) or Legendary Bounty mission completed",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
+      "text": "1 Resupply missions completed",
+      "description": "Best to be in a solo lobby so it registers [#2]",
+      "all_descriptions": [
+        "Buggy, often won't register in public lobbies [#1]",
+        "Best to be in a solo lobby so it registers [#2]"
+      ],
+      "desc_index": 1,
       "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "hard"
+      "category": "trader",
+      "difficulty": "easy"
     },
     {
-      "text": "1 Camp Stews eaten",
+      "text": "3 Small animal carcasses donated to Cripps",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -177,22 +209,17 @@
       "difficulty": "easy"
     },
     {
-      "text": "Goods sold to distant buyer",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
+      "text": "10559 Distance Delivery Wagon traveled on mission",
+      "description": "Check challenge total is updating as you set off [#2]",
+      "all_descriptions": [
+        "Use a Change Appearance solo lobby so it registers [#1]",
+        "Check challenge total is updating as you set off [#2]",
+        "Solo lobbies more reliable, check counter at start [#3]"
+      ],
+      "desc_index": 1,
       "desc_loop": "yes",
       "category": "trader",
-      "difficulty": "easy"
-    },
-    {
-      "text": "1 Resupply completed with 3 mins left",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "easy"
+      "difficulty": "med"
     },
     {
       "text": "2 Donated deadly predator carcass or skin",
@@ -204,47 +231,30 @@
       "difficulty": "med"
     },
     {
-      "text": "6 Small animal carcasses donated to Cripps",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "med"
-    },
-    {
-      "text": "1 Superior Quality Camp Stew recipes completed",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "med"
-    },
-    {
-      "text": "1 Cripps Special Camp Stew recipes completed",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "hard"
-    },
-    {
-      "text": "2 Goods sold to local buyer",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "hard"
-    },
-    {
-      "text": "2 Resupply missions completed",
-      "description": "Buggy, often won't register in public lobbies [#1]",
+      "text": "5 Medium animal carcasses donated to Cripps",
+      "description": "Emerald Ranch, for sheep, turkeys, & foxes.\nRacoons, Geese, Cranes, Herons, & Pelicans",
       "all_descriptions": [
-        "Buggy, often won't register in public lobbies [#1]",
-        "Best to be in a solo lobby so it registers [#2]"
+        "Emerald Ranch, for sheep, turkeys, & foxes.\nRacoons, Geese, Cranes, Herons, & Pelicans"
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "med"
+    },
+    {
+      "text": "20 Carcasses donated within 10 minutes",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "hard"
+    },
+    {
+      "text": "7 Medium animal carcasses donated to Cripps",
+      "description": "Emerald Ranch, for sheep, turkeys, & foxes.\nRacoons, Geese, Cranes, Herons, & Pelicans",
+      "all_descriptions": [
+        "Emerald Ranch, for sheep, turkeys, & foxes.\nRacoons, Geese, Cranes, Herons, & Pelicans"
       ],
       "desc_index": 0,
       "desc_loop": "yes",
@@ -252,13 +262,74 @@
       "difficulty": "hard"
     },
     {
-      "text": "1 Antique Alcohol Bottles found",
+      "text": "6 Perfect carcasses donated to Cripps",
+      "description": "Perfect pelts don't count. Try Emerald Ranch sheep.",
+      "all_descriptions": [
+        "Perfect pelts don't count. Try Emerald Ranch sheep."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "hard"
+    },
+    {
+      "text": "1 Bird Eggs found",
+      "description": "Duck, goose or loon eggs can be collected in multiples [#4]",
+      "all_descriptions": [
+        "Keep less than 5 duck eggs in your satchel, and you can then pick 5 of them at once [#1]",
+        "You can pick up to 5 duck eggs in one go [#2]",
+        "Carry 5 duck eggs, and you can then pick another 5 [#3]",
+        "Duck, goose or loon eggs can be collected in multiples [#4]"
+      ],
+      "desc_index": 3,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "easy"
+    },
+    {
+      "text": "2 Collectibles collected",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "collector",
       "difficulty": "easy"
+    },
+    {
+      "text": "1 Family Heirlooms found",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "easy"
+    },
+    {
+      "text": "2 Arrowheads found",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "med"
+    },
+    {
+      "text": "2 Collector Maps used",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "med"
+    },
+    {
+      "text": "2 Tarot Cards found",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "med"
     },
     {
       "text": "1 Antique Alcohol drunk",
@@ -267,63 +338,18 @@
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "collector",
-      "difficulty": "easy"
-    },
-    {
-      "text": "1 Lost Jewelry found",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "collector",
-      "difficulty": "easy"
-    },
-    {
-      "text": "2 Collectibles found with a Shovel",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "collector",
-      "difficulty": "med"
-    },
-    {
-      "text": "2 Collectibles looted from non-player enemies",
-      "description": "Gold Teeth count for this [#1]",
-      "all_descriptions": [
-        "Gold Teeth count for this [#1]",
-        "Moonshiner roadblock NPC's usually carry alchohol [#2]",
-        "Poacher NPC's usually carry collectables [#3]",
-        "Trade run end fight NPC's often have some [#4]"
-      ],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "collector",
-      "difficulty": "med"
-    },
-    {
-      "text": "2 Fossils found",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "collector",
-      "difficulty": "med"
-    },
-    {
-      "text": "3 Coins found",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "collector",
       "difficulty": "hard"
     },
     {
-      "text": "3 Collectibles found with a Shovel",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
+      "text": "5 Bird Eggs found",
+      "description": "Duck, goose or loon eggs can be collected in multiples [#4]",
+      "all_descriptions": [
+        "Keep less than 5 duck eggs in your satchel, and you can then pick 5 of them at once [#1]",
+        "You can pick up to 5 duck eggs in one go [#2]",
+        "Carry 5 duck eggs, and you can then pick another 5 [#3]",
+        "Duck, goose or loon eggs can be collected in multiples [#4]"
+      ],
+      "desc_index": 3,
       "desc_loop": "yes",
       "category": "collector",
       "difficulty": "hard"
@@ -338,48 +364,39 @@
       "difficulty": "hard"
     },
     {
+      "text": "1609 Distance Moonshine Wagon traveled on mission",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Drank own weak or higher strength moonshine",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "easy"
+    },
+    {
+      "text": "1 Moonshine Bootlegger Missions completed",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "easy"
+    },
+    {
       "text": "Moonshine Bar - Changed d\u00e9cor",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "moonshiner",
-      "difficulty": "easy"
-    },
-    {
-      "text": "1 Moonshine Story Mission completed",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "moonshiner",
-      "difficulty": "easy"
-    },
-    {
-      "text": "Moonshine sold with 3 mins left",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "moonshiner",
-      "difficulty": "easy"
-    },
-    {
-      "text": "Crafted Toxic Moonshine",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "moonshiner",
-      "difficulty": "med"
-    },
-    {
-      "text": "Moonshine Bar - Danced for 1 min",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "moonshiner",
       "difficulty": "med"
     },
     {
@@ -392,7 +409,16 @@
       "difficulty": "med"
     },
     {
-      "text": "Completed special moonshine recipe",
+      "text": "Moonshine sold with 4 mins left",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "med"
+    },
+    {
+      "text": "Moonshine Bar - Danced for 2 mins",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -401,7 +427,7 @@
       "difficulty": "hard"
     },
     {
-      "text": "4827 Distance Moonshine Wagon traveled on mission",
+      "text": "2 Moonshine Story Mission completed",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -410,7 +436,7 @@
       "difficulty": "hard"
     },
     {
-      "text": "Drank own strong moonshine",
+      "text": "2 Moonshine of preferred type sold to a buyer",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -446,7 +472,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "5 Crafted or cooked at Wilderness Camp",
+      "text": "1 Blending Tonics crafted or used",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -464,7 +490,7 @@
       "difficulty": "med"
     },
     {
-      "text": "1 Hardy Tonics used when too hot or cold",
+      "text": "1 Legendary Animals found using pheromones",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -473,7 +499,7 @@
       "difficulty": "med"
     },
     {
-      "text": "2 Legendary Animals found using pheromones",
+      "text": "7 Crafted or cooked at Wilderness Camp",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
