@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="./html/images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="static/css/style.css" />
+    <title>RDO Daily Challenges</title>
+</head>
+<body>
+    <div class="main-container">
+        <!-- COLUMN 1: GENERAL CHALLENGES -->
+        <div class="left-column">
+            <div class="banner-container">
+                <div class="banner-image-wrapper">
+                    <img src="HTML/images/RDO_Banner_Wide.jpg" alt="Banner" class="banner-image"/>
+                    <img id="pauseBtn" src="HTML/images/RDO_PauseStopwatch.png" alt="Pause RDO" title="Pause RDO"
+                         style="position:absolute; top:0px; left:10px; width:50px; cursor:pointer;" />                    
+                    <div class="banner-text-overlay">
+                        <h1 class="banner-title">Daily Challenges</h1>
+                        <div class="banner-date">{{ human_readable_date }}</div>
+                    </div>
+                    <div class="challenge-counters">
+                        <div>General Challenges <span id="general-counter">(0/7)</span></div>
+                        <div>Role Challenges <span id="role-counter">(0/9)</span></div>
+                    </div>
+                    <div class="rdo-clock" id="rdo-clock">
+                        --:--
+                    </div>
+                </div>
+            </div>
+
+            <div class="general-challenges-container">
+                {{ html_general | safe }}
+            </div>
+        </div>
+
+        <!-- COLUMN 2: ROLE CHALLENGES -->
+        <div class="sidebar-container" id="roles-container">
+            {{ selected_html_roles | safe }}
+            
+            <hr class="api-credit-separator" />
+            
+            <div class="api-credit">
+                <span class="api-label">Data provided by:&nbsp;</span>
+                <a href="https://rdo.gg/api" target="_blank" class="api-link">rdo.gg API</a>
+            </div>
+        </div>
+
+        <!-- COLUMN 3: BONUS INFO -->
+        <div class="bonus-container" id="bonus-container">
+            <h3 class="stats-heading" style="color: #666666; margin-bottom: 1px; padding-bottom: 0px;">Bonus Info</h3>
+            
+            <div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: left; color: #E0E0E0; font-family: sans-serif;">
+                <p class="stats-text" id="streak-container" style="margin-bottom: 0px; display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <span style="display: flex; align-items: center; white-space: nowrap;">
+                        <span style="font-weight: 500;">Daily Challenge Streak:</span>
+                        <span id="streak-controls">
+                            <span id="streak-down">▼</span><span id="streak-up">▲</span>
+                        </span>
+                    </span>
+                    <span id="current-streak" style="color: #FFC107; text-align: right;">0 Days</span>
+                </p>
+
+                <p class="stats-text" style="margin-bottom: 0px; display: flex; justify-content: space-between; width: 100%;">
+                    <span style="font-weight: 500;">Gold Per Challenge:</span>
+                    <span id="gold-per-challenge" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
+                </p>
+                
+                <p class="stats-text" style="margin-bottom: 0px; display: flex; justify-content: space-between; width: 100%;">
+                    <span style="font-weight: 500;">Completion Reward:</span>
+                    <span id="completion-bonus-reward" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
+                </p>
+                
+                <p class="stats-text" style="margin-bottom: 0px; display: flex; justify-content: space-between; width: 100%;">
+                    <span style="font-weight: 500;">Daily Gold Total:</span>
+                    <span id="daily-gold-total" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
+                </p>
+                
+                <p class="stats-text" style="margin-bottom: 0px; display: flex; justify-content: space-between; width: 100%;">
+                    <span style="font-weight: 500;">Streak Week Gold Total:</span>
+                    <span id="cycle-gold-total" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
+                </p>
+                
+                <p class="stats-text" style="display: flex; justify-content: space-between; width: 100%;">
+                    <span style="font-weight: 500;">Streak Gold Total:</span>
+                    <span id="streak-gold-total" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
+                </p>
+            </div>
+            
+            <!-- Gold Log Chart Container -->
+            <h3 id="gold-log-heading" class="stats-heading" style="color: #666666; margin-top: 15px; margin-bottom: 1px; padding-bottom: 0px; cursor: pointer; user-select: none; transition: color 0.2s;">
+                GOLD LOG (LAST 28 DAYS)
+            </h3>
+
+            <div id="gold-log-chart-container">
+                <!-- Bars injected here by JavaScript -->
+            </div>
+            <div id="chart-info-display" class="chart-info-display">&nbsp;</div>
+
+            <!-- NAZAR LOCATION SECTION -->
+            <h3 class="stats-heading" style="color: #666666; margin-top: 30px; margin-bottom: 1px; padding-bottom: 0px;">Where Is Madam Nazar Today?</h3>            
+            <div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: center;">
+                <div style="color: #FFC107; font-family: 'RDOFont', sans-serif; font-size: 1.4rem; letter-spacing: 0.05em; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); margin-bottom: 2px; line-height: 1.1;">
+                    {{ nazar.location_text }}
+                </div>
+                
+                <img src="{{ nazar.placeholder_path }}" 
+                     id="nazar-map-img"
+                     alt="Nazar Location Map" 
+                     data-final-target="{{ nazar.final_img_src }}"
+                     data-standard="{{ nazar.final_img_src }}"
+                     data-zoom="{{ nazar.zoom_src }}"
+                     data-photo="{{ nazar.photo_src }}"
+                     data-has-zoom="{{ nazar.has_zoom }}"
+                     onclick="toggleNazarZoom(this)"
+                     style="width: 100%; height: auto; border-radius: 4px; border: 1px solid #333; display: block; cursor: {{ nazar.cursor_style }};" 
+                />
+
+                <div style="font-size: 0.7rem; color: #777; margin-top: 1px; display: {{ 'block' if nazar.has_zoom == 'true' else 'none' }};">
+                    (Click map to zoom)
+                </div>
+            </div>
+            
+            <!-- UPCOMING EVENTS SECTION -->
+            <h3 class="stats-heading" id="events-heading-container" style="color: #666666; margin-top: 20px; margin-bottom: 1px; padding-bottom: 0px; display: flex; justify-content: space-between; align-items: center;">
+                <span>Upcoming Events</span>
+                <span id="event-offset-controls">
+                    <span id="event-offset-display">0s</span>
+                    <span id="event-offset-down" title="Start events earlier">▼</span><span id="event-offset-up" title="Start events later">▲</span>
+                </span>
+            </h3>
+            <div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; min-height: 85px;">
+                <div id="upcoming-events-list">
+                    <div style="text-align:center; padding:10px; color:#555; font-size:0.8rem;">Loading Events...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statcounter code -->
+    <script type="text/javascript">
+    var sc_project=13147326; 
+    var sc_invisible=1; 
+    var sc_security="51162dbd"; 
+    </script>
+    <script type="text/javascript" src="https://www.statcounter.com/counter/counter.js" async></script>
+    <noscript><div class="statcounter"><a title="Web Analytics" href="https://statcounter.com/" target="_blank"><img class="statcounter" src="https://c.statcounter.com/13147326/0/51162dbd/1/" alt="Web Analytics" referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+
+    <!-- Pass Python runtime variables to JavaScript cleanly -->
+    <script>
+      window.RDO_CONFIG = {
+        streakOverride: {{ manual_streak }},
+        challengeTimestamp: {{ start_timestamp }},
+        enableDebug: {{ 'true' if enable_js_debug else 'false' }},
+        rawEventsData: {{ events_json | safe }}
+      };
+    </script>
+    <script src="static/js/app.js"></script>
+</body>
+</html>

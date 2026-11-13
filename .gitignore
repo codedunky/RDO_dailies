@@ -1,4 +1,16 @@
-/OLD
-/jsonFiles/indexJsonBackups
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+
+# Local environment / IDE
+.vscode/
+.idea/
+*.venv
+venv/
+
+# Temporary / OS files
+Thumbs.db
+.DS_Store
+# Local daily challenge backups
+jsonFiles/indexJsonBackups/

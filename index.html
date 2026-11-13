@@ -1,948 +1,14 @@
-
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="./html/images/favicon.ico" type="image/x-icon" />
-    <style>
-        /* === Global styles === */
-        body {
-          margin: 0;
-          padding: 0;
-          background-color: #000;
-          display: flex;
-          flex-direction: row;
-          justify-content: flex-start;
-          align-items: flex-start;
-          font-family: Arial, sans-serif;
-          gap: 10px;
-          flex-wrap: wrap;
-        }
-
-        @font-face {
-          font-family: 'RDOFont';
-          src: url('./Fonts/RDO_chinese_rocks_rg.otf') format('opentype');
-          font-weight: normal;
-          font-style: normal;
-        }
-        @font-face {
-          font-family: 'hapna';
-          src: url('./Fonts/hapna.woff2') format('woff2');
-          font-weight: normal;
-          font-style: normal;
-        }
-
-        /* === Layout containers === */
-        .page-container {
-          display: flex;
-          flex-direction: column;
-          min-height: 100vh;
-        }
-        .main-container {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: flex-start;
-          align-items: flex-start;
-          gap: 10px;
-          margin: 0;
-          padding: 0;
-        }
-
-        .left-column {
-          display: flex;
-          flex-direction: column;
-          max-width: 850px;
-          width: 100%;
-        }
-
-        .sidebar-container {
-          display: block;
-          width: 450px;
-          background-color: #111;
-          color: #eee;
-          /*border: 2px solid orange;*/
-          padding: 15px;
-          box-sizing: border-box;
-          font-family: Arial, sans-serif;
-          overflow: visible; /* allow images to stick outside */
-          /* margin-left: -10px;shift left */
-        }
-        
-        
-        /* COLUMN 3: BONUS INFO - Base styles */
-        .bonus-container {
-            padding: 7px;
-            background-color: #111; /*Dark grey background*/
-            display: flex;
-            flex-direction: column;
-            
-            /* Fixed width for Desktop (3-column layout) */
-            width: 250px; 
-            min-width: 250px; 
-            
-            /* We remove max-width here to let flexbox handle it normally in row mode */
-        }
-        
-
-        .stats-heading {
-            font-family: 'RDOFont', sans-serif;
-            font-size: 1.3rem;
-            margin-top: 0;
-            margin-bottom: 5px;
-            border-bottom: 2px solid #555;
-            padding-bottom: 5px;
-            color: #666666; /* PRESERVED: Keeping the original color */
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-            
-        }
-        
-        .stats-text {
-            font-family: 'hapna', sans-serif; /* Example font */
-            font-size: .9rem;
-            color: #aaa;
-            white-space: pre-wrap; /* allows \n line breaks in descriptions */
-            letter-spacing: -0.05em; 
-            margin-top: 0;
-            margin: 0;
-        }
-
-        /* *** FIX: Styling for non-shifting streak adjustment controls *** */
-        #streak-controls {
-            opacity: 0;
-            visibility: hidden;
-            color: #999;
-            cursor: pointer;
-            user-select: none;
-            font-size: 0.8rem;
-            margin-left: 10px;
-            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
-        }
-        #streak-container:hover #streak-controls {
-            opacity: 1;
-            visibility: visible;
-        }
-        #streak-up, #streak-down {
-            padding: 0 4px;
-        }
-        #streak-up:hover, #streak-down:hover {
-            color: #fff;
-        }
-        
-        /* Event Offset Controls */
-        #event-offset-controls {
-            opacity: 0;
-            visibility: hidden;
-            color: #999;
-            user-select: none;
-            font-size: 0.8rem;
-            margin-left: 10px;
-            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
-            font-family: Arial, sans-serif;
-            letter-spacing: normal;
-        }
-        #events-heading-container:hover #event-offset-controls {
-            opacity: 1;
-            visibility: visible;
-        }
-        #event-offset-up, #event-offset-down {
-            padding: 0 4px;
-            cursor: pointer;
-        }
-        #event-offset-up:hover, #event-offset-down:hover {
-            color: #fff;
-        }
-        
-     
-        
-        
-        /* Ensure the animation class uses the 1000ms duration */
-        .gold-exciting-flash {
-            animation: simpleGoldGlow 1000ms ease-out forwards;
-        }
-
-        /* Define the simple glow keyframes */
-        /* Ensure the animation class uses the 1ms duration for an instant state change */
-        .gold-exciting-flash {
-            animation: instantWhiteGlow 1ms forwards;
-        }
-
-        @keyframes instantWhiteGlow {
-            /* 0% Start: Text and glow go instantly white */
-            0% {
-                color: white !important; 
-                text-shadow: 
-                    0 0 2px white,
-                    0 0 4px #eeeeee; /* Strong white/silver glow */
-                opacity: 1;
-            }
-            
-            /* 100% End: We keep it at the flash state so the JavaScript timeout controls the duration */
-            100% {
-                color: white !important;
-                text-shadow: 
-                    0 0 3px white,
-                    0 0 6px #eeeeee;
-                opacity: 1;
-            }
-        }
-        
-        /* Set the animation class to use the correct keyframes and the JS duration */
-        .gold-exciting-flash {
-            /* The 1000ms duration is crucial, matching your JavaScript setTimeout */
-            animation: instantWhiteGlow 1000ms forwards;
-        }
-
-            
-
-
-        .banner-container {
-          position: sticky;
-          top: 0;
-          z-index: 10; /* stays above other content */
-          
-          
-          width: 100%;
-          max-width: 850px;
-          min-width: 400px;
-          background-color: #000;
-          /*border: 2px solid blue;*/
-          box-sizing: border-box;
-          padding: 10px;
-          color: #eee;
-        }
-
-        .banner-image-wrapper {
-          position: relative;
-          width: 100%;
-        }
-
-        .banner-image {
-          width: 100%;
-          height: auto;
-          display: block;
-        }
-
-        .banner-text-overlay {
-          position: absolute;
-          top: -3%;
-          left: 50%;
-          transform: translateX(-50%);
-          color: white;
-          text-align: center;
-          width: 90%;
-          text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-          pointer-events: none;
-          font-family: 'RDOFont', sans-serif;
-        }
-
-        .banner-title {
-          font-size: 2.5rem;
-          margin: 10px 0;
-          text-shadow:
-            -2px -2px 0 #000,
-             2px -2px 0 #000,
-            -2px  2px 0 #000,
-             2px  2px 0 #000;
-        }
-
-        .banner-date {
-          font-size: 1.4rem;
-          margin-bottom: 10px;
-          margin-top: -15px;
-          text-shadow:
-           -1px -1px 2px #000,
-            1px -1px 2px #000,
-           -1px  1px 2px #000,
-            1px  1px 2px #000;
-        }
-
-        .challenge-counters {
-          position: absolute;
-          bottom: 10px;
-          left: 0;
-          right: 0;
-          display: flex;
-          justify-content: space-between;
-          padding: 0 15px;
-          font-size: 1.25rem;
-          color: white;
-          text-shadow: 3px 3px 2px rgba(0,0,0,0.6);
-          pointer-events: none;
-          font-family: 'RDOFont', sans-serif;
-          transform: scaleY(1.15); /* Increase font height */
-          
-        }
-
-        .challenge-counters > div {
-          white-space: nowrap;
-        }
-
-        .challenge-counters span {
-          display: inline-block;
-          width: 4ch;
-          text-align: right;
-        }
-        
-        .counter-glow {
-          color: white;
-          text-shadow:
-            0 0 5px rgba(255, 255, 160, 0.75),  /* yellow glow with an opacity (0.75) */
-            0 0 10px rgba(255, 255, 160, 0.75),
-            0 0 15px rgba(255, 255, 160, 0.75);
-          transition: text-shadow 0.3s ease;
-        }
-        
-        @keyframes counterPop {
-          0% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.3);
-          }
-          100% {
-            transform: scale(1);
-          }
-        }
-
-        .counter-pop {
-          animation: counterPop 0.4s ease forwards;
-        }
-        
-        
-
-        .general-challenges-container {
-          width: 100%;
-          max-width: 850px;
-          margin: 0 auto;
-          background-color: #111;
-          padding: 15px;
-          box-sizing: border-box;
-          color: white;
-          font-family: 'hapna', sans-serif;
-          font-size: 1.25rem;
-          text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
-          /*border: 2px solid green;*/
-        }
-
-
-
-/* ############################################################# */
-/*  Role challenges switching logic as browser viewport narrows  */
-/* ############################################################# */
-        
-        /* 
-           Scenario 1: Tablet/Intermediate Width (< 1600px)
-           Layout: General and Roles side-by-side (if they fit), 
-           Bonus Container wraps to the bottom line.
-        */
-        @media (max-width: 1600px) {
-            .bonus-container {
-                display: flex !important;
-                flex-direction: column;
-                order: 3;             /* Moves it to the end */
-                margin-top: 15px;     /* Gap above it */
-                
-                width: 100% !important;
-                /* CAP THE WIDTH: Keeps graphics looking good, matches sidebar width */
-                max-width: 450px !important; 
-                
-                /* FIX SCALING: Remove min-width so it shrinks on small screens */
-                min-width: 0 !important;
-            }
-        }
-        
-        /* 
-           Scenario 2: Mobile/Narrow Width (< 1320px)
-           Layout: Single column stack. 
-           General -> Roles -> Bonus (all centered)
-        */
-        @media (max-width: 1320px) {
-          body {
-            flex-direction: column;
-            align-items: center;
-          }
-          
-            .main-container {
-            flex-direction: column;
-            align-items: center;
-            width: 100%;    /* allow children to fill horizontally */
-            align-items: stretch; 
-            min-width: 0;   /* Prevent lock-up on tiny screens */
-          }
-          
-          .sidebar-container {
-            width: 100% !important; 
-            max-width: 850px !important;
-            margin-left: 0;    /* center below main container */
-          } 
-
-          .bonus-container {
-            margin-left: auto !important;
-            margin-right: auto !important; /* Centers the block */
-            width: 100% !important;
-            max-width: 450px !important;   /* Maintained width cap */
-            min-width: 0 !important;       /* Ensure it scales down on mobile */
-          }     
-        }
-
-        /* === Challenge checkboxes with wrapped text aligned properly === */
-        .challenge label {
-          display: flex; /* container */
-          align-items: flex-start;  /* Align to the top of the checkbox */
-          gap: 8px;                 /* Space between checkbox and text */
-          position: relative; /* for absolute checkbox */
-          padding-left: 0px; /* reserve space for checkbox */
-          cursor: pointer;
-          white-space: normal;
-          line-height: 1.3;
-        }
-        
-        .challenge:first-of-type label {
-          margin-top: -8px; /* adjust as needed */
-        }
-
-        /* Position the checkbox at the left of label */
-        .challenge-checkbox {
-          width: 14px;
-          height: 14px;
-          margin: 0;
-          margin-top: 6px;  /* Optional: better vertical alignment */
-          appearance: none; /* Remove default styling */
-          -webkit-appearance: none;
-          background-color: #888; /* Default background */
-          /* background-color: orange; /* TEST */*/
-          border: 2px solid #333;
-          border-radius: 3px;
-          cursor: pointer;
-        }
-        
-        .challenge-checkbox:checked {
-          background-color: #222;
-          background-color: #b00000;  /* Dark Red Colour */
-          border: 2px solid #333;
-          border-radius: 3px;
-        }
-        
-        /* add a checkmark */
-        .challenge-checkbox:checked::before {
-          content: "✔";
-          display: block;
-          text-align: top;
-          color: white;
-          font-size: 12px;
-          line-height: 10px;
-        }
-        
-
-        /* Text span with hanging indent:
-           first line starts after checkbox,
-           wrapped lines align under text, NOT under checkbox */
-           
-        .challenge-text {
-          display: block;
-          display: block;
-          word-wrap: break-word;
-          max-width: 100%;
-          user-select: none;
-        }
-
-
-        /* Optional: styling for challenge description */
-        .challenge-desc {
-          margin-left: 22px; /* indent to align with text */
-          font-size: 1rem;
-          color: #999999;
-          padding-bottom: 7px;
-          white-space: pre-wrap;  /* Preserve \n line breaks and wrap long lines */
-          line-height: 1.2;  /* smaller numbers = tighter spacing */
-        }
-        
-        .thin-divider {
-          border: none;
-          border-top: 1px solid #444;
-          /*width: 825px;    Allowing this will kill the word-wrap and dynamic resizing of the general challenges*/
-          max-width: 100%;
-          margin: 8px auto;
-        }
-
-
-    
-        .role-heading {
-            font-family: 'RDOFont', sans-serif;  /* Example font, change as needed */
-            font-size: 1.5rem;
-            color: #eee;
-            margin: -4px 0 0 0;
-            
-            text-shadow:
-            -3px -3px 0 #000,  
-             3px -3px 0 #000,
-            -3px 3px 0 #000,
-             3px 3px 0 #000;
-             text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
-            letter-spacing: 0.05em; /* Adjust this value to your liking */
-            padding-left: 20px; /* Increase this to move the text right */
-            background-color: transparent;
-            overflow: visible;
-            /*Adding picture behind the heading text*/
-            z-index: 0; /* Create a stacking context */
-            background-image: url('HTML/images/RDO_Role_Challenges_Header3.png');
-            background-repeat: no-repeat;
-            background-position: 2px center;
-            background-size: 410px 35px;
-            
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-    
-        }
-            /* Space between different role challenges */
-            .role-challenge {
-              margin-bottom: .6rem; /* adjust as needed */
-              margin-top: -1px;     /* <--- THIS LINE to pull it up */
-            }
-
-        .role-challenge-text {
-            font-family: 'hapna', sans-serif; /* Example font */
-            font-size: 1.05rem;
-            color: #eee;
-            display: inline-block; /* keeps it inline for natural text flow */
-            line-height: 1.1;
-            display: inline;
-            transform: scaleY(1.1); /* Increase font height */
-
-
-        }
-        .role-challenge-desc {
-            font-family: 'hapna', sans-serif; /* Example font */
-            font-size: .95rem;
-            color: #aaa;
-            margin-left: 6px; /* aligns under the role challenge text */
-            white-space: pre-wrap; /* allows \n line breaks in descriptions */
-            transform: scaleX(0.925); /* reduce width to 90% */
-            line-height: 0.99;  /* <--- ADD THIS LINE (Lower number = tighter gap) */
-            margin-top: 1px;   /* <--- OPTIONAL: Pulls description closer to the title */
-        }
-        
-        /*  ##### Role Challenges Tickboxes ##### */
-        
-        /* Unchecked state */
-        .role-challenge input[type="checkbox"] {
-            width: 14px;
-            height: 14px;
-            margin: 0;
-            margin-top: 0px;  /* Optional: better vertical alignment */
-            appearance: none; /* Remove default styling */
-            -webkit-appearance: none;
-            background-color: #888; /* Default background */
-            border: 2px solid #333;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        
-        /* Checked state */
-        .role-challenge input[type="checkbox"]:checked {
-            background-color: #222;
-            background-color: #b00000;  /* Dark Red Colour */
-            border: 2px solid #333;
-            border-radius: 3px;
-        }
-        .role-challenge input[type="checkbox"]:checked::before {
-            content: "✔";
-            display: block;
-            text-align: center;
-            color: white;
-            font-size: 12px;
-            line-height: 14px;
-            vertical-align: middle;
-            position: relative;
-            top: -2px; /* Adjust this value to fine-tune the vertical alignment */
-        }
-        
-        
-        .role-challenge-label {
-          display: flex;
-          align-items: baseline; /* aligns checkbox with first line of text */
-          gap: 0.5em;               /* space between checkbox and text */
-          cursor: pointer;
-          user-select: none;
-          -webkit-user-select: none; /* Safari */
-          -moz-user-select: none; /* Firefox */
-          -ms-user-select: none; /* IE/Edge */
-          
-        }
-        
-        /* Using this to scale role challenge text */
-        .text-scale {
-            display: inline-block;
-            transform: scaleX(0.9);
-            transform-origin: left;
-        }
-        
-        /* Makes it clickable */
-        .difficulty-toggle {
-            cursor: pointer;
-            user-select: none;
-            font-size: 0.6em;  /* adjust if needed */
-            margin-right: 10px; /* adjust px as you like */
-            color: #dd0000;  /* Dark Red Colour */
-            transform: scaleY(1.2); 
-            /* Mid-grey outline effect */
-            text-shadow:
-              -1px -1px 0 #111111,
-               1px -1px 0 #111111,
-              -1px  1px 0 #111111,
-               1px  1px 0 #111111;
-            }
-        
-        /* Dimming the difficulty-toggle */
-        .dimmed-text {
-            opacity: 0.5;
-            pointer-events: none;
-            user-select: none;
-        }
-
-
-        
-        
-
-/* ==== Checkbox Challenge Completion Styling ==== */
-
-
-        /* When checkbox is checked, style the following sibling text */
-        .challenge-checkbox:checked + .challenge-text,
-        .challenge-checkbox:checked + .role-challenge-text {
-          color: #555;
-          text-decoration: line-through;
-          opacity: 0.5;
-        }
-
-
-        /* This dims both the challenge text and the description when the challenge is completed */
-        .challenge.completed .challenge-text,
-        .challenge.completed .challenge-desc,
-        .role-challenge.completed .role-challenge-text,
-        .role-challenge.completed .role-challenge-desc {
-          color: #555 !important;
-          /* Uncomment if you want strikethrough and opacity effect */
-          text-decoration: line-through;
-          opacity: 0.85;
-        }
-
-        /* Dims the toggle button and makes it unclickable when the challenge is ticked */
-        .challenge.completed .desc-cycle-btn,
-        .role-challenge.completed .desc-cycle-btn {
-            color: #555 !important;
-            opacity: 0.5 !important;
-            pointer-events: none; /* Stops it from being clicked or hovering */
-        }
-        
-        
-        .role-completed {
-          color: #555;
-          font-weight: bold;
-        }
-
-
-        /* Dim role challenges and headings when all 9 role challenges are completed */
-        .role-completed .role-challenge-text,
-        .role-completed .role-heading {
-          opacity: 0.5; /* dim text and headings */
-          color: #666;  /* optional dim color */
-          transition: opacity 0.3s ease;
-          background: orange;
-        }
-
-        /* Keep checkboxes fully visible and interactive */
-        .role-completed .challenge-checkbox {
-          opacity: 1 !important;
-          pointer-events: auto;
-        }
-
-
-        /* Description Cycle Button */
-        .desc-cycle-btn {
-            cursor: pointer;
-            color: #ccc;           /* Brighter color so it stands out */
-            font-size: 1.2rem;
-            padding: 0 5px;        /* Increases the clickable hitbox area */
-            margin-top: -2px;      /* Fine tunes vertical alignment */
-            z-index: 10;           /* Keeps it on top of the row label */
-            user-select: none;
-            transition: color 0.2s, transform 0.3s ease;
-            display: inline-block; 
-            flex-shrink: 0;        /* Prevents icon from squishing if text wraps */
-        }
-        .desc-cycle-btn:hover {
-            color: #FFC107;        /* RDO Gold highlight */
-        }
-
-
-
-/* ==== Global Checkbox Role Challenge Completion Styling (9 out of 9)==== */
-
-
-        /* Global dimming for all text elements when all roles are complete */
-        .all-roles-completed .role-heading,
-        .all-roles-completed .role-challenge-label span, /* Targets the Challenge Name */
-        .all-roles-completed .role-challenge-desc, /* Targets the Description Element */
-        .all-roles-completed .role-challenge p, /* General Paragraph Fallback */
-        .all-roles-completed .role-challenge:not(.completed) .desc-cycle-btn /* Targets the toggle button on unticked roles */
-        {
-          color: #888 !important; 
-          opacity: 0.5 !important; /* Forces dimming, overriding competing rules */
-          transition: color 0.3s, opacity 0.3s;
-        }
-
-        /* When 9/9 roles are complete, make the entire DIV of any unticked challenge non-interactive */
-        .all-roles-completed .role-challenge:not(.completed) {
-            pointer-events: none;
-            cursor: default;
-        }
-
-        /* Then, specifically dim the checkbox inside that disabled DIV for visual feedback */
-        .all-roles-completed .role-challenge:not(.completed) input[type="checkbox"] {
-            opacity: 0.35 !important;
-        }
-        
-        
-    /*############ RDO-CLOCK SECTION ############*/        
-        .rdo-clock {
-            position: absolute;
-            bottom: 5px;  /* Position near the bottom of the banner */
-            left: 47.5%;
-            transform: translateX(-50%);
-            transform: translateY(-2px);  /* Negative value moves it up */
-            font-family: 'RDOFont', sans-serif;
-            font-size: calc(1.5vw + 0.8rem);
-            color: #white;
-            text-shadow:
-             -4px -4px 4px #cf0202,
-              4px -4px 4px #cf0202,
-             -4px  4px 4px #cf0202,
-              4px  4px 4px #cf0202;
-        }
-        
-        .rdo-clock.night-glow {
-            text-shadow:
-            -4px -4px 4px #0d2542,
-             4px -4px 4px #0d2542,
-            -4px  4px 4px #0d2542,
-             4px  4px 4px #0d2542;
-            /*color: #white;               Optional: change text color too */
-}
-
-
-
-    /*############ API CREDIT SECTION ############*/
-        .api-credit-separator {
-            border: none;
-            height: 15px;               /* Thickness of the line */
-            background-color: black;
-            margin: 10px -15px;         /* Vertical spacing, and negative horizontal to counter the container padding so it stretches all the way across */
-        }
-
-
-        /* API credit styling */
-        .api-credit {
-          margin-top: auto;
-          margin-bottom: 0px;
-          padding: 0px 0 0px 5px;
-          font-size: 0.75rem;
-          color: #5b5b5b;
-          font-family: Arial, sans-serif;
-          text-align: right;
-          line-height: 1
-        }
-        .api-credit a {
-          color: #5b5b5b;
-          text-decoration: none;
-        }
-        .api-credit a:hover {
-          text-decoration: underline;
-          color: #8e7878;
-        }
-        
-        
-     /*############ PAUSE RDR BUTTON SECTION ############*/       
-        .pause-rdr2-button {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            z-index: 9999;
-            padding: 6px 10px;
-            background-color: #b00000;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            font-family: 'hapna', sans-serif;
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-            transition: background-color 0.3s ease;
-        }
-        .pause-rdr2-button:hover {
-            background-color: #900000;
-        }
-        
-        #pauseBtn {
-          position: absolute;
-          top: 5px;
-          right: 10px;
-          width: 100px;
-          cursor: pointer;
-          display: none;    /* hidden by default */
-          filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.6));
-        }
-        
-        #pauseBtn:hover {
-          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
-          transform: scale(1.05);
-        }
-
-    /*############ GOLD LOG CHART ############*/
-        #gold-log-chart-container {
-            display: flex;
-            justify-content: flex-start; /* Aligns bars to the left */
-            align-items: flex-end;
-            height: 75px;
-            width: 100%;
-            background-color: #151515;
-            border: 1px solid #000;
-            border-radius: 8px;
-            padding: 2px;
-            box-sizing: border-box;
-            gap: 2px;
-            overflow: hidden; /* Prevents scrollbar */
-        }
-
-        .chart-bar-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            height: 100%;
-        }
-
-        .chart-bar {
-            width: 100%;
-            background-color: #B8860B; /* Darker Gold */
-            border-radius: 2px 2px 0 0;
-            transition: background-color 0.2s ease;
-            min-height: 1px;
-        }
-        
-        .chart-bar-wrapper:hover .chart-bar {
-            background-color: #FFE957; /* Brighter gold for highlight */
-        }
-        
-        .chart-info-display {
-            color: #5b5b5b;
-            font-family: 'hapna', sans-serif;
-            font-size: 0.8rem;
-            
-            /* TIGHTENING FIXES: */
-            height: 30px;        /* Fixed compact height (approx 2 lines) to prevent pushing content down */
-            min-height: 0;       /* Remove the large min-height from previous attempt */
-            margin-top: 0px;     /* Reset top margin */
-            padding-left: 5px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Center content vertically in the 30px box */
-            gap: 2px;            /* Tiny gap between the two rows */
-        }
-
-        .tooltip-top-row {
-            display: grid;
-            grid-template-columns: 1fr auto 20px; 
-            align-items: center;
-            width: 100%;
-            
-            /* TIGHTENING FIXES: */
-            border-bottom: 1px solid #222;
-            padding-bottom: 0px; /* Remove padding */
-            margin-bottom: 0px;  /* Remove margin */
-            line-height: 1.1;    /* Tight line height */
-        }
-
-        .tooltip-date {
-            font-weight: bold;
-            color: #bbb;
-            white-space: nowrap;
-        }
-
-        .tooltip-gold {
-            text-align: right;
-            padding-right: 5px;
-            color: #FFC107; 
-            font-feature-settings: "tnum";
-        }
-
-        .tooltip-star {
-            text-align: center;
-            font-size: 0.9rem; /* Slightly smaller star to fit line height */
-            line-height: 1;
-            padding-top: 1px;  /* Visual alignment */
-        }
-
-        .tooltip-bottom-row {
-            font-size: 0.75rem;
-            color: #888;
-            display: flex;
-            justify-content: space-between;
-            
-            /* TIGHTENING FIXES: */
-            line-height: 1.1; /* Tight line height */
-            margin-top: 0px;
-        }
-        
-        
-        
-        
-        
-/* === UPDATED: Tighter Pulse Animation === */
-        @keyframes urgentPulse {
-            0% { 
-                /* Very tight shadow to keep text crisp */
-                text-shadow: 0 0 1px #fff; 
-                color: #fff;
-            }
-            50% { 
-                /* Reduced blur radius (5px/8px instead of 15px/25px) */
-                text-shadow: 0 0 5px #fff, 0 0 8px #FFD700; 
-                color: #fffae6;
-            }
-            100% { 
-                text-shadow: 0 0 1px #fff; 
-                color: #fff;
-            }
-        }
-
-        .active-event-glow {
-            animation: urgentPulse 1.5s infinite ease-in-out;
-        }
-        
-        
-        /* NAZAR DISSOLVE EFFECT */
-        #nazar-map-img {
-            transition: opacity 0.8s ease-in-out;
-            opacity: 1;
-        } 
-
-
-        #chart-view-toggle:hover {
-            color: #ffffff !important;
-        }    
-
-        #gold-log-heading:hover {
-            color: #888888 !important;
-        }   
-        
-        
-        
-        
-    </style>
+    <link rel="stylesheet" href="static/css/style.css" />
+    <title>RDO Daily Challenges</title>
 </head>
 <body>
     <div class="main-container">
+        <!-- COLUMN 1: GENERAL CHALLENGES -->
         <div class="left-column">
             <div class="banner-container">
                 <div class="banner-image-wrapper">
@@ -951,7 +17,7 @@
                          style="position:absolute; top:0px; left:10px; width:50px; cursor:pointer;" />                    
                     <div class="banner-text-overlay">
                         <h1 class="banner-title">Daily Challenges</h1>
-                        <div class="banner-date">Thursday, 12th November 2026</div>
+                        <div class="banner-date">Friday, 13th November 2026</div>
                     </div>
                     <div class="challenge-counters">
                         <div>General Challenges <span id="general-counter">(0/7)</span></div>
@@ -968,50 +34,37 @@
         <div class="challenge" data-difficulty="None">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="challenge_2026-11-12_177419bc1df8f057" />
-              <span class="challenge-text">2 American Bullfrogs collected</span>
-            </label><span class="desc-cycle-btn" data-descs="[&quot;Fast travel to Lagras, and ride past Harriet. Plenty near the junction for the bridge and around the large bend in the road.\nFurther east, you'll find some next to the railway line where the crocodiles gather as well. [#1]&quot;, &quot;Head east from Lagras and then north to the spur of land above Copperhead Landing, there are often bullfrogs to catch. [#2]&quot;]" data-idx="1" data-target="desc_challenge_2026-11-12_177419bc1df8f057" onclick="cycleDesc(event, this)" title="Cycle Description">↻</span></div>
-
-          <div id="desc_challenge_2026-11-12_177419bc1df8f057" class="challenge-desc">Head east from Lagras and then north to the spur of land above Copperhead Landing, there are often bullfrogs to catch. [#2]</div></div>
-<hr class="thin-divider">
-
-        <div class="challenge" data-difficulty="None">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
-            <label style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="challenge_2026-11-12_d1e76689e5db0042" />
-              <span class="challenge-text">5 Chanterelle picked</span>
-            </label><span class="desc-cycle-btn" data-descs="[&quot;Just to the west of Rhodes station is one patch on the boundary line and near the fallen tree trunks, then ride due west again, almost to the coastline. On the spur of land that sticks out into the lake, there are a couple of patches in the centre of the woods. [#1]&quot;, &quot;Go to Emerald Station, and take the road east across the train tracks. There's a patch in the trees just east of the 'D' in 'EMERALD', then head north east for another patch in another group of trees. [#2]&quot;]" data-idx="0" data-target="desc_challenge_2026-11-12_d1e76689e5db0042" onclick="cycleDesc(event, this)" title="Cycle Description">↻</span></div>
-
-          <div id="desc_challenge_2026-11-12_d1e76689e5db0042" class="challenge-desc">Just to the west of Rhodes station is one patch on the boundary line and near the fallen tree trunks, then ride due west again, almost to the coastline. On the spur of land that sticks out into the lake, there are a couple of patches in the centre of the woods. [#1]</div></div>
-<hr class="thin-divider">
-
-        <div class="challenge" data-difficulty="None">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
-            <label style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="challenge_2026-11-12_b1f36774561323db" />
-              <span class="challenge-text">Horse appearance updated</span>
+              <input type="checkbox" class="challenge-checkbox" id="challenge_2026-11-13_4e36c0da03d081f0" />
+              <span class="challenge-text">3 Cooked Seasoned Succulent Fish</span>
             </label></div>
-
-          <div id="desc_challenge_2026-11-12_b1f36774561323db" class="challenge-desc">You don't have to change your current horse, any of your stable will register.
-Try changing a tail or mane, using one of the free options.</div></div>
+          <div id="desc_challenge_2026-11-13_4e36c0da03d081f0" class="challenge-desc">You need trout or salmon for this, breaking them down from your satchel.
+Trout can be found in the San Luis River just south of Scratching Post, around the little island.
+Salmon can be found just below Cumberland Falls.</div></div>
 <hr class="thin-divider">
 
         <div class="challenge" data-difficulty="None">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="challenge_2026-11-12_1ee55fda2705d0dc" />
-              <span class="challenge-text">Horse tack updated</span>
+              <input type="checkbox" class="challenge-checkbox" id="challenge_2026-11-13_95cdcaf29f01a080" />
+              <span class="challenge-text">10560 Distance traveled by train</span>
+            </label><span class="desc-cycle-btn" data-descs="[&quot;Fast travel to MacFarlane's Ranch for the easiest place to catch a train. Empty lobbies work best. [#1]&quot;, &quot;Drive a train from MacFarlane's Ranch all the way to Mercer Station, it's the perfect distance. [#2]&quot;]" data-idx="1" data-target="desc_challenge_2026-11-13_95cdcaf29f01a080" onclick="cycleDesc(event, this)" title="Cycle Description">↻</span></div>
+          <div id="desc_challenge_2026-11-13_95cdcaf29f01a080" class="challenge-desc">Drive a train from MacFarlane's Ranch all the way to Mercer Station, it's the perfect distance. [#2]</div></div>
+<hr class="thin-divider">
+
+        <div class="challenge" data-difficulty="None">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
+            <label style="flex-grow: 1; margin-right: 15px;">
+              <input type="checkbox" class="challenge-checkbox" id="challenge_2026-11-13_e2a47492e363fe6b" />
+              <span class="challenge-text">5 Dry goods eaten</span>
             </label></div>
-
-          <div id="desc_challenge_2026-11-12_1ee55fda2705d0dc" class="challenge-desc">At any stable, select Horses, then Tack and Services, then Saddles, and pick your existing ticked saddle.
-That should trigger the challenge, you don't need to alter anything.</div></div>
+          <div id="desc_challenge_2026-11-13_e2a47492e363fe6b" class="challenge-desc">Crackers, Bread Rolls, Bread Chunks, and Assorted Biscuits all count towards this.</div></div>
 <hr class="thin-divider">
 
         <div class="challenge" data-difficulty="None">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="challenge_2026-11-12_edea387b04296799" />
-              <span class="challenge-text">3 Player kills with a Pistol in Showdowns</span>
+              <input type="checkbox" class="challenge-checkbox" id="challenge_2026-11-13_9ada9222f127db30" />
+              <span class="challenge-text">Hunt the Leader completed</span>
             </label></div>
 </div>
 <hr class="thin-divider">
@@ -1019,25 +72,36 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
         <div class="challenge" data-difficulty="None">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="challenge_2026-11-12_c82c668385988ed0" />
-              <span class="challenge-text">1 Players headshot with a Bow in Showdowns</span>
+              <input type="checkbox" class="challenge-checkbox" id="challenge_2026-11-13_892a162447fb525a" />
+              <span class="challenge-text">1 Lake Sturgeon caught</span>
             </label></div>
-</div>
+          <div id="desc_challenge_2026-11-13_892a162447fb525a" class="challenge-desc">A great spot is in front of the lakeside shops in Blackwater, usually a couple there.
+Change lobby if they're not biting.</div></div>
 <hr class="thin-divider">
 
         <div class="challenge" data-difficulty="None">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="challenge_2026-11-12_1b89e5884b7fc3eb" />
-              <span class="challenge-text">1 Treasure Maps or treasures found</span>
+              <input type="checkbox" class="challenge-checkbox" id="challenge_2026-11-13_d5701aa8d4bee809" />
+              <span class="challenge-text">Muskie caught</span>
             </label></div>
+          <div id="desc_challenge_2026-11-13_d5701aa8d4bee809" class="challenge-desc">Ride west out of Strawberry to Owanjilla. 
+Ride all the way along the shore of the lake to the very western end where the little waterfall is. 
+This is a great spot to fish for Muskies. You will need a lure or a spinner to target these larger fish.</div></div>
+<hr class="thin-divider">
 
-          <div id="desc_challenge_2026-11-12_1b89e5884b7fc3eb" class="challenge-desc">Much easier to use an existing treasure map to find some treasure, than it is to search bodies or find one pinned to a tree. Get one every time you gain 5 levels.</div></div>
+        <div class="challenge" data-difficulty="None">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
+            <label style="flex-grow: 1; margin-right: 15px;">
+              <input type="checkbox" class="challenge-checkbox" id="challenge_2026-11-13_3bb3029a87966b67" />
+              <span class="challenge-text">3 Player kills in Dead Eye in Showdowns</span>
+            </label></div>
+          <div id="desc_challenge_2026-11-13_3bb3029a87966b67" class="challenge-desc">A bow and arrow is a nice way to achieve this, in something like Public Enemy.</div></div>
 
             </div>
         </div>
 
-<!-- COLUMN 2: ROLE CHALLENGES -->
+        <!-- COLUMN 2: ROLE CHALLENGES -->
         <div class="sidebar-container" id="roles-container">
             <div class="role-container">
   <h3 class="role-heading" id="role-bounty-hunter">Bounty Hunter&nbsp; <span class="difficulty-toggle RDOFont" data-difficulty="hard">(Hard: Rank 15+)</span></h3>
@@ -1045,33 +109,39 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
         <div class="role-challenge" data-difficulty="easy">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_4233f47eefc044ce" />
-              <span class="role-challenge-text">1 Bounties brought in from New Hanover posters</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_ac3152ab262bd3e1" />
+              <span class="role-challenge-text">1 Bounties brought in from New Austin posters</span>
             </label></div>
-
-          <div id="desc_role-challenge_2026-11-12_4233f47eefc044ce" class="role-challenge-desc">Valentine, Emerald Station, Van Horn and Annesburg</div></div>
+          <div id="desc_role-challenge_2026-11-13_ac3152ab262bd3e1" class="role-challenge-desc">Armadillo, Tumbleweed and Benedict Point</div></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_af5c69dc0361de02" />
-              <span class="role-challenge-text">1 Bounty completed with at least one other Posse Member</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_83cd663bb9ac7aa7" />
+              <span class="role-challenge-text">Bounty completed without killing an enemy or bounty target</span>
+            </label><span class="desc-cycle-btn" data-descs="[&quot;Risky, usually bugged and won't register [#1]&quot;, &quot;Etta Doyle bounty can work but isn't reliable [#2]&quot;, &quot;Bard's Crossing train track bounty might work [#3]&quot;]" data-idx="0" data-target="desc_role-challenge_2026-11-13_83cd663bb9ac7aa7" onclick="cycleDesc(event, this)" title="Cycle Description">↻</span></div>
+          <div id="desc_role-challenge_2026-11-13_83cd663bb9ac7aa7" class="role-challenge-desc">Risky, usually bugged and won't register [#1]</div></div>
+
+        <div class="role-challenge" data-difficulty="easy">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
+            <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_460bb7e7b36775a8" />
+              <span class="role-challenge-text">1 More than one bounty target brought in at once</span>
             </label></div>
 </div>
-
-        <div class="role-challenge" data-difficulty="easy">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
-            <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_9058360075f51103" />
-              <span class="role-challenge-text">1 Bounty targets lassoed from horseback</span>
-            </label><span class="desc-cycle-btn" data-descs="[&quot;Lasso the same target three times [#1]&quot;, &quot;You can lasso the same target over and over [#2]&quot;, &quot;Lasso, release, lasso, release, lasso the same target [#3]&quot;]" data-idx="1" data-target="desc_role-challenge_2026-11-12_9058360075f51103" onclick="cycleDesc(event, this)" title="Cycle Description">↻</span></div>
-
-          <div id="desc_role-challenge_2026-11-12_9058360075f51103" class="role-challenge-desc">You can lasso the same target over and over [#2]</div></div>
 
         <div class="role-challenge" data-difficulty="med">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_edd0762d5fecf97f" />
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_0bf25948d102ca7d" />
+              <span class="role-challenge-text">2 Bounties brought in from New Austin posters</span>
+            </label></div>
+          <div id="desc_role-challenge_2026-11-13_0bf25948d102ca7d" class="role-challenge-desc">Armadillo, Tumbleweed and Benedict Point</div></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
+            <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_edd0762d5fecf97f" />
               <span class="role-challenge-text">2 Bounties completed within one real-world hour</span>
             </label></div>
 </div>
@@ -1079,43 +149,34 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
         <div class="role-challenge" data-difficulty="med">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_83cd663bb9ac7aa7" />
-              <span class="role-challenge-text">Bounty completed without killing an enemy or bounty target</span>
-            </label><span class="desc-cycle-btn" data-descs="[&quot;Risky, usually bugged and won't register [#1]&quot;, &quot;Etta Doyle bounty can work but isn't reliable [#2]&quot;, &quot;Bard's Crossing train track bounty might work [#3]&quot;]" data-idx="2" data-target="desc_role-challenge_2026-11-12_83cd663bb9ac7aa7" onclick="cycleDesc(event, this)" title="Cycle Description">↻</span></div>
-
-          <div id="desc_role-challenge_2026-11-12_83cd663bb9ac7aa7" class="role-challenge-desc">Bard's Crossing train track bounty might work [#3]</div></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
-            <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_2f425bd0ad79301e" />
-              <span class="role-challenge-text">2 Bounty targets hogtied with a Reinforced Lasso</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_5fa26136f19b3767" />
+              <span class="role-challenge-text">2 Living bounty targets in a photograph</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="hard">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_884a3c9ac86610de" />
-              <span class="role-challenge-text">2 Bounty completed with at least one other Posse Member</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_095bdbbecec412b0" />
+              <span class="role-challenge-text">2 Bounties brought in from Lemoyne posters</span>
+            </label></div>
+          <div id="desc_role-challenge_2026-11-13_095bdbbecec412b0" class="role-challenge-desc">Rhodes and Saint Denis</div></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
+            <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_20e0bdba90106b1b" />
+              <span class="role-challenge-text">3 Bounty targets looted</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="hard">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_2e411e0641ca28cd" />
-              <span class="role-challenge-text">Bounty hunt completed with 5 min or more left</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_bed74dacf3ac8c33" />
+              <span class="role-challenge-text">3 Eagle Eye used to track a bounty target</span>
             </label></div>
-</div>
-
-        <div class="role-challenge" data-difficulty="hard">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
-            <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_121e660060f222b2" />
-              <span class="role-challenge-text">1 Player bounties collected</span>
-            </label></div>
-</div>
+          <div id="desc_role-challenge_2026-11-13_bed74dacf3ac8c33" class="role-challenge-desc">Can shoot with tracking arrow and then track them</div></div>
 </div>
 <hr class="thin-divider" />
 <div class="role-container">
@@ -1124,58 +185,57 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
         <div class="role-challenge" data-difficulty="easy">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_d1de3ee140a1adfa" />
-              <span class="role-challenge-text">5 Carcasses donated within 10 minutes</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_30cdbf75eaa0b789" />
+              <span class="role-challenge-text">5 Donations to Cripps</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="easy">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_83bdbc4ad4f16e1c" />
-              <span class="role-challenge-text">2 Perfect carcasses donated to Cripps</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_f7be76de99db9c0b" />
+              <span class="role-challenge-text">3 Medium animal carcasses donated to Cripps</span>
             </label></div>
-
-          <div id="desc_role-challenge_2026-11-12_83bdbc4ad4f16e1c" class="role-challenge-desc">Perfect pelts don't count. Try Emerald Ranch sheep.</div></div>
+          <div id="desc_role-challenge_2026-11-13_f7be76de99db9c0b" class="role-challenge-desc">Emerald Ranch, for sheep, turkeys, & foxes.
+Racoons, Geese, Cranes, Herons, & Pelicans</div></div>
 
         <div class="role-challenge" data-difficulty="easy">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_ca28dcbb25fc64e7" />
-              <span class="role-challenge-text">1 Resupply completed with 3 mins left</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_4229e42383ef90f0" />
+              <span class="role-challenge-text">3 Small animal carcasses donated to Cripps</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="med">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_fbf71a75767e420f" />
-              <span class="role-challenge-text">10 Donations to Cripps</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_1dff07eb13dbbe2e" />
+              <span class="role-challenge-text">5 Medium animal carcasses donated to Cripps</span>
+            </label></div>
+          <div id="desc_role-challenge_2026-11-13_1dff07eb13dbbe2e" class="role-challenge-desc">Emerald Ranch, for sheep, turkeys, & foxes.
+Racoons, Geese, Cranes, Herons, & Pelicans</div></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
+            <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_117475bd85ffba3c" />
+              <span class="role-challenge-text">4 Perfect carcasses donated to Cripps</span>
+            </label></div>
+          <div id="desc_role-challenge_2026-11-13_117475bd85ffba3c" class="role-challenge-desc">Perfect pelts don't count. Try Emerald Ranch sheep.</div></div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
+            <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_d48016ddc4f1f1a9" />
+              <span class="role-challenge-text">6 Small animal carcasses donated to Cripps</span>
             </label></div>
 </div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
-            <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_350135e8f016bf45" />
-              <span class="role-challenge-text">4 Large animal carcasses donated to Cripps</span>
-            </label></div>
-
-          <div id="desc_role-challenge_2026-11-12_350135e8f016bf45" class="role-challenge-desc">Deer, Pronghorn, Bighorn Ram, Panther, Cougar, Wolf</div></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
-            <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_64c9ecc0da996a74" />
-              <span class="role-challenge-text">2 Resupply missions completed</span>
-            </label><span class="desc-cycle-btn" data-descs="[&quot;Buggy, often won't register in public lobbies [#1]&quot;, &quot;Best to be in a solo lobby so it registers [#2]&quot;]" data-idx="0" data-target="desc_role-challenge_2026-11-12_64c9ecc0da996a74" onclick="cycleDesc(event, this)" title="Cycle Description">↻</span></div>
-
-          <div id="desc_role-challenge_2026-11-12_64c9ecc0da996a74" class="role-challenge-desc">Buggy, often won't register in public lobbies [#1]</div></div>
 
         <div class="role-challenge" data-difficulty="hard">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_17eb7ba375c36585" />
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_17eb7ba375c36585" />
               <span class="role-challenge-text">3 Camp Stews eaten</span>
             </label></div>
 </div>
@@ -1183,19 +243,18 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
         <div class="role-challenge" data-difficulty="hard">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_e2fc25cd87a58806" />
-              <span class="role-challenge-text">6 Large animal carcasses donated to Cripps</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_e111737a83591fbc" />
+              <span class="role-challenge-text">20 Donations to Cripps</span>
             </label></div>
-
-          <div id="desc_role-challenge_2026-11-12_e2fc25cd87a58806" class="role-challenge-desc">Deer, Pronghorn, Bighorn Ram, Panther, Cougar, Wolf</div></div>
+</div>
 
         <div class="role-challenge" data-difficulty="hard">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_3b59724647115f0a" />
-              <span class="role-challenge-text">$200.00 Money made from trading</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_94c4a5f307bd95b4" />
+              <span class="role-challenge-text">6 Perfect carcasses donated to Cripps</span>
             </label></div>
-</div>
+          <div id="desc_role-challenge_2026-11-13_94c4a5f307bd95b4" class="role-challenge-desc">Perfect pelts don't count. Try Emerald Ranch sheep.</div></div>
 </div>
 <hr class="thin-divider" />
 <div class="role-container">
@@ -1204,73 +263,72 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
         <div class="role-challenge" data-difficulty="easy">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_af78eab5de3bd9a2" />
-              <span class="role-challenge-text">1 American Wild Flowers found</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_fca3179b205c0671" />
+              <span class="role-challenge-text">1 Arrowheads found</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="easy">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_8578cc1b3e172eab" />
-              <span class="role-challenge-text">1 Coins found</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_40ee57e3eff733aa" />
+              <span class="role-challenge-text">1 Collectibles found with a Shovel</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="easy">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_0861bf25a71475c5" />
-              <span class="role-challenge-text">1 Tarot Cards found</span>
-            </label></div>
-</div>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_ece7524890cea1a3" />
+              <span class="role-challenge-text">1 Collectibles looted from non-player enemies</span>
+            </label><span class="desc-cycle-btn" data-descs="[&quot;Gold Teeth count for this [#1]&quot;, &quot;Moonshiner roadblock NPC's usually carry alchohol [#2]&quot;, &quot;Poacher NPC's usually carry collectables [#3]&quot;, &quot;Trade run end fight NPC's often have some [#4]&quot;]" data-idx="3" data-target="desc_role-challenge_2026-11-13_ece7524890cea1a3" onclick="cycleDesc(event, this)" title="Cycle Description">↻</span></div>
+          <div id="desc_role-challenge_2026-11-13_ece7524890cea1a3" class="role-challenge-desc">Trade run end fight NPC's often have some [#4]</div></div>
 
         <div class="role-challenge" data-difficulty="med">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_31c73b6630729e40" />
-              <span class="role-challenge-text">1 Antique Alcohol drunk</span>
-            </label></div>
-</div>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_a7dbe46321a815cf" />
+              <span class="role-challenge-text">3 Bird Eggs found</span>
+            </label><span class="desc-cycle-btn" data-descs="[&quot;Keep less than 5 duck eggs in your satchel, and you can then pick 5 of them at once [#1]&quot;, &quot;You can pick up to 5 duck eggs in one go [#2]&quot;, &quot;Carry 5 duck eggs, and you can then pick another 5 [#3]&quot;, &quot;Duck, goose or loon eggs can be collected in multiples [#4]&quot;]" data-idx="1" data-target="desc_role-challenge_2026-11-13_a7dbe46321a815cf" onclick="cycleDesc(event, this)" title="Cycle Description">↻</span></div>
+          <div id="desc_role-challenge_2026-11-13_a7dbe46321a815cf" class="role-challenge-desc">You can pick up to 5 duck eggs in one go [#2]</div></div>
 
         <div class="role-challenge" data-difficulty="med">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_45abe4cf53ac2233" />
-              <span class="role-challenge-text">2 Collectibles looted from non-player enemies</span>
-            </label><span class="desc-cycle-btn" data-descs="[&quot;Gold Teeth count for this [#1]&quot;, &quot;Moonshiner roadblock NPC's usually carry alchohol [#2]&quot;, &quot;Poacher NPC's usually carry collectables [#3]&quot;, &quot;Trade run end fight NPC's often have some [#4]&quot;]" data-idx="2" data-target="desc_role-challenge_2026-11-12_45abe4cf53ac2233" onclick="cycleDesc(event, this)" title="Cycle Description">↻</span></div>
-
-          <div id="desc_role-challenge_2026-11-12_45abe4cf53ac2233" class="role-challenge-desc">Poacher NPC's usually carry collectables [#3]</div></div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
-            <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_18e681e3a217d7fc" />
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_18e681e3a217d7fc" />
               <span class="role-challenge-text">2 Family Heirlooms found</span>
             </label></div>
 </div>
 
-        <div class="role-challenge" data-difficulty="hard">
+        <div class="role-challenge" data-difficulty="med">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_98be3bcfdd3cbf7e" />
-              <span class="role-challenge-text">6 Collectibles collected</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_a16a6df35447b903" />
+              <span class="role-challenge-text">2 Lost Jewelry found</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="hard">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_36c74c07935432b3" />
-              <span class="role-challenge-text">3 Collectibles found with a Shovel</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_7412647babd68c64" />
+              <span class="role-challenge-text">3 Arrowheads found</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="hard">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_3fb8f9140c0e4dcd" />
-              <span class="role-challenge-text">3 Collectibles sold to Madam Nazar</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_0d3676a724b3c197" />
+              <span class="role-challenge-text">3 Collectibles looted from non-player enemies</span>
+            </label><span class="desc-cycle-btn" data-descs="[&quot;Gold Teeth count for this [#1]&quot;, &quot;Moonshiner roadblock NPC's usually carry alchohol [#2]&quot;, &quot;Poacher NPC's usually carry collectables [#3]&quot;, &quot;Trade run end fight NPC's often have some [#4]&quot;]" data-idx="3" data-target="desc_role-challenge_2026-11-13_0d3676a724b3c197" onclick="cycleDesc(event, this)" title="Cycle Description">↻</span></div>
+          <div id="desc_role-challenge_2026-11-13_0d3676a724b3c197" class="role-challenge-desc">Trade run end fight NPC's often have some [#4]</div></div>
+
+        <div class="role-challenge" data-difficulty="hard">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
+            <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_fd639934cda4345d" />
+              <span class="role-challenge-text">3 Lost Jewelry found</span>
             </label></div>
 </div>
 </div>
@@ -1281,47 +339,47 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
         <div class="role-challenge" data-difficulty="easy">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_fb6dc36349dc79c9" />
-              <span class="role-challenge-text">$50.00 Money made from moonshine sold</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_e30d79e4a3638309" />
+              <span class="role-challenge-text">1609 Distance Moonshine Wagon traveled on mission</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="easy">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_8f895dc71bc9e233" />
-              <span class="role-challenge-text">1 Moonshine Story Mission completed</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_55932db38da20773" />
+              <span class="role-challenge-text">1 Moonshine served to other players at a bar</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="easy">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_f6ab0cbde3ffe0f2" />
-              <span class="role-challenge-text">Moonshine of any type sold to a buyer</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_e80f66ee60aa8aee" />
+              <span class="role-challenge-text">Moonshine sold with 3 mins left</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="med">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_2bad69e601ef3fb5" />
-              <span class="role-challenge-text">3218 Distance Moonshine Wagon traveled on mission</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_0c3e86f05c02a608" />
+              <span class="role-challenge-text">Completed improved or better moonshine recipe</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="med">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_9736e514df2f5ec9" />
-              <span class="role-challenge-text">Moonshine Bar - Danced for 1 min</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_2bf1e0a412b2d5ca" />
+              <span class="role-challenge-text">Drank own average or higher strength moonshine</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="med">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_f26447c28caa4dd9" />
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_f26447c28caa4dd9" />
               <span class="role-challenge-text">2 Moonshine served to other players at a bar</span>
             </label></div>
 </div>
@@ -1329,26 +387,26 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
         <div class="role-challenge" data-difficulty="hard">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_3fe6bec7eb88d56f" />
-              <span class="role-challenge-text">Completed special moonshine recipe</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_10f392805415cb2d" />
+              <span class="role-challenge-text">Drank own strong moonshine</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="hard">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_2529c09bd2ba077b" />
-              <span class="role-challenge-text">$200.00 Money made from moonshine sold</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_b922faf42e9c14e1" />
+              <span class="role-challenge-text">Moonshine Bar - Changed décor</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="hard">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_891b1f0ff6466b57" />
-              <span class="role-challenge-text">Played with a band for 2 mins</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_19439ef0d80686ab" />
+              <span class="role-challenge-text">2 Moonshine Bar - Drunken player interaction</span>
             </label></div>
-</div>
+          <div id="desc_role-challenge_2026-11-13_19439ef0d80686ab" class="role-challenge-desc">If solo, use Y then B button combo as entering shack</div></div>
 </div>
 <hr class="thin-divider" />
 <div class="role-container">
@@ -1357,7 +415,7 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
         <div class="role-challenge" data-difficulty="easy">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_a04f5ec0bd736c6b" />
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_a04f5ec0bd736c6b" />
               <span class="role-challenge-text">1 Blending Tonics crafted or used</span>
             </label></div>
 </div>
@@ -1365,7 +423,7 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
         <div class="role-challenge" data-difficulty="easy">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_cf51af02d7363d67" />
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_cf51af02d7363d67" />
               <span class="role-challenge-text">Don't kill an animal for 12 game hours</span>
             </label></div>
 </div>
@@ -1373,7 +431,7 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
         <div class="role-challenge" data-difficulty="easy">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_284a4be7f5835d48" />
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_284a4be7f5835d48" />
               <span class="role-challenge-text">1 Legendary Animals photographed</span>
             </label></div>
 </div>
@@ -1381,31 +439,31 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
         <div class="role-challenge" data-difficulty="med">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_780f4b91650f4e33" />
-              <span class="role-challenge-text">Don't kill an animal for 18 game hours</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_221236541d4abf9a" />
+              <span class="role-challenge-text">1 Hardy Tonics used when too hot or cold</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="med">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_f85c94c66f41aaf4" />
-              <span class="role-challenge-text">1 Legendary Animals found using pheromones</span>
-            </label></div>
-</div>
-
-        <div class="role-challenge" data-difficulty="med">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
-            <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_284a4be7f5835d48" />
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_284a4be7f5835d48" />
               <span class="role-challenge-text">1 Legendary Animals photographed</span>
+            </label></div>
+</div>
+
+        <div class="role-challenge" data-difficulty="med">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
+            <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_f9c3c5a2a3a7658a" />
+              <span class="role-challenge-text">1 Sedated animals revived</span>
             </label></div>
 </div>
 
         <div class="role-challenge" data-difficulty="hard">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_6cdbce1b8ac129af" />
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_6cdbce1b8ac129af" />
               <span class="role-challenge-text">2 Blending Tonics crafted or used</span>
             </label></div>
 </div>
@@ -1413,7 +471,7 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
         <div class="role-challenge" data-difficulty="hard">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_c36d02f902de2cbc" />
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_c36d02f902de2cbc" />
               <span class="role-challenge-text">Don't kill an animal for 24 game hours</span>
             </label></div>
 </div>
@@ -1421,8 +479,8 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
         <div class="role-challenge" data-difficulty="hard">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; position: relative;">
             <label class="role-challenge-label" style="flex-grow: 1; margin-right: 15px;">
-              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-12_9a50d23e61c79c00" />
-              <span class="role-challenge-text">2 Legendary Animals found using pheromones</span>
+              <input type="checkbox" class="challenge-checkbox" id="role-challenge_2026-11-13_284a4be7f5835d48" />
+              <span class="role-challenge-text">1 Legendary Animals photographed</span>
             </label></div>
 </div>
 </div>
@@ -1436,13 +494,11 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
             </div>
         </div>
 
-    
-<!-- COLUMN 3: BONUS INFO -->
+        <!-- COLUMN 3: BONUS INFO -->
         <div class="bonus-container" id="bonus-container">
             <h3 class="stats-heading" style="color: #666666; margin-bottom: 1px; padding-bottom: 0px;">Bonus Info</h3>
             
-<div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: left; color: #E0E0E0; font-family: sans-serif;">
-                
+            <div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: left; color: #E0E0E0; font-family: sans-serif;">
                 <p class="stats-text" id="streak-container" style="margin-bottom: 0px; display: flex; justify-content: space-between; align-items: center; width: 100%;">
                     <span style="display: flex; align-items: center; white-space: nowrap;">
                         <span style="font-weight: 500;">Daily Challenge Streak:</span>
@@ -1477,32 +533,25 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
                     <span style="font-weight: 500;">Streak Gold Total:</span>
                     <span id="streak-gold-total" style="color: #FFC107; text-align: right;">0.00 Gold Bars</span>
                 </p>
-                
             </div>
             
-            
             <!-- Gold Log Chart Container -->
-                
             <h3 id="gold-log-heading" class="stats-heading" style="color: #666666; margin-top: 15px; margin-bottom: 1px; padding-bottom: 0px; cursor: pointer; user-select: none; transition: color 0.2s;">
                 GOLD LOG (LAST 28 DAYS)
             </h3>
 
-  
-             <div id="gold-log-chart-container">
-                <!-- Bars will be injected here by JavaScript -->
+            <div id="gold-log-chart-container">
+                <!-- Bars injected here by JavaScript -->
             </div>
             <div id="chart-info-display" class="chart-info-display">&nbsp;</div>
 
-
-<!-- NAZAR LOCATION SECTION -->
+            <!-- NAZAR LOCATION SECTION -->
             <h3 class="stats-heading" style="color: #666666; margin-top: 30px; margin-bottom: 1px; padding-bottom: 0px;">Where Is Madam Nazar Today?</h3>            
             <div style="padding: 2px; border: 1px solid #000; border-radius: 8px; background-color: #151515; text-align: center;">
                 <div style="color: #FFC107; font-family: 'RDOFont', sans-serif; font-size: 1.4rem; letter-spacing: 0.05em; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); margin-bottom: 2px; line-height: 1.1;">
                     Manzanita Post
                 </div>
                 
-                    
-                <!-- Image with toggle logic and 5s dissolve -->
                 <img src="HTML/images/nazar/RDO_Nazar___Placeholder.png" 
                      id="nazar-map-img"
                      alt="Nazar Location Map" 
@@ -1515,16 +564,12 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
                      style="width: 100%; height: auto; border-radius: 4px; border: 1px solid #333; display: block; cursor: pointer;" 
                 />
 
-  
-                
-                <!-- Tiny hint text if zoom exists -->
                 <div style="font-size: 0.7rem; color: #777; margin-top: 1px; display: block;">
                     (Click map to zoom)
                 </div>
             </div>
             
-            
-<!-- UPCOMING EVENTS SECTION (NEW) -->
+            <!-- UPCOMING EVENTS SECTION -->
             <h3 class="stats-heading" id="events-heading-container" style="color: #666666; margin-top: 20px; margin-bottom: 1px; padding-bottom: 0px; display: flex; justify-content: space-between; align-items: center;">
                 <span>Upcoming Events</span>
                 <span id="event-offset-controls">
@@ -1537,1139 +582,27 @@ That should trigger the challenge, you don't need to alter anything.</div></div>
                     <div style="text-align:center; padding:10px; color:#555; font-size:0.8rem;">Loading Events...</div>
                 </div>
             </div>
-            
-            
-            
-            
-            
-            
-
-  
-  
-  
-<!-- Default Statcounter code for RDO_dailies - codedunky
-https://codedunky.github.io/RDO_dailies/ -->
-<script type="text/javascript">
-var sc_project=13147326; 
-var sc_invisible=1; 
-var sc_security="51162dbd"; 
-</script>
-<script type="text/javascript"
-src="https://www.statcounter.com/counter/counter.js"
-async></script>
-<noscript><div class="statcounter"><a title="Web Analytics"
-href="https://statcounter.com/" target="_blank"><img
-class="statcounter"
-src="https://c.statcounter.com/13147326/0/51162dbd/1/"
-alt="Web Analytics"
-referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
-<!-- End of Statcounter Code -->  
-  
-  
-
-
-
-
-
-
-
-
-
-<script>
-// ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Check if flask server is running and show or hide button accordingly       //
-// ////////////////////////////////////////////////////////////////////////////////////// //
-
-fetch('http://127.0.0.1:6969/status')
-    .then(response => {
-      if (response.ok) {
-        document.getElementById('pauseBtn').style.display = 'inline';
-      } else {
-        document.getElementById('pauseBtn').style.display = 'none';
-      }
-    })
-    .catch(error => {
-      document.getElementById('pauseBtn').style.display = 'none';
-    });
-
-// ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Banner and Clock Logic                                                     //
-// ////////////////////////////////////////////////////////////////////////////////////// //
-
-function resizeBannerText() {
-    const container = document.querySelector('.banner-container');
-    const title = document.querySelector('.banner-title');
-    const date = document.querySelector('.banner-date');
-    const counters = document.querySelector('.challenge-counters');
-    const clock = document.getElementById('rdo-clock');
-
-    if (!container) return;
-
-    const containerWidth = container.offsetWidth;
-    const minWidth = 400;
-    const maxWidth = 850;
-    const scale = Math.max(minWidth, Math.min(containerWidth, maxWidth)) / maxWidth;
-
-    title.style.fontSize = (2.5 * scale) + 'rem';
-    date.style.fontSize = (1.4 * scale) + 'rem';
-    counters.style.fontSize = (1.25 * scale) + 'rem';
-    
-    if (clock) {
-        clock.style.fontSize = (2 * scale) + 'rem';
-    }
-}
-
-window.addEventListener('resize', resizeBannerText);
-window.addEventListener('load', resizeBannerText);
-
-const offsetSeconds = -600; // -10 minutes offset for game clock
-
-function getInGameHour() {
-    const now = new Date();
-    const utcSeconds = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds();
-    const gameSeconds = (utcSeconds * 30 + offsetSeconds) % 86400;
-    return Math.floor(gameSeconds / 3600) + Math.floor((gameSeconds % 3600) / 60) / 60;
-}
-
-function updateAllTimeFunctions() {
-    const hourFloat = getInGameHour();
-    const gameHours = Math.floor(hourFloat).toString().padStart(2, '0');
-    const gameMinutes = Math.floor((hourFloat % 1) * 60).toString().padStart(2, '0');
-    document.getElementById("rdo-clock").textContent = `${gameHours}:${gameMinutes}`;
-
-    const banner = document.querySelector('.banner-image');
-    const clock = document.querySelector('.rdo-clock');
-    
-    if (hourFloat >= 22 || hourFloat < 5) {
-        if (!banner.src.endsWith("RDO_Banner_Wide_Night.jpg")) banner.src = "HTML/images/RDO_Banner_Wide_Night.jpg";
-        clock.classList.add('night-glow');
-    } else {
-        if (!banner.src.endsWith("RDO_Banner_Wide.jpg")) banner.src = "HTML/images/RDO_Banner_Wide.jpg";
-        clock.classList.remove('night-glow');
-    }
-}
-
-setInterval(updateAllTimeFunctions, 1000);
-updateAllTimeFunctions();
-
-
-// ////////////////////////////////////////////////////////////////////////////////////// //
-// Cycle Descriptions                                                                     //
-// ////////////////////////////////////////////////////////////////////////////////////// //
-    function cycleDesc(event, btn) {
-        // PREVENT the click from ticking the checkbox or triggering the row
-        event.preventDefault();
-        event.stopPropagation();
-        
-        try {
-            // Parse the stored descriptions and current index
-            const descs = JSON.parse(btn.getAttribute('data-descs'));
-            let currentIdx = parseInt(btn.getAttribute('data-idx'), 10);
-            
-            // Advance the index, loop back if we hit the end
-            currentIdx = (currentIdx + 1) % descs.length;
-            btn.setAttribute('data-idx', currentIdx);
-            
-            // Apply text to the targeted description element
-            const targetId = btn.getAttribute('data-target');
-            const targetDiv = document.getElementById(targetId);
-            if (targetDiv) {
-                targetDiv.textContent = descs[currentIdx];
-            }
-            
-            // Visual flair: Spin the icon 180 degrees every click
-            let rotation = parseInt(btn.getAttribute('data-rotation') || '0', 10);
-            rotation += 180;
-            
-            // Double braces for python f-string escaping
-            btn.style.transform = `rotate(${rotation}deg)`;
-            
-            btn.setAttribute('data-rotation', rotation);
-            
-        } catch (e) {
-            console.error("Error cycling description:", e);
-        }
-    }
-    
-    window.cycleDesc = cycleDesc;
-
-
-
-
-// ////////////////////////////////////////////////////////////////////////////////////// //
-// Toggle Nazar Map Zoom                                                                  //
-// ////////////////////////////////////////////////////////////////////////////////////// //
-
-    function toggleNazarZoom(img) {
-        if (img.dataset.hasZoom !== "true") return;
-
-        // Get filenames to avoid full path mismatches
-        const currentSrc = img.src.split('/').pop();
-        const stdSrc = img.dataset.standard.split('/').pop();
-        
-        // Handle cases where zoom or photo might be empty strings
-        // We split to get just the filename, or return empty string if undefined
-        const zoomSrc = img.dataset.zoom ? img.dataset.zoom.split('/').pop() : "";
-        const photoSrc = img.dataset.photo ? img.dataset.photo.split('/').pop() : "";
-
-        // CYCLE LOGIC: Standard -> Zoom -> Photo -> Standard
-        
-        if (currentSrc === stdSrc) {
-            // If we are on Standard, try to go to Zoom. 
-            // If no Zoom, try Photo. If neither, stay.
-            if (zoomSrc) {
-                img.src = img.dataset.zoom;
-            } else if (photoSrc) {
-                img.src = img.dataset.photo;
-            }
-        } 
-        else if (currentSrc === zoomSrc) {
-            // If we are on Zoom, try to go to Photo.
-            // If no Photo, go back to Standard.
-            if (photoSrc) {
-                img.src = img.dataset.photo;
-            } else {
-                img.src = img.dataset.standard;
-            }
-        } 
-        else {
-            // We must be on Photo (or unknown), go back to Standard
-            img.src = img.dataset.standard;
-        }
-    }
-    
-    // Expose to window so onclick can find it
-    window.toggleNazarZoom = toggleNazarZoom;
-    
-    
-    
-    
-    
-// ////////////////////////////////////////////////////////////////////////////////////// //
-    // JavaScript: Nazar Map 5-Second Dissolve Logic                                          //
-    // ////////////////////////////////////////////////////////////////////////////////////// //
-    
-    setTimeout(() => {
-        const img = document.getElementById('nazar-map-img');
-        if (!img) return;
-
-        // Get the filenames to compare (ignoring full URL paths)
-        const currentFilename = img.src.split('/').pop();
-        const targetSrc = img.dataset.finalTarget;
-        const targetFilename = targetSrc.split('/').pop();
-
-        // If the current image is ALREADY the target (or no target exists), do nothing
-        if (currentFilename === targetFilename || !targetSrc) return;
-
-        // 1. Fade Out
-        img.style.opacity = 0;
-
-        // 2. Wait for fade out, then swap source and Fade In
-        setTimeout(() => {
-            img.src = targetSrc;
-            
-            // Important: Update the data-standard attribute so the zoom logic 
-            // knows this new image is now the "Standard" base to zoom from.
-            img.dataset.standard = targetSrc; 
-            
-            // 3. Fade In
-            img.style.opacity = 1;
-        }, 800); // Wait 800ms (matches CSS transition)
-
-    }, 5000); // 5000ms = 5 seconds delay    
-
-
-
-
-
-
-// ////////////////////////////////////////////////////////////////////////////////////// //
-// JavaScript: Main Logic                                                                 //
-// ////////////////////////////////////////////////////////////////////////////////////// //
-
-document.addEventListener("DOMContentLoaded", function() {
-
-    // --- CONSTANTS INJECTED FROM PYTHON ---
-    const PYTHON_STREAK_OVERRIDE = -1;
-    const PYTHON_CHALLENGE_TIMESTAMP = 1794463200; 
-    const PYTHON_ENABLE_DEBUG = true;
-
-    // --- LOCAL STORAGE KEYS ---
-    const LS_STREAK_COUNT = 'rdoStreakCount';
-    const LS_LAST_COMPLETION_DATE = 'rdoLastCompletionDate';
-    const LS_CHALLENGE_STATUS = 'rdoChallengeStatus';
-    const LS_STREAK_FOR_MULTIPLIER = 'rdoStreakForMultiplier'; 
-    const MAX_RDO_STREAK = 28;
-    const LS_GOLD_LOG = 'rdoGoldLog';
-    const LS_LAST_KNOWN_TIMESTAMP = 'rdoLastKnownTimestamp';
-    const LS_CHART_VIEW_MODE = 'rdoChartViewMode';
-
-    let activeChartView = localStorage.getItem(LS_CHART_VIEW_MODE) || 'gold';
-    
-    // --- ELEMENT SELECTORS ---
-    const allCheckboxes = document.querySelectorAll('.challenge-checkbox');
-    const generalCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="challenge_"]');
-    const roleCheckboxes = document.querySelectorAll('.challenge-checkbox[id^="role-challenge_"]');
-    
-    // --- UTILITY FUNCTIONS ---
-    
-    function getRDODayKey() {
-        const now = new Date();
-        const resetTimeHours = 6; 
-        const date = new Date(now.getTime());
-        if (date.getUTCHours() < resetTimeHours) {
-            date.setUTCDate(date.getUTCDate() - 1);
-        }
-        return date.toISOString().split('T')[0];
-    }
-
-    function getChallengeDateKey() {
-        const date = new Date(PYTHON_CHALLENGE_TIMESTAMP * 1000);
-        return date.toISOString().split('T')[0];
-    }
-
-    function getDateDifferenceInDays(dateStr1, dateStr2) {
-        const date1 = new Date(`${dateStr1}T12:00:00Z`);
-        const date2 = new Date(`${dateStr2}T12:00:00Z`);
-        return Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
-    }
-    
-    function setStreakCount(newCount, setCompleted) {
-        const count = Math.min(Math.max(0, newCount), MAX_RDO_STREAK); 
-        localStorage.setItem(LS_STREAK_COUNT, count);
-        if (setCompleted) {
-            localStorage.setItem(LS_LAST_COMPLETION_DATE, getRDODayKey());
-            localStorage.setItem(LS_CHALLENGE_STATUS, 'completed');
-        } else {
-            localStorage.removeItem(LS_LAST_COMPLETION_DATE);
-            localStorage.removeItem(LS_CHALLENGE_STATUS);
-        }
-    }
-
-    function getMultiplier() { 
-        // FIX: Use LS_STREAK_COUNT (current status) instead of LS_STREAK_FOR_MULTIPLIER (start of day baseline)
-        // This ensures the multiplier updates immediately visually when the streak increments (e.g. 7 -> 8).
-        const currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
-        
-        if (currentStreak >= 22) return 2.5; // Days 22-28
-        if (currentStreak >= 15) return 2.0; // Days 15-21
-        if (currentStreak >= 8) return 1.5;  // Days 8-14
-        return 1.0;                         // Days 1-7
-    }
-
-    function formatGoldForDisplay(goldValue) {
-        const fixedValue = goldValue.toFixed(2);
-        const parts = fixedValue.split('.');
-        return `<span>${parts[0]}</span><span class="gold-decimal">.${parts[1]}</span> Gold Bars`;
-    }
-
-    // --- DEBUGGING FUNCTION ---
-    function debugGoldStats(daily, week, running, goldLog) {
-        if (!PYTHON_ENABLE_DEBUG) return;
-
-        console.group(`%cRDO GOLD STATS`, 'color: #000; background: #FFC107; padding: 4px; border-radius: 4px; font-weight: bold;');
-        
-        console.table({
-            "Current Streak (Live)": localStorage.getItem(LS_STREAK_COUNT) + " Days",
-            "Multiplier Lock (Base)": localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) + " Days",
-            "Multiplier Value": getMultiplier() + "x",
-            "Daily Total": daily.toFixed(2),
-            "Streak Week Total": week.toFixed(2),
-            "Streak Running Total": running.toFixed(2)
-        });
-
-        console.groupCollapsed("Full Gold Log History");
-        console.table(goldLog);
-        console.groupEnd();
-        
-        console.groupEnd();
-    }
-
-    function calculateDailyGoldTotal(completedGeneral, completedRole) {
-        const BASE_REWARD = 0.10; 
-        const COMPLETION_BONUS_BASE = 0.30; 
-        const multiplier = getMultiplier();
-        const completionBonusAmount = COMPLETION_BONUS_BASE * multiplier;
-        const generalGold = (completedGeneral * BASE_REWARD) * multiplier;
-        const generalBonus = (completedGeneral === 7) ? completionBonusAmount : 0;
-        const roleGold = (completedRole * BASE_REWARD) * multiplier;
-        const roleBonus = (completedRole === 9) ? completionBonusAmount : 0;
-        
-        document.getElementById('gold-per-challenge').innerHTML = formatGoldForDisplay(BASE_REWARD * multiplier);
-        document.getElementById('completion-bonus-reward').innerHTML = formatGoldForDisplay(completionBonusAmount);
-        
-        return Math.round((generalGold + generalBonus + roleGold + roleBonus) * 100) / 100;
-    }
-
-    function logDailyGold(goldAmount, streakCount, generalCount, roleCount) {
-        const today = getRDODayKey();
-        if (getChallengeDateKey() !== today) return;
-
-        let goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) ||[];
-        const todayEntryIndex = goldLog.findIndex(entry => entry.date === today);
-        const newEntry = { date: today, gold: goldAmount, streak: streakCount, general: generalCount, role: roleCount };
-
-        if (todayEntryIndex > -1) {
-            goldLog[todayEntryIndex] = newEntry;
-        } else {
-            goldLog.push(newEntry);
-        }
-        while (goldLog.length > 28) goldLog.shift();
-        localStorage.setItem(LS_GOLD_LOG, JSON.stringify(goldLog));
-    }
-    
-    
-    // --- EVENTS DATA FROM PYTHON ---
-    const RAW_EVENTS_DATA = [{"time": "00:00", "name": "Cold Dead Hands", "cat": "standard"}, {"time": "00:45", "name": "Railroad Baron", "cat": "standard"}, {"time": "01:30", "name": "Wild Animal Kills Challenge", "cat": "standard"}, {"time": "02:15", "name": "Fools Gold", "cat": "standard"}, {"time": "03:00", "name": "Challenges", "cat": "standard"}, {"time": "03:45", "name": "Wildlife Photographer", "cat": "standard"}, {"time": "04:30", "name": "King of the Castle", "cat": "standard"}, {"time": "05:15", "name": "Fishing Swamp Challenge", "cat": "standard"}, {"time": "06:00", "name": "Dispatch Rider", "cat": "standard"}, {"time": "06:45", "name": "Challenges", "cat": "standard"}, {"time": "07:30", "name": "Wildlife Photographer", "cat": "standard"}, {"time": "08:15", "name": "Railroad Baron", "cat": "standard"}, {"time": "09:00", "name": "Master Archer", "cat": "standard"}, {"time": "09:45", "name": "Wildlife Photographer", "cat": "standard"}, {"time": "10:30", "name": "Fishing Lake Challenge", "cat": "standard"}, {"time": "11:15", "name": "King of the Castle", "cat": "standard"}, {"time": "12:00", "name": "Cold Dead Hands", "cat": "standard"}, {"time": "12:45", "name": "Railroad Baron", "cat": "standard"}, {"time": "13:30", "name": "Wild Animal Kills Challenge", "cat": "standard"}, {"time": "14:15", "name": "Fools Gold", "cat": "standard"}, {"time": "15:00", "name": "Challenges", "cat": "standard"}, {"time": "15:45", "name": "Wildlife Photographer", "cat": "standard"}, {"time": "16:30", "name": "King of the Castle", "cat": "standard"}, {"time": "17:15", "name": "Fishing Swamp Challenge", "cat": "standard"}, {"time": "18:00", "name": "Dispatch Rider", "cat": "standard"}, {"time": "18:45", "name": "Challenges", "cat": "standard"}, {"time": "19:30", "name": "Wildlife Photographer", "cat": "standard"}, {"time": "20:15", "name": "Railroad Baron", "cat": "standard"}, {"time": "21:00", "name": "Master Archer", "cat": "standard"}, {"time": "21:45", "name": "Wildlife Photographer", "cat": "standard"}, {"time": "22:30", "name": "Fishing Lake Challenge", "cat": "standard"}, {"time": "23:15", "name": "King of the Castle", "cat": "standard"}, {"time": "00:22", "name": "Protect Legendary Animal", "cat": "themed"}, {"time": "01:52", "name": "Day Of Reckoning", "cat": "themed"}, {"time": "03:22", "name": "Animal Tagging", "cat": "themed"}, {"time": "04:52", "name": "Manhunt", "cat": "themed"}, {"time": "06:22", "name": "Trade Route", "cat": "themed"}, {"time": "07:52", "name": "Condor Egg", "cat": "themed"}, {"time": "09:22", "name": "Day Of Reckoning", "cat": "themed"}, {"time": "10:52", "name": "Protect Legendary Animal", "cat": "themed"}, {"time": "12:22", "name": "Manhunt", "cat": "themed"}, {"time": "13:52", "name": "Salvage", "cat": "themed"}, {"time": "15:22", "name": "Day Of Reckoning", "cat": "themed"}, {"time": "16:52", "name": "Animal Tagging", "cat": "themed"}, {"time": "18:22", "name": "Manhunt", "cat": "themed"}, {"time": "19:52", "name": "Trade Route", "cat": "themed"}, {"time": "21:22", "name": "Condor Egg", "cat": "themed"}, {"time": "22:52", "name": "Day Of Reckoning", "cat": "themed"}]; 
-
-    // ////////////////////////////////////////////////////////////////////////////////////// //
-    // JavaScript: Dynamic Upcoming Events Logic                                              //
-    // ////////////////////////////////////////////////////////////////////////////////////// //
-
-    const LS_EVENT_OFFSET = 'rdoEventOffset';
-    let currentEventOffset = parseInt(localStorage.getItem(LS_EVENT_OFFSET) || '0', 10);
-
-    function updateOffsetDisplay() {
-        const display = document.getElementById('event-offset-display');
-        if (!display) return;
-        if (currentEventOffset > 0) {
-            display.textContent = '+' + currentEventOffset + 's';
-            display.style.color = '#88ff88';
-        } else if (currentEventOffset < 0) {
-            display.textContent = currentEventOffset + 's';
-            display.style.color = '#ff8888';
-        } else {
-            display.textContent = '0s';
-            display.style.color = '#999';
-        }
-    }
-
-function updateUpcomingEvents() {
-        const container = document.getElementById('upcoming-events-list');
-        if (!container || !RAW_EVENTS_DATA.length) return;
-
-        const now = new Date();
-        const JOIN_WINDOW_MS = 3 * 60 * 1000; // 3 minutes
-        
-        const offsetMs = currentEventOffset * 1000;
-
-        let candidates =[];
-        
-        function getEventDate(timeStr, dayOffset) {
-            const[h, m] = timeStr.split(':').map(Number);
-            const d = new Date();
-            d.setUTCHours(h, m, 0, 0);
-            if (dayOffset > 0) {
-                d.setUTCDate(d.getUTCDate() + dayOffset);
-            }
-            return d;
-        }
-
-        RAW_EVENTS_DATA.forEach(evt => {
-            const t1 = getEventDate(evt.time, 0);
-            candidates.push({ ...evt, dt: t1 });
-            const t2 = getEventDate(evt.time, 1);
-            candidates.push({ ...evt, dt: t2 });
-        });
-
-        const activeEvents = candidates.filter(e => {
-            return (e.dt.getTime() + offsetMs + JOIN_WINDOW_MS) > now.getTime();
-        });
-
-        activeEvents.sort((a, b) => a.dt - b.dt);
-        const next5 = activeEvents.slice(0, 5);
-
-        let html = '<ul style="list-style: none; padding: 0; margin: 0;">';
-        
-        next5.forEach(e => {
-            const diffMs = (e.dt.getTime() + offsetMs) - now.getTime(); 
-            
-            let timeDisplay = "";
-            let rowBgColor = "transparent"; 
-            let rowPadding = "1px 0"; 
-            let textColor = "#ccc";
-            let timeColor = "#bbb";   
-            let textClass = "";
-            
-            // Extract the local time automatically using the user's system timezone/DST rules
-            const localH = e.dt.getHours().toString().padStart(2, '0');
-            const localM = e.dt.getMinutes().toString().padStart(2, '0');
-            let eventTimeStr = `${localH}:${localM}`;
-            
-            // Define truncation limit (Default: 25 chars)
-            let maxNameLength = 27; 
-
-            if (diffMs > 0) {
-                // === FUTURE EVENT ===
-                const diffMins = Math.floor(diffMs / 60000);
-                if (diffMins < 60) {
-                    timeDisplay = `${diffMins}m`;
-                } else {
-                    const h = Math.floor(diffMins / 60);
-                    const m = diffMins % 60;
-                    timeDisplay = `${h}h ${m}m`;
-                }
-            } else {
-                // === ACTIVE / STARTED EVENT ===
-                textClass = "active-event-glow";
-                
-                // NEW: Reduce name length to make room for "Join Now" text
-                maxNameLength = 27; 
-                
-                const msPast = Math.abs(diffMs);
-                rowPadding = "2px 4px"; 
-                textColor = "#fff"; 
-                timeColor = "#ddd"; 
-
-                // --- NEW COUNTDOWN LOGIC ---
-                const msRemaining = JOIN_WINDOW_MS - msPast;
-                const secsRemaining = Math.max(0, Math.floor(msRemaining / 1000));
-                const mins = Math.floor(secsRemaining / 60);
-                const secs = (secsRemaining % 60).toString().padStart(2, '0');
-                
-                eventTimeStr = `${mins}:${secs}`; // Override the scheduled time
-                
-                if (msPast < 60000) {
-                    rowBgColor = "#333333";
-                    timeDisplay = "Now";
-                } else if (msPast < 120000) {
-                    rowBgColor = "#555500"; 
-                    timeDisplay = "Now";
-                } else {
-                    rowBgColor = "#550000";
-                    timeDisplay = "<1min";
-                }
-            }
-            
-            // Apply Dynamic Truncation
-            let nameDisplay = e.name;
-            if (nameDisplay.length > maxNameLength) {
-                nameDisplay = nameDisplay.substring(0, maxNameLength - 2) + "..";
-            }
-            
-            html += `
-            <li style="display: flex; justify-content: space-between; align-items: center; padding: ${rowPadding}; border-bottom: 1px solid #1a1a1a; font-size: 0.85rem; color: ${textColor}; background-color: ${rowBgColor}; border-radius: 2px; margin-bottom: 1px; transition: background-color 0.5s;">
-                <div style="line-height: 1;">
-                    <span class="${textClass}" style="font-family: 'hapna', sans-serif; letter-spacing: -0.05em;">${nameDisplay}</span>
-                    <span style="font-size: 0.7rem; color: ${timeColor}; margin-left: 4px; letter-spacing: -0.05em;">(${timeDisplay})</span>
-                </div>
-                <span class="${textClass}" style="color: #FFC107; font-family: 'RDOFont', sans-serif; font-size: 1.0rem; letter-spacing: 1px; line-height: 1;">${eventTimeStr}</span>
-            </li>
-            `;
-        });
-        
-        html += '</ul>';
-        container.innerHTML = html;
-    }
-    
-    
-    
-    
-    
-    // Run immediately, then every second to keep "minutes remaining" accurate
-    setInterval(updateUpcomingEvents, 1000);
-    // Also run on load
-    window.addEventListener('load', updateUpcomingEvents);
-    
-    // Bind event offset controls
-    const offsetUp = document.getElementById('event-offset-up');
-    const offsetDown = document.getElementById('event-offset-down');
-    
-    if (offsetUp) {
-        offsetUp.addEventListener('click', () => {
-            currentEventOffset += 1;
-            localStorage.setItem(LS_EVENT_OFFSET, currentEventOffset);
-            updateOffsetDisplay();
-            updateUpcomingEvents();
-        });
-    }
-    
-    if (offsetDown) {
-        offsetDown.addEventListener('click', () => {
-            currentEventOffset -= 1;
-            localStorage.setItem(LS_EVENT_OFFSET, currentEventOffset);
-            updateOffsetDisplay();
-            updateUpcomingEvents();
-        });
-    }
-    
-    updateOffsetDisplay();
-    
-    
-// UPDATED FUNCTION: Fixed calculation to prevent summing previous cycle's weeks
-    function calculateLogSums(currentStreak) {
-        if (currentStreak === 0) {
-            return { week: 0, running: 0 };
-        }
-
-        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) ||[];
-        
-        // 1. Determine the minimum streak day for the current week bracket
-        let minWeekStreak = 1;
-        if (currentStreak >= 22) minWeekStreak = 22;
-        else if (currentStreak >= 15) minWeekStreak = 15;
-        else if (currentStreak >= 8) minWeekStreak = 8;
-        
-        let weekTotal = 0.0;
-        let runningTotal = 0.0;
-        
-        // Track the streak number of the previous iteration (initially -1)
-        let lastStreakVal = -1;
-        
-        // Loop BACKWARDS through the log (newest to oldest)
-        for (let i = goldLog.length - 1; i >= 0; i--) {
-            const entry = goldLog[i];
-            const val = parseFloat(entry.gold || 0);
-            const s = parseInt(entry.streak || 0);
-            
-            // If we hit a 0 streak or data is missing, stop calculations
-            if (s === 0) break;
-            
-            // CYCLE BOUNDARY CHECK:
-            // If the streak number jumps UP while going backwards (e.g., 1 -> 28),
-            // we have crossed into the previous 28-day cycle. Stop the running total.
-            if (lastStreakVal !== -1 && s > lastStreakVal) {
-                break;
-            }
-
-            // Add to Running Total (Streak Gold Total)
-            runningTotal += val;
-
-            // WEEK TOTAL CHECK:
-            // Only add to the week total if the streak is within the current bracket.
-            // Since we break the loop above if we cross a cycle boundary, 
-            // this simply filters out days 1-21 if we are in week 4 (22-28).
-            if (s >= minWeekStreak) {
-                weekTotal += val;
-            }
-
-            lastStreakVal = s;
-        }
-        
-        return { week: weekTotal, running: runningTotal };
-    }
-    
-    function renderGoldLogChart() {
-        const GOLD_CHART_MULTIPLIER = 12; 
-        const container = document.getElementById('gold-log-chart-container');
-        const infoDisplay = document.getElementById('chart-info-display');
-        if (!container || !infoDisplay) return;
-
-        // Audio Context Setup
-        if (!window.rdoAudioCtx) {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            window.rdoAudioCtx = new AudioContext();
-            const unlockAudio = () => {
-                if (window.rdoAudioCtx.state === 'suspended') window.rdoAudioCtx.resume();
-                document.removeEventListener('click', unlockAudio);
-            };
-            document.addEventListener('click', unlockAudio);
-        }
-        
-        function playHoverTick() {
-            const ctx = window.rdoAudioCtx;
-            if (!ctx || ctx.state === 'suspended') return;
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.type = 'triangle'; 
-            osc.frequency.setValueAtTime(1200, ctx.currentTime);
-            gain.gain.setValueAtTime(0.2, ctx.currentTime); 
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.05);
-        }
-
-        infoDisplay.innerHTML = '&nbsp;';
-        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) ||[];
-        container.innerHTML = '';
-
-        // Generate a solid 28-day range ending today
-        const dateList = [];
-        const baseDate = new Date(getRDODayKey() + 'T12:00:00Z');
-        for (let i = 27; i >= 0; i--) {
-            const d = new Date(baseDate.getTime() - i * 24 * 60 * 60 * 1000);
-            dateList.push(d.toISOString().split('T')[0]);
-        }
-
-        // Create a lookup map for existing logged data
-        const entryMap = {};
-        goldLog.forEach(entry => {
-            entryMap[entry.date] = entry;
-        });
-
-        const availableWidth = container.clientWidth - 4; 
-        const barWidth = Math.max(Math.floor(availableWidth / 28) - 2, 2);
-        let tooltipLeaveTimer;
-
-        function getBarColorForStreak(streak) {
-            if (!streak) return '#555555';
-            if (streak >= 22) return '#FFD200'; 
-            if (streak >= 15) return '#E4B800'; 
-            if (streak >= 8)  return '#C59A00'; 
-            return '#A57C00';                   
-        }
-
-        dateList.forEach(dateStr => {
-            const entry = entryMap[dateStr] || { date: dateStr, gold: 0, streak: 0, general: 0, role: 0, isMissing: true };
-            
-            const wrapper = document.createElement('div');
-            wrapper.className = 'chart-bar-wrapper';
-            wrapper.style.width = `${barWidth}px`;
-            
-            if (activeChartView === 'gold') {
-                // --- GOLD VIEW RENDER ---
-                const barHeight = Math.max((entry.gold * GOLD_CHART_MULTIPLIER), 0);
-                const bar = document.createElement('div');
-                bar.className = 'chart-bar';
-                
-                if (entry.gold === 0) {
-                    bar.style.height = '0px';
-                    bar.style.minHeight = '0px';
-                    bar.style.backgroundColor = 'transparent';
-                } else {
-                    bar.style.height = `${barHeight}px`;
-                    bar.style.backgroundColor = getBarColorForStreak(entry.streak);
-                }
-                wrapper.appendChild(bar);
-            } else {
-                // --- CHALLENGES VIEW RENDER ---
-                wrapper.style.display = 'flex';
-                wrapper.style.flexDirection = 'column';
-                wrapper.style.justifyContent = 'space-between';
-                wrapper.style.height = '100%';
-                
-                const totalSteps = 16;
-                const usableHeight = 71; // 75px max - 4px internal margins
-                const stepHeight = usableHeight / totalSteps;
-
-                const generalCount = entry.general || 0;
-                const roleCount = entry.role || 0;
-
-                // Rule: If both are completed, both bars turn gold
-                const bothCompleted = (generalCount === 7 && roleCount === 9);
-
-                // 1. General Bar (hanging down from top)
-                const topBar = document.createElement('div');
-                topBar.className = 'chart-bar';
-                topBar.style.borderRadius = '0 0 2px 2px'; 
-                
-                if (generalCount === 0) {
-                    topBar.style.height = '0px';
-                    topBar.style.backgroundColor = 'transparent';
-                } else {
-                    topBar.style.height = `${generalCount * stepHeight}px`;
-                    
-                    if (bothCompleted) {
-                        topBar.style.backgroundColor = '#FFC107'; // Gold
-                    } else if (generalCount === 7) {
-                        topBar.style.backgroundColor = '#999999'; // Silver
-                    } else {
-                        topBar.style.backgroundColor = '#E30000'; // RDR Red Shade 1 (General incomplete)
-                    }
-                }
-
-                // 2. Role Bar (growing up from bottom)
-                const bottomBar = document.createElement('div');
-                bottomBar.className = 'chart-bar';
-                bottomBar.style.borderRadius = '2px 2px 0 0';
-                
-                if (roleCount === 0) {
-                    bottomBar.style.height = '0px';
-                    bottomBar.style.backgroundColor = 'transparent';
-                } else {
-                    bottomBar.style.height = `${roleCount * stepHeight}px`;
-                    
-                    if (bothCompleted) {
-                        bottomBar.style.backgroundColor = '#FFC107'; // Gold
-                    } else if (roleCount === 9) {
-                        bottomBar.style.backgroundColor = '#999999'; // Silver
-                    } else {
-                        bottomBar.style.backgroundColor = '#E30000'; // RDR Red Shade 2 (Role incomplete - darker)
-                    }
-                }
-
-                wrapper.appendChild(topBar);
-                wrapper.appendChild(bottomBar);
-            }
-
-            container.appendChild(wrapper);
-
-            const date = new Date(dateStr + 'T12:00:00Z'); 
-
-            wrapper.addEventListener('mouseenter', () => {
-                if (tooltipLeaveTimer) clearTimeout(tooltipLeaveTimer);
-                
-                // Audio tick and highlighting effects based on active view
-                let hasData = (activeChartView === 'gold') ? (entry.gold > 0) : ((entry.general || 0) > 0 || (entry.role || 0) > 0);
-                
-                if (hasData) {
-                    playHoverTick();
-                    const segments = wrapper.querySelectorAll('.chart-bar');
-                    segments.forEach(seg => {
-                        if (seg.style.backgroundColor !== 'transparent') {
-                            seg.dataset.origBg = seg.style.backgroundColor;
-                            seg.style.backgroundColor = '#FFFFFF';
-                            seg.style.boxShadow = '0 0 8px rgba(255, 255, 255, 0.9)';
-                        }
-                    });
-                }
-
-                const humanDate = date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-                const streakText = entry.streak ? `Day ${entry.streak} (Week ${Math.floor((entry.streak - 1) / 7) + 1})` : 'No Streak';
-                
-                // --- STABLE STAR LOGIC ---
-                let starChar = '☆'; 
-                let starStyle = 'color: #444; opacity: 0.3; font-weight: normal;'; 
-
-                if (entry.general === 7 && entry.role === 9) {
-                    starChar = '★'; 
-                    starStyle = 'color: #FFD700; text-shadow: 0 0 4px #FFD700, 0 0 10px #FFA500;';
-                } 
-                else if (entry.general === 7 || entry.role === 9) {
-                    starChar = '★'; 
-                    starStyle = 'color: #C0C0C0; text-shadow: 0 0 3px rgba(192, 192, 192, 0.5);';
-                }
-                
-                infoDisplay.innerHTML = `
-                    <div class="tooltip-top-row">
-                        <span class="tooltip-date">${humanDate}</span>
-                        <span class="tooltip-gold">${entry.gold.toFixed(2)} Gold</span>
-                        <span class="tooltip-star" style="${starStyle}">${starChar}</span>
-                    </div>
-                    <div class="tooltip-bottom-row">
-                        <span>Streak: ${streakText}</span>
-                        <span>Gen: ${entry.general}/7 | Role: ${entry.role}/9</span>
-                    </div>
-                `;
-                
-                infoDisplay.style.color = '#aaa';
-            });
-
-            wrapper.addEventListener('mouseleave', () => {
-                const segments = wrapper.querySelectorAll('.chart-bar');
-                segments.forEach(seg => {
-                    if (seg.dataset.origBg) {
-                        seg.style.backgroundColor = seg.dataset.origBg;
-                        seg.style.boxShadow = 'none';
-                    }
-                });
-                
-                tooltipLeaveTimer = setTimeout(() => {
-                    infoDisplay.innerHTML = '&nbsp;';
-                }, 200);
-            });
-        });
-    }
-
-
-
-
-
-    // --- CORE UPDATE LOGIC ---
-    
-    // --- STREAK VALIDATION & MAINTENANCE ---
-
-    function validateStreakConsistency(currentStreak) {
-        const lastCompletionDateStr = localStorage.getItem(LS_LAST_COMPLETION_DATE);
-        const todayKey = getRDODayKey();
-        
-        if (!lastCompletionDateStr) {
-            // No record of completion: Streak must be 0
-            if (currentStreak > 0) {
-                console.log("[Streak Validator] No completion date found. Resetting streak to 0.");
-                return 0;
-            }
-            return currentStreak;
-        }
-
-        const diff = getDateDifferenceInDays(todayKey, lastCompletionDateStr);
-
-        if (isNaN(diff) || diff > 1) {
-            // A gap of more than 1 day was detected: Streak is broken
-            console.log(`[Streak Validator] Gap of ${diff} days detected. Resetting streak to 0.`);
-            return 0;
-        }
-
-        return currentStreak;
-    }
-
-    function loadStreak() {
-        let currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
-        if (isNaN(currentStreak)) currentStreak = 0;
-
-        // Trust stored streak unless a physical date gap is detected
-        const validatedStreak = validateStreakConsistency(currentStreak);
-        if (validatedStreak !== currentStreak) {
-            currentStreak = validatedStreak;
-            localStorage.setItem(LS_STREAK_COUNT, currentStreak);
-            if (currentStreak === 0) {
-                localStorage.removeItem(LS_LAST_COMPLETION_DATE);
-                localStorage.removeItem(LS_CHALLENGE_STATUS);
-            }
-        }
-
-        // Apply Python script manual override if active
-        if (PYTHON_STREAK_OVERRIDE > -1) {
-            currentStreak = PYTHON_STREAK_OVERRIDE; 
-            setStreakCount(currentStreak, true);
-        }
-        
-        const lastCompletionDateStr = localStorage.getItem(LS_LAST_COMPLETION_DATE);
-        const todayKey = getRDODayKey();
-        
-        if (lastCompletionDateStr) {
-            const diff = getDateDifferenceInDays(todayKey, lastCompletionDateStr);
-            console.log(`[Streak Debug] Today: "${todayKey}", Last Completed: "${lastCompletionDateStr}", Diff: ${diff}`);
-            
-            if (diff === 1) {
-                if (currentStreak >= MAX_RDO_STREAK) {
-                    console.log(`[Streak Debug] Day 28 completed. Rolling over to Day 0 for the new day.`);
-                    currentStreak = 0;
-                    setStreakCount(0, false);
-                } else {
-                    console.log(`[Streak Debug] New day detected. Preparing for new challenge progression.`);
-                    localStorage.removeItem(LS_CHALLENGE_STATUS);
-                }
-            }
-        }
-        
-        localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, currentStreak);
-        document.getElementById('current-streak').textContent = `${currentStreak} Days`;
-    }
-
-
-
-    function updateCounters() {
-        const generalDone = Array.from(generalCheckboxes).filter(cb => cb.checked).length;
-        const roleDone = Math.min(
-            Array.from(roleCheckboxes).filter(cb => cb.checked && cb.closest('.role-challenge')?.style.display !== 'none').length,
-            9
-        );
-
-        document.getElementById('general-counter').textContent = `${generalDone}/7`;
-        document.getElementById('general-counter').classList.toggle('counter-glow', generalDone === 7);
-        document.getElementById('role-counter').textContent = `${roleDone}/9`;
-        document.getElementById('role-counter').classList.toggle('counter-glow', roleDone === 9);
-        
-        const dailyGoldTotal = calculateDailyGoldTotal(generalDone, roleDone);
-        const currentStreak = parseInt(localStorage.getItem(LS_STREAK_COUNT) || '0', 10);
-        
-        document.getElementById('current-streak').textContent = `${currentStreak} Days`; 
-        
-        const goldDisplay = document.getElementById('daily-gold-total');
-        const isDataCurrent = (getChallengeDateKey() === getRDODayKey());
-        
-        if (isDataCurrent) {
-            // 1. Log today's calculated gold (and streak) to localStorage
-            logDailyGold(dailyGoldTotal, currentStreak, generalDone, roleDone);
-            goldDisplay.innerHTML = formatGoldForDisplay(dailyGoldTotal);
-        } else {
-            goldDisplay.innerHTML = '<span style="color: #888; font-size: 0.8em;">PREVIOUS DAY DATA</span>';
-        }
-
-        // 2. Calculate Week/Running totals by summing the Log
-        const sums = calculateLogSums(currentStreak);
-        
-        // 3. Update DOM with flash effect if values changed
-        const newCycleHTML = formatGoldForDisplay(sums.week);
-        const cycleEl = document.getElementById('cycle-gold-total');
-        if (cycleEl.innerHTML !== newCycleHTML) {
-             cycleEl.innerHTML = newCycleHTML;
-             cycleEl.classList.remove('gold-exciting-flash');
-             void cycleEl.offsetWidth; 
-             cycleEl.classList.add('gold-exciting-flash');
-             setTimeout(() => cycleEl.classList.remove('gold-exciting-flash'), 1000);
-        }
-        
-        const newStreakHTML = formatGoldForDisplay(sums.running);
-        const streakEl = document.getElementById('streak-gold-total');
-        if (streakEl.innerHTML !== newStreakHTML) {
-             streakEl.innerHTML = newStreakHTML;
-             streakEl.classList.remove('gold-exciting-flash');
-             void streakEl.offsetWidth; 
-             streakEl.classList.add('gold-exciting-flash');
-             setTimeout(() => streakEl.classList.remove('gold-exciting-flash'), 1000);
-        }
-
-        const rolesContainer = document.getElementById('roles-container') || document.body;
-        rolesContainer.classList.toggle('all-roles-completed', roleDone === 9);
-        document.querySelectorAll('.difficulty-toggle').forEach(toggle => toggle.classList.toggle('dimmed-text', roleDone === 9));
-        
-        document.querySelectorAll('.role-container').forEach(roleContainer => {
-            const visible = Array.from(roleContainer.querySelectorAll('.role-challenge')).filter(ch => ch.style.display !== 'none');
-            const allComp = visible.length > 0 && visible.every(ch => ch.querySelector('.challenge-checkbox')?.checked);
-            roleContainer.querySelector('.role-heading')?.classList.toggle('dimmed', allComp);
-        });
-        
-        renderGoldLogChart();
-        // --- DEBUG LOG ---
-        const goldLog = JSON.parse(localStorage.getItem(LS_GOLD_LOG)) ||[];
-        debugGoldStats(dailyGoldTotal, sums.week, sums.running, goldLog);
-    }
-    
-    function handleStreakUpdate(isTicked) {
-        const checkedCount = Array.from(allCheckboxes).filter(cb => cb.checked).length;
-        const currentStatus = localStorage.getItem(LS_CHALLENGE_STATUS);
-        const lockedStreak = parseInt(localStorage.getItem(LS_STREAK_FOR_MULTIPLIER) || '0', 10);
-        
-        if (isTicked && checkedCount > 0 && currentStatus !== 'completed') {
-            const newStreak = lockedStreak + 1;
-            setStreakCount(newStreak, true);
-        } else if (!isTicked && checkedCount === 0 && currentStatus === 'completed') {
-            setStreakCount(lockedStreak, false);
-        }
-        updateCounters();
-    }
-
-    // --- INIT ---
-    
-    const dailyKeyCheck = localStorage.getItem(LS_LAST_KNOWN_TIMESTAMP);
-    if (dailyKeyCheck != PYTHON_CHALLENGE_TIMESTAMP) {
-        Object.keys(localStorage).forEach(k => { if(k.includes('_challenge_')) localStorage.removeItem(k); });
-    }
-    
-    localStorage.setItem(LS_LAST_KNOWN_TIMESTAMP, PYTHON_CHALLENGE_TIMESTAMP);
-    
-allCheckboxes.forEach(cb => {
-        const key = `${PYTHON_CHALLENGE_TIMESTAMP}_${cb.id}`;
-        cb.checked = localStorage.getItem(key) === "true";
-        
-        // FIX: Specifically target the outer container, skipping the inner flex div
-        const wrapper = cb.closest('.challenge, .role-challenge');
-        
-        if(cb.checked && wrapper) wrapper.classList.add('completed');
-        
-        cb.addEventListener('change', () => {
-            if(wrapper) wrapper.classList.toggle('completed', cb.checked);
-            localStorage.setItem(key, cb.checked);
-            handleStreakUpdate(cb.checked);
-        });
-    });
-
-    document.getElementById('streak-up').addEventListener('click', () => { 
-        localStorage.setItem(LS_STREAK_COUNT, Math.min(28, parseInt(localStorage.getItem(LS_STREAK_COUNT)||0)+1)); 
-        localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, localStorage.getItem(LS_STREAK_COUNT));
-        updateCounters(); 
-    });
-    document.getElementById('streak-down').addEventListener('click', () => { 
-        localStorage.setItem(LS_STREAK_COUNT, Math.max(0, parseInt(localStorage.getItem(LS_STREAK_COUNT)||0)-1)); 
-        localStorage.setItem(LS_STREAK_FOR_MULTIPLIER, localStorage.getItem(LS_STREAK_COUNT));
-        updateCounters(); 
-    });
-
-document.querySelectorAll('.difficulty-toggle').forEach(toggle => {
-        const roleContainer = toggle.closest('.role-container');
-        // Create unique key for storage
-        const roleName = roleContainer.querySelector('.role-heading').textContent.split('(')[0].trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-        const lsKey = `difficulty_${roleName}`;
-        
-        function setView(diff) {
-            // 1. Show/Hide challenges
-            roleContainer.querySelectorAll('.role-challenge').forEach(ch => {
-                // If diff is 'none', everything hides.
-                // If diff is 'easy', only easy shows.
-                ch.style.display = (ch.dataset.difficulty === diff) ? '' : 'none';
-            });
-            
-            toggle.dataset.difficulty = diff;
-            
-            // 2. Visual Label Logic
-            if (diff === 'none') {
-                toggle.textContent = '(Unpurchased)';
-                toggle.style.color = '#777';      // Greyed out
-                toggle.style.fontStyle = 'italic';
-            } else {
-                toggle.style.color = '#dd0000';   // Active Red
-                toggle.style.fontStyle = 'normal';
-                
-                const desc = diff === 'easy' ? 'Rank 1–5' : diff === 'med' ? 'Rank 6–14' : 'Rank 15+';
-                const label = diff.charAt(0).toUpperCase() + diff.slice(1);
-                toggle.textContent = `(${label}: ${desc})`;
-            }
-        }
-        
-        // Load saved state (default 'hard')
-        setView(localStorage.getItem(lsKey) || 'hard');
-        
-        toggle.addEventListener('click', () => {
-            if (toggle.classList.contains('dimmed-text')) return;
-            
-            // Cycle: Easy -> Med -> Hard -> None -> Easy
-            const current = toggle.dataset.difficulty;
-            let next = 'easy';
-            
-            if (current === 'easy') next = 'med';
-            else if (current === 'med') next = 'hard';
-            else if (current === 'hard') next = 'none'; // Unpurchased state
-            else next = 'easy';
-            
-            localStorage.setItem(lsKey, next);
-            setView(next);
-
-            // *** FIX: We removed the code that unticks hidden boxes here. ***
-            // The checkboxes stay checked in the background.
-            // updateCounters() will exclude them from the Total/Gold count 
-            // because it checks for (style.display !== 'none').
-            
-            handleStreakUpdate(false);
-        });
-    });
-    
-    // --- CHART VIEW TOGGLE LOGIC ---
-
-    function updateToggleDisplay() {
-        const heading = document.getElementById('gold-log-heading');
-        if (!heading) return;
-
-        if (activeChartView === 'gold') {
-            heading.textContent = "GOLD LOG (LAST 28 DAYS)";
-        } else {
-            heading.textContent = "CHALLENGES (LAST 28 DAYS)";
-        }
-    }
-
-    const viewToggle = document.getElementById('gold-log-heading');
-    if (viewToggle) {
-        viewToggle.addEventListener('click', () => {
-            activeChartView = (activeChartView === 'gold') ? 'challenges' : 'gold';
-            localStorage.setItem(LS_CHART_VIEW_MODE, activeChartView);
-            updateToggleDisplay();
-            renderGoldLogChart(); 
-        });
-    }
-
-    updateToggleDisplay();
-
-    updateToggleDisplay();
-    
-    
-    loadStreak();
-    updateCounters();
-    
-    window.addEventListener('load', renderGoldLogChart);
-    window.addEventListener('resize', renderGoldLogChart);
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('pauseBtn').addEventListener('click', () => {
-      fetch('http://127.0.0.1:6969/pause', { method: 'POST' })
-      .then(r => r.text()).then(d => alert(d)).catch(e => alert(e));
-    });
-});
-</script>
-
-
-
-
-
-
-
-
-
-
-
-  
+        </div>
+    </div>
+
+    <!-- Statcounter code -->
+    <script type="text/javascript">
+    var sc_project=13147326; 
+    var sc_invisible=1; 
+    var sc_security="51162dbd"; 
+    </script>
+    <script type="text/javascript" src="https://www.statcounter.com/counter/counter.js" async></script>
+    <noscript><div class="statcounter"><a title="Web Analytics" href="https://statcounter.com/" target="_blank"><img class="statcounter" src="https://c.statcounter.com/13147326/0/51162dbd/1/" alt="Web Analytics" referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+
+    <!-- Pass Python runtime variables to JavaScript cleanly -->
+    <script>
+      window.RDO_CONFIG = {
+        streakOverride: -1,
+        challengeTimestamp: 1794549600,
+        enableDebug: true,
+        rawEventsData: [{"time": "00:00", "name": "Cold Dead Hands", "cat": "standard"}, {"time": "00:45", "name": "Railroad Baron", "cat": "standard"}, {"time": "01:30", "name": "Wild Animal Kills Challenge", "cat": "standard"}, {"time": "02:15", "name": "Fools Gold", "cat": "standard"}, {"time": "03:00", "name": "Challenges", "cat": "standard"}, {"time": "03:45", "name": "Wildlife Photographer", "cat": "standard"}, {"time": "04:30", "name": "King of the Castle", "cat": "standard"}, {"time": "05:15", "name": "Fishing Swamp Challenge", "cat": "standard"}, {"time": "06:00", "name": "Dispatch Rider", "cat": "standard"}, {"time": "06:45", "name": "Challenges", "cat": "standard"}, {"time": "07:30", "name": "Wildlife Photographer", "cat": "standard"}, {"time": "08:15", "name": "Railroad Baron", "cat": "standard"}, {"time": "09:00", "name": "Master Archer", "cat": "standard"}, {"time": "09:45", "name": "Wildlife Photographer", "cat": "standard"}, {"time": "10:30", "name": "Fishing Lake Challenge", "cat": "standard"}, {"time": "11:15", "name": "King of the Castle", "cat": "standard"}, {"time": "12:00", "name": "Cold Dead Hands", "cat": "standard"}, {"time": "12:45", "name": "Railroad Baron", "cat": "standard"}, {"time": "13:30", "name": "Wild Animal Kills Challenge", "cat": "standard"}, {"time": "14:15", "name": "Fools Gold", "cat": "standard"}, {"time": "15:00", "name": "Challenges", "cat": "standard"}, {"time": "15:45", "name": "Wildlife Photographer", "cat": "standard"}, {"time": "16:30", "name": "King of the Castle", "cat": "standard"}, {"time": "17:15", "name": "Fishing Swamp Challenge", "cat": "standard"}, {"time": "18:00", "name": "Dispatch Rider", "cat": "standard"}, {"time": "18:45", "name": "Challenges", "cat": "standard"}, {"time": "19:30", "name": "Wildlife Photographer", "cat": "standard"}, {"time": "20:15", "name": "Railroad Baron", "cat": "standard"}, {"time": "21:00", "name": "Master Archer", "cat": "standard"}, {"time": "21:45", "name": "Wildlife Photographer", "cat": "standard"}, {"time": "22:30", "name": "Fishing Lake Challenge", "cat": "standard"}, {"time": "23:15", "name": "King of the Castle", "cat": "standard"}, {"time": "00:22", "name": "Protect Legendary Animal", "cat": "themed"}, {"time": "01:52", "name": "Day Of Reckoning", "cat": "themed"}, {"time": "03:22", "name": "Animal Tagging", "cat": "themed"}, {"time": "04:52", "name": "Manhunt", "cat": "themed"}, {"time": "06:22", "name": "Trade Route", "cat": "themed"}, {"time": "07:52", "name": "Condor Egg", "cat": "themed"}, {"time": "09:22", "name": "Day Of Reckoning", "cat": "themed"}, {"time": "10:52", "name": "Protect Legendary Animal", "cat": "themed"}, {"time": "12:22", "name": "Manhunt", "cat": "themed"}, {"time": "13:52", "name": "Salvage", "cat": "themed"}, {"time": "15:22", "name": "Day Of Reckoning", "cat": "themed"}, {"time": "16:52", "name": "Animal Tagging", "cat": "themed"}, {"time": "18:22", "name": "Manhunt", "cat": "themed"}, {"time": "19:52", "name": "Trade Route", "cat": "themed"}, {"time": "21:22", "name": "Condor Egg", "cat": "themed"}, {"time": "22:52", "name": "Day Of Reckoning", "cat": "themed"}]
+      };
+    </script>
+    <script src="static/js/app.js"></script>
 </body>
 </html>
