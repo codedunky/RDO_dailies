@@ -717,7 +717,7 @@ if download_now:
         print("Skipping backup")
 
     # -------------------------------------------------------------
-    # DOWNLOAD FROM RDO-DAILIES.COM (Primary) WITH RDO.GG (Backup)
+    # DOWNLOAD FROM RDO.GG (Primary) WITH RDO-DAILIES.COM (Backup)
     # -------------------------------------------------------------
     today_str = datetime.datetime.now(datetime.timezone.utc).strftime(
         "%Y-%m-%d"
@@ -730,33 +730,60 @@ if download_now:
         "Accept": "application/json",
     }
     downloaded_data = None
+    stale_backup_data = None
 
-    # Step 1: Fetch from rdo-dailies.com
+    # Step 1: Try primary provider (rdo.gg)
     try:
-      print("Attempting to download from rdo-dailies.com...")
-      primary_url = f"https://rdo-dailies.com/api/RDO/general/daily_challenges?nocache={today_str}"
+      print("Attempting to download from rdo.gg...")
+      primary_url = f"https://api.rdo.gg/challenges/index.json?nocache={today_str}"
       req = urllib.request.Request(primary_url, headers=headers)
       with urllib.request.urlopen(req, timeout=10) as response:
-        raw = json.loads(response.read().decode("utf-8"))
-        downloaded_data = convert_rdodailies_to_index_format(raw)
-        print("SUCCESS: Retrieved and converted data from rdo-dailies.com!")
-    except Exception as e:
-      print(f"rdo-dailies.com failed: {e}")
+        candidate = json.loads(response.read().decode("utf-8"))
+        candidate_end = candidate.get("endTime", 0)
 
-    # Step 2: Fallback to rdo.gg if rdo-dailies.com fails
+        # Check if the data is current
+        if candidate_end > now:
+          downloaded_data = candidate
+          print("SUCCESS: Retrieved up-to-date data from rdo.gg!")
+        else:
+          stale_backup_data = candidate
+          print(
+              f"rdo.gg returned outdated data (endTime:"
+              f" {timestamp_to_date(candidate_end)} <= now). Falling back..."
+          )
+    except Exception as e:
+      print(f"rdo.gg failed: {e}")
+
+    # Step 2: Fallback to rdo-dailies.com if rdo.gg was unreachable or out of date
     if not downloaded_data:
       try:
-        print("Falling back to rdo.gg...")
-        req = urllib.request.Request(
-            "https://api.rdo.gg/challenges/index.json", headers=headers
-        )
+        print("Falling back to rdo-dailies.com...")
+        fallback_url = f"https://rdo-dailies.com/api/RDO/general/daily_challenges?nocache={today_str}"
+        req = urllib.request.Request(fallback_url, headers=headers)
         with urllib.request.urlopen(req, timeout=10) as response:
-          downloaded_data = json.loads(response.read().decode("utf-8"))
-          print("SUCCESS: Retrieved fallback data from rdo.gg!")
-      except Exception as e:
-        print(f"rdo.gg fallback also failed: {e}")
+          raw = json.loads(response.read().decode("utf-8"))
+          candidate = convert_rdodailies_to_index_format(raw)
+          candidate_end = candidate.get("endTime", 0)
 
-    # Step 3: Write to your local index.json file
+          if candidate_end > now:
+            downloaded_data = candidate
+            print("SUCCESS: Retrieved and converted up-to-date data from rdo-dailies.com!")
+          else:
+            print(
+                f"rdo-dailies.com also returned outdated data (endTime:"
+                f" {timestamp_to_date(candidate_end)})."
+            )
+            # Retain stale data as a last resort if nothing else is available
+            stale_backup_data = stale_backup_data or candidate
+      except Exception as e:
+        print(f"rdo-dailies.com fallback failed: {e}")
+
+    # Step 3: If both APIs were out of date, use the best available data rather than nothing
+    if not downloaded_data and stale_backup_data:
+      print("WARNING: Both sources returned outdated data; using best available fallback.")
+      downloaded_data = stale_backup_data
+
+    # Step 4: Write to local index.json file
     if downloaded_data:
       try:
         with open(local_filename, "w", encoding="utf-8") as f:
@@ -850,22 +877,134 @@ if BLOCK_DOWNLOADS and download_nazar:
     download_nazar = False
 # ----------------------------------
 
+# -------------------------------------------------------------
+# NAZAR DOWNLOAD: RDO.GG (Primary) WITH RDO-DAILIES.COM (Backup)
+# -------------------------------------------------------------
 if download_nazar:
+  today_str = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
+  headers = {
+      "User-Agent": (
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+          " (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      ),
+      "Accept": "application/json",
+  }
+
+  downloaded_nazar = None
+  stale_nazar_backup = None
+
+  def normalize_nazar_payload(raw):
+    """Ensures consistent schema whether from rdo.gg or rdo-dailies."""
+    if not isinstance(raw, dict):
+      return None
+
+    data_block = raw.get("data", raw)
+
+    # Resolve timestamps
+    start_time = data_block.get("startTime", raw.get("startTime", 0))
+    end_time = data_block.get("endTime", raw.get("endTime", 0))
+    if not end_time:
+      start_time, end_time = get_current_rdo_window()
+
+    return {
+        "updated": raw.get("updated", int(time.time())),
+        "startTime": start_time,
+        "endTime": end_time,
+        "state": data_block.get("state", raw.get("state", "unknown_state")),
+        "location": (
+            data_block.get("location", raw.get("location", "unknown_location"))
+        ),
+        "near": data_block.get("near", raw.get("near", "")),
+    }
+
+  # --- Step 1: Attempt primary download from rdo.gg ---
+  try:
+    print("NAZAR: Attempting download from api.rdo.gg...")
+    primary_nazar_url = f"https://api.rdo.gg/nazar?nocache={today_str}"
+    req = urllib.request.Request(primary_nazar_url, headers=headers)
+    with urllib.request.urlopen(req, timeout=10) as response:
+      candidate = normalize_nazar_payload(
+          json.loads(response.read().decode("utf-8"))
+      )
+      candidate_end = candidate.get("endTime", 0)
+
+      if candidate_end > now:
+        downloaded_nazar = candidate
+        print("NAZAR: SUCCESS: Retrieved up-to-date data from api.rdo.gg!")
+      else:
+        stale_nazar_backup = candidate
+        print(
+            f"NAZAR: api.rdo.gg returned outdated data (endTime:"
+            f" {timestamp_to_date(candidate_end)} <= now). Falling back..."
+        )
+  except Exception as e:
+    print(f"NAZAR: api.rdo.gg download failed: {e}")
+
+  # --- Step 2: Fallback to rdo-dailies.com if rdo.gg was down or out-of-date ---
+  if not downloaded_nazar:
+    fallback_nazar_urls = [
+        (
+            "https://rdo-dailies.com/api/RDO/collector/madam_nazar"
+            f"?nocache={today_str}"
+        ),
+        (
+            "https://rdo-dailies.com/api/RDO/general/madam_nazar"
+            f"?nocache={today_str}"
+        ),
+    ]
+
+    for fb_url in fallback_nazar_urls:
+      try:
+        print(f"NAZAR: Falling back to {fb_url}...")
+        req = urllib.request.Request(fb_url, headers=headers)
+        with urllib.request.urlopen(req, timeout=10) as response:
+          raw_data = json.loads(response.read().decode("utf-8"))
+          candidate = normalize_nazar_payload(raw_data)
+
+          if candidate and candidate.get("location") != "unknown_location":
+            candidate_end = candidate.get("endTime", 0)
+            if candidate_end > now:
+              downloaded_nazar = candidate
+              print(
+                  "NAZAR: SUCCESS: Retrieved and converted data from"
+                  " rdo-dailies.com!"
+              )
+              break
+            else:
+              stale_nazar_backup = stale_nazar_backup or candidate
+              print("NAZAR: rdo-dailies.com also returned outdated data.")
+      except Exception as e:
+        print(f"NAZAR: Fallback attempt failed: {e}")
+
+  # --- Step 3: Best available fallback if all providers returned stale data ---
+  if not downloaded_nazar and stale_nazar_backup:
+    print(
+        "NAZAR: WARNING: Both sources returned outdated data; using best"
+        " available fallback."
+    )
+    downloaded_nazar = stale_nazar_backup
+
+  # --- Step 4: Save & update status ---
+  if downloaded_nazar:
     try:
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        req = urllib.request.Request(nazar_url, headers=headers)
-        with urllib.request.urlopen(req) as response:
-            data_bytes = response.read()
-            new_nazar_data = json.loads(data_bytes.decode('utf-8'))
-            with open(local_filename_nazar, 'w', encoding='utf-8') as f:
-                json.dump(new_nazar_data, f, indent=2)
-            nazar_data = new_nazar_data
-            valid_nazar_data = True 
-            print("NAZAR: downloaded new nazar.json file")
-            status_nazar = f"{BG_GREEN}NAZAR:  New json file downloaded successfully.{BG_RESET}"
+      with open(local_filename_nazar, "w", encoding="utf-8") as f:
+        json.dump(downloaded_nazar, f, indent=2)
+      nazar_data = downloaded_nazar
+      valid_nazar_data = True
+      print(f"NAZAR: Saved new nazar.json to {local_filename_nazar}")
+      status_nazar = (
+          f"{BG_GREEN}NAZAR:  New json file downloaded successfully.{BG_RESET}"
+      )
     except Exception as e:
-        print(f"NAZAR: Error during Nazar download: {e}")
-        status_nazar = f"{BG_RED}NAZAR:  Error Downloading.{BG_RESET}"
+      print(f"NAZAR: Error saving to {local_filename_nazar}: {e}")
+      status_nazar = f"{BG_RED}NAZAR:  Error Saving.{BG_RESET}"
+      valid_nazar_data = False
+  else:
+    print("NAZAR: CRITICAL: Failed to get Nazar location from all providers.")
+    status_nazar = f"{BG_RED}NAZAR:  Error Downloading.{BG_RESET}"
+    valid_nazar_data = False
+
+    
 
 # 2. Process Data ONLY if valid
 if valid_nazar_data:
