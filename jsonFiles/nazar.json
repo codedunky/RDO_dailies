@@ -2,13 +2,7 @@
   "updated": 1794549630,
   "startTime": 1794549600,
   "endTime": 1794635999,
-  "id": "MPSW_LOCATION_03",
   "state": "p_1_west_elizabeth",
   "location": "p_4_manzanita_post",
-  "landmark": "p_4_manzanita_post",
-  "meta": {
-    "documentation": "https://rdo.gg/api#tag/collector/operation/get-nazar",
-    "provider": "Alloc8or",
-    "special_thanks": []
-  }
+  "near": ""
 }
