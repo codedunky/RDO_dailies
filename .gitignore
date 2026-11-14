@@ -14,3 +14,4 @@ Thumbs.db
 .DS_Store
 # Local daily challenge backups
 jsonFiles/indexJsonBackups/
+run.ps1

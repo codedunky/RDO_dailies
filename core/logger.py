@@ -1,4 +1,12 @@
 import inspect
+
+import os
+import sys
+
+# Enable ANSI color rendering in Windows console
+if os.name == 'nt':
+    os.system('')
+
 import textwrap
 from config import settings
 
