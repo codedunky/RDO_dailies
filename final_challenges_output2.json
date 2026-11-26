@@ -1,28 +1,10 @@
 {
   "final_name": [
     {
-      "text": "Bird Shooting Contest completed",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
-    },
-    {
-      "text": "3 Cooked Seasoned Venison",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
-    },
-    {
-      "text": "1000 Distance rowed a boat or canoe",
-      "description": "Head to the shores of Flat Iron Lake, west of Rhodes. There are usually some boats or canoes passing by the shore which can be hijacked. Prepare to be patient. Solo lobbies work much better though.",
+      "text": "3 Cooked Seasoned Plump Bird",
+      "description": "Chickens and Turkeys give you plump bird meat when plucked. Rathskeller Fork usually has lot of chickens to kill.",
       "all_descriptions": [
-        "Head to the shores of Flat Iron Lake, west of Rhodes. There are usually some boats or canoes passing by the shore which can be hijacked. Prepare to be patient. Solo lobbies work much better though."
+        "Chickens and Turkeys give you plump bird meat when plucked. Rathskeller Fork usually has lot of chickens to kill."
       ],
       "desc_index": 0,
       "desc_loop": "yes",
@@ -30,30 +12,7 @@
       "difficulty": null
     },
     {
-      "text": "3 Elk skinned",
-      "description": "Set your camp in Big Valley and you'll soon find elk grazing by the winding river.\nTall Trees, north of Manzanita Post is another decent area.",
-      "all_descriptions": [
-        "Set your camp in Big Valley and you'll soon find elk grazing by the winding river.\nTall Trees, north of Manzanita Post is another decent area."
-      ],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
-    },
-    {
-      "text": "5 Non-player enemies killed at long range",
-      "description": "Del Lobo's at Thieves Landing, or Revenue Agents at a roadblock are good targets, as are trader resupply NPC's. Use a scoped rifle or maybe a bow with dead eye for the distance.\nYou should see a popup notification on the right of the screen if it counts.\nTrade Route with a repeater is good for this as well. [#1]",
-      "all_descriptions": [
-        "Del Lobo's at Thieves Landing, or Revenue Agents at a roadblock are good targets, as are trader resupply NPC's. Use a scoped rifle or maybe a bow with dead eye for the distance.\nYou should see a popup notification on the right of the screen if it counts.\nTrade Route with a repeater is good for this as well. [#1]",
-        "Revenue agents at a moonshiner roadblock and a sniper rifle are an excellent way to get this challenge done. [#2]"
-      ],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
-    },
-    {
-      "text": "Photographed your horse",
+      "text": "Crafted a horse care item",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -62,7 +21,7 @@
       "difficulty": null
     },
     {
-      "text": "1 Player kills from the hip in Showdowns",
+      "text": "5 Drinks ordered at a Saloon",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -71,10 +30,52 @@
       "difficulty": null
     },
     {
-      "text": "1 Bounties brought in from New Austin posters",
-      "description": "Armadillo, Tumbleweed and Benedict Point",
+      "text": "5 Meats eaten",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "Petted a dog",
+      "description": "Your camp dog is the easiest way to get this, or try Armadilo by the undertakers, and maybe Tumbleweed around the butchers.",
       "all_descriptions": [
-        "Armadillo, Tumbleweed and Benedict Point"
+        "Your camp dog is the easiest way to get this, or try Armadilo by the undertakers, and maybe Tumbleweed around the butchers."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "3 Turkeys skinned",
+      "description": "The western end of Big Valley where the two roads meet is a good hunting location.\nThere should be plenty just south of Butcher Creek and Elysian Pool, and also around Rhodes, and there's often some in the triangle of railway lines just north of Emerald Station.",
+      "all_descriptions": [
+        "The western end of Big Valley where the two roads meet is a good hunting location.\nThere should be plenty just south of Butcher Creek and Elysian Pool, and also around Rhodes, and there's often some in the triangle of railway lines just north of Emerald Station."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "5 Whole animal carcasses sold",
+      "description": "Sell at any butchers, ones at Blackwater and Rhodes are very close to the fast travel posts. Birds and small animals from your satchel are suitable, fish are not though.",
+      "all_descriptions": [
+        "Sell at any butchers, ones at Blackwater and Rhodes are very close to the fast travel posts. Birds and small animals from your satchel are suitable, fish are not though."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "1 Bounties brought in from West Elizabeth posters",
+      "description": "Strawberry, Blackwater, Wallace Station, & Riggs Station",
+      "all_descriptions": [
+        "Strawberry, Blackwater, Wallace Station, & Riggs Station"
       ],
       "desc_index": 0,
       "desc_loop": "yes",
@@ -82,16 +83,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "1 Bounty completed with at least one other Posse Member",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "easy"
-    },
-    {
-      "text": "1 Bounty targets hogtied with a Reinforced Lasso",
+      "text": "1 Bounty targets brought in",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -100,35 +92,13 @@
       "difficulty": "easy"
     },
     {
-      "text": "2 Bounties brought in from New Hanover posters",
-      "description": "Valentine, Emerald Station, Van Horn and Annesburg",
-      "all_descriptions": [
-        "Valentine, Emerald Station, Van Horn and Annesburg"
-      ],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "med"
-    },
-    {
-      "text": "2 Bounty targets looted",
+      "text": "1 More than one bounty target brought in at once",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "bounty_hunter",
-      "difficulty": "med"
-    },
-    {
-      "text": "2 Eagle Eye used to track a bounty target",
-      "description": "Can shoot with tracking arrow and then track them",
-      "all_descriptions": [
-        "Can shoot with tracking arrow and then track them"
-      ],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "med"
+      "difficulty": "easy"
     },
     {
       "text": "2 Bounties brought in from Lemoyne posters",
@@ -139,31 +109,69 @@
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "bounty_hunter",
-      "difficulty": "hard"
+      "difficulty": "med"
     },
     {
-      "text": "Bounty hunt completed with 5 min or more left",
+      "text": "1 Bounty completed with at least one other Posse Member",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "bounty_hunter",
-      "difficulty": "hard"
+      "difficulty": "med"
     },
     {
-      "text": "3 Bounty targets hogtied with a Reinforced Lasso",
+      "text": "2 More than one bounty target brought in at once",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "bounty_hunter",
-      "difficulty": "hard"
+      "difficulty": "med"
     },
     {
-      "text": "2 Large animal carcasses donated to Cripps",
-      "description": "Deer, Pronghorn, Bighorn Ram, Panther, Cougar, Wolf",
+      "text": "2 Bounties brought in from New Austin posters",
+      "description": "Armadillo, Tumbleweed and Benedict Point",
       "all_descriptions": [
-        "Deer, Pronghorn, Bighorn Ram, Panther, Cougar, Wolf"
+        "Armadillo, Tumbleweed and Benedict Point"
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "hard"
+    },
+    {
+      "text": "3 Bounty targets brought in",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "hard"
+    },
+    {
+      "text": "3 More than one bounty target brought in at once",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "hard"
+    },
+    {
+      "text": "1 Camp Stews eaten",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "easy"
+    },
+    {
+      "text": "3 Medium animal carcasses donated to Cripps",
+      "description": "Emerald Ranch, for sheep, turkeys, & foxes.\nRacoons, Geese, Cranes, Herons, & Pelicans",
+      "all_descriptions": [
+        "Emerald Ranch, for sheep, turkeys, & foxes.\nRacoons, Geese, Cranes, Herons, & Pelicans"
       ],
       "desc_index": 0,
       "desc_loop": "yes",
@@ -171,7 +179,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "1 Resupply completed with 3 mins left",
+      "text": "$50.00 Money made from trading",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -180,13 +188,13 @@
       "difficulty": "easy"
     },
     {
-      "text": "3 Small animal carcasses donated to Cripps",
+      "text": "10 Donations to Cripps",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "trader",
-      "difficulty": "easy"
+      "difficulty": "med"
     },
     {
       "text": "2 Goods sold to distant buyer",
@@ -198,27 +206,38 @@
       "difficulty": "med"
     },
     {
-      "text": "5 Medium animal carcasses donated to Cripps",
-      "description": "Emerald Ranch, for sheep, turkeys, & foxes.\nRacoons, Geese, Cranes, Herons, & Pelicans",
+      "text": "$100.00 Money made from trading",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "med"
+    },
+    {
+      "text": "3 Camp Stews eaten",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "hard"
+    },
+    {
+      "text": "15838 Distance Delivery Wagon traveled on mission",
+      "description": "Check challenge total is updating as you set off [#2]",
       "all_descriptions": [
-        "Emerald Ranch, for sheep, turkeys, & foxes.\nRacoons, Geese, Cranes, Herons, & Pelicans"
+        "Use a Change Appearance solo lobby so it registers [#1]",
+        "Check challenge total is updating as you set off [#2]",
+        "Solo lobbies more reliable, check counter at start [#3]"
       ],
-      "desc_index": 0,
+      "desc_index": 1,
       "desc_loop": "yes",
       "category": "trader",
-      "difficulty": "med"
+      "difficulty": "hard"
     },
     {
-      "text": "1 Resupply completed with 4 mins left",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "med"
-    },
-    {
-      "text": "1 Cripps Special Camp Stew recipes completed",
+      "text": "2 Goods sold to distant buyer",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -227,25 +246,16 @@
       "difficulty": "hard"
     },
     {
-      "text": "3 Donated deadly predator carcass or skin",
+      "text": "1 Coins found",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "hard"
+      "category": "collector",
+      "difficulty": "easy"
     },
     {
-      "text": "2 Goods sold to local buyer",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "hard"
-    },
-    {
-      "text": "1 Antique Alcohol drunk",
+      "text": "1 Collectibles found with a Shovel",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -263,16 +273,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "1 Family Heirlooms found",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "collector",
-      "difficulty": "easy"
-    },
-    {
-      "text": "2 Arrowheads found",
+      "text": "1 Antique Alcohol drunk",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -281,7 +282,7 @@
       "difficulty": "med"
     },
     {
-      "text": "2 Coins found",
+      "text": "2 Collectibles found with a Shovel",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -290,7 +291,7 @@
       "difficulty": "med"
     },
     {
-      "text": "2 Collector Maps used",
+      "text": "2 Collectibles sold to Madam Nazar",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -308,7 +309,7 @@
       "difficulty": "hard"
     },
     {
-      "text": "3 Collectibles sold to Madam Nazar",
+      "text": "3 Arrowheads found",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -317,7 +318,7 @@
       "difficulty": "hard"
     },
     {
-      "text": "3 Tarot Cards found",
+      "text": "2 Collectibles found with a Metal Detector",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -335,7 +336,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "1 Moonshine served to other players at a bar",
+      "text": "1 Moonshine Bootlegger Missions completed",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -344,7 +345,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "Moonshine sold with at least 10 bottles intact",
+      "text": "Moonshine of any type sold to a buyer",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -353,7 +354,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "3218 Distance Moonshine Wagon traveled on mission",
+      "text": "Crafted Toxic Moonshine",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -362,7 +363,7 @@
       "difficulty": "med"
     },
     {
-      "text": "2 Moonshine Bootlegger Missions completed",
+      "text": "2 Moonshine of any type sold to a buyer",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -371,7 +372,7 @@
       "difficulty": "med"
     },
     {
-      "text": "Played with a band for 1 min",
+      "text": "Moonshine sold with at least 15 bottles intact",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -380,7 +381,18 @@
       "difficulty": "med"
     },
     {
-      "text": "Drank own strong moonshine",
+      "text": "2 Moonshine Bar - Drunken player interaction",
+      "description": "If solo, use Y then B button combo as entering shack",
+      "all_descriptions": [
+        "If solo, use Y then B button combo as entering shack"
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Moonshine sold with 5 mins left",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -389,16 +401,7 @@
       "difficulty": "hard"
     },
     {
-      "text": "$200.00 Money made from moonshine sold",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "moonshiner",
-      "difficulty": "hard"
-    },
-    {
-      "text": "3 Moonshine Bootlegger Missions completed",
+      "text": "Moonshine sold with at least 18 bottles intact",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -443,15 +446,6 @@
       "difficulty": "med"
     },
     {
-      "text": "1 Hardy Tonics used when too hot or cold",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "naturalist",
-      "difficulty": "med"
-    },
-    {
       "text": "1 Legendary Animals photographed",
       "description": null,
       "all_descriptions": [],
@@ -461,13 +455,13 @@
       "difficulty": "med"
     },
     {
-      "text": "2 Blending Tonics crafted or used",
+      "text": "1 Sedated animals revived",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "naturalist",
-      "difficulty": "hard"
+      "difficulty": "med"
     },
     {
       "text": "7 Crafted or cooked at Wilderness Camp",
@@ -480,6 +474,15 @@
     },
     {
       "text": "Don't kill an animal for 24 game hours",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "hard"
+    },
+    {
+      "text": "2 Sedated animals revived",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
