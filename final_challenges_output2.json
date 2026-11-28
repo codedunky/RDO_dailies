@@ -1,10 +1,10 @@
 {
   "final_name": [
     {
-      "text": "Clothing style updated",
-      "description": "You can just go to your wardrobe and change outfit for this to register.",
+      "text": "1 Cooked Seasoned Exotic Bird",
+      "description": "Pelicans are the best source of Exotic Bird Meat. A good spot is just east of Quaker's Cove.\nAs you come down the road into the cove, to the left is a beach area where they often sit.",
       "all_descriptions": [
-        "You can just go to your wardrobe and change outfit for this to register."
+        "Pelicans are the best source of Exotic Bird Meat. A good spot is just east of Quaker's Cove.\nAs you come down the road into the cove, to the left is a beach area where they often sit."
       ],
       "desc_index": 0,
       "desc_loop": "yes",
@@ -12,10 +12,10 @@
       "difficulty": null
     },
     {
-      "text": "Horse appearance updated",
-      "description": "You don't have to change your current horse, any of your stable will register.\nTry changing a tail or mane, using one of the free options.",
+      "text": "5 Desert Sage picked",
+      "description": "Head south out of Tumbleweed, and at the crossroads next to the 'E' of 'NEW AUSTIN' on the map you'll find the plants.",
       "all_descriptions": [
-        "You don't have to change your current horse, any of your stable will register.\nTry changing a tail or mane, using one of the free options."
+        "Head south out of Tumbleweed, and at the crossroads next to the 'E' of 'NEW AUSTIN' on the map you'll find the plants."
       ],
       "desc_index": 0,
       "desc_loop": "yes",
@@ -23,7 +23,31 @@
       "difficulty": null
     },
     {
-      "text": "Self portraits taken",
+      "text": "Facial appearance updated at a Barber",
+      "description": "Go to the Barber at Blackwater, Saint Denis or Valentine, and change make-up, beards or moustaches.",
+      "all_descriptions": [
+        "Go to the Barber at Blackwater, Saint Denis or Valentine, and change make-up, beards or moustaches."
+      ],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "2 Foxes skinned",
+      "description": "There are a number of fox spawn points in a circle around the edge of Armadillo, with the bulk of them to the north of the town. [#3]",
+      "all_descriptions": [
+        "A good spot with a regular spawn is just north east of Emerald Station. Follow the railway line around the S-bend in the track, and you'll normally find one a few feet from the railway, by the T-Junction and the track to the little shack. [#1]",
+        "Try the western end of Big Valley, just around the 'W' of 'WEST ELIZABETH' on the map. [#2]",
+        "There are a number of fox spawn points in a circle around the edge of Armadillo, with the bulk of them to the north of the town. [#3]"
+      ],
+      "desc_index": 2,
+      "desc_loop": "yes",
+      "category": "general",
+      "difficulty": null
+    },
+    {
+      "text": "2 Free Roam Events played",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -32,45 +56,35 @@
       "difficulty": null
     },
     {
-      "text": "Visited a shop in Blackwater",
-      "description": null,
-      "all_descriptions": [],
+      "text": "3 Players revived",
+      "description": "Go into a posse with someone, turn on friendly fire, shoot them in the knee with a Varmint Rifle using\nregular ammo until downed. Revive them, then repeat until you\u2019re finished.",
+      "all_descriptions": [
+        "Go into a posse with someone, turn on friendly fire, shoot them in the knee with a Varmint Rifle using\nregular ammo until downed. Revive them, then repeat until you\u2019re finished."
+      ],
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "general",
       "difficulty": null
     },
     {
-      "text": "Visited a shop in Rhodes",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
+      "text": "5 Rock Bass caught",
+      "description": "The Dakpta River, just down from Cumberland Falls is a good spot for these, using cheese bait to avoid most of the other fish. Try the east bank, just a little above the 'r' in 'River' on the map. [#3]",
+      "all_descriptions": [
+        "Fast travel to Blackwater and fish from the wooden slipway under construction, where it slopes down\nto the water. Lake Don Julio is another decent spot. [#1]",
+        "Aurora Basin in Tall Trees is a decent place to fish for Rock Bass. Cheese bait is recommended but not essential. [#2]",
+        "The Dakpta River, just down from Cumberland Falls is a good spot for these, using cheese bait to avoid most of the other fish. Try the east bank, just a little above the 'r' in 'River' on the map. [#3]"
+      ],
+      "desc_index": 2,
       "desc_loop": "yes",
       "category": "general",
       "difficulty": null
     },
     {
-      "text": "Visited a shop in Saint Denis",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
-    },
-    {
-      "text": "1 Weapons customized",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "general",
-      "difficulty": null
-    },
-    {
-      "text": "1 Bounty targets hogtied with a Reinforced Lasso",
-      "description": null,
-      "all_descriptions": [],
+      "text": "1 Bounties brought in from West Elizabeth posters",
+      "description": "Strawberry, Blackwater, Wallace Station, & Riggs Station",
+      "all_descriptions": [
+        "Strawberry, Blackwater, Wallace Station, & Riggs Station"
+      ],
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "bounty_hunter",
@@ -86,142 +100,137 @@
       "difficulty": "easy"
     },
     {
-      "text": "1 Eagle Eye used to track a bounty target",
-      "description": "Can shoot with tracking arrow and then track them",
+      "text": "1 Living bounty targets in a photograph",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Bounty hunt completed with 4 min or more left",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "med"
+    },
+    {
+      "text": "2 Bounty targets brought in",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "med"
+    },
+    {
+      "text": "2 Bounty targets lassoed from horseback",
+      "description": "Lasso, release, lasso, release, lasso the same target [#3]",
       "all_descriptions": [
-        "Can shoot with tracking arrow and then track them"
+        "Lasso the same target three times [#1]",
+        "You can lasso the same target over and over [#2]",
+        "Lasso, release, lasso, release, lasso the same target [#3]"
+      ],
+      "desc_index": 2,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "med"
+    },
+    {
+      "text": "2 Bounties completed within one real-world hour",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "hard"
+    },
+    {
+      "text": "1 Hard ($$$) or Legendary Bounty mission completed",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "hard"
+    },
+    {
+      "text": "3 Living bounty targets in a photograph",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "bounty_hunter",
+      "difficulty": "hard"
+    },
+    {
+      "text": "5 Donations to Cripps",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "easy"
+    },
+    {
+      "text": "Goods sold to distant buyer",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "easy"
+    },
+    {
+      "text": "1 Resupply completed with 3 mins left",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "easy"
+    },
+    {
+      "text": "2 Camp Stews eaten",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "med"
+    },
+    {
+      "text": "10559 Distance Delivery Wagon traveled on mission",
+      "description": "Use a Change Appearance solo lobby so it registers [#1]",
+      "all_descriptions": [
+        "Use a Change Appearance solo lobby so it registers [#1]",
+        "Check challenge total is updating as you set off [#2]",
+        "Solo lobbies more reliable, check counter at start [#3]"
       ],
       "desc_index": 0,
       "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "easy"
+      "category": "trader",
+      "difficulty": "med"
     },
     {
-      "text": "2 Bounties brought in from Lemoyne posters",
-      "description": "Rhodes and Saint Denis",
+      "text": "1 Superior Quality Camp Stew recipes completed",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "trader",
+      "difficulty": "med"
+    },
+    {
+      "text": "15838 Distance Delivery Wagon traveled on mission",
+      "description": "Use a Change Appearance solo lobby so it registers [#1]",
       "all_descriptions": [
-        "Rhodes and Saint Denis"
-      ],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "med"
-    },
-    {
-      "text": "2 Bounty targets looted",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "med"
-    },
-    {
-      "text": "1 Bounty targets taken down with Bolas",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "med"
-    },
-    {
-      "text": "3 Bounty targets brought in",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "hard"
-    },
-    {
-      "text": "2 Bounty targets taken down with Bolas",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "hard"
-    },
-    {
-      "text": "3 Eagle Eye used to track a bounty target",
-      "description": "Can shoot with tracking arrow and then track them",
-      "all_descriptions": [
-        "Can shoot with tracking arrow and then track them"
-      ],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "bounty_hunter",
-      "difficulty": "hard"
-    },
-    {
-      "text": "1 Goods sold to local buyer",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "easy"
-    },
-    {
-      "text": "High Quality Camp Stew recipes completed",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "easy"
-    },
-    {
-      "text": "$50.00 Money made from trading",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "easy"
-    },
-    {
-      "text": "10 Carcasses donated within 10 minutes",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "med"
-    },
-    {
-      "text": "2 Goods sold to local buyer",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "med"
-    },
-    {
-      "text": "1 Resupply completed with 4 mins left",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "med"
-    },
-    {
-      "text": "2 Goods sold to distant buyer",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "trader",
-      "difficulty": "hard"
-    },
-    {
-      "text": "6 Large animal carcasses donated to Cripps",
-      "description": "Deer, Pronghorn, Bighorn Ram, Panther, Cougar, Wolf",
-      "all_descriptions": [
-        "Deer, Pronghorn, Bighorn Ram, Panther, Cougar, Wolf"
+        "Use a Change Appearance solo lobby so it registers [#1]",
+        "Check challenge total is updating as you set off [#2]",
+        "Solo lobbies more reliable, check counter at start [#3]"
       ],
       "desc_index": 0,
       "desc_loop": "yes",
@@ -229,10 +238,11 @@
       "difficulty": "hard"
     },
     {
-      "text": "7 Medium animal carcasses donated to Cripps",
-      "description": "Emerald Ranch, for sheep, turkeys, & foxes.\nRacoons, Geese, Cranes, Herons, & Pelicans",
+      "text": "2 Resupply missions completed",
+      "description": "Buggy, often won't register in public lobbies [#1]",
       "all_descriptions": [
-        "Emerald Ranch, for sheep, turkeys, & foxes.\nRacoons, Geese, Cranes, Herons, & Pelicans"
+        "Buggy, often won't register in public lobbies [#1]",
+        "Best to be in a solo lobby so it registers [#2]"
       ],
       "desc_index": 0,
       "desc_loop": "yes",
@@ -240,58 +250,13 @@
       "difficulty": "hard"
     },
     {
-      "text": "1 American Wild Flowers found",
+      "text": "10 Small animal carcasses donated to Cripps",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
       "desc_loop": "yes",
-      "category": "collector",
-      "difficulty": "easy"
-    },
-    {
-      "text": "2 Collectibles collected",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "collector",
-      "difficulty": "easy"
-    },
-    {
-      "text": "1 Collector Maps used",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "collector",
-      "difficulty": "easy"
-    },
-    {
-      "text": "2 American Wild Flowers found",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "collector",
-      "difficulty": "med"
-    },
-    {
-      "text": "2 Antique Alcohol Bottles found",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "collector",
-      "difficulty": "med"
-    },
-    {
-      "text": "4 Collectibles collected",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "collector",
-      "difficulty": "med"
+      "category": "trader",
+      "difficulty": "hard"
     },
     {
       "text": "1 Antique Alcohol drunk",
@@ -300,18 +265,63 @@
       "desc_index": 0,
       "desc_loop": "yes",
       "category": "collector",
-      "difficulty": "hard"
+      "difficulty": "easy"
     },
     {
-      "text": "5 Bird Eggs found",
-      "description": "Duck, goose or loon eggs can be collected in multiples [#4]",
+      "text": "1 Arrowheads found",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "easy"
+    },
+    {
+      "text": "1 Lost Jewelry found",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "easy"
+    },
+    {
+      "text": "1 Collectibles found with a Metal Detector",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "med"
+    },
+    {
+      "text": "2 Collectibles sold to Madam Nazar",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "med"
+    },
+    {
+      "text": "2 Fossils found",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "med"
+    },
+    {
+      "text": "3 Collectibles looted from non-player enemies",
+      "description": "Poacher NPC's usually carry collectables [#3]",
       "all_descriptions": [
-        "Keep less than 5 duck eggs in your satchel, and you can then pick 5 of them at once [#1]",
-        "You can pick up to 5 duck eggs in one go [#2]",
-        "Carry 5 duck eggs, and you can then pick another 5 [#3]",
-        "Duck, goose or loon eggs can be collected in multiples [#4]"
+        "Gold Teeth count for this [#1]",
+        "Moonshiner roadblock NPC's usually carry alchohol [#2]",
+        "Poacher NPC's usually carry collectables [#3]",
+        "Trade run end fight NPC's often have some [#4]"
       ],
-      "desc_index": 3,
+      "desc_index": 2,
       "desc_loop": "yes",
       "category": "collector",
       "difficulty": "hard"
@@ -326,7 +336,16 @@
       "difficulty": "hard"
     },
     {
-      "text": "Completed regular or better moonshine recipe",
+      "text": "3 Family Heirlooms found",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "collector",
+      "difficulty": "hard"
+    },
+    {
+      "text": "Moonshine Bar - Changed d\u00e9cor",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -335,7 +354,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "Drank own weak or higher strength moonshine",
+      "text": "1 Moonshine Story Mission completed",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -344,7 +363,7 @@
       "difficulty": "easy"
     },
     {
-      "text": "1 Moonshine served to other players at a bar",
+      "text": "Moonshine sold with at least 10 bottles intact",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -353,7 +372,16 @@
       "difficulty": "easy"
     },
     {
-      "text": "$100.00 Money made from moonshine sold",
+      "text": "Crafted Toxic Moonshine",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "moonshiner",
+      "difficulty": "med"
+    },
+    {
+      "text": "Drank own average or higher strength moonshine",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -371,15 +399,6 @@
       "difficulty": "med"
     },
     {
-      "text": "Played with a band for 1 min",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "moonshiner",
-      "difficulty": "med"
-    },
-    {
       "text": "2 Crafted Toxic Moonshine",
       "description": null,
       "all_descriptions": [],
@@ -389,7 +408,7 @@
       "difficulty": "hard"
     },
     {
-      "text": "4827 Distance Moonshine Wagon traveled on mission",
+      "text": "2 Moonshine Story Mission completed",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -398,7 +417,7 @@
       "difficulty": "hard"
     },
     {
-      "text": "2 Moonshine Bar - Danced for 2 mins",
+      "text": "4 Moonshine served to other players at a bar",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
@@ -434,6 +453,24 @@
       "difficulty": "easy"
     },
     {
+      "text": "1 Blending Tonics crafted or used",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "med"
+    },
+    {
+      "text": "5 Crafted or cooked at Wilderness Camp",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "med"
+    },
+    {
       "text": "Don't kill an animal for 18 game hours",
       "description": null,
       "all_descriptions": [],
@@ -443,43 +480,25 @@
       "difficulty": "med"
     },
     {
-      "text": "1 Hardy Tonics used when too hot or cold",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "naturalist",
-      "difficulty": "med"
-    },
-    {
-      "text": "1 Sedated animals revived",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "naturalist",
-      "difficulty": "med"
-    },
-    {
-      "text": "2 Blending Tonics crafted or used",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "naturalist",
-      "difficulty": "hard"
-    },
-    {
-      "text": "7 Crafted or cooked at Wilderness Camp",
-      "description": null,
-      "all_descriptions": [],
-      "desc_index": 0,
-      "desc_loop": "yes",
-      "category": "naturalist",
-      "difficulty": "hard"
-    },
-    {
       "text": "2 Hardy Tonics used when too hot or cold",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "hard"
+    },
+    {
+      "text": "1 Legendary Animals photographed",
+      "description": null,
+      "all_descriptions": [],
+      "desc_index": 0,
+      "desc_loop": "yes",
+      "category": "naturalist",
+      "difficulty": "hard"
+    },
+    {
+      "text": "2 Sedated animals revived",
       "description": null,
       "all_descriptions": [],
       "desc_index": 0,
